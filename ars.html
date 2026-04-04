@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Neural Link AR Manual Start</title>
+  <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  <style>
+    :root {
+      --primary: #00f0ff;
+      --glass: rgba(0,20,30,.88);
+      --danger: #ff6b6b;
+      --ok: #00ff88;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+    #boot {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+    }
+    #bootCard {
+      width: min(92vw, 420px);
+      background: var(--glass);
+      border: 1px solid var(--primary);
+      border-radius: 16px;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    #bootTitle {
+      margin: 0 0 10px;
+      color: var(--primary);
+      font-size: 18px;
+    }
+    #bootText {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #dffcff;
+      margin-bottom: 14px;
+    }
+    .sys-btn {
+      width: 100%;
+      min-height: 48px;
+      border-radius: 12px;
+      border: 1px solid var(--primary);
+      background: transparent;
+      color: var(--primary);
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .sys-btn:disabled {
+      opacity: .5;
+      cursor: default;
+    }
+    #bootStatus {
+      margin-top: 12px;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #fff;
+      white-space: pre-line;
+    }
+    #overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 12;
+      pointer-events: none;
+      display: none;
+    }
+    #status {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      max-width: calc(100vw - 32px);
+      background: var(--glass);
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    #helpBox {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      max-width: min(330px, calc(100vw - 32px));
+      background: var(--glass);
+      border: 1px solid rgba(0,240,255,.35);
+      color: #d7f7fb;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    #backLink {
+      position: absolute;
+      left: 50%;
+      top: 16px;
+      transform: translateX(-50%);
+      z-index: 13;
+      background: var(--glass);
+      border: 1px solid rgba(0,240,255,.35);
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      pointer-events: auto;
+    }
+    #hotspots-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .hotspot-wrap {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      display: none;
+      pointer-events: auto;
+    }
+    .hotspot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      background: var(--primary);
+      box-shadow: 0 0 14px var(--primary);
+      cursor: pointer;
+    }
+    .annotation {
+      margin-top: 8px;
+      min-width: 170px;
+      max-width: 220px;
+      background: var(--glass);
+      border: 1px solid var(--primary);
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 12px;
+      display: none;
+      line-height: 1.45;
+      color: #fff;
+    }
+    .hotspot-wrap:hover .annotation,
+    .hotspot-wrap:focus-within .annotation {
+      display: block;
+    }
+    #mediaHub {
+      position: absolute;
+      left: 50%;
+      bottom: 16px;
+      transform: translateX(-50%);
+      width: min(420px, calc(100vw - 24px));
+      background: rgba(0,20,30,.94);
+      border: 1px solid var(--primary);
+      border-radius: 16px;
+      display: none;
+      flex-direction: column;
+      pointer-events: auto;
+    }
+    .hub-tabs {
+      display: flex;
+      border-bottom: 1px solid rgba(0,240,255,.35);
+    }
+    .tab {
+      flex: 1;
+      padding: 10px;
+      background: none;
+      border: none;
+      color: #7aaeb2;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .tab.active {
+      color: var(--primary);
+      background: rgba(0,240,255,.08);
+    }
+    .hub-body { padding: 16px; }
+    #hubTitle {
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+    #hubDescription {
+      color: #d7f7fb;
+      font-size: 12px;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    #videoArea iframe {
+      width: 100%;
+      height: 210px;
+      border: 0;
+      border-radius: 10px;
+      background: #000;
+    }
+    #audContent {
+      display: none;
+      padding-top: 10px;
+    }
+    #audioPlayer { width: 100%; }
+    video {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      object-fit: cover !important;
+      z-index: 1 !important;
+      background: #000 !important;
+    }
+    .a-canvas {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      z-index: 2 !important;
+      pointer-events: none !important;
+    }
+    #sceneMount {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="boot">
+    <div id="bootCard">
+      <h1 id="bootTitle">NEURAL LINK AR</h1>
+      <div id="bootText">На Android Chrome камера часто не стартует автоматически в AR.js. Поэтому ниже сначала запрашиваем доступ к камере вручную, а потом запускаем AR-сцену.</div>
+      <button id="grantBtn" class="sys-btn">1. РАЗРЕШИТЬ КАМЕРУ</button>
+      <button id="startBtn" class="sys-btn" disabled>2. ЗАПУСТИТЬ AR</button>
+      <div id="bootStatus">Статус: ожидание действий.</div>
+    </div>
+  </div>
+
+  <div id="sceneMount"></div>
+
+  <div id="overlay">
+    <a id="backLink" href="javascript:history.back()">НАЗАД</a>
+    <div id="status">КАМЕРА ЗАПУСКАЕТСЯ...</div>
+    <div id="helpBox">После запуска наведите камеру на маркер Hiro. Если камера снова не появилась, значит проблема в мобильной совместимости AR.js на этом устройстве.</div>
+
+    <div id="hotspots-layer">
+      <div class="hotspot-wrap" id="hp-1">
+        <button class="hotspot" type="button" aria-label="DATA_PORT HAND"></button>
+        <div class="annotation">DATA_PORT: HAND</div>
+      </div>
+      <div class="hotspot-wrap" id="hp-5">
+        <button class="hotspot" type="button" aria-label="NEURAL EYE"></button>
+        <div class="annotation">NEURAL_EYE (v.3.0)</div>
+      </div>
+    </div>
+
+    <div id="mediaHub">
+      <div class="hub-tabs">
+        <button class="tab active" onclick="setMode('vid', event)">VIDEO_FEED</button>
+        <button class="tab" onclick="setMode('aud', event)">AUDIO_GUIDE</button>
+      </div>
+      <div class="hub-body">
+        <div id="hubTitle">DATA_NODE_ACTIVE</div>
+        <div id="hubDescription"></div>
+        <div id="videoArea"><iframe id="videoIframe" src="" allowfullscreen></iframe></div>
+        <div id="audContent"><audio id="audioPlayer" controls></audio></div>
+        <button class="sys-btn" onclick="closeHub()">CLOSE_SESSION</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let testStream = null;
+    let permissionGranted = false;
+
+    const hotspotData = {
+      1: {
+        title: 'DATA_PORT: HAND',
+        description: 'Точка доступа к тактильному модулю. Открывает видеообзор и аудиогид.',
+        vid: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+        aud: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'
+      },
+      5: {
+        title: 'NEURAL_EYE (v.3.0)',
+        description: 'Центральный узел наблюдения. Видео, описание и отдельный аудиогид.',
+        vid: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+        aud: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'
+      }
+    };
+
+    function setBootStatus(text, color) {
+      const el = document.getElementById('bootStatus');
+      el.textContent = text;
+      el.style.color = color || '#fff';
+    }
+
+    function hasLiveVideo() {
+      const vids = document.querySelectorAll('video');
+      for (const v of vids) {
+        if (v.srcObject || (v.readyState && v.readyState >= 2)) return true;
+      }
+      return false;
+    }
+
+    async function requestCameraPermission() {
+      setBootStatus('Запрашиваем разрешение камеры...', '#00f0ff');
+      try {
+        testStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: 'environment' } },
+          audio: false
+        });
+        permissionGranted = true;
+        document.getElementById('startBtn').disabled = false;
+        setBootStatus('Камера разрешена. Теперь нажмите «ЗАПУСТИТЬ AR».', '#00ff88');
+      } catch (err) {
+        setBootStatus('Не удалось получить доступ к камере: ' + err.message, '#ff6b6b');
+      }
+    }
+
+    function stopTestStream() {
+      if (testStream) {
+        testStream.getTracks().forEach(track => track.stop());
+        testStream = null;
+      }
+    }
+
+    function buildScene() {
+      document.getElementById('sceneMount').innerHTML = `
+        <a-scene
+          embedded
+          renderer="antialias: true; alpha: true"
+          vr-mode-ui="enabled: false"
+          arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best;"
+          hotspot-tracker>
+          <a-marker preset="hiro" id="ar-marker">
+            <a-entity gltf-model="url(https://qigod888.github.io/1/demos.glb)" scale="1 1 1" position="0 0 0">
+              <a-entity id="anchor-1" position="0.39 -0.52 -0.07"></a-entity>
+              <a-entity id="anchor-5" position="0.03 0.35 0.46"></a-entity>
+            </a-entity>
+          </a-marker>
+          <a-entity camera></a-entity>
+        </a-scene>`;
+    }
+
+    function registerTracker() {
+      if (AFRAME.components['hotspot-tracker']) return;
+      AFRAME.registerComponent('hotspot-tracker', {
+        init: function () {
+          this.marker = document.getElementById('ar-marker');
+          this.statusEl = document.getElementById('status');
+          this.cameraEl = document.querySelector('[camera]');
+          this.points = [
+            { anchor: document.getElementById('anchor-1'), ui: document.getElementById('hp-1') },
+            { anchor: document.getElementById('anchor-5'), ui: document.getElementById('hp-5') }
+          ];
+
+          this.statusEl.textContent = 'ПОИСК МАРКЕРА HIRO...';
+
+          this.marker.addEventListener('markerFound', () => {
+            this.statusEl.textContent = 'МАРКЕР НАЙДЕН';
+            this.statusEl.style.color = '#00ff88';
+          });
+
+          this.marker.addEventListener('markerLost', () => {
+            this.statusEl.textContent = hasLiveVideo()
+              ? 'КАМЕРА АКТИВНА. ПОИСК МАРКЕРА HIRO...'
+              : 'КАМЕРА НЕ ПОШЛА В AR-СЦЕНУ';
+            this.statusEl.style.color = hasLiveVideo() ? '#00f0ff' : '#ff6b6b';
+          });
+
+          setTimeout(() => {
+            if (!hasLiveVideo()) {
+              this.statusEl.textContent = 'AR.js не вывел камеру. Попробуйте перезагрузить страницу или открыть в другом браузере.';
+              this.statusEl.style.color = '#ff6b6b';
+            }
+          }, 5000);
+        },
+        tick: function () {
+          const camera = this.cameraEl && this.cameraEl.getObject3D('camera');
+          if (!camera || !this.marker || !this.marker.object3D.visible) {
+            this.points.forEach(p => p.ui.style.display = 'none');
+            return;
+          }
+          this.points.forEach(p => {
+            const v = new THREE.Vector3();
+            p.anchor.object3D.getWorldPosition(v);
+            v.project(camera);
+            const x = (v.x * 0.5 + 0.5) * window.innerWidth;
+            const y = (-v.y * 0.5 + 0.5) * window.innerHeight;
+            if (v.z < 1) {
+              p.ui.style.display = 'block';
+              p.ui.style.left = `${x}px`;
+              p.ui.style.top = `${y}px`;
+            } else {
+              p.ui.style.display = 'none';
+            }
+          });
+        }
+      });
+    }
+
+    function startAR() {
+      if (!permissionGranted) {
+        setBootStatus('Сначала дайте разрешение на камеру.', '#ff6b6b');
+        return;
+      }
+      setBootStatus('Запускаем AR-сцену...', '#00f0ff');
+      stopTestStream();
+      registerTracker();
+      buildScene();
+      document.getElementById('sceneMount').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('boot').style.display = 'none';
+    }
+
+    function openHub(id) {
+      const item = hotspotData[id];
+      document.getElementById('hubTitle').textContent = item.title;
+      document.getElementById('hubDescription').textContent = item.description;
+      document.getElementById('videoIframe').src = item.vid;
+      document.getElementById('audioPlayer').src = item.aud;
+      document.getElementById('mediaHub').style.display = 'flex';
+      setMode('vid', { target: document.querySelector('.tab') });
+    }
+
+    function closeHub() {
+      document.getElementById('mediaHub').style.display = 'none';
+      document.getElementById('videoIframe').src = '';
+      const audio = document.getElementById('audioPlayer');
+      audio.pause();
+      audio.src = '';
+    }
+
+    function setMode(mode, event) {
+      document.getElementById('videoArea').style.display = mode === 'vid' ? 'block' : 'none';
+      document.getElementById('audContent').style.display = mode === 'aud' ? 'block' : 'none';
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      if (event && event.target) event.target.classList.add('active');
+    }
+
+    document.getElementById('grantBtn').addEventListener('click', requestCameraPermission);
+    document.getElementById('startBtn').addEventListener('click', startAR);
+    document.querySelector('#hp-1 .hotspot').addEventListener('click', () => openHub(1));
+    document.querySelector('#hp-5 .hotspot').addEventListener('click', () => openHub(5));
+  </script>
+</body>
+</html>
