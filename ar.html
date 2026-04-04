@@ -1,350 +1,302 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Neural Link AR</title>
-  <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #00f0ff;
-      --bg: rgba(0, 20, 30, 0.86);
-      --font-code: 'JetBrains Mono', monospace;
-      --font-ui: 'Unbounded', sans-serif;
-    }
-    html, body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      font-family: var(--font-code);
-      background: transparent;
-      color: #fff;
-    }
-    video {
-      position: fixed !important;
-      inset: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      object-fit: cover !important;
-      z-index: 1 !important;
-      background: #000;
-    }
-    .a-canvas {
-      position: fixed !important;
-      inset: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      z-index: 2 !important;
-      pointer-events: none !important;
-    }
-    #overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 3;
-      pointer-events: none;
-    }
-    #status {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      max-width: calc(100vw - 32px);
-      background: var(--bg);
-      border: 1px solid var(--primary);
-      color: var(--primary);
-      padding: 10px 14px;
-      border-radius: 10px;
-      font-size: 11px;
-    }
-    #helpBox {
-      position: absolute;
-      top: 16px;
-      left: 16px;
-      max-width: min(320px, calc(100vw - 32px));
-      background: var(--bg);
-      border: 1px solid rgba(0,240,255,.35);
-      color: #d7f7fb;
-      padding: 10px 12px;
-      border-radius: 10px;
-      font-size: 11px;
-      line-height: 1.45;
-    }
-    #hotspots-layer {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-    .hotspot-wrap {
-      position: absolute;
-      transform: translate(-50%, -50%);
-      display: none;
-      pointer-events: auto;
-    }
-    .hotspot {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border: 2px solid #fff;
-      background: var(--primary);
-      box-shadow: 0 0 14px var(--primary);
-      cursor: pointer;
-      pointer-events: auto;
-    }
-    .annotation {
-      margin-top: 8px;
-      min-width: 170px;
-      max-width: 220px;
-      background: var(--bg);
-      border: 1px solid var(--primary);
-      border-radius: 10px;
-      padding: 10px;
-      font-size: 11px;
-      display: none;
-      line-height: 1.45;
-      color: #fff;
-    }
-    .hotspot-wrap:hover .annotation,
-    .hotspot-wrap:focus-within .annotation {
-      display: block;
-    }
-    #mediaHub {
-      position: absolute;
-      left: 50%;
-      bottom: 16px;
-      transform: translateX(-50%);
-      width: min(420px, calc(100vw - 24px));
-      background: rgba(0,20,30,.92);
-      border: 1px solid var(--primary);
-      border-radius: 16px;
-      display: none;
-      flex-direction: column;
-      pointer-events: auto;
-    }
-    .hub-tabs {
-      display: flex;
-      border-bottom: 1px solid rgba(0,240,255,.35);
-    }
-    .tab {
-      flex: 1;
-      padding: 10px;
-      background: none;
-      border: none;
-      color: #7aaeb2;
-      cursor: pointer;
-      font-size: 11px;
-      font-family: var(--font-code);
-    }
-    .tab.active {
-      color: var(--primary);
-      background: rgba(0,240,255,.08);
-    }
-    .hub-body { padding: 16px; }
-    #hubTitle {
-      color: var(--primary);
-      font-weight: 700;
-      font-size: 12px;
-      margin-bottom: 10px;
-    }
-    #hubDescription {
-      color: #d7f7fb;
-      font-size: 11px;
-      line-height: 1.5;
-      margin-bottom: 12px;
-    }
-    #videoArea iframe {
-      width: 100%;
-      height: 210px;
-      border: 0;
-      border-radius: 10px;
-      background: #000;
-    }
-    #audContent {
-      display: none;
-      padding-top: 10px;
-    }
-    #audioPlayer {
-      width: 100%;
-    }
-    .sys-btn {
-      width: 100%;
-      margin-top: 12px;
-      min-height: 46px;
-      background: transparent;
-      border: 1px solid var(--primary);
-      color: var(--primary);
-      border-radius: 10px;
-      cursor: pointer;
-      font-family: var(--font-ui);
-      font-size: 12px;
-    }
-    #backLink {
-      position: absolute;
-      left: 50%;
-      top: 16px;
-      transform: translateX(-50%);
-      z-index: 4;
-      background: var(--bg);
-      border: 1px solid rgba(0,240,255,.35);
-      color: #fff;
-      text-decoration: none;
-      padding: 10px 14px;
-      border-radius: 10px;
-      font-size: 11px;
-      pointer-events: auto;
-    }
-  </style>
-</head>
-<body>
-  <a id="backLink" href="javascript:history.back()">НАЗАД</a>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NEURAL-LINK ARCHIVE v2.0 | AR.js Fusion</title>
+    
+    <!-- Базовые скрипты для 3D и AR -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 
-  <div id="overlay">
-    <div id="status">ЗАПУСК КАМЕРЫ...</div>
-    <div id="helpBox">Если камера не появилась: откройте страницу напрямую по HTTPS, разрешите доступ к камере и попробуйте в Chrome на Android или Safari на iPhone.</div>
-
-    <div id="hotspots-layer">
-      <div class="hotspot-wrap" id="hp-1">
-        <button class="hotspot" type="button" aria-label="DATA_PORT HAND"></button>
-        <div class="annotation">DATA_PORT: HAND</div>
-      </div>
-      <div class="hotspot-wrap" id="hp-5">
-        <button class="hotspot" type="button" aria-label="NEURAL EYE"></button>
-        <div class="annotation">NEURAL_EYE (v.3.0)</div>
-      </div>
-    </div>
-
-    <div id="mediaHub">
-      <div class="hub-tabs">
-        <button class="tab active" onclick="setMode('vid', event)">VIDEO_FEED</button>
-        <button class="tab" onclick="setMode('aud', event)">AUDIO_GUIDE</button>
-      </div>
-      <div class="hub-body">
-        <div id="hubTitle">DATA_NODE_ACTIVE</div>
-        <div id="hubDescription"></div>
-        <div id="videoArea"><iframe id="videoIframe" src="" allowfullscreen></iframe></div>
-        <div id="audContent"><audio id="audioPlayer" controls></audio></div>
-        <button class="sys-btn" onclick="closeHub()">CLOSE_SESSION</button>
-      </div>
-    </div>
-  </div>
-
-  <a-scene
-    embedded
-    renderer="antialias: true; alpha: true"
-    vr-mode-ui="enabled: false"
-    arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best;"
-    hotspot-tracker>
-
-    <a-marker preset="hiro" id="ar-marker">
-      <a-entity gltf-model="url(https://qigod888.github.io/1/demos.glb)" scale="1 1 1" position="0 0 0">
-        <a-entity id="anchor-1" position="0.39 -0.52 -0.07"></a-entity>
-        <a-entity id="anchor-5" position="0.03 0.35 0.46"></a-entity>
-      </a-entity>
-    </a-marker>
-
-    <a-entity camera></a-entity>
-  </a-scene>
-
-  <script>
-    const hotspotData = {
-      1: {
-        title: 'DATA_PORT: HAND',
-        description: 'Точка доступа к тактильному модулю. Открывает видеообзор и аудиогид.',
-        vid: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-        aud: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'
-      },
-      5: {
-        title: 'NEURAL_EYE (v.3.0)',
-        description: 'Центральный узел наблюдения. Видео, описание и отдельный аудиогид.',
-        vid: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-        aud: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'
-      }
-    };
-
-    function openHub(id) {
-      const item = hotspotData[id];
-      document.getElementById('hubTitle').textContent = item.title;
-      document.getElementById('hubDescription').textContent = item.description;
-      document.getElementById('videoIframe').src = item.vid;
-      document.getElementById('audioPlayer').src = item.aud;
-      document.getElementById('mediaHub').style.display = 'flex';
-      setMode('vid', { target: document.querySelector('.tab') });
-    }
-
-    function closeHub() {
-      document.getElementById('mediaHub').style.display = 'none';
-      document.getElementById('videoIframe').src = '';
-      const audio = document.getElementById('audioPlayer');
-      audio.pause();
-      audio.src = '';
-    }
-
-    function setMode(mode, event) {
-      document.getElementById('videoArea').style.display = mode === 'vid' ? 'block' : 'none';
-      document.getElementById('audContent').style.display = mode === 'aud' ? 'block' : 'none';
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      if (event && event.target) event.target.classList.add('active');
-    }
-
-    document.querySelector('#hp-1 .hotspot').addEventListener('click', () => openHub(1));
-    document.querySelector('#hp-5 .hotspot').addEventListener('click', () => openHub(5));
-
-    AFRAME.registerComponent('hotspot-tracker', {
-      init: function () {
-        this.marker = document.getElementById('ar-marker');
-        this.statusEl = document.getElementById('status');
-        this.cameraEl = document.querySelector('[camera]');
-        this.points = [
-          { anchor: document.getElementById('anchor-1'), ui: document.getElementById('hp-1') },
-          { anchor: document.getElementById('anchor-5'), ui: document.getElementById('hp-5') }
-        ];
-
-        this.statusEl.textContent = 'ПОИСК МАРКЕРА HIRO...';
-
-        this.marker.addEventListener('markerFound', () => {
-          this.statusEl.textContent = 'МАРКЕР НАЙДЕН';
-          this.statusEl.style.color = '#00ff88';
-        });
-
-        this.marker.addEventListener('markerLost', () => {
-          this.statusEl.textContent = 'ПОИСК МАРКЕРА HIRO...';
-          this.statusEl.style.color = '#00f0ff';
-        });
-
-        setTimeout(() => {
-          const videos = document.querySelectorAll('video');
-          if (!videos.length) {
-            this.statusEl.textContent = 'КАМЕРА НЕ ЗАПУЩЕНА: проверьте HTTPS и разрешение камеры';
-            this.statusEl.style.color = '#ff7676';
-          }
-        }, 3500);
-      },
-
-      tick: function () {
-        const camera = this.cameraEl && this.cameraEl.getObject3D('camera');
-        if (!camera || !this.marker || !this.marker.object3D.visible) {
-          this.points.forEach(p => p.ui.style.display = 'none');
-          return;
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #00f0ff;
+            --secondary: #ff00ea;
+            --bg: #050505;
+            --glass: rgba(0, 20, 30, 0.85);
+            --font-code: 'JetBrains Mono', monospace;
+        }
+        body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; overflow: hidden; font-family: 'JetBrains Mono', monospace; }
+        
+        /* Фон и HUD */
+        #dataCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.2; pointer-events: none; }
+        .hud-overlay {
+            position: fixed; inset: 0; pointer-events: none; z-index: 10;
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            background: 
+                linear-gradient(to right, var(--primary) 1px, transparent 1px) 0 0,
+                linear-gradient(to bottom, var(--primary) 1px, transparent 1px) 0 0;
+            background-size: 50px 50px; opacity: 0.05;
         }
 
-        this.points.forEach(p => {
-          const v = new THREE.Vector3();
-          p.anchor.object3D.getWorldPosition(v);
-          v.project(camera);
+        /* Терминал */
+        #terminal {
+            position: fixed; top: 20px; left: 20px; width: 280px;
+            background: var(--glass); border: 1px solid var(--primary);
+            padding: 15px; border-radius: 4px; z-index: 100;
+            font-size: 10px; color: var(--primary); pointer-events: none;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
+            backdrop-filter: blur(10px);
+        }
 
-          const x = (v.x * 0.5 + 0.5) * window.innerWidth;
-          const y = (-v.y * 0.5 + 0.5) * window.innerHeight;
+        /* Model Viewer */
+        model-viewer {
+            width: 100%; height: 100vh; position: relative; z-index: 5;
+            --poster-color: transparent;
+        }
 
-          if (v.z < 1) {
-            p.ui.style.display = 'block';
-            p.ui.style.left = `${x}px`;
-            p.ui.style.top = `${y}px`;
-          } else {
-            p.ui.style.display = 'none';
-          }
+        /* AR.js Сцена (скрыта по умолчанию) */
+        #ar-scene-container {
+            position: fixed; inset: 0; z-index: -1; display: none;
+        }
+
+        /* Кнопки и Хотспоты */
+        .Hotspot {
+            background: var(--primary); border-radius: 50%; width: 16px; height: 16px;
+            border: 2px solid #fff; cursor: pointer; z-index: 6; pointer-events: auto;
+            box-shadow: 0 0 15px var(--primary);
+        }
+        .HotspotAnnotation {
+            background: var(--glass); border: 1px solid var(--primary);
+            padding: 12px; border-radius: 4px; color: #fff; width: 180px;
+            position: absolute; left: 25px; opacity: 0; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(10px); pointer-events: none; font-size: 11px;
+        }
+        .Hotspot:hover .HotspotAnnotation { opacity: 1; transform: translateX(5px); }
+
+        /* Футуристичная кнопка */
+        #ar-init-btn {
+            position: fixed; bottom: 50px; left: 50%; transform: translateX(-50%);
+            background: #000; border: 1px solid var(--primary); color: var(--primary);
+            padding: 20px 50px; font-family: 'Unbounded'; font-size: 12px; font-weight: 700;
+            cursor: pointer; z-index: 100; pointer-events: auto;
+            letter-spacing: 4px; text-transform: uppercase;
+            transition: 0.4s; box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        }
+        #ar-init-btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 50px var(--primary); }
+
+        /* Media Hub */
+        .media-hub {
+            position: fixed; right: 25px; bottom: 25px; width: 380px;
+            background: var(--glass); border: 1px solid var(--primary);
+            backdrop-filter: blur(20px); border-radius: 10px; display: none;
+            flex-direction: column; z-index: 1001; pointer-events: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+        }
+        .hub-header { padding: 15px; border-bottom: 1px solid rgba(0, 240, 255, 0.2); font-size: 10px; color: var(--primary); display: flex; justify-content: space-between; }
+        .hub-tabs { display: flex; background: rgba(0,0,0,0.3); }
+        .tab { flex: 1; padding: 12px; background: none; border: none; color: #666; cursor: pointer; font-size: 10px; font-family: inherit; transition: 0.3s; }
+        .tab.active { color: var(--primary); background: rgba(0, 240, 255, 0.1); border-bottom: 2px solid var(--primary); }
+        
+        .close-hub { cursor: pointer; color: #ff4444; }
+
+        /* AR UI элементы (поверх камеры) */
+        #ar-ui {
+            position: fixed; inset: 0; z-index: 2000; display: none; pointer-events: none;
+        }
+        #ar-ui .ar-back-btn {
+            position: absolute; top: 30px; left: 30px; padding: 10px 20px;
+            background: rgba(0,0,0,0.8); border: 1px solid #fff; color: #fff;
+            pointer-events: auto; cursor: pointer; font-size: 12px;
+        }
+
+        /* Состояние перегрузки */
+        body.overdrive { --primary: #ff1100; }
+        body.overdrive .Hotspot { box-shadow: 0 0 25px #ff1100; }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(1000%); }
+        }
+        .scan-line {
+            position: absolute; width: 100%; height: 2px; background: var(--primary);
+            top: 0; opacity: 0.3; animation: scanline 4s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="dataCanvas"></canvas>
+    <div class="hud-overlay"></div>
+    
+    <div id="terminal">
+        <div style="font-weight: bold; color: #fff; margin-bottom: 8px; letter-spacing: 1px;">> ARCHIVE_INIT_v2.0</div>
+        <div id="logContent">Загрузка протоколов AR.js Fusion...</div>
+    </div>
+
+    <!-- 1. Модель для десктопа/превью -->
+    <model-viewer 
+        id="mainModel"
+        src="https://qigod888.github.io/1/demos.glb" 
+        ar-modes="webxr scene-viewer quick-look"
+        camera-controls 
+        interaction-prompt="none"
+        shadow-intensity="2"
+        exposure="1">
+        
+        <button class="Hotspot" slot="hotspot-1" data-position="0.39m -0.52m -0.07m" data-normal="0 1 0">
+            <div class="HotspotAnnotation">HAND_INTERFACE: 48-bit Logic Connector</div>
+        </button>
+        <button class="Hotspot" id="eyeTrigger" slot="hotspot-5" data-position="0.03m 0.35m 0.46m" data-normal="0 0 1">
+            <div class="HotspotAnnotation">NEURAL_EYE: Optical Quantum Sensor</div>
+        </button>
+        
+        <div class="scan-line"></div>
+    </model-viewer>
+
+    <button id="ar-init-btn">ИНИЦИАЛИЗАЦИЯ AR.js СРЕДЫ</button>
+
+    <!-- 2. AR.js / A-Frame Сцена -->
+    <div id="ar-scene-container">
+        <a-scene embedded arjs='sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'>
+            <a-assets>
+                <a-asset-item id="robotModel" src="https://qigod888.github.io/1/demos.glb"></a-asset-item>
+            </a-assets>
+
+            <!-- Маркер Hiro (стандарт) или безмаркерное перемещение -->
+            <a-marker preset="hiro">
+                <a-entity 
+                    gltf-model="#robotModel" 
+                    scale="0.5 0.5 0.5" 
+                    position="0 0 0"
+                    rotation="-90 0 0"
+                    animation="property: rotation; to: -90 360 0; loop: true; dur: 20000; easing: linear">
+                </a-entity>
+                
+                <!-- Хотспоты в 3D пространстве AR.js -->
+                <a-sphere position="0.2 0.3 0.2" radius="0.05" color="#00f0ff" 
+                    animation="property: scale; to: 1.2 1.2 1.2; dir: alternate; loop: true; dur: 1000">
+                </a-sphere>
+                <a-text value="DATA_NODE_01" position="0.3 0.4 0.2" scale="0.5 0.5 0.5" color="#fff"></a-text>
+            </a-marker>
+
+            <a-entity camera></a-entity>
+        </a-scene>
+    </div>
+
+    <!-- UI поверх AR -->
+    <div id="ar-ui">
+        <div class="ar-back-btn" onclick="exitAR()">ВЫХОД ИЗ СЕССИИ</div>
+        <div id="terminal-ar" style="position:absolute; bottom:30px; left:30px; font-size:10px; color:var(--primary); background:rgba(0,0,0,0.7); padding:10px;">
+            > AR_MODE: ACTIVE<br>
+            > TRACKING: STABLE
+        </div>
+    </div>
+
+    <!-- Media Hub -->
+    <div class="media-hub" id="mediaHub">
+        <div class="hub-header">
+            <span>NEURAL_NODE_ACCESS</span>
+            <span class="close-hub" onclick="closeHub()">[TERMINATE]</span>
+        </div>
+        <div class="hub-tabs">
+            <button class="tab active" onclick="setMode('vid')">VISUAL_FEED</button>
+            <button class="tab" onclick="setMode('aud')">ENCRYPTED_COMMS</button>
+        </div>
+        <div style="padding: 20px;">
+            <div id="vidContent">
+                <iframe id="videoIframe" width="100%" height="200" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="border: 1px solid var(--primary);"></iframe>
+            </div>
+            <div id="audContent" style="display:none; text-align:center;">
+                <div style="margin-bottom:15px; color:#888;">DECRYPTING SIGNAL...</div>
+                <audio id="audioPlayer" controls style="width:100%; filter: invert(1);"></audio>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. Матричный фон
+        const canvas = document.getElementById('dataCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const chars = "010101🤖SYNC";
+        const drops = Array(Math.floor(canvas.width / 12)).fill(1);
+        function draw() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary');
+            ctx.font = "12px monospace";
+            drops.forEach((y, i) => {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * 12, y * 12);
+                if (y * 12 > canvas.height && Math.random() > 0.98) drops[i] = 0;
+                drops[i]++;
+            });
+        }
+        setInterval(draw, 50);
+
+        // 2. Логгер
+        const logContent = document.getElementById('logContent');
+        function log(msg) {
+            const p = document.createElement('div');
+            p.innerHTML = `> ${msg}`;
+            logContent.prepend(p);
+            if(logContent.children.length > 8) logContent.lastChild.remove();
+        }
+
+        // 3. Интеграция AR.js
+        const arBtn = document.getElementById('ar-init-btn');
+        const mv = document.getElementById('mainModel');
+        const arScene = document.getElementById('ar-scene-container');
+        const arUI = document.getElementById('ar-ui');
+
+        arBtn.addEventListener('click', () => {
+            log("INIT_HYBRID_AR_SESSION...");
+            mv.style.display = 'none';
+            arBtn.style.display = 'none';
+            document.getElementById('terminal').style.display = 'none';
+            
+            arScene.style.display = 'block';
+            arUI.style.display = 'block';
+            document.body.style.background = 'transparent';
+            
+            log("WEBCAM_STREAM: CONNECTED");
+            log("AR_MARKER_SCAN: PENDING (Find 'Hiro' marker)");
         });
-      }
-    });
-  </script>
+
+        function exitAR() {
+            location.reload(); // Простой способ сбросить все AR-процессы
+        }
+
+        // 4. Взаимодействие с хотспотами
+        document.querySelectorAll('.Hotspot').forEach(h => {
+            h.addEventListener('click', () => {
+                const nodeName = h.getAttribute('slot').toUpperCase();
+                log(`ACCESSING_${nodeName}...`);
+                document.getElementById('mediaHub').style.display = 'flex';
+                document.getElementById('videoIframe').src = "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1";
+            });
+        });
+
+        function closeHub() { 
+            document.getElementById('mediaHub').style.display = 'none'; 
+            document.getElementById('videoIframe').src = "";
+            log("SESSION_STBY");
+        }
+
+        function setMode(mode) {
+            document.getElementById('vidContent').style.display = mode === 'vid' ? 'block' : 'none';
+            document.getElementById('audContent').style.display = mode === 'aud' ? 'block' : 'none';
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            log(`SWITCH_MODE: ${mode.toUpperCase()}`);
+        }
+
+        // ПАСХАЛКА: Тройной тап
+        let clicks = 0;
+        document.getElementById('eyeTrigger').addEventListener('click', () => {
+            clicks++;
+            if(clicks === 3) {
+                document.body.classList.add('overdrive');
+                log("!!! CRITICAL_SYSTEM_OVERDRIVE !!!");
+                alert("WARNING: Deep Space Photogrammetry Mode Active.");
+            }
+            setTimeout(() => clicks = 0, 1000);
+        });
+
+        log("SYSTEM_READY. AWAITING_INPUT.");
+    </script>
 </body>
 </html>
