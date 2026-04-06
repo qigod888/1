@@ -1109,7 +1109,7 @@ const AXIAL_TILTS_DEG = {
   jupiter: 3.1, saturn: 26.7, uranus: 97.8, neptune: 28.3,
 };
 
-const NATURAL_SATELLITES = {
+const NATURALSATELLITES = {
   mercury: [],
   venus: [],
   earth: [
@@ -1527,21 +1527,29 @@ function initPostProcessing() {
 
 initPostProcessing();
 
-// ============================================================
-// ATMOSPHERIC SHADER (EARTH)
+/// ============================================================
+// ATMOSPHERIC SHADER
 // ============================================================
 const atmosphereVertexShader = `
   varying vec3 vNormal;
+
   void main() {
     vNormal = normalize(normalMatrix * normal);
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
   }
 `;
-const atmosphereFragmentShader = `
+
 const atmosphereFragmentShader = `
   uniform vec3 glowColor;
   uniform float intensity;
   varying vec3 vNormal;
+
+  void main() {
+    float rim = 1.0 - max(dot(normalize(vNormal), vec3(0.0, 0.0, 1.0)), 0.0);
+    rim = pow(rim, 2.8);
+    gl_FragColor = vec4(glowColor, rim * intensity);
+  }
+`;
 
   void main() {
     float rim = 1.0 - max(dot(normalize(vNormal), vec3(0.0, 0.0, 1.0)), 0.0);
@@ -1775,7 +1783,7 @@ for (let s = 0; s < 3; s++) {
 // ============================================================
 // NATURAL SATELLITES
 // ============================================================
-const naturalList = NATURAL_SATELLITES[p.id] || [];
+const naturalList = NATURALSATELLITES[p.id] || [];
 naturalList.forEach((sat, satIdx) => {
   // У Земли Луна уже создаётся отдельным старым кодом — не дублируем
   if (p.id === 'earth' && sat.name === 'Луна' && pm.moon) return;
@@ -2182,7 +2190,7 @@ function renderSatellitesList(items, title = 'Спутники') {
 }
 
 function showDetailPanel(idx, mode = 'planet') {
-  const data = mode === 'sun' ? SUN_INFO : PLANETS[idx];
+  const data = mode === 'sun' ? SUNINFO : PLANETS[idx];
   if (!data) return;
 
   document.getElementById('dp-tagline').textContent = data.tagline || '';
@@ -2190,7 +2198,7 @@ function showDetailPanel(idx, mode = 'planet') {
   document.getElementById('dp-desc-short').textContent = data.descShort || '';
   document.getElementById('dp-desc-long').textContent = data.descLong || '';
   document.getElementById('dp-desc-long').classList.remove('show');
-  document.getElementById('dp-read-more').textContent = 'Показать больше';
+  document.getElementById('dp-read-more').textContent = 'Читать подробнее';
 
   const f = data.facts || {};
   document.getElementById('f-diameter').textContent = f.diameter || '—';
@@ -2202,39 +2210,34 @@ function showDetailPanel(idx, mode = 'planet') {
   document.getElementById('f-axialTilt').textContent = f.axialTilt || '—';
   document.getElementById('f-moons').textContent = f.moons || '—';
 
-  if (mode === 'sun') {
-    renderSatellitesList([], 'Спутники');
-  } else {
-    renderSatellitesList(data.satellites || [], 'Спутники');
+  const majorMoonEl = document.getElementById('dp-major-moons');
+  if (majorMoonEl) {
+    if (mode === 'planet' && idx >= 0) {
+      const p = PLANETS[idx];
+      const majorMoons = (NATURALSATELLITES[p.id] || []).map(m => m.name);
+
+      if (p.id === 'earth') {
+        majorMoons.push('ISS', 'GPS', 'Starlink');
+      }
+
+      if (majorMoons.length) {
+        majorMoonEl.style.display = 'block';
+        majorMoonEl.textContent = majorMoons.join(', ');
+      } else {
+        majorMoonEl.style.display = 'none';
+        majorMoonEl.textContent = '';
+      }
+    } else {
+      majorMoonEl.style.display = 'none';
+      majorMoonEl.textContent = '';
+    }
   }
 
-  document.getElementById('detail-panel').classList.add('visible');
-}
-
-  const f = p.facts;
-  document.getElementById('f-diameter').textContent = f.diameter;
-  document.getElementById('f-temp').textContent = f.temp;
-  document.getElementById('f-day').textContent = f.day;
-  document.getElementById('f-gravity').textContent = f.gravity;
-  document.getElementById('f-mass').textContent = f.mass;
-  document.getElementById('f-density').textContent = f.density;
-  document.getElementById('f-axialTilt').textContent = f.axialTilt;
-  document.getElementById('f-moons').textContent = f.moons;
-
-const majorMoonEl = document.getElementById('dp-major-moons');
-const majorMoons = (NATURAL_SATELLITES[p.id] || []).map(m => m.name);
-
-if (p.id === 'earth') {
-  majorMoons.push('ISS', 'GPS', 'геостационарные спутники');
-}
-
-if (majorMoons.length) {
-  majorMoonEl.style.display = 'block';
-  majorMoonEl.textContent = 'Ключевые спутники: ' + majorMoons.join(', ');
-} else {
-  majorMoonEl.style.display = 'none';
-  majorMoonEl.textContent = '';
-}
+  if (mode === 'sun') {
+    renderSatellitesList([], '');
+  } else {
+    renderSatellitesList(data.satellites || [], 'Спутники и объекты');
+  }
 
   document.getElementById('detail-panel').classList.add('visible');
 }
@@ -2268,11 +2271,11 @@ function updateNavActive(idx) {
 
 function hideLoader() {
   document.getElementById('loader').classList.add('hidden');
-  // apply all textures
+
   applySkyTexture();
   applySunTexture();
   applyPlanetTextures();
-  // show hero
+
   setTimeout(() => {
     document.getElementById('hero').classList.remove('hidden');
   }, 300);
