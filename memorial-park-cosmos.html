@@ -906,7 +906,7 @@ html, body {
   <div class="loader-track">
     <div id="loader-fill"></div>
   </div>
-  <div class="loader-msg" id="loader-msg">Загрузка текстур NASA...</div>
+  <div class="loader-msg" id="loader-msg">Подготовка планетария к запуску...</div>
 </div>
 
 <!-- Hero -->
@@ -1384,36 +1384,51 @@ scene.add(ambientLight);
 // ============================================================
 // TEXTURE LOADING
 // ============================================================
-let loadedCount = 0;
-let totalTextures = Object.keys(TEX).length;
 const textures = {};
+const texKeys = Object.keys(TEX);
+let finishedTextures = 0;
+const totalTextures = texKeys.length;
+let loaderClosed = false;
 
-const loadingManager = new THREE.LoadingManager();
-loadingManager.onProgress = (url, loaded, total) => {
-  const pct = Math.round((loaded / total) * 100);
+function finishTexture(key, tex = null) {
+  textures[key] = tex;
+  finishedTextures++;
+
+  const pct = Math.round((finishedTextures / totalTextures) * 100);
   document.getElementById('loader-fill').style.width = pct + '%';
-  document.getElementById('loader-msg').textContent = 'Загрузка: ' + url.split('/').pop();
-};
-loadingManager.onLoad = () => {
-  document.getElementById('loader-fill').style.width = '100%';
-  setTimeout(hideLoader, 600);
-};
-loadingManager.onError = (url) => {
-  console.warn('Texture failed:', url);
-};
+  document.getElementById('loader-msg').textContent = `Загружено: ${finishedTextures}/${totalTextures}`;
 
-const textureLoader = new THREE.TextureLoader(loadingManager);
-// CORS: raw.githubusercontent.com sends Access-Control-Allow-Origin: *
-// so crossOrigin can be left as default (empty string) — no explicit set needed.
-
-function loadTex(key) {
-  textureLoader.load(TEX[key],
-    (t) => { textures[key] = t; },
-    undefined,
-    (err) => { console.warn('Texture failed:', key, err); textures[key] = null; }
-  );
+  if (finishedTextures >= totalTextures && !loaderClosed) {
+    loaderClosed = true;
+    document.getElementById('loader-fill').style.width = '100%';
+    document.getElementById('loader-msg').textContent = 'Готово';
+    setTimeout(hideLoader, 300);
+  }
 }
-Object.keys(TEX).forEach(loadTex);
+
+const textureLoader = new THREE.TextureLoader();
+
+texKeys.forEach((key) => {
+  textureLoader.load(
+    TEX[key],
+    (t) => finishTexture(key, t),
+    undefined,
+    (err) => {
+      console.warn('Texture failed:', key, TEX[key], err);
+      finishTexture(key, null);
+    }
+  );
+});
+
+setTimeout(() => {
+  if (!loaderClosed) {
+    console.warn('Texture loading timeout — forcing UI start');
+    loaderClosed = true;
+    document.getElementById('loader-fill').style.width = '100%';
+    document.getElementById('loader-msg').textContent = 'Запуск без части текстур';
+    hideLoader();
+  }
+}, 8000);
 
 // ============================================================
 // SKYBOX
