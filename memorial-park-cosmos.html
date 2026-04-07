@@ -3118,20 +3118,6 @@ const REAL_ORBIT_RATIOS = {
 const VISUAL_ORBITS = PLANETS.map(p => p.orbitR);
 const BASE_AU = 160;
 
-let realScaleMode = false;
-const REAL_ORBIT_RATIOS = {
-  mercury: 0.39,
-  venus: 0.72,
-  earth: 1.0,
-  mars: 1.52,
-  jupiter: 5.2,
-  saturn: 9.58,
-  uranus: 19.2,
-  neptune: 30.05
-};
-const VISUAL_ORBITS = PLANETS.map(p => p.orbitR);
-const BASE_AU = 160;
-
 document.getElementById('btn-realscale').addEventListener('click', () => {
   realScaleMode = !realScaleMode;
 
