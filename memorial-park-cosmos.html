@@ -2736,14 +2736,15 @@ window.addEventListener('keydown', (e) => {
     if (!isOverview) returnToOverview();
     if (tourActive) stopTour();
   }
-  if (e.key === 'ArrowRight' && !isOverview) {
-    const next = (focusedIdx + 1) % PLANETS.length;
-    focusPlanet(next);
-  }
-  if (e.key === 'ArrowLeft' && !isOverview) {
-    const prev = (focusedIdx - 1 + PLANETS.length) % PLANETS.length;
-    focusPlanet(prev);
-  }
+if (e.key === 'ArrowRight' && !isOverview && focusedIdx > 0) {
+  const next = getOrbitPlanetRealIndexByStep(focusedIdx, +1);
+  focusPlanet(next);
+}
+
+if (e.key === 'ArrowLeft' && !isOverview && focusedIdx > 0) {
+  const prev = getOrbitPlanetRealIndexByStep(focusedIdx, -1);
+  focusPlanet(prev);
+}
 });
 
 // ============================================================
@@ -3089,12 +3090,28 @@ window.addEventListener('touchend', (e) => {
   if (e.changedTouches.length === 1) {
     const dx = e.changedTouches[0].clientX - _touchStartX;
     const dy = e.changedTouches[0].clientY - _touchStartY;
+  window.addEventListener('touchend', e => {
+  if (!swipeActive) return;
+
+  if (e.changedTouches.length === 1) {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+
     if (Math.abs(dx) > 60 && Math.abs(dy) < 40) {
-      if (!isOverview && focusedIdx >= 0) {
-        if (dx < 0) focusPlanet((focusedIdx + 1) % PLANETS.length);
-        else focusPlanet((focusedIdx - 1 + PLANETS.length) % PLANETS.length);
+      if (!isOverview && focusedIdx > 0) {
+        if (dx < 0) {
+          const nextIdx = getOrbitPlanetRealIndexByStep(focusedIdx, +1);
+          focusPlanet(nextIdx);
+        } else {
+          const prevIdx = getOrbitPlanetRealIndexByStep(focusedIdx, -1);
+          focusPlanet(prevIdx);
+        }
       }
     }
+  }
+
+  swipeActive = false;
+}, { passive: true });
   }
   _swipeActive = false;
 }, { passive: true });
@@ -3106,9 +3123,9 @@ window.addEventListener('touchend', (e) => {
 // The original listener is already defined; we add a second one:
 window.addEventListener('keydown', (e) => {
   // Keys 1-8: fly to planet
- const num = parseInt(e.key, 10);
+const num = parseInt(e.key, 10);
 if (num >= 1 && num <= 8 && !e.altKey && !e.ctrlKey && !e.metaKey) {
-  focusPlanet(num); // 1 = mercury, 2 = venus ... если sun = 0
+  focusPlanet(num);
   return;
 }
   // F — fullscreen
