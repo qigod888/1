@@ -1975,7 +1975,13 @@ let speedMultiplier = 1;
 // FOCUS PLANET (CINEMATIC FLY-IN)
 // ============================================================
 function focusPlanet(idx) {
-  if (currentTween) { currentTween.kill(); currentTween = null; }
+  if (idx < 0 || idx >= PLANETS.length) return;
+  if (teacherPlanetLocked && focusedIdx >= 0 && idx !== focusedIdx) return;
+
+  if (currentTween) {
+    currentTween.kill();
+    currentTween = null;
+  }
 
   focusedIdx = idx;
   isOverview = false;
@@ -1984,40 +1990,32 @@ function focusPlanet(idx) {
 
   const planet = PLANETS[idx];
   const pm = planetMeshes[idx];
-
-  // World position of the planet
-  const planetPos = pm.mesh.position.clone();
-  // Adjust for parent if needed
+  const planetPos = new THREE.Vector3();
   pm.mesh.getWorldPosition(planetPos);
 
-  // Calculate final camera distance: planet occupies ~17% of screen height
   const fovRad = camera.fov * Math.PI / 180;
   const finalDist = planet.size / (0.17 * Math.tan(fovRad / 2));
 
-  // Direction from planet to camera (normalized)
   const dir = new THREE.Vector3().subVectors(camera.position, planetPos).normalize();
-  // Push slightly upward
   dir.y += 0.3;
   dir.normalize();
 
   const finalPos = new THREE.Vector3(
     planetPos.x + dir.x * finalDist,
     planetPos.y + dir.y * finalDist,
-    planetPos.z + dir.z * finalDist,
+    planetPos.z + dir.z * finalDist
   );
 
-  // Mid point: arc high above ecliptic
   const midX = (camera.position.x + planetPos.x) / 2;
   const midZ = (camera.position.z + planetPos.z) / 2;
   const highY = Math.max(camera.position.y, 180);
 
-  // Lock lookAt continuously during flight
-  // Use live reference to planet mesh position for tracking
-  const pm_ref = pm;
+  const pmref = pm;
 
   currentTween = gsap.timeline({
     onComplete: () => {
-      const livePos = pm_ref.mesh.position;
+      const livePos = new THREE.Vector3();
+      pmref.mesh.getWorldPosition(livePos);
       controls.target.copy(livePos);
       controls.minDistance = planet.size * 1.4;
       controls.maxDistance = planet.size * 12;
@@ -2025,21 +2023,26 @@ function focusPlanet(idx) {
       orbitActive = true;
       currentTween = null;
     }
-  })
-  .to(camera.position, {
-    x: midX, y: highY, z: midZ,
-    duration: 1.5,
-    ease: 'power1.in',
-    onUpdate: () => camera.lookAt(pm_ref.mesh.position),
-  })
-  .to(camera.position, {
-    x: finalPos.x, y: finalPos.y, z: finalPos.z,
-    duration: 2.2,
-    ease: 'expo.out',
-    onUpdate: () => camera.lookAt(pm_ref.mesh.position),
   });
 
-  // Update UI
+  currentTween
+    .to(camera.position, {
+      x: midX,
+      y: highY,
+      z: midZ,
+      duration: 1.5,
+      ease: 'power1.inOut',
+      onUpdate: () => camera.lookAt(pmref.mesh.position)
+    })
+    .to(camera.position, {
+      x: finalPos.x,
+      y: finalPos.y,
+      z: finalPos.z,
+      duration: 2.2,
+      ease: 'expo.out',
+      onUpdate: () => camera.lookAt(pmref.mesh.position)
+    });
+
   showDetailPanel(idx);
   showFocusUI(idx);
   updateNavActive(idx);
@@ -2047,7 +2050,12 @@ function focusPlanet(idx) {
 }
 
 function returnToOverview() {
-  if (currentTween) { currentTween.kill(); currentTween = null; }
+  if (teacherPlanetLocked) return;
+
+  if (currentTween) {
+    currentTween.kill();
+    currentTween = null;
+  }
 
   controls.enabled = false;
   controls.target.set(0, 0, 0);
@@ -2061,23 +2069,28 @@ function returnToOverview() {
       focusedIdx = -1;
       currentTween = null;
     }
-  })
-  .to(camera.position, {
-    x: 0, y: 200, z: 480,
+  });
+
+  currentTween.to(camera.position, {
+    x: 0,
+    y: 200,
+    z: 480,
     duration: 2.5,
     ease: 'power2.inOut',
-    onUpdate: () => camera.lookAt(0, 0, 0),
+    onUpdate: () => camera.lookAt(0, 0, 0)
   });
 
   hideDetailPanel();
   hideFocusUI();
   updateNavActive(-1);
+  document.getElementById('earth-compare').classList.remove('visible');
+  document.getElementById('qr-widget').classList.remove('visible');
 }
 
 // ============================================================
 // UI HELPERS
 // ============================================================
-function renderSatellitesList(items, title = 'Спутники') {
+function renderSatellitesList(items, title) {
   const titleEl = document.getElementById('dp-satellites-title');
   const listEl = document.getElementById('dp-satellites-list');
 
@@ -2088,9 +2101,9 @@ function renderSatellitesList(items, title = 'Спутники') {
     return;
   }
 
-  titleEl.style.display = '';
+  titleEl.style.display = 'block';
   listEl.style.display = 'flex';
-  titleEl.textContent = title;
+  titleEl.textContent = title || 'Спутники';
   listEl.innerHTML = '';
 
   items.forEach(item => {
@@ -2098,13 +2111,11 @@ function renderSatellitesList(items, title = 'Спутники') {
     card.className = 'dp-satellite-card';
 
     if (typeof item === 'string') {
-      card.innerHTML = `
-        <div class="dp-satellite-desc">${item}</div>
-      `;
+      card.innerHTML = `<div class="dp-satellite-desc">${item}</div>`;
     } else {
       card.innerHTML = `
-        <div class="dp-satellite-name">${item.name || 'Без названия'}</div>
-        <div class="dp-satellite-type">${item.type || 'Спутник'}</div>
+        <div class="dp-satellite-name">${item.name || ''}</div>
+        <div class="dp-satellite-type">${item.type || ''}</div>
         <div class="dp-satellite-desc">${item.desc || ''}</div>
       `;
     }
@@ -2120,9 +2131,13 @@ function showDetailPanel(idx, mode = 'planet') {
   document.getElementById('dp-tagline').textContent = data.tagline || '';
   document.getElementById('dp-name').textContent = data.name || '';
   document.getElementById('dp-desc-short').textContent = data.descShort || '';
-  document.getElementById('dp-desc-long').textContent = data.descLong || '';
-  document.getElementById('dp-desc-long').classList.remove('show');
-  document.getElementById('dp-read-more').textContent = 'Читать подробнее';
+
+  const longEl = document.getElementById('dp-desc-long');
+  longEl.textContent = data.descLong || '';
+  longEl.classList.remove('show');
+
+  const readMoreBtn = document.getElementById('dp-read-more');
+  readMoreBtn.textContent = 'Читать далее';
 
   const f = data.facts || {};
   document.getElementById('f-diameter').textContent = f.diameter || '—';
@@ -2138,7 +2153,7 @@ function showDetailPanel(idx, mode = 'planet') {
   if (majorMoonEl) {
     if (mode === 'planet' && idx >= 0) {
       const p = PLANETS[idx];
-      const majorMoons = (NATURALSATELLITES[p.id] || []).map(m => m.name);
+      const majorMoons = (NATURALSATELLITES[p.id] || []).map(m => m.name).filter(Boolean);
 
       if (p.id === 'earth') {
         majorMoons.push('ISS', 'GPS', 'Starlink');
@@ -2164,6 +2179,32 @@ function showDetailPanel(idx, mode = 'planet') {
   }
 
   document.getElementById('detail-panel').classList.add('visible');
+
+  if (mode === 'planet' && idx >= 0) {
+    updateEarthCompare(PLANETS[idx].id);
+    updateQRCode(idx);
+
+    const timelineSlider = document.getElementById('timeline-slider');
+    const timelineYear = document.getElementById('timeline-year');
+    if (timelineSlider && timelineYear) {
+      timelineSlider.value = 0;
+      timelineYear.textContent = '';
+    }
+
+    if (teacherFactsHidden) {
+      setTimeout(() => {
+        const fg = document.querySelector('.dp-facts-grid');
+        if (fg) fg.style.filter = 'blur(8px)';
+      }, 50);
+    }
+  } else {
+    document.getElementById('earth-compare').classList.remove('visible');
+    document.getElementById('qr-widget').classList.remove('visible');
+  }
+}
+
+function hideDetailPanel() {
+  document.getElementById('detail-panel').classList.remove('visible');
 }
 
 function hideDetailPanel() {
@@ -2173,9 +2214,8 @@ function hideDetailPanel() {
 function showFocusUI(idx) {
   document.getElementById('back-btn').classList.add('visible');
   document.getElementById('arrow-nav').classList.add('visible');
-  document.getElementById('planet-ticker').textContent = String(idx + 1).padStart(2, '0') + '/08';
+  document.getElementById('planet-ticker').textContent = `${String(idx + 1).padStart(2, '0')}/08`;
   document.getElementById('ui-header').classList.add('hidden');
-  // Navigator stays ALWAYS visible after Start — do NOT hide it
   document.getElementById('speed-ctrl').classList.add('hidden');
 }
 
@@ -2183,7 +2223,6 @@ function hideFocusUI() {
   document.getElementById('back-btn').classList.remove('visible');
   document.getElementById('arrow-nav').classList.remove('visible');
   document.getElementById('ui-header').classList.remove('hidden');
-  // Navigator is always visible — no need to show/hide it here
   document.getElementById('speed-ctrl').classList.remove('hidden');
 }
 
@@ -2195,7 +2234,6 @@ function updateNavActive(idx) {
 
 function hideLoader() {
   document.getElementById('loader').classList.add('hidden');
-
   applySkyTexture();
   applySunTexture();
   applyPlanetTextures();
@@ -2543,6 +2581,7 @@ function renderFrame() {
 // ============================================================
 function animate() {
   requestAnimationFrame(animate);
+
   const delta = Math.min(clock.getDelta(), 0.05);
 
   asteroidTick(delta);
@@ -2553,142 +2592,101 @@ function animate() {
     earthPmNight.nightMesh.position.copy(earthPmNight.mesh.position);
     earthPmNight.nightMesh.rotation.y = earthPmNight.mesh.rotation.y;
   }
-  // Sun rotation
-  sunMesh.rotation.y += 0.002 * delta;
 
-  // Planet self-rotation + orbit
+  sunMesh.rotation.y += 0.002 * delta * 60;
+
   planetMeshes.forEach((pm, i) => {
     const p = PLANETS[i];
 
-    // Self-rotation
-    pm.mesh.rotation.y += p.rotSpeed * delta;
+    pm.mesh.rotation.y += p.rotSpeed * delta * 60;
 
-    // Cloud layer (slightly faster)
     if (pm.clouds) {
-      pm.clouds.rotation.y += p.rotSpeed * delta * 1.12;
+      pm.clouds.rotation.y += p.rotSpeed * 1.12 * delta * 60;
     }
 
-    // Moon
+    pm.angle += p.speed * speedMultiplier * delta * 60;
+
+    const pos = getOrbitPos(p, pm.angle, pm.radius || p.orbitR);
+    const nx = pos.x;
+    const nz = pos.z;
+
+    pm.mesh.position.set(nx, 0, nz);
+
+    if (pm.clouds) pm.clouds.position.set(nx, 0, nz);
+    if (pm.atmosphere) pm.atmosphere.position.set(nx, 0, nz);
+    if (pm.ring) pm.ring.position.set(nx, 0, nz);
+    if (pm.nightMesh) pm.nightMesh.position.set(nx, 0, nz);
+
+    if (!isOverview && focusedIdx === i && orbitActive && controls.enabled) {
+      controls.target.set(nx, 0, nz);
+    }
+
     if (pm.moon) {
-      pm.moonAngle += 0.35 * delta;
+      pm.moonAngle += 0.35 * delta * 60;
       const moonR = p.size * 2.2;
       const moonX = moonR * Math.cos(pm.moonAngle);
       const moonZ = moonR * Math.sin(pm.moonAngle);
       const moonY = 0.2 * moonR * Math.sin(pm.moonAngle * 0.3);
-      pm.moon.position.set(moonX + pm.mesh.position.x, pm.mesh.position.y + moonY, moonZ + pm.mesh.position.z);
+      pm.moon.position.set(nx + moonX, moonY, nz + moonZ);
     }
 
-// ISS around Earth
-if (pm.iss) {
-  pm.issAngle += 1.8 * delta;
-  const r = p.size + 1.1;
-  pm.iss.position.set(
-    pm.mesh.position.x + Math.cos(pm.issAngle) * r,
-    pm.mesh.position.y + 0.35 + Math.sin(pm.issAngle * 1.5) * 0.18,
-    pm.mesh.position.z + Math.sin(pm.issAngle) * r
-  );
-  pm.iss.lookAt(pm.mesh.position);
-}
+    if (pm.iss) {
+      pm.issAngle += 1.8 * delta;
+      const r = p.size * 1.18;
+      pm.iss.position.set(
+        nx + Math.cos(pm.issAngle) * r,
+        0.35 * Math.sin(pm.issAngle * 1.5) + 0.18,
+        nz + Math.sin(pm.issAngle) * r
+      );
+      pm.iss.lookAt(nx, 0, nz);
+    }
 
-// Communication satellites
-if (pm.commSats && pm.commSats.length) {
-  pm.commSats.forEach((sat, si) => {
-    sat.userData.orbitAngle += sat.userData.orbitSpeed * delta;
-    const r = sat.userData.orbitRadius;
-    sat.position.set(
-      pm.mesh.position.x + Math.cos(sat.userData.orbitAngle) * r,
-      pm.mesh.position.y + 0.8 + Math.sin(sat.userData.orbitAngle * 0.5 + si) * 0.2,
-      pm.mesh.position.z + Math.sin(sat.userData.orbitAngle) * r
-    );
-    sat.lookAt(pm.mesh.position);
-  });
-}
+    if (pm.commSats && pm.commSats.length) {
+      pm.commSats.forEach((sat, si) => {
+        sat.userData.orbitAngle += sat.userData.orbitSpeed * delta * 60;
+        const r = sat.userData.orbitRadius;
+        sat.position.set(
+          nx + Math.cos(sat.userData.orbitAngle) * r,
+          0.8 * Math.sin(sat.userData.orbitAngle * 0.5 + si * 0.2),
+          nz + Math.sin(sat.userData.orbitAngle) * r
+        );
+        sat.lookAt(nx, 0, nz);
+      });
+    }
 
-// Natural satellites
-if (pm.naturalSatellites && pm.naturalSatellites.length) {
-  pm.naturalSatellites.forEach((sat) => {
-    sat.angle += sat.speed * delta;
-    const sx = Math.cos(sat.angle) * sat.orbit;
-    const sz = Math.sin(sat.angle) * sat.orbit;
-    const sy = sat.tiltY ? Math.sin(sat.angle * 0.8) * sat.tiltY * sat.orbit : 0;
+    if (pm.naturalSatellites && pm.naturalSatellites.length) {
+      pm.naturalSatellites.forEach(sat => {
+        sat.angle += sat.speed * delta * 60;
+        const sx = Math.cos(sat.angle) * sat.orbit;
+        const sz = Math.sin(sat.angle) * sat.orbit;
+        const sy = sat.tiltY ? Math.sin(sat.angle * 0.8) * sat.tiltY * sat.orbit : 0;
 
-    sat.mesh.position.set(
-      pm.mesh.position.x + sx,
-      pm.mesh.position.y + sy,
-      pm.mesh.position.z + sz
-    );
+        sat.mesh.position.set(nx + sx, sy, nz + sz);
+        sat.mesh.rotation.y += delta * 0.6 * 60;
+        sat.orbitLine.position.set(nx, 0, nz);
 
-    sat.mesh.rotation.y += delta * 0.6;
-    sat.orbitLine.position.copy(pm.mesh.position);
-  });
-}
+        const focused = !isOverview && focusedIdx === i;
+        sat.mesh.visible = focused || isOverview;
+        sat.orbitLine.material.opacity = focused ? 0.18 : 0.035;
+      });
+    }
 
-// Artificial satellites around Earth
-if (pm.artificialSatellites && pm.artificialSatellites.length) {
-  pm.artificialSatellites.forEach((sat) => {
-    sat.angle += sat.speed * delta;
-    const sx = Math.cos(sat.angle) * sat.orbit;
-    const sz = Math.sin(sat.angle) * sat.orbit;
-    const sy = Math.sin(sat.angle * 1.5) * sat.tiltY;
+    if (pm.artificialSatellites && pm.artificialSatellites.length) {
+      pm.artificialSatellites.forEach(sat => {
+        sat.angle += sat.speed * delta * 60;
+        const sx = Math.cos(sat.angle) * sat.orbit;
+        const sz = Math.sin(sat.angle) * sat.orbit;
+        const sy = Math.sin(sat.angle * 1.5) * sat.tiltY;
 
-    sat.mesh.position.set(
-      pm.mesh.position.x + sx,
-      pm.mesh.position.y + sy,
-      pm.mesh.position.z + sz
-    );
+        sat.mesh.position.set(nx + sx, sy, nz + sz);
+        sat.mesh.lookAt(nx, 0, nz);
+        sat.mesh.rotation.z = Math.PI / 2;
+        sat.orbitLine.position.set(nx, 0, nz);
 
-    sat.mesh.lookAt(pm.mesh.position.x, pm.mesh.position.y, pm.mesh.position.z);
-    sat.mesh.rotation.z += Math.PI / 2;
-    sat.orbitLine.position.copy(pm.mesh.position);
-
-    const earthFocused = !isOverview && focusedIdx === i;
-    sat.mesh.visible = earthFocused || isOverview;
-    sat.mesh.scale.setScalar(earthFocused ? 1 : 0.7);
-  });
-}
-
-// Satellite orbit visibility depending on focus mode
-if (pm.naturalSatellites && pm.naturalSatellites.length) {
-  pm.naturalSatellites.forEach((sat) => {
-    sat.orbitLine.material.opacity = (!isOverview && focusedIdx === i) ? 0.18 : 0.035;
-  });
-}
-if (pm.artificialSatellites && pm.artificialSatellites.length) {
-  pm.artificialSatellites.forEach((sat) => {
-    sat.orbitLine.material.opacity = (!isOverview && focusedIdx === i) ? 0.22 : 0.04;
-  });
-}
-
-    // Orbital movement (only in overview or when not locked to planet)
-    if (isOverview || focusedIdx !== i) {
-pm.angle += p.speed * speedMultiplier * delta * 60
-const pos = getOrbitPos(p, pm.angle);
-const nx = pos.x * (pm.radius / p.orbitR);
-const nz = pos.z * (pm.radius / p.orbitR);
-pm.mesh.position.set(nx, 0, nz)
-if (pm.clouds) pm.clouds.position.set(nx, 0, nz);
-if (pm.atmosphere) pm.atmosphere.position.set(nx, 0, nz);
-if (pm.ring) pm.ring.position.set(nx, 0, nz);
-
-      // Update lookAt target during tour/flyby
-      if (!isOverview && focusedIdx === i && orbitActive) {
-        controls.target.set(nx, 0, nz);
-      }
-    } else if (focusedIdx === i) {
-      // Still orbit the focused planet (it keeps moving)
-      pm.angle += p.speed * speedMultiplier * delta * 60
-const pos = getOrbitPos(p, pm.angle);
-const nx = pos.x * (pm.radius / p.orbitR);
-const nz = pos.z * (pm.radius / p.orbitR);
-pm.mesh.position.set(nx, 0, nz)
-if (pm.clouds) pm.clouds.position.set(nx, 0, nz);
-if (pm.atmosphere) pm.atmosphere.position.set(nx, 0, nz);
-if (pm.ring) pm.ring.position.set(nx, 0, nz);
-
-      // If orbit controls enabled, update target to follow planet
-      if (orbitActive && controls.enabled) {
-        controls.target.set(nx, 0, nz);
-      }
+        const focused = !isOverview && focusedIdx === i;
+        sat.mesh.visible = focused || isOverview;
+        sat.orbitLine.material.opacity = focused ? 0.22 : 0.04;
+      });
     }
   });
 
@@ -2971,13 +2969,24 @@ document.getElementById('timeline-slider').addEventListener('input', function() 
 });
 
 function applyTimelineScale(billions) {
-  // Expand/contract orbits and sun size based on timeline
   const scaleFactor = 1 + billions * 0.08;
-  const sunScale = 1 + Math.max(0, billions) * 0.15;
-  gsap.to(sunMesh.scale, { x: sunScale, y: sunScale, z: sunScale, duration: 0.6 });
+  const sunScale = 1 + Math.max(0, billions * 0.15);
+
+  gsap.to(sunMesh.scale, {
+    x: sunScale,
+    y: sunScale,
+    z: sunScale,
+    duration: 0.6
+  });
+
+  if (realScaleMode) return;
+
   planetMeshes.forEach((pm, i) => {
     const newR = PLANETS[i].orbitR * Math.max(0.5, scaleFactor);
-    gsap.to(pm, { radius: newR, duration: 0.8 });
+    gsap.to(pm, {
+      radius: newR,
+      duration: 0.8
+    });
   });
 }
 
@@ -3106,15 +3115,26 @@ const REAL_ORBIT_RATIOS = { mercury:0.39, venus:0.72, earth:1.0, mars:1.52, jupi
 const VISUAL_ORBITS = PLANETS.map(p => p.orbitR);
 const BASE_AU = 160;
 
+let realScaleMode = false;
+const REAL_ORBIT_RATIOS = {
+  mercury: 0.39, venus: 0.72, earth: 1.0, mars: 1.52,
+  jupiter: 5.2, saturn: 9.58, uranus: 19.2, neptune: 30.05
+};
+const VISUAL_ORBITS = PLANETS.map(p => p.orbitR);
+const BASE_AU = 160;
+
 document.getElementById('btn-realscale').addEventListener('click', () => {
   realScaleMode = !realScaleMode;
+
   const btn = document.getElementById('btn-realscale');
   btn.classList.toggle('active', realScaleMode);
+
   const warn = document.getElementById('realscale-warning');
   warn.classList.toggle('show', realScaleMode);
 
   if (realScaleMode) {
     setTimeout(() => warn.classList.remove('show'), 5000);
+
     const targetRadii = [];
     let prevR = 0;
     let prevSize = 0;
@@ -3125,6 +3145,7 @@ document.getElementById('btn-realscale').addEventListener('click', () => {
       const realSize = Math.max(0.22, Math.pow(diameterRatio, 0.42) * 3.2);
 
       let finalR = nominalR;
+
       if (i > 0) {
         const minGap = prevSize + realSize + 18;
         if (finalR - prevR < minGap) finalR = prevR + minGap;
@@ -3142,12 +3163,33 @@ document.getElementById('btn-realscale').addEventListener('click', () => {
         ease: 'power2.inOut'
       });
 
+      const s = targetRadii[i].realSize / PLANETS[i].size;
+
       gsap.to(planetMeshes[i].mesh.scale, {
-        x: targetRadii[i].realSize / PLANETS[i].size,
-        y: targetRadii[i].realSize / PLANETS[i].size,
-        z: targetRadii[i].realSize / PLANETS[i].size,
+        x: s, y: s, z: s,
         duration: 2.5
       });
+
+      if (planetMeshes[i].clouds) {
+        gsap.to(planetMeshes[i].clouds.scale, {
+          x: s, y: s, z: s,
+          duration: 2.5
+        });
+      }
+
+      if (planetMeshes[i].atmosphere) {
+        gsap.to(planetMeshes[i].atmosphere.scale, {
+          x: s, y: s, z: s,
+          duration: 2.5
+        });
+      }
+
+      if (planetMeshes[i].ring) {
+        gsap.to(planetMeshes[i].ring.scale, {
+          x: s, y: s, z: s,
+          duration: 2.5
+        });
+      }
     });
 
     gsap.to(camera.position, {
@@ -3158,31 +3200,77 @@ document.getElementById('btn-realscale').addEventListener('click', () => {
       ease: 'power2.inOut',
       onUpdate: () => camera.lookAt(0, 0, 0)
     });
-
   } else {
     PLANETS.forEach((p, i) => {
-      gsap.to(planetMeshes[i], { radius: VISUAL_ORBITS[i], duration: 2.5, ease: 'power2.inOut' });
-      gsap.to(planetMeshes[i].mesh.scale, { x: 1, y: 1, z: 1, duration: 2.5 });
+      gsap.to(planetMeshes[i], {
+        radius: VISUAL_ORBITS[i],
+        duration: 2.5,
+        ease: 'power2.inOut'
+      });
+
+      gsap.to(planetMeshes[i].mesh.scale, {
+        x: 1, y: 1, z: 1,
+        duration: 2.5
+      });
+
+      if (planetMeshes[i].clouds) {
+        gsap.to(planetMeshes[i].clouds.scale, {
+          x: 1, y: 1, z: 1,
+          duration: 2.5
+        });
+      }
+
+      if (planetMeshes[i].atmosphere) {
+        gsap.to(planetMeshes[i].atmosphere.scale, {
+          x: 1, y: 1, z: 1,
+          duration: 2.5
+        });
+      }
+
+      if (planetMeshes[i].ring) {
+        gsap.to(planetMeshes[i].ring.scale, {
+          x: 1, y: 1, z: 1,
+          duration: 2.5
+        });
+      }
+    });
+
+    gsap.to(camera.position, {
+      x: 0,
+      y: 200,
+      z: 480,
+      duration: 2.4,
+      ease: 'power2.inOut',
+      onUpdate: () => camera.lookAt(0, 0, 0)
     });
   }
-
 });
-
 
 // ============================================================
 // ELLIPTICAL ORBITS
 // ============================================================
-const ECCENTRICITY = { mercury:0.206, venus:0.007, earth:0.017, mars:0.093, jupiter:0.049, saturn:0.057, uranus:0.046, neptune:0.010 };
+const ECCENTRICITY = {
+  mercury: 0.206,
+  venus: 0.007,
+  earth: 0.017,
+  mars: 0.093,
+  jupiter: 0.049,
+  saturn: 0.057,
+  uranus: 0.046,
+  neptune: 0.010
+};
 
-function getOrbitPos(p, angle) {
+function getOrbitPos(p, angle, radiusOverride = null) {
   const e = ECCENTRICITY[p.id] || 0;
-  const a = p.orbitR;
+  const a = radiusOverride ?? p.orbitR;
   const b = a * Math.sqrt(1 - e * e);
+
   return {
     x: a * Math.cos(angle) - a * e,
-    z: b * Math.sin(angle),
+    z: b * Math.sin(angle)
   };
 }
+
 // ============================================================
 // ASTEROID BELT
 // ============================================================
@@ -3357,17 +3445,6 @@ document.getElementById('teacher-tour-btn').addEventListener('click', () => {
 const _origFocusPlanet = focusPlanet;
 // We can't easily override, so patch via post-focus hooks
 // Instead, hook into showDetailPanel
-const _origShowDetailPanel = showDetailPanel;
-window.showDetailPanel = function(idx, mode = 'planet') {
-  _origShowDetailPanel(idx, mode);
-
-  if (mode === 'planet' && idx >= 0) {
-    updateEarthCompare(PLANETS[idx].id);
-    updateQRCode(idx);
-  } else {
-    document.getElementById('earth-compare').classList.remove('visible');
-    document.getElementById('qr-widget').classList.remove('visible');
-  }
 
   const timelineSlider = document.getElementById('timeline-slider');
   const timelineYear = document.getElementById('timeline-year');
@@ -3385,10 +3462,6 @@ window.showDetailPanel = function(idx, mode = 'planet') {
 // ============================================================
 // PATCH animate loop to update asteroids + night mesh + elliptic orbits
 // ============================================================
-const _origAnimate = animate;
-// Patch orbit positions to use elliptical calculation
-// Override planet position update in existing animate() by post-processing
-// Since we can't modify the loop directly, we add an RAF hook
 function asteroidTick(delta) {
   if (!window._asteroids || !window._asteroidMesh) return;
   const dummy = window._asteroidDummy;
