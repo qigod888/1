@@ -3120,61 +3120,88 @@ window.addEventListener('keydown', (e) => {
 // ============================================================
 // REAL SCALE MODE
 // ============================================================
-if (realScaleMode) {
-  setTimeout(() => warn.classList.remove('show'), 5000);
-  const targetRadii = [];
-  let prevR = 0;
-  let prevSize = 0;
-  // ← убрать } отсюда
+let realScaleMode = false;
+const REAL_ORBIT_RATIOS = { mercury:0.39, venus:0.72, earth:1.0, mars:1.52, jupiter:5.2, saturn:9.58, uranus:19.2, neptune:30.05 };
+const VISUAL_ORBITS = PLANETS.map(p => p.orbitR);
+const BASE_AU = 160;
 
-  PLANETS.forEach((p, i) => {
-    const nominalR = REAL_ORBIT_RATIOS[p.id] * BASE_AU;
-    const diameterRatio = REAL_DIAMETERS_KM[p.id] / REAL_DIAMETERS_KM.earth;
-    const realSize = Math.max(0.22, Math.pow(diameterRatio, 0.42) * 3.2);
+document.getElementById('btn-realscale').addEventListener('click', () => {
+  realScaleMode = !realScaleMode;
+  const btn = document.getElementById('btn-realscale');
+  btn.classList.toggle('active', realScaleMode);
+  const warn = document.getElementById('realscale-warning');
+  warn.classList.toggle('show', realScaleMode);
 
-    let finalR = nominalR;
-    if (i > 0) {
-      const minGap = prevSize + realSize + 18;
-      if (finalR - prevR < minGap) finalR = prevR + minGap;
-    }
+  if (realScaleMode) {
+    setTimeout(() => warn.classList.remove('show'), 5000);
+    const targetRadii = [];
+    let prevR = 0;
+    let prevSize = 0;
 
-    targetRadii.push({ finalR, realSize });
-    prevR = finalR;
-    prevSize = realSize;
-  });
+    PLANETS.forEach((p, i) => {
+      const nominalR = REAL_ORBIT_RATIOS[p.id] * BASE_AU;
+      const diameterRatio = REAL_DIAMETERS_KM[p.id] / REAL_DIAMETERS_KM.earth;
+      const realSize = Math.max(0.22, Math.pow(diameterRatio, 0.42) * 3.2);
 
-  PLANETS.forEach((p, i) => {
-    gsap.to(planetMeshes[i], {
-      radius: targetRadii[i].finalR,
-      duration: 2.5,
-      ease: 'power2.inOut'
+      let finalR = nominalR;
+      if (i > 0) {
+        const minGap = prevSize + realSize + 18;
+        if (finalR - prevR < minGap) finalR = prevR + minGap;
+      }
+
+      targetRadii.push({ finalR, realSize });
+      prevR = finalR;
+      prevSize = realSize;
     });
 
-    gsap.to(planetMeshes[i].mesh.scale, {
-      x: targetRadii[i].realSize / PLANETS[i].size,
-      y: targetRadii[i].realSize / PLANETS[i].size,
-      z: targetRadii[i].realSize / PLANETS[i].size,
-      duration: 2.5
+    PLANETS.forEach((p, i) => {
+      gsap.to(planetMeshes[i], {
+        radius: targetRadii[i].finalR,
+        duration: 2.5,
+        ease: 'power2.inOut'
+      });
+
+      gsap.to(planetMeshes[i].mesh.scale, {
+        x: targetRadii[i].realSize / PLANETS[i].size,
+        y: targetRadii[i].realSize / PLANETS[i].size,
+        z: targetRadii[i].realSize / PLANETS[i].size,
+        duration: 2.5
+      });
     });
-  });
 
-  gsap.to(camera.position, {
-    x: 0,
-    y: 850,
-    z: 1850,
-    duration: 3,
-    ease: 'power2.inOut',
-    onUpdate: () => camera.lookAt(0, 0, 0)
-  });
-} // ← } переехала сюда
+    gsap.to(camera.position, {
+      x: 0,
+      y: 850,
+      z: 1850,
+      duration: 3,
+      ease: 'power2.inOut',
+      onUpdate: () => camera.lookAt(0, 0, 0)
+    });
 
-else {
-  PLANETS.forEach((p, i) => {
-    gsap.to(planetMeshes[i], { radius: VISUAL_ORBITS[i], duration: 2.5, ease: 'power2.inOut' });
-    gsap.to(planetMeshes[i].mesh.scale, { x: 1, y: 1, z: 1, duration: 2.5 });
-  });
+  } else {
+    PLANETS.forEach((p, i) => {
+      gsap.to(planetMeshes[i], { radius: VISUAL_ORBITS[i], duration: 2.5, ease: 'power2.inOut' });
+      gsap.to(planetMeshes[i].mesh.scale, { x: 1, y: 1, z: 1, duration: 2.5 });
+    });
+  }
+
+});
+
+
+// ============================================================
+// ELLIPTICAL ORBITS
+// ============================================================
+const ECCENTRICITY = { mercury:0.206, venus:0.007, earth:0.017, mars:0.093, jupiter:0.049, saturn:0.057, uranus:0.046, neptune:0.010 };
+
+function getOrbitPos(p, angle) {
+  const e = ECCENTRICITY[p.id] || 0;
+  const a = p.orbitR;
+  const b = a * Math.sqrt(1 - e * e);
+  return {
+    x: a * Math.cos(angle) - a * e,
+    z: b * Math.sin(angle),
+  };
 }
-  
 // ============================================================
 // ASTEROID BELT
 // ============================================================
