@@ -1501,13 +1501,6 @@ const atmosphereFragmentShader = `
   }
 `;
 
-  void main() {
-    float rim = 1.0 - max(dot(normalize(vNormal), vec3(0.0, 0.0, 1.0)), 0.0);
-    rim = pow(rim, 2.8);
-    gl_FragColor = vec4(glowColor, rim * intensity);
-  }
-`;
-
 // ============================================================
 // BUILD PLANETS
 // ============================================================
