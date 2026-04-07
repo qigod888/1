@@ -3112,8 +3112,14 @@ window.addEventListener('keydown', (e) => {
 // ============================================================
 let realScaleMode = false;
 const REAL_ORBIT_RATIOS = {
-  mercury: 0.39, venus: 0.72, earth: 1.0, mars: 1.52,
-  jupiter: 5.2, saturn: 9.58, uranus: 19.2, neptune: 30.05
+  mercury: 0.39,
+  venus: 0.72,
+  earth: 1.0,
+  mars: 1.52,
+  jupiter: 5.2,
+  saturn: 9.58,
+  uranus: 19.2,
+  neptune: 30.05
 };
 const VISUAL_ORBITS = PLANETS.map(p => p.orbitR);
 const BASE_AU = 160;
@@ -3140,7 +3146,6 @@ document.getElementById('btn-realscale').addEventListener('click', () => {
       const realSize = Math.max(0.22, Math.pow(diameterRatio, 0.42) * 3.2);
 
       let finalR = nominalR;
-
       if (i > 0) {
         const minGap = prevSize + realSize + 18;
         if (finalR - prevR < minGap) finalR = prevR + minGap;
@@ -3158,12 +3163,10 @@ document.getElementById('btn-realscale').addEventListener('click', () => {
         ease: 'power2.inOut'
       });
 
-      const s = targetRadii[i].realSize / PLANETS[i].size;
-
       gsap.to(planetMeshes[i].mesh.scale, {
-        x: s,
-        y: s,
-        z: s,
+        x: targetRadii[i].realSize / PLANETS[i].size,
+        y: targetRadii[i].realSize / PLANETS[i].size,
+        z: targetRadii[i].realSize / PLANETS[i].size,
         duration: 2.5
       });
     });
@@ -3190,15 +3193,6 @@ document.getElementById('btn-realscale').addEventListener('click', () => {
         z: 1,
         duration: 2.5
       });
-    });
-
-    gsap.to(camera.position, {
-      x: 0,
-      y: 200,
-      z: 480,
-      duration: 2.4,
-      ease: 'power2.inOut',
-      onUpdate: () => camera.lookAt(0, 0, 0)
     });
   }
 });
