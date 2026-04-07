@@ -1980,19 +1980,6 @@ function tickRaycast(now) {
   hoverLabel.classList.remove('show');
   canvas.style.cursor = 'default';
 }
-    } else {
-      // In focus mode: show cursor pointer when hovering a different planet
-      hoveredIndex = idx;
-    }
-    // Show pointer cursor if it's a different planet (or any planet in overview)
-    const isDiff = !isOverview && idx === focusedIdx;
-    canvas.style.cursor = isDiff ? 'default' : 'pointer';
-  } else {
-    if (isOverview && hoveredIndex >= 0) unsetHover(hoveredIndex);
-    hoveredIndex = -1;
-    canvas.style.cursor = 'default';
-  }
-}
 
 function setHover(idx) {
   gsap.to(planetMeshes[idx].mesh.scale, { x: 1.12, y: 1.12, z: 1.12, duration: 0.3 });
