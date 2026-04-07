@@ -1165,7 +1165,7 @@ const EARTH_ARTIFICIAL_SATELLITES = [
 ];
 
 const PLANETS = [
-const SUN_INFO = {
+    {
   id: 'sun',
   name: 'Солнце',
   tagline: 'Звезда нашей системы',
@@ -2917,7 +2917,7 @@ const QUIZ_DATA = {
     { q: 'Тип планеты Уран:', opts: ['Газовый гигант','Ледяной гигант','Каменная','Карликовая'], a: 1 },
     { q: 'Температура на Уране:', opts: ['-100°C','-150°C','-195°C','-224°C'], a: 3 },
   ],
-  neptune: [
+    neptune: [
     { q: 'Скорость ветров на Нептуне:', opts: ['500 км/ч','800 км/ч','1500 км/ч','2100 км/ч'], a: 3 },
     { q: 'Расстояние от Нептуна до Земли:', opts: ['150 млн км','1 млрд км','2 млрд км','4.5 млрд км'], a: 3 },
     { q: 'Спутник Тритон вращается:', opts: ['Как обычно','В обратную сторону','Не вращается','Хаотично'], a: 1 },
@@ -3206,7 +3206,6 @@ document.getElementById('btn-realscale').addEventListener('click', () => {
 
 if (realScaleMode) {
   setTimeout(() => warn.classList.remove('show'), 5000);
-
   const targetRadii = [];
   let prevR = 0;
   let prevSize = 0;
