@@ -3118,6 +3118,20 @@ const REAL_ORBIT_RATIOS = {
 const VISUAL_ORBITS = PLANETS.map(p => p.orbitR);
 const BASE_AU = 160;
 
+let realScaleMode = false;
+const REAL_ORBIT_RATIOS = {
+  mercury: 0.39,
+  venus: 0.72,
+  earth: 1.0,
+  mars: 1.52,
+  jupiter: 5.2,
+  saturn: 9.58,
+  uranus: 19.2,
+  neptune: 30.05
+};
+const VISUAL_ORBITS = PLANETS.map(p => p.orbitR);
+const BASE_AU = 160;
+
 document.getElementById('btn-realscale').addEventListener('click', () => {
   realScaleMode = !realScaleMode;
 
@@ -3150,6 +3164,58 @@ document.getElementById('btn-realscale').addEventListener('click', () => {
       prevR = finalR;
       prevSize = realSize;
     });
+
+    PLANETS.forEach((p, i) => {
+      gsap.to(planetMeshes[i], {
+        radius: targetRadii[i].finalR,
+        duration: 2.5,
+        ease: 'power2.inOut'
+      });
+
+      const s = targetRadii[i].realSize / PLANETS[i].size;
+
+      gsap.to(planetMeshes[i].mesh.scale, {
+        x: s,
+        y: s,
+        z: s,
+        duration: 2.5
+      });
+    });
+
+    gsap.to(camera.position, {
+      x: 0,
+      y: 850,
+      z: 1850,
+      duration: 3,
+      ease: 'power2.inOut',
+      onUpdate: () => camera.lookAt(0, 0, 0)
+    });
+  } else {
+    PLANETS.forEach((p, i) => {
+      gsap.to(planetMeshes[i], {
+        radius: VISUAL_ORBITS[i],
+        duration: 2.5,
+        ease: 'power2.inOut'
+      });
+
+      gsap.to(planetMeshes[i].mesh.scale, {
+        x: 1,
+        y: 1,
+        z: 1,
+        duration: 2.5
+      });
+    });
+
+    gsap.to(camera.position, {
+      x: 0,
+      y: 200,
+      z: 480,
+      duration: 2.4,
+      ease: 'power2.inOut',
+      onUpdate: () => camera.lookAt(0, 0, 0)
+    });
+  }
+});
 
     PLANETS.forEach((p, i) => {
       gsap.to(planetMeshes[i], {
@@ -3433,26 +3499,6 @@ document.getElementById('teacher-tour-btn').addEventListener('click', () => {
     navigator.serviceWorker.register(swURL).catch(() => {});
   }
 })();
-
-// ============================================================
-// PATCH focusPlanet to also update new widgets
-// ============================================================
-const _origFocusPlanet = focusPlanet;
-// We can't easily override, so patch via post-focus hooks
-// Instead, hook into showDetailPanel
-
-  const timelineSlider = document.getElementById('timeline-slider');
-  const timelineYear = document.getElementById('timeline-year');
-  if (timelineSlider) timelineSlider.value = 0;
-  if (timelineYear) timelineYear.textContent = 'Сейчас';
-
-  if (teacherFactsHidden) {
-    setTimeout(() => {
-      const fg = document.querySelector('.dp-facts-grid');
-      if (fg) fg.style.filter = 'blur(8px)';
-    }, 100);
-  }
-};
 
 // ============================================================
 // PATCH animate loop to update asteroids + night mesh + elliptic orbits
