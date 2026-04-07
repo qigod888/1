@@ -3120,24 +3120,12 @@ window.addEventListener('keydown', (e) => {
 // ============================================================
 // REAL SCALE MODE
 // ============================================================
-let realScaleMode = false;
-const REAL_ORBIT_RATIOS = { mercury:0.39, venus:0.72, earth:1.0, mars:1.52, jupiter:5.2, saturn:9.58, uranus:19.2, neptune:30.05 };
-const VISUAL_ORBITS = PLANETS.map(p => p.orbitR);
-const BASE_AU = 160; // earth orbit visual = 100 units
-
-document.getElementById('btn-realscale').addEventListener('click', () => {
-  realScaleMode = !realScaleMode;
-  const btn = document.getElementById('btn-realscale');
-  btn.classList.toggle('active', realScaleMode);
-  const warn = document.getElementById('realscale-warning');
-  warn.classList.toggle('show', realScaleMode);
-
 if (realScaleMode) {
   setTimeout(() => warn.classList.remove('show'), 5000);
   const targetRadii = [];
   let prevR = 0;
   let prevSize = 0;
-}
+  // ← убрать } отсюда
 
   PLANETS.forEach((p, i) => {
     const nominalR = REAL_ORBIT_RATIOS[p.id] * BASE_AU;
@@ -3178,32 +3166,15 @@ if (realScaleMode) {
     ease: 'power2.inOut',
     onUpdate: () => camera.lookAt(0, 0, 0)
   });
-}
+} // ← } переехала сюда
 
 else {
-    PLANETS.forEach((p, i) => {
-      gsap.to(planetMeshes[i], { radius: VISUAL_ORBITS[i], duration: 2.5, ease: 'power2.inOut' });
-      gsap.to(planetMeshes[i].mesh.scale, { x: 1, y: 1, z: 1, duration: 2.5 });
-    });
-  }
-});
-
-// ============================================================
-// ELLIPTICAL ORBITS
-// ============================================================
-const ECCENTRICITY = { mercury:0.206, venus:0.007, earth:0.017, mars:0.093, jupiter:0.049, saturn:0.057, uranus:0.046, neptune:0.010 };
-
-// Override orbit position calculation to use ellipse
-function getOrbitPos(p, angle) {
-  const e = ECCENTRICITY[p.id] || 0;
-  const a = p.orbitR; // semi-major axis
-  const b = a * Math.sqrt(1 - e * e); // semi-minor axis
-  return {
-    x: a * Math.cos(angle) - a * e,
-    z: b * Math.sin(angle),
-  };
+  PLANETS.forEach((p, i) => {
+    gsap.to(planetMeshes[i], { radius: VISUAL_ORBITS[i], duration: 2.5, ease: 'power2.inOut' });
+    gsap.to(planetMeshes[i].mesh.scale, { x: 1, y: 1, z: 1, duration: 2.5 });
+  });
 }
-
+  
 // ============================================================
 // ASTEROID BELT
 // ============================================================
