@@ -1786,45 +1786,51 @@ naturalList.forEach((sat, satIdx) => {
 // ARTIFICIAL SATELLITES AROUND EARTH
 // ============================================================
 if (p.id === 'earth') {
-  EARTH_ARTIFICIAL_SATELLITES.forEach((sat, satIdx) => {
-    const satGroup = new THREE.Group();
+      EARTH_ARTIFICIAL_SATELLITES.forEach((sat, satIdx) => {
+        const satGroup = new THREE.Group();
 
-    const bodyGeo = new THREE.BoxGeometry(sat.size * 1.4, sat.size * 0.5, sat.size * 0.5);
-    const bodyMat = new THREE.MeshBasicMaterial({ color: sat.color });
-    const body = new THREE.Mesh(bodyGeo, bodyMat);
+        const bodyGeo = new THREE.BoxGeometry(sat.size * 1.4, sat.size * 0.5, sat.size * 0.5);
+        const bodyMat = new THREE.MeshBasicMaterial({ color: sat.color });
+        const body = new THREE.Mesh(bodyGeo, bodyMat);
 
-    const panelGeo = new THREE.BoxGeometry(sat.size * 2.4, sat.size * 0.08, sat.size * 0.7);
-    const panelMat = new THREE.MeshBasicMaterial({ color: 0x4f83cc });
-    const panel = new THREE.Mesh(panelGeo, panelMat);
+        const panelGeo = new THREE.BoxGeometry(sat.size * 2.4, sat.size * 0.08, sat.size * 0.7);
+        const panelMat = new THREE.MeshBasicMaterial({ color: 0x4f83cc });
+        const panel = new THREE.Mesh(panelGeo, panelMat);
 
-    satGroup.add(body);
-    satGroup.add(panel);
+        satGroup.add(body);
+        satGroup.add(panel);
 
-    const orbitLineGeo = new THREE.RingGeometry(sat.orbit - 0.02, sat.orbit + 0.02, 80);
-    const orbitLineMat = new THREE.MeshBasicMaterial({
-      color: sat.altitudeBand === 'GEO' ? 0x4fc3f7 : sat.altitudeBand === 'MEO' ? 0xffd54f : 0xffffff,
-      transparent: true,
-      opacity: sat.altitudeBand === 'GEO' ? 0.16 : 0.10,
-      side: THREE.DoubleSide,
-      depthWrite: false
-    });
-    const orbitLine = new THREE.Mesh(orbitLineGeo, orbitLineMat);
-    orbitLine.rotation.x = -Math.PI / 2;
+        const orbitLineGeo = new THREE.RingGeometry(sat.orbit - 0.02, sat.orbit + 0.02, 80);
+        const orbitLineMat = new THREE.MeshBasicMaterial({
+          color: sat.altitudeBand === 'GEO'
+            ? 0x4fc3f7
+            : sat.altitudeBand === 'MEO'
+              ? 0xffd54f
+              : 0xffffff,
+          transparent: true,
+          opacity: sat.altitudeBand === 'GEO' ? 0.16 : 0.10,
+          side: THREE.DoubleSide,
+          depthWrite: false
+        });
+        const orbitLine = new THREE.Mesh(orbitLineGeo, orbitLineMat);
+        orbitLine.rotation.x = -Math.PI / 2;
 
-    orbitGroup.add(orbitLine);
-    orbitGroup.add(satGroup);
+        orbitGroup.add(orbitLine);
+        orbitGroup.add(satGroup);
 
         pm.artificialSatellites.push({
-      ...sat,
-      mesh: satGroup,
-      orbitLine,
-      angle: Math.random() * Math.PI * 2 + satIdx * 0.8,
-      tiltY: sat.altitudeBand === 'LEO' ? 0.15 : sat.altitudeBand === 'MEO' ? -0.08 : 0.0
-    });
-  });
+          ...sat,
+          mesh: satGroup,
+          orbitLine,
+          angle: Math.random() * Math.PI * 2 + satIdx * 0.8,
+          tiltY: sat.altitudeBand === 'LEO' ? 0.15 : sat.altitudeBand === 'MEO' ? -0.08 : 0.0
+        });
+      });
+    }
 
-  planetMeshes.push(pm);
-});
+    planetMeshes.push(pm);
+  });
+}
 
 function applyPlanetTextures() {
   PLANETS.forEach((p, i) => {
