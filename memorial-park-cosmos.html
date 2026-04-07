@@ -1814,18 +1814,17 @@ if (p.id === 'earth') {
     orbitGroup.add(orbitLine);
     orbitGroup.add(satGroup);
 
-    pm.artificialSatellites.push({
+        pm.artificialSatellites.push({
       ...sat,
       mesh: satGroup,
       orbitLine,
       angle: Math.random() * Math.PI * 2 + satIdx * 0.8,
       tiltY: sat.altitudeBand === 'LEO' ? 0.15 : sat.altitudeBand === 'MEO' ? -0.08 : 0.0
     });
-}
-                                      
-    planetMeshes.push(pm);
   });
-}
+
+  planetMeshes.push(pm);
+});
 
 function applyPlanetTextures() {
   PLANETS.forEach((p, i) => {
