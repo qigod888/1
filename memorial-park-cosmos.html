@@ -1509,10 +1509,16 @@ const orbitGroups = [];
 const hoverScales = {};
 
 function buildOrbitLine(radius) {
+  // защита от NaN/undefined
+  if (typeof radius !== 'number' || !isFinite(radius)) return;
+
   const geo = new THREE.RingGeometry(radius - 0.15, radius + 0.15, 128);
   const mat = new THREE.MeshBasicMaterial({
-    color: 0xffffff, transparent: true, opacity: 0.06,
-    side: THREE.DoubleSide, depthWrite: false
+    color: 0xffffff,
+    transparent: true,
+    opacity: 0.06,
+    side: THREE.DoubleSide,
+    depthWrite: false
   });
   const mesh = new THREE.Mesh(geo, mat);
   mesh.rotation.x = -Math.PI / 2;
@@ -1521,7 +1527,10 @@ function buildOrbitLine(radius) {
 
 function buildPlanets() {
   PLANETS.forEach((p, i) => {
-    buildOrbitLine(p.orbitR);
+    // 1) орбиты: пропускаем объекты без orbitR (Солнце и т.п.)
+    if (typeof p.orbitR === 'number' && isFinite(p.orbitR)) {
+      buildOrbitLine(p.orbitR);
+    }
 
     const orbitGroup = new THREE.Group();
     scene.add(orbitGroup);
@@ -1529,7 +1538,10 @@ function buildPlanets() {
 
     // Main planet sphere
     const geo = new THREE.SphereGeometry(p.size, 64, 64);
-    const shininess = (p.id === 'earth') ? 35 : (p.id === 'jupiter' || p.id === 'saturn' || p.id === 'uranus' || p.id === 'neptune') ? 5 : 2;
+    const shininess =
+      (p.id === 'earth') ? 35 :
+      (p.id === 'jupiter' || p.id === 'saturn' || p.id === 'uranus' || p.id === 'neptune') ? 5 : 2;
+
     const mat = new THREE.MeshPhongMaterial({
       color: PLANET_FALLBACK_COLORS[p.id] || 0x888888,
       shininess,
@@ -1537,54 +1549,56 @@ function buildPlanets() {
     const mesh = new THREE.Mesh(geo, mat);
 
     // Axial tilt
-    const tiltRad = AXIAL_TILTS_DEG[p.id] * Math.PI / 180;
+    const tiltRad = (AXIAL_TILTS_DEG[p.id] || 0) * Math.PI / 180;
     mesh.rotation.z = tiltRad;
 
     orbitGroup.add(mesh);
 
-const pm = {
-  mesh,
-  clouds: null,
-  atmosphere: null,
-  moon: null,
-  ring: null,
-  angle: Math.random() * Math.PI * 2,
-  radius: p.orbitR,
-  orbitGroup,
-  moonAngle: 0,
-  scaleTarget: 1,
-  naturalSatellites: [],
-  artificialSatellites: [],
-};
+    const pm = {
+      mesh,
+      clouds: null,
+      atmosphere: null,
+      moon: null,
+      ring: null,
+      angle: Math.random() * Math.PI * 2,
+      radius: p.orbitR || 0,   // 2) если нет orbitR — ставим 0
+      orbitGroup,
+      moonAngle: 0,
+      scaleTarget: 1,
+      naturalSatellites: [],
+      artificialSatellites: [],
+    };
 
-const atmCfg = ATMOSPHERE_CONFIG[p.id];
-if (atmCfg) {
-  const atmGeo = new THREE.SphereGeometry(p.size * atmCfg.scale, 64, 64);
-  const atmMat = new THREE.ShaderMaterial({
-    vertexShader: atmosphereVertexShader,
-    fragmentShader: atmosphereFragmentShader,
-    uniforms: {
-      glowColor: { value: atmCfg.color },
-      intensity: { value: atmCfg.opacity }
-    },
-    transparent: true,
-    side: THREE.BackSide,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending
-  });
-  const atmMesh = new THREE.Mesh(atmGeo, atmMat);
-  atmMesh.rotation.z = tiltRad;
-  orbitGroup.add(atmMesh);
-  pm.atmosphere = atmMesh;
-}
+    const atmCfg = ATMOSPHERE_CONFIG[p.id];
+    if (atmCfg) {
+      const atmGeo = new THREE.SphereGeometry(p.size * atmCfg.scale, 64, 64);
+      const atmMat = new THREE.ShaderMaterial({
+        vertexShader: atmosphereVertexShader,
+        fragmentShader: atmosphereFragmentShader,
+        uniforms: {
+          glowColor: { value: atmCfg.color },
+          intensity: { value: atmCfg.opacity }
+        },
+        transparent: true,
+        side: THREE.BackSide,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+      });
+      const atmMesh = new THREE.Mesh(atmGeo, atmMat);
+      atmMesh.rotation.z = tiltRad;
+      orbitGroup.add(atmMesh);
+      pm.atmosphere = atmMesh;
+    }
 
     // Earth specifics
     if (p.id === 'earth') {
       // Cloud layer
       const cloudGeo = new THREE.SphereGeometry(p.size * 1.005, 64, 64);
       const cloudMat = new THREE.MeshPhongMaterial({
-        transparent: true, opacity: 0.85,
-        depthWrite: false, shininess: 0,
+        transparent: true,
+        opacity: 0.85,
+        depthWrite: false,
+        shininess: 0,
         color: 0xffffff,
       });
       const cloudMesh = new THREE.Mesh(cloudGeo, cloudMat);
@@ -1597,7 +1611,10 @@ if (atmCfg) {
       const atmMat = new THREE.ShaderMaterial({
         vertexShader: atmosphereVertexShader,
         fragmentShader: atmosphereFragmentShader,
-        uniforms: { glowColor: { value: new THREE.Vector3(0.29, 0.56, 0.85) } },
+        uniforms: {
+          glowColor: { value: new THREE.Vector3(0.29, 0.56, 0.85) },
+          intensity: { value: 1.0 }
+        },
         transparent: true,
         side: THREE.FrontSide,
         depthWrite: false,
@@ -1608,24 +1625,6 @@ if (atmCfg) {
       orbitGroup.add(atmMesh);
       pm.atmosphere = atmMesh;
 
-if (false) {
-  // Atmosphere glow
-  const atmGeo = new THREE.SphereGeometry(p.size * 1.025, 64, 64);
-  const atmMat = new THREE.ShaderMaterial({
-    vertexShader: atmosphereVertexShader,
-    fragmentShader: atmosphereFragmentShader,
-    uniforms: { glowColor: { value: new THREE.Vector3(0.29, 0.56, 0.85) } },
-    transparent: true,
-    side: THREE.FrontSide,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending,
-  });
-  const atmMesh = new THREE.Mesh(atmGeo, atmMat);
-  atmMesh.rotation.z = tiltRad;
-  orbitGroup.add(atmMesh);
-  pm.atmosphere = atmMesh;
-}
-
       // Moon
       const moonGeo = new THREE.SphereGeometry(1.2, 32, 32);
       const moonMat = new THREE.MeshPhongMaterial({ color: 0xAAAAAA, shininess: 1 });
@@ -1634,55 +1633,54 @@ if (false) {
       pm.moon = moonMesh;
     }
 
-// ISS
-const issGroup = new THREE.Group();
-const issBody = new THREE.Mesh(
-  new THREE.BoxGeometry(0.18, 0.18, 0.5),
-  new THREE.MeshBasicMaterial({ color: 0xdddddd })
-);
-const issPanelL = new THREE.Mesh(
-  new THREE.BoxGeometry(0.55, 0.03, 0.18),
-  new THREE.MeshBasicMaterial({ color: 0x4f6fd6 })
-);
-const issPanelR = issPanelL.clone();
-issPanelL.position.x = -0.42;
-issPanelR.position.x = 0.42;
-issGroup.add(issBody, issPanelL, issPanelR);
-orbitGroup.add(issGroup);
-pm.iss = issGroup;
-pm.issAngle = Math.random() * Math.PI * 2;
+    // ISS
+    const issGroup = new THREE.Group();
+    const issBody = new THREE.Mesh(
+      new THREE.BoxGeometry(0.18, 0.18, 0.5),
+      new THREE.MeshBasicMaterial({ color: 0xdddddd })
+    );
+    const issPanelL = new THREE.Mesh(
+      new THREE.BoxGeometry(0.55, 0.03, 0.18),
+      new THREE.MeshBasicMaterial({ color: 0x4f6fd6 })
+    );
+    const issPanelR = issPanelL.clone();
+    issPanelL.position.x = -0.42;
+    issPanelR.position.x = 0.42;
+    issGroup.add(issBody, issPanelL, issPanelR);
+    orbitGroup.add(issGroup);
+    pm.iss = issGroup;
+    pm.issAngle = Math.random() * Math.PI * 2;
 
-// Communication satellites
-pm.commSats = [];
-for (let s = 0; s < 3; s++) {
-  const sat = new THREE.Group();
-  const satBody = new THREE.Mesh(
-    new THREE.BoxGeometry(0.12, 0.12, 0.18),
-    new THREE.MeshBasicMaterial({ color: 0xbcc6d6 })
-  );
-  const satPanel1 = new THREE.Mesh(
-    new THREE.BoxGeometry(0.26, 0.02, 0.08),
-    new THREE.MeshBasicMaterial({ color: 0x2e5bd1 })
-  );
-  const satPanel2 = satPanel1.clone();
-  satPanel1.position.x = -0.19;
-  satPanel2.position.x = 0.19;
-  sat.add(satBody, satPanel1, satPanel2);
+    // Communication satellites
+    pm.commSats = [];
+    for (let s = 0; s < 3; s++) {
+      const sat = new THREE.Group();
+      const satBody = new THREE.Mesh(
+        new THREE.BoxGeometry(0.12, 0.12, 0.18),
+        new THREE.MeshBasicMaterial({ color: 0xbcc6d6 })
+      );
+      const satPanel1 = new THREE.Mesh(
+        new THREE.BoxGeometry(0.26, 0.02, 0.08),
+        new THREE.MeshBasicMaterial({ color: 0x2e5bd1 })
+      );
+      const satPanel2 = satPanel1.clone();
+      satPanel1.position.x = -0.19;
+      satPanel2.position.x = 0.19;
+      sat.add(satBody, satPanel1, satPanel2);
 
-  sat.userData.orbitAngle = (Math.PI * 2 / 3) * s;
-  sat.userData.orbitRadius = p.size + 1.8 + s * 0.35;
-  sat.userData.orbitSpeed = 0.9 + s * 0.2;
+      sat.userData.orbitAngle = (Math.PI * 2 / 3) * s;
+      sat.userData.orbitRadius = p.size + 1.8 + s * 0.35;
+      sat.userData.orbitSpeed = 0.9 + s * 0.2;
 
-  orbitGroup.add(sat);
-  pm.commSats.push(sat);
-}
+      orbitGroup.add(sat);
+      pm.commSats.push(sat);
+    }
 
     // Saturn rings
     if (p.id === 'saturn') {
       const ringInner = p.size * 1.3;
       const ringOuter = p.size * 2.4;
       const ringGeo = new THREE.RingGeometry(ringInner, ringOuter, 128);
-      // UV fix for ring texture
       const ringPos = ringGeo.attributes.position;
       const ringUV = ringGeo.attributes.uv;
       const v3 = new THREE.Vector3();
@@ -1704,12 +1702,15 @@ for (let s = 0; s < 3; s++) {
       pm.ring = ringMesh;
     }
 
-    // Uranus rings (vertical)
+    // Uranus rings
     if (p.id === 'uranus') {
       const urRingGeo = new THREE.RingGeometry(p.size * 1.4, p.size * 1.7, 64);
       const urRingMat = new THREE.MeshBasicMaterial({
-        color: 0x7FD4D4, transparent: true, opacity: 0.25,
-        side: THREE.DoubleSide, depthWrite: false
+        color: 0x7FD4D4,
+        transparent: true,
+        opacity: 0.25,
+        side: THREE.DoubleSide,
+        depthWrite: false
       });
       const urRingMesh = new THREE.Mesh(urRingGeo, urRingMat);
       urRingMesh.rotation.z = Math.PI / 2;
@@ -1717,11 +1718,22 @@ for (let s = 0; s < 3; s++) {
       pm.ring = urRingMesh;
     }
 
-    // Initial position
-    mesh.position.set(Math.cos(pm.angle) * p.orbitR, 0, Math.sin(pm.angle) * p.orbitR);
+    // Initial position (только если есть орбита)
+    if (typeof p.orbitR === 'number' && isFinite(p.orbitR)) {
+      mesh.position.set(
+        Math.cos(pm.angle) * p.orbitR,
+        0,
+        Math.sin(pm.angle) * p.orbitR
+      );
+    }
+
     if (pm.clouds) pm.clouds.position.copy(mesh.position);
     if (pm.atmosphere) pm.atmosphere.position.copy(mesh.position);
     if (pm.ring) pm.ring.position.copy(mesh.position);
+
+    planetMeshes.push(pm);
+  });
+}
 
 // ============================================================
 // NATURAL SATELLITES
