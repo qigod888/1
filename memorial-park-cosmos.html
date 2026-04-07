@@ -1173,7 +1173,7 @@ const EARTH_ARTIFICIAL_SATELLITES = [
   { name: 'GeoSat-2',   orbit: 18.5, speed: 0.22, color: 0x4fc3f7, size: 0.09, altitudeBand: 'GEO' }
 ];
 
-const PLANETS = [
+const ORBIT_PLANETS = [
   {
     id: 'sun',
     name: 'Солнце',
@@ -1285,7 +1285,7 @@ const PLANETS = [
     video:'Нептун: Синий странник'
   },
 ];
-const SUNINFO = PLANETS[0];
+const ORBIT_PLANETS = PLANETS.filter(p => p.id !== 'sun');
 // ============================================================
 // THREE.JS SCENE SETUP
 // ============================================================
@@ -1536,10 +1536,8 @@ function buildOrbitLine(radius) {
 }
 
 function buildPlanets() {
-  PLANETS.forEach((p, i) => {
-    if (typeof p.orbitR === 'number' && isFinite(p.orbitR)) {
-      buildOrbitLine(p.orbitR);
-    }
+  ORBIT_PLANETS.forEach((p, i) => {
+    buildOrbitLine(p.orbitR);
 
     const orbitGroup = new THREE.Group();
     scene.add(orbitGroup);
@@ -1548,10 +1546,10 @@ function buildPlanets() {
     const geo = new THREE.SphereGeometry(p.size, 64, 64);
     const shininess =
       p.id === 'earth' ? 35 :
-      (p.id === 'jupiter' || p.id === 'saturn' || p.id === 'uranus' || p.id === 'neptune') ? 5 : 2;
+      ['jupiter', 'saturn', 'uranus', 'neptune'].includes(p.id) ? 5 : 2;
 
     const mat = new THREE.MeshPhongMaterial({
-      color: PLANET_FALLBACK_COLORS[p.id] || 0x888888,
+      color: PLANETFALLBACKCOLORS[p.id] || 0x888888,
       shininess
     });
 
@@ -1567,7 +1565,7 @@ function buildPlanets() {
       moon: null,
       ring: null,
       angle: Math.random() * Math.PI * 2,
-      radius: p.orbitR || 0,
+      radius: p.orbitR,
       orbitGroup,
       moonAngle: 0,
       scaleTarget: 1,
@@ -2207,10 +2205,6 @@ function hideDetailPanel() {
   document.getElementById('detail-panel').classList.remove('visible');
 }
 
-function hideDetailPanel() {
-  document.getElementById('detail-panel').classList.remove('visible');
-}
-
 function showFocusUI(idx) {
   document.getElementById('back-btn').classList.add('visible');
   document.getElementById('arrow-nav').classList.add('visible');
@@ -2249,15 +2243,20 @@ function hideLoader() {
 function buildNavigator() {
   const nav = document.getElementById('navigator');
   nav.innerHTML = '';
-  PLANETS.forEach((p, i) => {
+
+  ORBIT_PLANETS.forEach((p, i) => {
     const item = document.createElement('div');
     item.className = 'nav-item';
-    item.dataset.idx = i;
+    item.dataset.idx = i + 1; // индекс в общем PLANETS, если sun = 0
+
     item.innerHTML = `<div class="nav-dot"></div><span class="nav-name">${p.name}</span>`;
+
     item.addEventListener('click', () => {
-      if (isOverview) focusPlanet(i);
-      else if (focusedIdx !== i) focusPlanet(i);
+      const realIdx = PLANETS.findIndex(x => x.id === p.id);
+      if (isOverview) focusPlanet(realIdx);
+      else if (focusedIdx !== realIdx) focusPlanet(realIdx);
     });
+
     nav.appendChild(item);
   });
 }
@@ -2282,18 +2281,38 @@ document.getElementById('back-btn').addEventListener('click', returnToOverview);
 // ARROW NAV
 // ============================================================
 document.getElementById('btn-prev').addEventListener('click', () => {
-  if (focusedIdx < 0) return;
-  const prev = (focusedIdx - 1 + PLANETS.length) % PLANETS.length;
-  focusPlanet(prev);
-});
-document.getElementById('btn-next').addEventListener('click', () => {
-  if (focusedIdx < 0) return;
-  const next = (focusedIdx + 1) % PLANETS.length;
-  focusPlanet(next);
-});
-document.getElementById('btn-sun-info').addEventListener('click', () => { showDetailPanel(-1, 'sun')
+  if (focusedIdx <= 0) return;
+
+  const currentOrbitIdx = ORBIT_PLANETS.findIndex(p => p.id === PLANETS[focusedIdx].id);
+  const prevOrbitIdx = (currentOrbitIdx - 1 + ORBIT_PLANETS.length) % ORBIT_PLANETS.length;
+  const realIdx = PLANETS.findIndex(p => p.id === ORBIT_PLANETS[prevOrbitIdx].id);
+
+  focusPlanet(realIdx);
 });
 
+document.getElementById('btn-next').addEventListener('click', () => {
+  if (focusedIdx <= 0) return;
+
+  const currentOrbitIdx = ORBIT_PLANETS.findIndex(p => p.id === PLANETS[focusedIdx].id);
+  const nextOrbitIdx = (currentOrbitIdx + 1) % ORBIT_PLANETS.length;
+  const realIdx = PLANETS.findIndex(p => p.id === ORBIT_PLANETS[nextOrbitIdx].id);
+
+  focusPlanet(realIdx);
+});
+  
+document.getElementById('btn-sun-info').addEventListener('click', () => { showDetailPanel(-1, 'sun')
+});
+  
+function showDetailPanel(idx, mode = 'planet') {
+  const data = mode === 'sun' ? SUNINFO : PLANETS[idx];
+  if (!data) return;
+
+  // ...
+  if (mode === 'sun') {
+    document.getElementById('earth-compare').classList.remove('visible');
+    document.getElementById('qr-widget').classList.remove('visible');
+  }
+}
 // ============================================================
 // START / HERO BUTTONS
 // ============================================================
@@ -2981,9 +3000,11 @@ function applyTimelineScale(billions) {
 
   if (realScaleMode) return;
 
-  planetMeshes.forEach((pm, i) => {
-    const newR = PLANETS[i].orbitR * Math.max(0.5, scaleFactor);
-    gsap.to(pm, {
+  ORBIT_PLANETS.forEach((p) => {
+    const meshIndex = PLANETS.findIndex(x => x.id === p.id);
+    const newR = p.orbitR * Math.max(0.5, scaleFactor);
+
+    gsap.to(planetMeshes[meshIndex], {
       radius: newR,
       duration: 0.8
     });
@@ -3085,11 +3106,11 @@ window.addEventListener('touchend', (e) => {
 // The original listener is already defined; we add a second one:
 window.addEventListener('keydown', (e) => {
   // Keys 1-8: fly to planet
-  const num = parseInt(e.key);
-  if (num >= 1 && num <= 8 && !e.altKey && !e.ctrlKey && !e.metaKey) {
-    focusPlanet(num - 1);
-    return;
-  }
+ const num = parseInt(e.key, 10);
+if (num >= 1 && num <= 8 && !e.altKey && !e.ctrlKey && !e.metaKey) {
+  focusPlanet(num); // 1 = mercury, 2 = venus ... если sun = 0
+  return;
+}
   // F — fullscreen
   if (e.key === 'f' || e.key === 'F') {
     document.getElementById('btn-fullscreen').click();
@@ -3121,13 +3142,16 @@ const REAL_ORBIT_RATIOS = {
   uranus: 19.2,
   neptune: 30.05
 };
-const VISUAL_ORBITS = PLANETS.map(p => p.orbitR);
+const ORBIT_PLANETS = PLANETS.filter(p => p.id !== 'sun');
+const VISUAL_ORBITS = ORBIT_PLANETS.map(p => p.orbitR);
 const BASE_AU = 160;
 
 document.getElementById('btn-realscale').addEventListener('click', () => {
   realScaleMode = !realScaleMode;
+
   const btn = document.getElementById('btn-realscale');
   btn.classList.toggle('active', realScaleMode);
+
   const warn = document.getElementById('realscale-warning');
   warn.classList.toggle('show', realScaleMode);
 
@@ -3138,7 +3162,7 @@ document.getElementById('btn-realscale').addEventListener('click', () => {
     let prevR = 0;
     let prevSize = 0;
 
-    PLANETS.forEach((p, i) => {
+    ORBIT_PLANETS.forEach((p, i) => {
       const nominalR = REAL_ORBIT_RATIOS[p.id] * BASE_AU;
       const diameterRatio = REAL_DIAMETERS_KM[p.id] / REAL_DIAMETERS_KM.earth;
       const realSize = Math.max(0.22, Math.pow(diameterRatio, 0.42) * 3.2);
@@ -3154,17 +3178,19 @@ document.getElementById('btn-realscale').addEventListener('click', () => {
       prevSize = realSize;
     });
 
-    PLANETS.forEach((p, i) => {
-      gsap.to(planetMeshes[i], {
+    ORBIT_PLANETS.forEach((p, i) => {
+      const meshIndex = PLANETS.findIndex(x => x.id === p.id);
+
+      gsap.to(planetMeshes[meshIndex], {
         radius: targetRadii[i].finalR,
         duration: 2.5,
         ease: 'power2.inOut'
       });
 
-      gsap.to(planetMeshes[i].mesh.scale, {
-        x: targetRadii[i].realSize / PLANETS[i].size,
-        y: targetRadii[i].realSize / PLANETS[i].size,
-        z: targetRadii[i].realSize / PLANETS[i].size,
+      gsap.to(planetMeshes[meshIndex].mesh.scale, {
+        x: targetRadii[i].realSize / p.size,
+        y: targetRadii[i].realSize / p.size,
+        z: targetRadii[i].realSize / p.size,
         duration: 2.5
       });
     });
@@ -3177,16 +3203,17 @@ document.getElementById('btn-realscale').addEventListener('click', () => {
       ease: 'power2.inOut',
       onUpdate: () => camera.lookAt(0, 0, 0)
     });
-
   } else {
-    PLANETS.forEach((p, i) => {
-      gsap.to(planetMeshes[i], {
+    ORBIT_PLANETS.forEach((p, i) => {
+      const meshIndex = PLANETS.findIndex(x => x.id === p.id);
+
+      gsap.to(planetMeshes[meshIndex], {
         radius: VISUAL_ORBITS[i],
         duration: 2.5,
         ease: 'power2.inOut'
       });
 
-      gsap.to(planetMeshes[i].mesh.scale, {
+      gsap.to(planetMeshes[meshIndex].mesh.scale, {
         x: 1,
         y: 1,
         z: 1,
