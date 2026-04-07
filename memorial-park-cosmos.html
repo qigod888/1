@@ -1748,18 +1748,24 @@ function buildPlanets() {
 // ============================================================
 // NATURAL SATELLITES
 // ============================================================
- const naturalList = NATURALSATELLITES[p.id] || [];
+    const naturalList = NATURALSATELLITES[p.id] || [];
     naturalList.forEach((sat, satIdx) => {
       if (p.id === 'earth' && sat.name === 'Луна' && pm.moon) return;
 
       const satGeo = new THREE.SphereGeometry(sat.size, 24, 24);
-      const satMat = new THREE.MeshPhongMaterial({ color: sat.color, shininess: 2 });
+      const satMat = new THREE.MeshPhongMaterial({
+        color: sat.color,
+        shininess: 2
+      });
       const satMesh = new THREE.Mesh(satGeo, satMat);
 
       const orbitLineGeo = new THREE.RingGeometry(sat.orbit - 0.03, sat.orbit + 0.03, 64);
       const orbitLineMat = new THREE.MeshBasicMaterial({
-        color: 0xffffff, transparent: true, opacity: 0.08,
-        side: THREE.DoubleSide, depthWrite: false
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.08,
+        side: THREE.DoubleSide,
+        depthWrite: false
       });
       const orbitLine = new THREE.Mesh(orbitLineGeo, orbitLineMat);
       orbitLine.rotation.x = -Math.PI / 2;
@@ -1768,12 +1774,13 @@ function buildPlanets() {
       orbitGroup.add(satMesh);
 
       pm.naturalSatellites.push({
-        ...sat, mesh: satMesh, orbitLine,
+        ...sat,
+        mesh: satMesh,
+        orbitLine,
         angle: Math.random() * Math.PI * 2 + satIdx
       });
     });
 
-    // ── ARTIFICIAL SATELLITES (EARTH) ────────────────────────
     if (p.id === 'earth') {
       EARTH_ARTIFICIAL_SATELLITES.forEach((sat, satIdx) => {
         const satGroup = new THREE.Group();
@@ -1792,7 +1799,8 @@ function buildPlanets() {
         const orbitLineGeo = new THREE.RingGeometry(sat.orbit - 0.02, sat.orbit + 0.02, 80);
         const orbitLineMat = new THREE.MeshBasicMaterial({
           color: sat.altitudeBand === 'GEO' ? 0x4fc3f7
-               : sat.altitudeBand === 'MEO' ? 0xffd54f : 0xffffff,
+               : sat.altitudeBand === 'MEO' ? 0xffd54f
+               : 0xffffff,
           transparent: true,
           opacity: sat.altitudeBand === 'GEO' ? 0.16 : 0.10,
           side: THREE.DoubleSide,
@@ -1815,51 +1823,9 @@ function buildPlanets() {
     }
 
     planetMeshes.push(pm);
-  }); // ← закрывает PLANETS.forEach
-}     // ← закрывает buildPlanets()
-
-function applyPlanetTextures() {
-  PLANETS.forEach((p, i) => {
-    const pm = planetMeshes[i];
-    if (!pm) return;
-
-    const t = textures[p.id];
-    if (t) {
-      pm.mesh.material.map = t;
-      pm.mesh.material.color.setHex(0xffffff);
-      pm.mesh.material.needsUpdate = true;
-    }
-
-    if (p.id === 'earth') {
-      if (textures.earthClouds && pm.clouds) {
-        pm.clouds.material.map = textures.earthClouds;
-        pm.clouds.material.alphaMap = textures.earthClouds;
-        pm.clouds.material.needsUpdate = true;
-      }
-      if (textures.earthNormal) {
-        pm.mesh.material.normalMap = textures.earthNormal;
-        pm.mesh.material.needsUpdate = true;
-      }
-      if (textures.moon && pm.moon) {
-        pm.moon.material.map = textures.moon;
-        pm.moon.material.color.setHex(0xffffff);
-        pm.moon.material.needsUpdate = true;
-      }
-    }
-
-    if (p.id === 'saturn') {
-      if (textures.saturnRing && pm.ring) {
-        pm.ring.material.map = textures.saturnRing;
-        pm.ring.material.alphaMap = textures.saturnRing;
-        pm.ring.material.color.setHex(0xffffff);
-        pm.ring.material.needsUpdate = true;
-      }
-    }
   });
 }
-
-buildPlanets();
-
+  
 // ============================================================
 // LENS FLARE
 // ============================================================
