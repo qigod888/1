@@ -272,6 +272,15 @@ html, body {
   flex-direction: column;
   gap: 8px;
   transition: opacity var(--transition);
+  max-height: calc(100vh - 220px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+  padding-bottom: 8px;
+  scrollbar-width: none;
+}
+#navigator::-webkit-scrollbar {
+  display: none;
 }
 #navigator.hidden { opacity: 0; pointer-events: none; }
 .nav-item {
@@ -714,7 +723,7 @@ html, body {
 
 /* ===== EARTH COMPARE WIDGET ===== */
 #earth-compare {
-  position: fixed; bottom: 80px; left: 22px; z-index: 40;
+  #earth-compare { position: fixed; bottom: 130px; left: 22px; z-index: 45;
   background: rgba(5,12,25,0.82); backdrop-filter: blur(16px);
   border: 1px solid var(--c-border); border-radius: 12px;
   padding: 14px 16px; display: flex; align-items: center; gap: 12px;
@@ -791,7 +800,7 @@ html, body {
 
 /* ===== QR CODE ===== */
 #qr-widget {
-  position: fixed; bottom: 24px; left: 22px; z-index: 40;
+  #qr-widget { position: fixed; bottom: 24px; left: 22px; z-index: 45;
   background: rgba(5,12,25,0.88); backdrop-filter: blur(var(--blur));
   border: 1px solid var(--c-border); border-radius: 10px;
   padding: 10px; display: flex; flex-direction: column; align-items: center; gap: 6px;
@@ -1276,6 +1285,7 @@ const PLANETS = [
     video:'Нептун: Синий странник'
   },
 ];
+const SUNINFO = PLANETS[0];
 // ============================================================
 // THREE.JS SCENE SETUP
 // ============================================================
@@ -1934,17 +1944,42 @@ function tickRaycast(now) {
   lastRaycastTime = now;
 
   raycaster.setFromCamera(mouse, camera);
-  const meshes = planetMeshes.map(pm => pm.mesh);
-  const hits = raycaster.intersectObjects(meshes);
+
+  const meshes = planetMeshes.map(pm => pm.mesh).filter(Boolean);
+  const hits = raycaster.intersectObjects(meshes, false);
 
   if (hits.length > 0) {
-    const idx = meshes.indexOf(hits[0].object);
-    if (isOverview) {
-      if (idx !== hoveredIndex) {
-        if (hoveredIndex >= 0) unsetHover(hoveredIndex);
+    const hitMesh = hits[0].object;
+    const idx = planetMeshes.findIndex(pm => pm.mesh === hitMesh);
+
+    if (idx >= 0) {
+      hoverLabel.textContent = PLANETS[idx]?.name || '';
+      hoverLabel.classList.add('show');
+
+      if (isOverview) {
+        if (idx !== hoveredIndex) {
+          if (hoveredIndex >= 0) unsetHover(hoveredIndex);
+          hoveredIndex = idx;
+          setHover(idx);
+        }
+        canvas.style.cursor = 'pointer';
+      } else {
         hoveredIndex = idx;
-        setHover(idx);
+        canvas.style.cursor = idx !== focusedIdx ? 'pointer' : 'default';
       }
+
+      return;
+    }
+  }
+
+  if (isOverview && hoveredIndex >= 0) {
+    unsetHover(hoveredIndex);
+    hoveredIndex = -1;
+  }
+
+  hoverLabel.classList.remove('show');
+  canvas.style.cursor = 'default';
+}
     } else {
       // In focus mode: show cursor pointer when hovering a different planet
       hoveredIndex = idx;
@@ -2135,11 +2170,19 @@ function renderSatellitesList(items, title = 'Спутники') {
   items.forEach(item => {
     const card = document.createElement('div');
     card.className = 'dp-satellite-card';
-    card.innerHTML = `
-      <div class="dp-satellite-name">${item.name}</div>
-      <div class="dp-satellite-type">${item.type || 'Спутник'}</div>
-      <div class="dp-satellite-desc">${item.desc || ''}</div>
-    `;
+
+    if (typeof item === 'string') {
+      card.innerHTML = `
+        <div class="dp-satellite-desc">${item}</div>
+      `;
+    } else {
+      card.innerHTML = `
+        <div class="dp-satellite-name">${item.name || 'Без названия'}</div>
+        <div class="dp-satellite-type">${item.type || 'Спутник'}</div>
+        <div class="dp-satellite-desc">${item.desc || ''}</div>
+      `;
+    }
+
     listEl.appendChild(card);
   });
 }
