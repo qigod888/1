@@ -1285,7 +1285,6 @@ const ORBIT_PLANETS = [
     video:'Нептун: Синий странник'
   },
 ];
-const ORBIT_PLANETS = PLANETS.filter(p => p.id !== 'sun');
 // ============================================================
 // THREE.JS SCENE SETUP
 // ============================================================
@@ -2282,22 +2281,14 @@ document.getElementById('back-btn').addEventListener('click', returnToOverview);
 // ============================================================
 document.getElementById('btn-prev').addEventListener('click', () => {
   if (focusedIdx <= 0) return;
-
-  const currentOrbitIdx = ORBIT_PLANETS.findIndex(p => p.id === PLANETS[focusedIdx].id);
-  const prevOrbitIdx = (currentOrbitIdx - 1 + ORBIT_PLANETS.length) % ORBIT_PLANETS.length;
-  const realIdx = PLANETS.findIndex(p => p.id === ORBIT_PLANETS[prevOrbitIdx].id);
-
-  focusPlanet(realIdx);
+  const prev = getOrbitPlanetRealIndexByStep(focusedIdx, -1);
+  focusPlanet(prev);
 });
 
 document.getElementById('btn-next').addEventListener('click', () => {
   if (focusedIdx <= 0) return;
-
-  const currentOrbitIdx = ORBIT_PLANETS.findIndex(p => p.id === PLANETS[focusedIdx].id);
-  const nextOrbitIdx = (currentOrbitIdx + 1) % ORBIT_PLANETS.length;
-  const realIdx = PLANETS.findIndex(p => p.id === ORBIT_PLANETS[nextOrbitIdx].id);
-
-  focusPlanet(realIdx);
+  const next = getOrbitPlanetRealIndexByStep(focusedIdx, +1);
+  focusPlanet(next);
 });
   
 document.getElementById('btn-sun-info').addEventListener('click', () => { showDetailPanel(-1, 'sun')
