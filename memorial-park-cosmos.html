@@ -3126,10 +3126,8 @@ const BASE_AU = 160;
 
 document.getElementById('btn-realscale').addEventListener('click', () => {
   realScaleMode = !realScaleMode;
-
   const btn = document.getElementById('btn-realscale');
   btn.classList.toggle('active', realScaleMode);
-
   const warn = document.getElementById('realscale-warning');
   warn.classList.toggle('show', realScaleMode);
 
@@ -3179,6 +3177,7 @@ document.getElementById('btn-realscale').addEventListener('click', () => {
       ease: 'power2.inOut',
       onUpdate: () => camera.lookAt(0, 0, 0)
     });
+
   } else {
     PLANETS.forEach((p, i) => {
       gsap.to(planetMeshes[i], {
