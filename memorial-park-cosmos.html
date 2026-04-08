@@ -4010,6 +4010,58 @@ function toggleDwarfs() {
 }
 _wire('edu-btn-dwarfs', toggleDwarfs);
 
+  // Клик по карликовым планетам — показать информацию
+function showDwarfInfo(dwarfData) {
+  const d = _DWARFS.find(x => x.id === dwarfData.id);
+  if (!d) return;
+  document.getElementById('dp-tagline').textContent = d.tagline || 'Карликовая планета';
+  document.getElementById('dp-name').textContent = d.name;
+  document.getElementById('dp-desc-short').textContent = d.descShort;
+  const f = d.facts;
+  document.getElementById('f-diameter').textContent = f.diameter;
+  document.getElementById('f-temp').textContent = f.temp;
+  document.getElementById('f-day').textContent = f.day;
+  document.getElementById('f-gravity').textContent = f.gravity;
+  document.getElementById('f-mass').textContent = f.mass;
+  document.getElementById('f-density').textContent = f.density;
+  document.getElementById('f-axialTilt').textContent = f.axialTilt;
+  document.getElementById('f-moons').textContent = f.moons;
+  const descLong = document.getElementById('dp-desc-long');
+  descLong.textContent = d.descLong;
+  descLong.classList.remove('show');
+  document.getElementById('dp-read-more').onclick = () => {
+    descLong.classList.toggle('show');
+    document.getElementById('dp-read-more').textContent =
+      descLong.classList.contains('show') ? 'Свернуть ↑' : 'Подробнее →';
+  };
+  document.getElementById('dp-major-moons').style.display = 'none';
+  document.getElementById('dp-quiz-btn').style.display = 'none';
+  // Показать панель
+  const panel = document.getElementById('detail-panel');
+  panel.classList.add('visible');
+  // Не строим edu-секции для карликовых (нет миссий/атмосферы)
+  // Можно добавить при желании
+}
+
+// Проверка клика по карликовым в raycaster (добавить в tickRaycast или clickHandler)
+function checkDwarfClick(event) {
+  if (!_dwarfVis) return false;
+  const rect = canvas.getBoundingClientRect();
+  const mx = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  const my = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+  raycaster.setFromCamera({ x: mx, y: my }, camera);
+  const dwarfMeshes = _dwarfObjs.map(d => d.mesh);
+  const hits = raycaster.intersectObjects(dwarfMeshes);
+  if (hits.length > 0) {
+    const hitMesh = hits[0].object;
+    const dObj = _dwarfObjs.find(d => d.mesh === hitMesh);
+    if (dObj) { showDwarfInfo(dObj); return true; }
+  }
+  return false;
+}
+
+// Добавить вызов в основной click-обработчик canvas:
+// if (checkDwarfClick(event)) return;
 // ---- HALLEY'S COMET ----
 let _cometVis=false;
 const _cA=260,_cE=.967,_cB=_cA*Math.sqrt(1-_cE*_cE),_cC=_cA*_cE;
