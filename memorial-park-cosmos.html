@@ -2502,6 +2502,14 @@ if (majorMoons.length) {
 function hideDetailPanel() {
   document.getElementById('detail-panel').classList.remove('visible');
 }
+  
+  const dpCloseBtn = document.getElementById('dp-close-btn');
+if (dpCloseBtn) {
+  dpCloseBtn.addEventListener('click', () => {
+    const panel = document.getElementById('detail-panel');
+    if (panel) panel.classList.remove('visible');
+  });
+}
 
 function showFocusUI(idx) {
   document.getElementById('back-btn').classList.add('visible');
