@@ -3421,17 +3421,29 @@ function getOrbitPos(p, angle) {
 // QR CODE WIDGET
 // ============================================================
 function updateQRCode(planetIdx) {
+  const widget = document.getElementById('qr-widget');
+  const img = document.getElementById('qr-img');
+
   if (planetIdx < 0) {
-    document.getElementById('qr-widget').classList.remove('visible');
+    widget.classList.remove('visible');
     return;
   }
-  const planetName = PLANETS[planetIdx].name;
-  const url = encodeURIComponent(window.location.href + '#' + PLANETS[planetIdx].id);
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${url}&bgcolor=050C19&color=4fc3f7&format=png`;
-  document.getElementById('qr-img').src = qrUrl;
-  document.getElementById('qr-widget').classList.add('visible');
+
+  const planetId = PLANETS[planetIdx].id;
+  const url = encodeURIComponent(window.location.href.split('#')[0] + '#' + planetId);
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=84x84&data=${url}&bgcolor=050C19&color=4fc3f7&format=png`;
+
+  img.src = qrUrl;
+  widget.classList.add('visible');
 }
 
+const qrCloseBtn = document.getElementById('qr-close-btn');
+if (qrCloseBtn) {
+  qrCloseBtn.addEventListener('click', () => {
+    document.getElementById('qr-widget').classList.remove('visible');
+  });
+}
+  
 // ============================================================
 // TEACHER MODE
 // ============================================================
