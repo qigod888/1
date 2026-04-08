@@ -2059,79 +2059,29 @@ window.addEventListener('mousemove', (e) => {
   if (dLbl) { dLbl.style.left = e.clientX + 'px'; dLbl.style.top = e.clientY + 'px'; }
 });
 
-  // ---- DWARF SAFETY GLOBALS ----
-let dwarfVis = false;
-let dwarfObjs = [];
-
-function syncDwarfGlobals() {
-  if (typeof _dwarfVis !== 'undefined') dwarfVis = _dwarfVis;
-  if (typeof _dwarfObjs !== 'undefined' && Array.isArray(_dwarfObjs)) dwarfObjs = _dwarfObjs;
-}
-
-  let dwarfVis = false;
-let dwarfObjs = [];
-  
 function tickRaycast(now) {
   if (now - lastRaycastTime < 60) return;
   lastRaycastTime = now;
 
-  // безопасная синхронизация карликовых
-  if (typeof _dwarfVis !== 'undefined') dwarfVis = _dwarfVis;
-  if (typeof _dwarfObjs !== 'undefined' && Array.isArray(_dwarfObjs)) dwarfObjs = _dwarfObjs;
-
   raycaster.setFromCamera(mouse, camera);
 
-  const hoverLabel = document.getElementById('planet-hover-label');
-  const dLbl = document.getElementById('dwarf-hover-label');
-
   // --- Карликовые планеты: hover ---
-  if (typeof dwarfVis !== 'undefined' && dwarfVis && Array.isArray(dwarfObjs) && dwarfObjs.length) {
-    const dMeshes = dwarfObjs.map(d => d.mesh).filter(Boolean);
-    if (dMeshes.length) {
-      const dHits = raycaster.intersectObjects(dMeshes);
-      if (dHits.length) {
-        const dObj = dwarfObjs.find(d => d.mesh === dHits[0].object);
-        if (dObj) {
-          if (dLbl) {
-            dLbl.textContent = dObj.name;
-            dLbl.classList.add('show');
-          }
-          if (hoverLabel) hoverLabel.classList.remove('show');
-          canvas.style.cursor = 'pointer';
-          return;
-        }
+  const dLbl = document.getElementById('dwarf-hover-label');
+  if (_dwarfVis && typeof _dwarfObjs !== 'undefined') {
+    const dMeshes = _dwarfObjs.map(d => d.mesh);
+    const dHits = raycaster.intersectObjects(dMeshes);
+    if (dHits.length) {
+      const dObj = _dwarfObjs.find(d => d.mesh === dHits[0].object);
+      if (dObj) {
+        if (dLbl) { dLbl.textContent = dObj.name; dLbl.classList.add('show'); }
+        canvas.style.cursor = 'pointer';
+        return; // не обрабатываем планеты пока наведено на карлика
       }
     }
-  }
-  if (dLbl) dLbl.classList.remove('show');
-
-  // --- Обычные планеты: hover ---
-  const meshes = planetMeshes.map(pm => pm.mesh).filter(Boolean);
-  const hits = raycaster.intersectObjects(meshes);
-
-  if (hits.length > 0) {
-    const idx = meshes.indexOf(hits[0].object);
-
-    if (isOverview) {
-      if (idx !== hoveredIndex) {
-        if (hoveredIndex >= 0) unsetHover(hoveredIndex);
-        hoveredIndex = idx;
-        setHover(idx);
-      }
-    } else {
-      const isDiff = idx !== focusedIdx;
-      canvas.style.cursor = isDiff ? 'pointer' : 'default';
-      if (hoverLabel) hoverLabel.classList.remove('show');
-    }
+    if (dLbl) dLbl.classList.remove('show');
   } else {
-    if (isOverview && hoveredIndex >= 0) {
-      unsetHover(hoveredIndex);
-      hoveredIndex = -1;
-    }
-    if (hoverLabel) hoverLabel.classList.remove('show');
-    canvas.style.cursor = 'default';
+    if (dLbl) dLbl.classList.remove('show');
   }
-}
 
   // --- Обычные планеты: hover ---
   const meshes = planetMeshes.map(pm => pm.mesh);
@@ -2181,7 +2131,7 @@ function unsetHover(idx) {
 canvas.addEventListener('click', () => {
 
   // --- Карликовые планеты: клик ---
-  if (dwarfVis && typeof _dwarfObjs !== 'undefined') {
+  if (_dwarfVis && typeof _dwarfObjs !== 'undefined') {
     raycaster.setFromCamera(mouse, camera);
     const dMeshes = _dwarfObjs.map(d => d.mesh);
     const dHits = raycaster.intersectObjects(dMeshes);
@@ -2216,7 +2166,7 @@ let focusedIdx = -1;
 let currentTween = null;
 let orbitActive = false;
 let speedMultiplier = 1;
-  
+
 // ============================================================
 // FOCUS PLANET (CINEMATIC FLY-IN)
 // ============================================================
@@ -3815,14 +3765,7 @@ function _eduRefresh(id) {
   if (id==='miss')   _eduMiss(_curPid);
 }
 
-  function eduRefresh(id) {
-  if (typeof _eduRefresh === 'function') {
-    _eduRefresh(id);
-  }
-}
-  
 function _eduWeight(pid) {
-  console.log('EDU WEIGHT для', pid);
   const g=EDU_G[pid]; if(!g) return;
   const inp=document.getElementById('edu-weight-inp');
   const m=parseFloat(inp?inp.value:60)||60;
@@ -3872,23 +3815,14 @@ function _eduMiss(pid) {
 
 // ---- HOOK showDetailPanel ----
 {
-  const origShowDetailPanelEdu = showDetailPanel;
-  showDetailPanel = function(idx){
-    origShowDetailPanelEdu(idx);
-
-    const planet = PLANETS[idx];
-    if (!planet) return;
-
-    // ставим текущую планету для EDU
-    _curPid = planet.id;
-    console.log('EDU curPid =', _curPid);
-
-    // подготавливаем данные для всех секций
-    _eduWeight(_curPid);
-    _eduLight(_curPid);
-    _eduAtmo(_curPid);
-    _eduInt(_curPid);
-    _eduMiss(_curPid);
+  const _orig = showDetailPanel;
+  showDetailPanel = function(idx) {
+    _orig(idx);
+    _curPid = PLANETS[idx].id;
+    ['weight','light','atmo','int','miss'].forEach(id=>{
+      const s=document.getElementById('edu-'+id);
+      if(s&&s.classList.contains('open')) _eduRefresh(id);
+    });
   };
 }
 
@@ -3933,64 +3867,9 @@ function _buildSatHitMap() {
 function tickRaycast(now) {
   if (now - lastRaycastTime < 60) return;
   lastRaycastTime = now;
-
-  // безопасная синхронизация карликовых
-  if (typeof _dwarfVis !== 'undefined') dwarfVis = _dwarfVis;
-  if (typeof _dwarfObjs !== 'undefined' && Array.isArray(_dwarfObjs)) dwarfObjs = _dwarfObjs;
-
   raycaster.setFromCamera(mouse, camera);
-
   const hoverLabel = document.getElementById('planet-hover-label');
-  const dLbl = document.getElementById('dwarf-hover-label');
-
-  // --- Карликовые планеты: hover ---
-  if (typeof dwarfVis !== 'undefined' && dwarfVis && Array.isArray(dwarfObjs) && dwarfObjs.length) {
-    const dMeshes = dwarfObjs.map(d => d.mesh).filter(Boolean);
-    if (dMeshes.length) {
-      const dHits = raycaster.intersectObjects(dMeshes);
-      if (dHits.length) {
-        const dObj = dwarfObjs.find(d => d.mesh === dHits[0].object);
-        if (dObj) {
-          if (dLbl) {
-            dLbl.textContent = dObj.name;
-            dLbl.classList.add('show');
-          }
-          if (hoverLabel) hoverLabel.classList.remove('show');
-          canvas.style.cursor = 'pointer';
-          return;
-        }
-      }
-    }
-  }
-  if (dLbl) dLbl.classList.remove('show');
-
-  // --- Обычные планеты: hover ---
-  const meshes = planetMeshes.map(pm => pm.mesh).filter(Boolean);
-  const hits = raycaster.intersectObjects(meshes);
-
-  if (hits.length > 0) {
-    const idx = meshes.indexOf(hits[0].object);
-
-    if (isOverview) {
-      if (idx !== hoveredIndex) {
-        if (hoveredIndex >= 0) unsetHover(hoveredIndex);
-        hoveredIndex = idx;
-        setHover(idx);
-      }
-    } else {
-      const isDiff = idx !== focusedIdx;
-      canvas.style.cursor = isDiff ? 'pointer' : 'default';
-      if (hoverLabel) hoverLabel.classList.remove('show');
-    }
-  } else {
-    if (isOverview && hoveredIndex >= 0) {
-      unsetHover(hoveredIndex);
-      hoveredIndex = -1;
-    }
-    if (hoverLabel) hoverLabel.classList.remove('show');
-    canvas.style.cursor = 'default';
-  }
-}
+  const satPopup = document.getElementById('sat-popup');
 
   // Satellite hit test
   const satMeshes = [..._satHitMap.keys()];
@@ -4110,7 +3989,7 @@ _wire('edu-btn-compare', () => {
 });
 
 // ---- DWARF PLANETS ----
-let dwarfVis = false;
+let _dwarfVis = false;
 const _DWARFS = [
   {
     id:'pluto', name:'Плутон', r:385, s:1.4, c:0xb09898, spd:.000032,
@@ -4161,9 +4040,9 @@ const _dwarfObjs = _DWARFS.map(dp => {
 });
 
 function toggleDwarfs() {
-  dwarfVis=!dwarfVis;
-  _dwarfObjs.forEach(o=>{o.mesh.visible=dwarfVis;o.orb.visible=dwarfVis;});
-  document.getElementById('edu-btn-dwarfs')?.classList.toggle('active',dwarfVis);
+  _dwarfVis=!_dwarfVis;
+  _dwarfObjs.forEach(o=>{o.mesh.visible=_dwarfVis;o.orb.visible=_dwarfVis;});
+  document.getElementById('edu-btn-dwarfs')?.classList.toggle('active',_dwarfVis);
 }
 _wire('edu-btn-dwarfs', toggleDwarfs);
 
@@ -4199,7 +4078,7 @@ function showDwarfInfo(dObj) {
 
 // Проверка клика по карликовым в raycaster (добавить в tickRaycast или clickHandler)
 function checkDwarfClick(event) {
-  if (!dwarfVis) return false;
+  if (!_dwarfVis) return false;
   const rect = canvas.getBoundingClientRect();
   const mx = ((event.clientX - rect.left) / rect.width) * 2 - 1;
   const my = -((event.clientY - rect.top) / rect.height) * 2 + 1;
@@ -4271,7 +4150,7 @@ window.addEventListener('keydown', e => {
 // ---- ANIMATION: use setInterval (reliable) ----
 setInterval(() => {
   _dwarfObjs.forEach(dp => {
-    if (!dwarfVis) return;
+    if (!_dwarfVis) return;
     dp.a += dp.spd * speedMultiplier;
     dp.mesh.position.set(Math.cos(dp.a)*dp.r, 0, Math.sin(dp.a)*dp.r);
     dp.mesh.rotation.y += 0.004;
