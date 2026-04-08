@@ -2059,29 +2059,75 @@ window.addEventListener('mousemove', (e) => {
   if (dLbl) { dLbl.style.left = e.clientX + 'px'; dLbl.style.top = e.clientY + 'px'; }
 });
 
+  // ---- DWARF SAFETY GLOBALS ----
+let dwarfVis = false;
+let dwarfObjs = [];
+
+function syncDwarfGlobals() {
+  if (typeof _dwarfVis !== 'undefined') dwarfVis = _dwarfVis;
+  if (typeof _dwarfObjs !== 'undefined' && Array.isArray(_dwarfObjs)) dwarfObjs = _dwarfObjs;
+}
 function tickRaycast(now) {
   if (now - lastRaycastTime < 60) return;
   lastRaycastTime = now;
 
+  // безопасная синхронизация карликовых
+  if (typeof _dwarfVis !== 'undefined') dwarfVis = _dwarfVis;
+  if (typeof _dwarfObjs !== 'undefined' && Array.isArray(_dwarfObjs)) dwarfObjs = _dwarfObjs;
+
   raycaster.setFromCamera(mouse, camera);
 
-  // --- Карликовые планеты: hover ---
+  const hoverLabel = document.getElementById('planet-hover-label');
   const dLbl = document.getElementById('dwarf-hover-label');
-  if (dwarfVis && typeof _dwarfObjs !== 'undefined') {
-    const dMeshes = _dwarfObjs.map(d => d.mesh);
-    const dHits = raycaster.intersectObjects(dMeshes);
-    if (dHits.length) {
-      const dObj = _dwarfObjs.find(d => d.mesh === dHits[0].object);
-      if (dObj) {
-        if (dLbl) { dLbl.textContent = dObj.name; dLbl.classList.add('show'); }
-        canvas.style.cursor = 'pointer';
-        return; // не обрабатываем планеты пока наведено на карлика
+
+  // --- Карликовые планеты: hover ---
+  if (typeof dwarfVis !== 'undefined' && dwarfVis && Array.isArray(dwarfObjs) && dwarfObjs.length) {
+    const dMeshes = dwarfObjs.map(d => d.mesh).filter(Boolean);
+    if (dMeshes.length) {
+      const dHits = raycaster.intersectObjects(dMeshes);
+      if (dHits.length) {
+        const dObj = dwarfObjs.find(d => d.mesh === dHits[0].object);
+        if (dObj) {
+          if (dLbl) {
+            dLbl.textContent = dObj.name;
+            dLbl.classList.add('show');
+          }
+          if (hoverLabel) hoverLabel.classList.remove('show');
+          canvas.style.cursor = 'pointer';
+          return;
+        }
       }
     }
-    if (dLbl) dLbl.classList.remove('show');
-  } else {
-    if (dLbl) dLbl.classList.remove('show');
   }
+  if (dLbl) dLbl.classList.remove('show');
+
+  // --- Обычные планеты: hover ---
+  const meshes = planetMeshes.map(pm => pm.mesh).filter(Boolean);
+  const hits = raycaster.intersectObjects(meshes);
+
+  if (hits.length > 0) {
+    const idx = meshes.indexOf(hits[0].object);
+
+    if (isOverview) {
+      if (idx !== hoveredIndex) {
+        if (hoveredIndex >= 0) unsetHover(hoveredIndex);
+        hoveredIndex = idx;
+        setHover(idx);
+      }
+    } else {
+      const isDiff = idx !== focusedIdx;
+      canvas.style.cursor = isDiff ? 'pointer' : 'default';
+      if (hoverLabel) hoverLabel.classList.remove('show');
+    }
+  } else {
+    if (isOverview && hoveredIndex >= 0) {
+      unsetHover(hoveredIndex);
+      hoveredIndex = -1;
+    }
+    if (hoverLabel) hoverLabel.classList.remove('show');
+    canvas.style.cursor = 'default';
+  }
+}
 
   // --- Обычные планеты: hover ---
   const meshes = planetMeshes.map(pm => pm.mesh);
@@ -3883,9 +3929,64 @@ function _buildSatHitMap() {
 function tickRaycast(now) {
   if (now - lastRaycastTime < 60) return;
   lastRaycastTime = now;
+
+  // безопасная синхронизация карликовых
+  if (typeof _dwarfVis !== 'undefined') dwarfVis = _dwarfVis;
+  if (typeof _dwarfObjs !== 'undefined' && Array.isArray(_dwarfObjs)) dwarfObjs = _dwarfObjs;
+
   raycaster.setFromCamera(mouse, camera);
+
   const hoverLabel = document.getElementById('planet-hover-label');
-  const satPopup = document.getElementById('sat-popup');
+  const dLbl = document.getElementById('dwarf-hover-label');
+
+  // --- Карликовые планеты: hover ---
+  if (typeof dwarfVis !== 'undefined' && dwarfVis && Array.isArray(dwarfObjs) && dwarfObjs.length) {
+    const dMeshes = dwarfObjs.map(d => d.mesh).filter(Boolean);
+    if (dMeshes.length) {
+      const dHits = raycaster.intersectObjects(dMeshes);
+      if (dHits.length) {
+        const dObj = dwarfObjs.find(d => d.mesh === dHits[0].object);
+        if (dObj) {
+          if (dLbl) {
+            dLbl.textContent = dObj.name;
+            dLbl.classList.add('show');
+          }
+          if (hoverLabel) hoverLabel.classList.remove('show');
+          canvas.style.cursor = 'pointer';
+          return;
+        }
+      }
+    }
+  }
+  if (dLbl) dLbl.classList.remove('show');
+
+  // --- Обычные планеты: hover ---
+  const meshes = planetMeshes.map(pm => pm.mesh).filter(Boolean);
+  const hits = raycaster.intersectObjects(meshes);
+
+  if (hits.length > 0) {
+    const idx = meshes.indexOf(hits[0].object);
+
+    if (isOverview) {
+      if (idx !== hoveredIndex) {
+        if (hoveredIndex >= 0) unsetHover(hoveredIndex);
+        hoveredIndex = idx;
+        setHover(idx);
+      }
+    } else {
+      const isDiff = idx !== focusedIdx;
+      canvas.style.cursor = isDiff ? 'pointer' : 'default';
+      if (hoverLabel) hoverLabel.classList.remove('show');
+    }
+  } else {
+    if (isOverview && hoveredIndex >= 0) {
+      unsetHover(hoveredIndex);
+      hoveredIndex = -1;
+    }
+    if (hoverLabel) hoverLabel.classList.remove('show');
+    canvas.style.cursor = 'default';
+  }
+}
 
   // Satellite hit test
   const satMeshes = [..._satHitMap.keys()];
