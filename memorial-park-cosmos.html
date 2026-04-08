@@ -3772,6 +3772,7 @@ function _eduRefresh(id) {
 }
   
 function _eduWeight(pid) {
+  console.log('EDU WEIGHT для', pid);
   const g=EDU_G[pid]; if(!g) return;
   const inp=document.getElementById('edu-weight-inp');
   const m=parseFloat(inp?inp.value:60)||60;
