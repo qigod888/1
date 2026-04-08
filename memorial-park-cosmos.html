@@ -3820,34 +3820,25 @@ function _eduMiss(pid) {
   el.innerHTML=ms.map(m=>`<div class="edu-miss-card"><div class="edu-miss-name">${m.n}</div><div class="edu-miss-meta">${m.y} · ${m.a} — ${m.t}</div></div>`).join('');
 }
 
-// ---- HOOK showDetailPanel DIAG ----
+// ---- HOOK showDetailPanel ----
 {
   const origShowDetailPanelEdu = showDetailPanel;
   showDetailPanel = function(idx){
-    console.group('showDetailPanel HOOK');
-    console.log('idx =', idx);
-
     origShowDetailPanelEdu(idx);
 
     const planet = PLANETS[idx];
-    console.log('planet =', planet);
+    if (!planet) return;
 
-    if (!planet) {
-      console.warn('planet not found by idx');
-      console.groupEnd();
-      return;
-    }
+    // ставим текущую планету для EDU
+    _curPid = planet.id;
+    console.log('EDU curPid =', _curPid);
 
-    curPid = planet.id;
-    console.log('curPid set to =', curPid);
-
-    try { eduWeight(curPid); console.log('eduWeight called'); } catch(e){ console.error(e); }
-    try { eduLight(curPid); console.log('eduLight called'); } catch(e){ console.error(e); }
-    try { eduAtmo(curPid); console.log('eduAtmo called'); } catch(e){ console.error(e); }
-    try { eduInt(curPid); console.log('eduInt called'); } catch(e){ console.error(e); }
-    try { eduMiss(curPid); console.log('eduMiss called'); } catch(e){ console.error(e); }
-
-    console.groupEnd();
+    // подготавливаем данные для всех секций
+    _eduWeight(_curPid);
+    _eduLight(_curPid);
+    _eduAtmo(_curPid);
+    _eduInt(_curPid);
+    _eduMiss(_curPid);
   };
 }
 
