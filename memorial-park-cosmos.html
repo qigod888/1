@@ -2031,7 +2031,23 @@ const pm = {
       orbitGroup.add(ringMesh);
       pm.ring = ringMesh;
     }
-
+    
+// Пылевое кольцо Юпитера
+if (p.id === 'jupiter') {
+  const jRingGeo = new THREE.RingGeometry(p.size * 1.35, p.size * 1.65, 64);
+  const jRingMat = new THREE.MeshBasicMaterial({
+    color: 0xd8cbb2,
+    side: THREE.DoubleSide,
+    transparent: true,
+    opacity: 0.13,
+    depthWrite: false
+  });
+  const jRingMesh = new THREE.Mesh(jRingGeo, jRingMat);
+  jRingMesh.rotation.x = Math.PI / 2;
+  orbitGroup.add(jRingMesh);
+  pm.jRing = jRingMesh;
+}
+    
     // Uranus rings (vertical)
     if (p.id === 'uranus') {
       const urRingGeo = new THREE.RingGeometry(p.size * 1.4, p.size * 1.7, 64);
@@ -2981,6 +2997,7 @@ pm.mesh.position.set(nx, 0, nz);
 if (pm.clouds) pm.clouds.position.set(nx, 0, nz);
 if (pm.atmosphere) pm.atmosphere.position.set(nx, 0, nz);
 if (pm.ring) pm.ring.position.set(nx, 0, nz);
+if (pm.jRing) pm.jRing.position.set(nx, 0, nz);      
 
       // Update lookAt target during tour/flyby
       if (!isOverview && focusedIdx === i && orbitActive) {
