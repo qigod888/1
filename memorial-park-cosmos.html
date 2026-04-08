@@ -1112,6 +1112,8 @@ html, body {
   color: var(--c-muted); transition: var(--transition); font-family: var(--font-body);
 }
 .hotkeys-close:hover { color: var(--c-text); border-color: var(--c-border-bright); }
+
+/* SOLARIS EDU v3 */
 </style>
 </head>
 <body>
@@ -1153,26 +1155,6 @@ html, body {
   <div id="ui-header" class="hidden">
     <span class="header-logo">SOLARIS</span>
     <div class="header-sep"></div>
-
-  <!-- EDU TOOLBAR -->
-  <div id="edu-toolbar">
-    <button class="edu-tool-btn" id="edu-btn-dwarfs" title="Карликовые планеты: Плутон, Церера, Эрида (D)">
-      <span class="edu-tool-icon">🪐</span>Плутон и др.
-    </button>
-    <div class="edu-sep"></div>
-    <button class="edu-tool-btn" id="edu-btn-comet" title="Комета Галлея (K)">
-      <span class="edu-tool-icon">☄️</span>Комета
-    </button>
-    <div class="edu-sep"></div>
-    <button class="edu-tool-btn" id="edu-btn-compare" title="Сравнить две планеты (C)">
-      <span class="edu-tool-icon">📊</span>Сравнить
-    </button>
-    <div class="edu-sep"></div>
-    <button class="edu-tool-btn" id="edu-btn-hotkeys" title="Горячие клавиши (?)">
-      <span class="edu-tool-icon">⌨️</span>Клавиши
-    </button>
-  </div>
-
     <span class="header-label">Солнечная система</span>
       <div class="header-sep"></div>
     <button id="btn-fullscreen" title="Полный экран (F)">⛶ Экран</button>
@@ -1180,6 +1162,25 @@ html, body {
     <div class="header-sep"></div>
     <button id="btn-edu" title="Образовательные инструменты">🎓 Инструменты</button>
 </div>
+  <!-- EDU TOOLBAR: appears below header when activated -->
+  <div id="edu-toolbar">
+    <button class="edu-tool-btn" id="edu-btn-dwarfs">
+      <span class="edu-icon">🪐</span>Карликовые
+    </button>
+    <div class="edu-sep"></div>
+    <button class="edu-tool-btn" id="edu-btn-comet">
+      <span class="edu-icon">☄️</span>Комета
+    </button>
+    <div class="edu-sep"></div>
+    <button class="edu-tool-btn" id="edu-btn-compare">
+      <span class="edu-icon">📊</span>Сравнить
+    </button>
+    <div class="edu-sep"></div>
+    <button class="edu-tool-btn" id="edu-btn-keys">
+      <span class="edu-icon">⌨️</span>Клавиши
+    </button>
+  </div>
+
 
   <!-- Navigator -->
   <!-- Planet Search -->
@@ -1220,58 +1221,6 @@ html, body {
       </div>
     </div>
   </div>
-
-  
-    <!-- WEIGHT CALCULATOR -->
-    <button class="dp-section-btn" id="toggle-weight" onclick="dpToggle('weight')">
-      🏋️&nbsp;Вес на планете <span class="dp-arrow">▼</span>
-    </button>
-    <div class="dp-collapsible" id="sec-weight">
-      <div style="padding:10px 0 6px">
-        <input type="number" class="dp-weight-input" id="weight-input" placeholder="Твоя масса, кг" min="1" max="500" value="60">
-        <div class="dp-weight-result" id="weight-result">—</div>
-        <div class="dp-weight-sub" id="weight-sub">Введи массу, чтобы узнать свой вес</div>
-      </div>
-    </div>
-
-    <!-- LIGHT TRAVEL TIME -->
-    <button class="dp-section-btn" id="toggle-light" onclick="dpToggle('light')">
-      💡&nbsp;Сигнал от Солнца <span class="dp-arrow">▼</span>
-    </button>
-    <div class="dp-collapsible" id="sec-light">
-      <div style="padding:10px 0 6px">
-        <div class="lighttime-big" id="lighttime-val">—</div>
-        <div class="lighttime-sub" id="lighttime-sub">Скорость света: 299 792 км/с</div>
-      </div>
-    </div>
-
-    <!-- ATMOSPHERE -->
-    <button class="dp-section-btn" id="toggle-atmo" onclick="dpToggle('atmo')">
-      🌫️&nbsp;Состав атмосферы <span class="dp-arrow">▼</span>
-    </button>
-    <div class="dp-collapsible" id="sec-atmo">
-      <div id="atmo-bars" style="padding:10px 0 6px"></div>
-    </div>
-
-    <!-- INTERIOR STRUCTURE -->
-    <button class="dp-section-btn" id="toggle-int" onclick="dpToggle('int')">
-      🏗️&nbsp;Внутреннее строение <span class="dp-arrow">▼</span>
-    </button>
-    <div class="dp-collapsible" id="sec-int">
-      <div style="padding:10px 0 4px">
-        <div class="interior-svg-wrap" id="int-svg"></div>
-        <div id="int-legend"></div>
-      </div>
-    </div>
-
-    <!-- MISSIONS -->
-    <button class="dp-section-btn" id="toggle-miss" onclick="dpToggle('miss')">
-      🚀&nbsp;Миссии к планете <span class="dp-arrow">▼</span>
-    </button>
-    <div class="dp-collapsible" id="sec-miss">
-      <div id="miss-list" style="padding:10px 0 6px"></div>
-    </div>
-
 
   <!-- Back Button -->
   <button class="back-btn" id="back-btn">
@@ -1364,6 +1313,58 @@ html, body {
 
 <!-- Planet Hover Label -->
 <div id="planet-hover-label"> </div>
+
+
+<!-- ===================== EDU OVERLAYS ===================== -->
+<!-- SAT POPUP -->
+<div id="sat-popup" style="position:fixed;z-index:90;pointer-events:none;opacity:0;transition:opacity .18s;transform:translate(-50%,calc(-100% - 16px))">
+  <div style="background:rgba(3,10,22,.97);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:14px 17px;min-width:220px;max-width:275px;box-shadow:0 14px 44px rgba(0,0,0,.65)">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:9px">
+      <span id="sat-icon" style="font-size:22px;line-height:1">🛸</span>
+      <div>
+        <div id="sat-name" style="font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--c-text)">—</div>
+        <div id="sat-agency" style="font-size:10px;color:var(--c-accent);letter-spacing:.07em;margin-top:1px">—</div>
+      </div>
+    </div>
+    <div id="sat-orbit" style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.06);border-radius:4px;padding:3px 8px;font-size:10px;color:var(--c-muted);letter-spacing:.06em;margin-bottom:9px">—</div>
+    <div id="sat-desc" style="font-size:11px;color:rgba(180,190,210,.85);line-height:1.6">—</div>
+    <div id="sat-band" style="display:inline-block;margin-top:8px;padding:2px 9px;border-radius:4px;font-size:9px;letter-spacing:.09em;font-weight:700;text-transform:uppercase"></div>
+  </div>
+</div>
+
+<!-- COMPARE PANEL -->
+<div id="compare-panel" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.96);z-index:150;width:min(680px,96vw);background:rgba(3,9,20,.97);backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,.15);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:18px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s,visibility .35s,transform .35s cubic-bezier(.16,1,.3,1);max-height:90vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.7)">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--c-text)">📊 Сравнение планет</div>
+    <button onclick="document.getElementById('compare-panel').style.cssText+='opacity:0;visibility:hidden;pointer-events:none';document.getElementById('edu-btn-compare').classList.remove('active')" style="background:none;border:1px solid var(--c-border);border-radius:6px;padding:7px 18px;cursor:pointer;font-size:12px;color:var(--c-muted);font-family:var(--font-body);transition:var(--transition)">Закрыть ✕</button>
+  </div>
+  <div style="display:flex;gap:12px;align-items:center">
+    <select id="compare-a" style="flex:1;padding:9px 13px;border-radius:8px;border:1px solid var(--c-border);background:rgba(5,12,25,.85);color:var(--c-text);font-size:13px;font-family:var(--font-body);outline:none;cursor:pointer">
+      <option value="mercury">Меркурий</option><option value="venus">Венера</option>
+      <option value="earth" selected>Земля</option><option value="mars">Марс</option>
+      <option value="jupiter">Юпитер</option><option value="saturn">Сатурн</option>
+      <option value="uranus">Уран</option><option value="neptune">Нептун</option>
+    </select>
+    <span style="font-size:13px;font-weight:700;color:var(--c-muted)">vs</span>
+    <select id="compare-b" style="flex:1;padding:9px 13px;border-radius:8px;border:1px solid var(--c-border);background:rgba(5,12,25,.85);color:var(--c-text);font-size:13px;font-family:var(--font-body);outline:none;cursor:pointer">
+      <option value="mercury">Меркурий</option><option value="venus">Венера</option>
+      <option value="earth">Земля</option><option value="mars" selected>Марс</option>
+      <option value="jupiter">Юпитер</option><option value="saturn">Сатурн</option>
+      <option value="uranus">Уран</option><option value="neptune">Нептун</option>
+    </select>
+  </div>
+  <table id="compare-table" style="width:100%;border-collapse:collapse"></table>
+</div>
+
+<!-- HOTKEYS OVERLAY -->
+<div id="hotkeys-overlay" style="position:fixed;inset:0;z-index:300;background:rgba(2,3,10,.9);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s,visibility .35s">
+  <div style="width:min(460px,94vw);background:rgba(5,14,30,.98);border:1px solid rgba(255,255,255,.16);border-radius:20px;padding:32px;display:flex;flex-direction:column;gap:18px;box-shadow:0 24px 60px rgba(0,0,0,.7)">
+    <div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--c-text)">⌨️ Горячие клавиши</div>
+    <div id="hk-grid" style="display:grid;grid-template-columns:auto 1fr;gap:9px 20px;align-items:center"></div>
+    <button onclick="document.getElementById('hotkeys-overlay').classList.remove('vis-overlay')" style="align-self:flex-end;background:none;border:1px solid var(--c-border);border-radius:6px;padding:8px 20px;cursor:pointer;font-size:12px;color:var(--c-muted);font-family:var(--font-body)">Закрыть</button>
+  </div>
+</div>
+<!-- ============= END EDU OVERLAYS ============= -->
 
 <script>
 // ============================================================
@@ -3556,156 +3557,248 @@ setTimeout(() => {
 })();
 
 // ================================================================
-// SOLARIS EDU — EDUCATIONAL EXTENSIONS v2.0
-// Fixes: hover label bug, premium toolbar, satellite descriptions
+// SOLARIS EDU v3 — EDUCATIONAL EXTENSIONS
+// All features with full null-safety and correct DOM injection
 // ================================================================
 
 // ---- DATA ----
-const EDU_GRAVITY = { mercury:3.7, venus:8.87, earth:9.8, mars:3.71, jupiter:24.79, saturn:10.44, uranus:8.69, neptune:11.15 };
-const EDU_DIST_AU = { mercury:0.387, venus:0.723, earth:1.0, mars:1.524, jupiter:5.203, saturn:9.537, uranus:19.19, neptune:30.07 };
-
+const EDU_G = {mercury:3.7,venus:8.87,earth:9.8,mars:3.71,jupiter:24.79,saturn:10.44,uranus:8.69,neptune:11.15};
+const EDU_AU = {mercury:.387,venus:.723,earth:1.0,mars:1.524,jupiter:5.203,saturn:9.537,uranus:19.19,neptune:30.07};
 const EDU_ATMO = {
-  mercury: [],
-  venus:   [{g:'CO₂',p:96.5,c:'#d4a654'},{g:'N₂',p:3.5,c:'#6a88c8'}],
-  earth:   [{g:'N₂',p:78,c:'#6a88c8'},{g:'O₂',p:21,c:'#81d4fa'},{g:'Ar',p:0.9,c:'#9c7ec4'},{g:'CO₂',p:0.04,c:'#d4a654'}],
-  mars:    [{g:'CO₂',p:95.3,c:'#d4a654'},{g:'N₂',p:2.7,c:'#6a88c8'},{g:'Ar',p:1.6,c:'#9c7ec4'}],
-  jupiter: [{g:'H₂',p:89.8,c:'#e8c87a'},{g:'He',p:10.2,c:'#c8a898'}],
-  saturn:  [{g:'H₂',p:96.3,c:'#d4b876'},{g:'He',p:3.25,c:'#c8a898'}],
-  uranus:  [{g:'H₂',p:82.5,c:'#7FD4D4'},{g:'He',p:15.2,c:'#9fc8d0'},{g:'CH₄',p:2.3,c:'#4da8a8'}],
-  neptune: [{g:'H₂',p:80,c:'#4fc3f7'},{g:'He',p:19,c:'#81a8d4'},{g:'CH₄',p:1.5,c:'#3b8cbf'}]
+  mercury:[],
+  venus:  [{g:'CO₂',p:96.5,c:'#d4a654'},{g:'N₂',p:3.5,c:'#6a88c8'}],
+  earth:  [{g:'N₂',p:78,c:'#6a88c8'},{g:'O₂',p:21,c:'#81d4fa'},{g:'Ar',p:.9,c:'#9c7ec4'},{g:'CO₂',p:.04,c:'#d4a654'}],
+  mars:   [{g:'CO₂',p:95.3,c:'#d4a654'},{g:'N₂',p:2.7,c:'#6a88c8'},{g:'Ar',p:1.6,c:'#9c7ec4'}],
+  jupiter:[{g:'H₂',p:89.8,c:'#e8c87a'},{g:'He',p:10.2,c:'#c8a898'}],
+  saturn: [{g:'H₂',p:96.3,c:'#d4b876'},{g:'He',p:3.25,c:'#c8a898'}],
+  uranus: [{g:'H₂',p:82.5,c:'#7FD4D4'},{g:'He',p:15.2,c:'#9fc8d0'},{g:'CH₄',p:2.3,c:'#4da8a8'}],
+  neptune:[{g:'H₂',p:80,c:'#4fc3f7'},{g:'He',p:19,c:'#81a8d4'},{g:'CH₄',p:1.5,c:'#3b8cbf'}]
 };
-
-const EDU_INTERIOR = {
-  mercury: [{l:'Кора',r:.95,c:'#9e9e9e'},{l:'Мантия',r:.60,c:'#8b6f4e'},{l:'Ядро (Fe)',r:.42,c:'#b5651d'}],
-  venus:   [{l:'Кора',r:.95,c:'#c8b870'},{l:'Мантия',r:.55,c:'#b87850'},{l:'Ядро (Fe)',r:.35,c:'#c85028'}],
-  earth:   [{l:'Кора',r:.95,c:'#5a8f30'},{l:'Мантия',r:.55,c:'#c87832'},{l:'Внеш. ядро',r:.35,c:'#c83222'},{l:'Внутр. ядро',r:.18,c:'#e8a040'}],
-  mars:    [{l:'Кора',r:.95,c:'#c05030'},{l:'Мантия',r:.55,c:'#a86040'},{l:'Ядро (Fe,S)',r:.30,c:'#c84828'}],
-  jupiter: [{l:'Атмосфера',r:.95,c:'#c8a070'},{l:'H₂ жидкий',r:.70,c:'#b07858'},{l:'H металл.',r:.40,c:'#806040'},{l:'Ядро',r:.15,c:'#505050'}],
-  saturn:  [{l:'Атмосфера',r:.95,c:'#d4b876'},{l:'H₂ жидкий',r:.65,c:'#b09060'},{l:'H металл.',r:.35,c:'#807050'},{l:'Ядро',r:.15,c:'#505050'}],
-  uranus:  [{l:'Атмосфера',r:.95,c:'#7FD4D4'},{l:'Лёд (H₂O)',r:.65,c:'#5fb0c0'},{l:'Ядро (скала)',r:.25,c:'#708090'}],
-  neptune: [{l:'Атмосфера',r:.95,c:'#4060c0'},{l:'Лёд/вода',r:.60,c:'#3050a0'},{l:'Ядро (силикат)',r:.20,c:'#506080'}]
+const EDU_INT = {
+  mercury:[{l:'Кора',r:.95,c:'#9e9e9e'},{l:'Мантия',r:.60,c:'#8b6f4e'},{l:'Ядро (Fe)',r:.42,c:'#b5651d'}],
+  venus:  [{l:'Кора',r:.95,c:'#c8b870'},{l:'Мантия',r:.55,c:'#b87850'},{l:'Ядро',r:.35,c:'#c85028'}],
+  earth:  [{l:'Кора',r:.95,c:'#5a8f30'},{l:'Мантия',r:.55,c:'#c87832'},{l:'Внеш. ядро',r:.35,c:'#c83222'},{l:'Внутр. ядро',r:.18,c:'#e8a040'}],
+  mars:   [{l:'Кора',r:.95,c:'#c05030'},{l:'Мантия',r:.55,c:'#a86040'},{l:'Ядро',r:.30,c:'#c84828'}],
+  jupiter:[{l:'Атмосфера',r:.95,c:'#c8a070'},{l:'H₂ жидкий',r:.70,c:'#b07858'},{l:'H металл.',r:.40,c:'#806040'},{l:'Ядро',r:.15,c:'#505050'}],
+  saturn: [{l:'Атмосфера',r:.95,c:'#d4b876'},{l:'H₂ жидкий',r:.65,c:'#b09060'},{l:'H металл.',r:.35,c:'#807050'},{l:'Ядро',r:.15,c:'#505050'}],
+  uranus: [{l:'Атмосфера',r:.95,c:'#7FD4D4'},{l:'Лёд (H₂O)',r:.65,c:'#5fb0c0'},{l:'Ядро',r:.25,c:'#708090'}],
+  neptune:[{l:'Атмосфера',r:.95,c:'#4060c0'},{l:'Лёд/вода',r:.60,c:'#3050a0'},{l:'Ядро',r:.20,c:'#506080'}]
 };
-
-const EDU_MISSIONS = {
-  mercury: [{n:'Mariner 10',y:'1974–75',a:'NASA',t:'Первый пролёт, 45% поверхности'},{n:'MESSENGER',y:'2011–15',a:'NASA',t:'Орбита, полная карта поверхности'}],
-  venus:   [{n:'Venera 7',y:'1970',a:'СССР',t:'Первая мягкая посадка на другой планете'},{n:'Magellan',y:'1990–94',a:'NASA',t:'Радарное картографирование'},{n:'Venus Express',y:'2006–14',a:'ESA',t:'Исследование атмосферы и климата'}],
-  earth:   [{n:'Explorer 1',y:'1958',a:'США',t:'Первый спутник США'},{n:'МКС',y:'1998–н.в.',a:'NASA/РКА/ESA',t:'Постоянная обитаемая лаборатория'},{n:'Hubble',y:'1990–н.в.',a:'NASA/ESA',t:'Космический телескоп, > 1 млн снимков'}],
-  mars:    [{n:'Mariner 9',y:'1971',a:'NASA',t:'Первый орбитальный аппарат'},{n:'Viking 1/2',y:'1976',a:'NASA',t:'Посадка, поиск признаков жизни'},{n:'Curiosity',y:'2012–н.в.',a:'NASA',t:'Марсоход, кратер Гейл'},{n:'Perseverance + Ingenuity',y:'2021–н.в.',a:'NASA',t:'Взятие образцов породы, первый вертолёт'}],
-  jupiter: [{n:'Pioneer 10',y:'1973',a:'NASA',t:'Первый пролёт'},{n:'Voyager 1/2',y:'1979',a:'NASA',t:'Открытие колец, детальные снимки лун'},{n:'Galileo',y:'1995–2003',a:'NASA',t:'13 орбит, зонд в атмосферу'},{n:'Juno',y:'2016–н.в.',a:'NASA',t:'Магнитное поле, полюса планеты'}],
-  saturn:  [{n:'Pioneer 11',y:'1979',a:'NASA',t:'Первый пролёт'},{n:'Voyager 1/2',y:'1980–81',a:'NASA',t:'Детальные снимки колец и лун'},{n:'Cassini-Гюйгенс',y:'2004–17',a:'NASA/ESA',t:'13 лет на орбите; Гюйгенс — посадка на Титан'}],
-  uranus:  [{n:'Voyager 2',y:'1986',a:'NASA',t:'Единственный визит, открыл 10 новых лун и кольца'}],
-  neptune: [{n:'Voyager 2',y:'1989',a:'NASA',t:'Единственный визит, Большое Тёмное Пятно, скорость ветра 2100 км/ч'}]
+const EDU_MISS = {
+  mercury:[{n:'Mariner 10',y:'1974–75',a:'NASA',t:'Первый пролёт, 45% карты поверхности'},{n:'MESSENGER',y:'2011–15',a:'NASA',t:'Орбита, полная карта поверхности и гравитация'}],
+  venus:  [{n:'Venera 7',y:'1970',a:'СССР',t:'Первая мягкая посадка на другой планете'},{n:'Magellan',y:'1990–94',a:'NASA',t:'Радарное картографирование рельефа'},{n:'Venus Express',y:'2006–14',a:'ESA',t:'Динамика атмосферы и климат'}],
+  earth:  [{n:'Explorer 1',y:'1958',a:'США',t:'Первый американский спутник'},{n:'МКС',y:'1998–н.в.',a:'NASA/РКА/ESA',t:'Обитаемая лаборатория на орбите'},{n:'Hubble',y:'1990–н.в.',a:'NASA/ESA',t:'Космический телескоп, >1.5 млн снимков'}],
+  mars:   [{n:'Mariner 9',y:'1971',a:'NASA',t:'Первый орбитальный аппарат'},{n:'Viking 1/2',y:'1976',a:'NASA',t:'Посадка, поиск жизни'},{n:'Curiosity',y:'2012–н.в.',a:'NASA',t:'Марсоход, кратер Гейл'},{n:'Perseverance',y:'2021–н.в.',a:'NASA',t:'Взятие образцов, вертолёт Ingenuity'}],
+  jupiter:[{n:'Pioneer 10',y:'1973',a:'NASA',t:'Первый пролёт'},{n:'Voyager 1/2',y:'1979',a:'NASA',t:'Открытие колец, детали лун'},{n:'Galileo',y:'1995–2003',a:'NASA',t:'13 лет орбиты, зонд в атмосферу'},{n:'Juno',y:'2016–н.в.',a:'NASA',t:'Магнитное поле, полюса'}],
+  saturn: [{n:'Pioneer 11',y:'1979',a:'NASA',t:'Первый пролёт'},{n:'Voyager 1/2',y:'1980–81',a:'NASA',t:'Детальные снимки колец'},{n:'Cassini-Гюйгенс',y:'2004–17',a:'NASA/ESA',t:'13 лет орбиты; Гюйгенс — посадка на Титан'}],
+  uranus: [{n:'Voyager 2',y:'1986',a:'NASA',t:'Единственный визит, 10 лун, кольца'}],
+  neptune:[{n:'Voyager 2',y:'1989',a:'NASA',t:'Единственный визит, Большое Тёмное Пятно'}]
 };
-
 const SAT_INFO = {
-  'ISS':       { icon:'🛸', name:'МКС — Международная космическая станция', agency:'NASA · Роскосмос · ESA · JAXA', orbit:'НОО · ~400 км', desc:'Обитаемая исследовательская станция, летит со скоростью 27 600 км/ч и облетает Землю каждые 90 минут. Экипаж из 6–7 человек постоянно работает там с 2000 года. Размером с футбольное поле (109 × 73 м).', band:'LEO' },
-  'Hubble':    { icon:'🔭', name:'Космический телескоп Хаббл', agency:'NASA · ESA', orbit:'НОО · ~547 км', desc:'Работает с 1990 года. Позволил учёным определить возраст Вселенной, открыть тёмную энергию и сделать более 1,5 млн снимков 47 000 объектов. Разрешение в 10× лучше наземных телескопов.', band:'LEO' },
-  'Starlink-A': { icon:'📡', name:'Starlink — широкополосный интернет-спутник', agency:'SpaceX', orbit:'НОО · ~550 км', desc:'Спутники группировки Starlink обеспечивают высокоскоростной интернет по всей планете. К 2026 году на орбите более 6 000 спутников. Каждый весит ~295 кг и работает ~5 лет.', band:'LEO' },
-  'Starlink-B': { icon:'📡', name:'Starlink — широкополосный интернет-спутник', agency:'SpaceX', orbit:'НОО · ~550 км', desc:'Второй сегмент группировки. Спутники двигаются в ином наклонении орбиты, создавая глобальное покрытие. При ясном небе их можно видеть невооружённым глазом вскоре после заката.', band:'LEO' },
-  'GPS':       { icon:'🛰️', name:'GPS — система глобального позиционирования', agency:'ВВС США', orbit:'СОО · ~20 200 км', desc:'Созвездие из 31 спутника, запущенных США с 1973 года. Ваш телефон получает сигналы от ≥4 спутников и вычисляет позицию с точностью до 30 см. Использует теорию относительности для коррекции хода часов.', band:'MEO' },
-  'Galileo':   { icon:'🛰️', name:'Galileo — европейская навигационная система', agency:'ESA · ЕС', orbit:'СОО · ~23 222 км', desc:'Европейский аналог GPS. 30 спутников обеспечивают точность до 1 метра для гражданских пользователей и до 20 см для специальных приложений. Независима от военного контроля США.', band:'MEO' },
-  'GeoSat-1':  { icon:'🌐', name:'Геостационарный спутник связи', agency:'Различные операторы', orbit:'ГСО · 35 786 км', desc:'На высоте ~36 000 км спутник вращается синхронно с Землёй и кажется «висящим» в одной точке неба. Один спутник покрывает 42% поверхности Земли. Используется для ТВ-вещания, телефонии и интернета.', band:'GEO' },
-  'GeoSat-2':  { icon:'🌐', name:'Геостационарный метеоспутник', agency:'Различные агентства', orbit:'ГСО · 35 786 км', desc:'Метеоспутники на ГСО непрерывно снимают облачный покров Земли. Именно с них поступают снимки в прогнозы погоды. Три таких спутника покрывают практически всю поверхность планеты.', band:'GEO' }
+  'ISS':       {ico:'🛸',name:'МКС — Международная Космическая Станция',agency:'NASA · Роскосмос · ESA · JAXA',orbit:'НОО · ~400 км',desc:'Обитаемая лаборатория с 2000 года. Размером с футбольное поле (109×73 м). Облетает Землю каждые 90 минут со скоростью 27 600 км/ч. Одновременно на борту 6–7 астронавтов.',band:'LEO'},
+  'Hubble':    {ico:'🔭',name:'Телескоп Хаббл',agency:'NASA · ESA',orbit:'НОО · ~547 км',desc:'Работает с 1990 года. Помог определить возраст Вселенной (13.8 млрд лет), открыть тёмную энергию. Сделал >1.5 млн снимков 47 000 объектов.',band:'LEO'},
+  'Starlink-A':{ico:'📡',name:'Starlink — интернет-спутник',agency:'SpaceX',orbit:'НОО · ~550 км',desc:'Группировка из >6000 спутников для глобального интернета. Каждый весит ~295 кг и работает ~5 лет. При ясном небе их видно невооружённым глазом вскоре после заката.',band:'LEO'},
+  'Starlink-B':{ico:'📡',name:'Starlink — интернет-спутник',agency:'SpaceX',orbit:'НОО · ~550 км',desc:'Второй сегмент группировки Starlink. Иное наклонение орбиты для глобального покрытия. Спутники со временем снижают яркость за счёт антибликового покрытия.',band:'LEO'},
+  'GPS':       {ico:'🛰️',name:'GPS — глобальная навигация',agency:'ВВС США',orbit:'СОО · ~20 200 км',desc:'31 спутник в 6 орбитальных плоскостях. Ваш телефон получает сигналы от ≥4 спутников. Требует поправок по теории относительности — часы спутников идут быстрее.',band:'MEO'},
+  'Galileo':   {ico:'🛰️',name:'Galileo — европейская навигация',agency:'ESA · ЕС',orbit:'СОО · ~23 222 км',desc:'Европейский аналог GPS, 30 спутников. Точность до 1 м для гражданских, до 20 см для спецприменений. Независима от военного контроля США и России.',band:'MEO'},
+  'GeoSat-1':  {ico:'🌐',name:'Геостационарный спутник связи',agency:'Различные операторы',orbit:'ГСО · 35 786 км',desc:'На 36 000 км спутник вращается синхронно с Землёй — кажется зависшим в одной точке неба. Один спутник покрывает 42% поверхности. Используется для ТВ, интернета и телефонии.',band:'GEO'},
+  'GeoSat-2':  {ico:'🌐',name:'Метеоспутник ГСО',agency:'Различные агентства',orbit:'ГСО · 35 786 км',desc:'Метеоспутники непрерывно снимают облачный покров. Три таких спутника охватывают всю Землю. Именно с них поступают снимки в прогнозы погоды.',band:'GEO'}
 };
 
-// ---- SECTION TOGGLE ----
-function dpToggle(id) {
-  const sec = document.getElementById('sec-' + id);
-  const btn = document.getElementById('toggle-' + id);
+// ---- INJECT DETAIL PANEL SECTIONS (via JS - reliable!) ----
+(function injectDetailSections(){
+  const dp = document.getElementById('detail-panel');
+  if (!dp) return;
+  dp.insertAdjacentHTML('beforeend', `
+    <div class="dp-sep" id="edu-sep-start"></div>
+    <div style="font-size:10px;letter-spacing:.14em;color:var(--c-accent);text-transform:uppercase;font-weight:600;padding:2px 0 6px">🎓 Образовательный блок</div>
+
+    <button class="dp-sec-btn" onclick="eduToggle('weight')">
+      🏋️ Вес на планете <span class="dp-arr">▼</span>
+    </button>
+    <div class="dp-coll" id="edu-weight">
+      <div style="padding:10px 0 6px">
+        <input type="number" id="edu-weight-inp" placeholder="Ваша масса, кг" min="1" max="500" value="60"
+          style="width:100%;padding:8px 12px;border-radius:7px;border:1px solid var(--c-border);background:rgba(5,12,25,.7);color:var(--c-text);font-size:14px;font-family:var(--font-body);outline:none">
+        <div id="edu-weight-result" style="font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--c-accent);margin-top:8px">—</div>
+        <div id="edu-weight-sub" style="font-size:11px;color:var(--c-muted);margin-top:3px">Введи массу, чтобы узнать вес</div>
+      </div>
+    </div>
+
+    <button class="dp-sec-btn" onclick="eduToggle('light')">
+      💡 Сигнал от Солнца <span class="dp-arr">▼</span>
+    </button>
+    <div class="dp-coll" id="edu-light">
+      <div style="padding:10px 0 6px">
+        <div id="edu-light-val" style="font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--c-accent2)">—</div>
+        <div id="edu-light-sub" style="font-size:11px;color:var(--c-muted);margin-top:3px;line-height:1.55">Скорость света: 299 792 км/с</div>
+      </div>
+    </div>
+
+    <button class="dp-sec-btn" onclick="eduToggle('atmo')">
+      🌫️ Состав атмосферы <span class="dp-arr">▼</span>
+    </button>
+    <div class="dp-coll" id="edu-atmo">
+      <div id="edu-atmo-bars" style="padding:10px 0 6px"></div>
+    </div>
+
+    <button class="dp-sec-btn" onclick="eduToggle('int')">
+      🏗️ Внутреннее строение <span class="dp-arr">▼</span>
+    </button>
+    <div class="dp-coll" id="edu-int">
+      <div style="padding:8px 0 4px">
+        <div id="edu-int-svg" style="display:flex;justify-content:center"></div>
+        <div id="edu-int-leg"></div>
+      </div>
+    </div>
+
+    <button class="dp-sec-btn" onclick="eduToggle('miss')">
+      🚀 Миссии к планете <span class="dp-arr">▼</span>
+    </button>
+    <div class="dp-coll" id="edu-miss">
+      <div id="edu-miss-list" style="padding:10px 0 6px"></div>
+    </div>
+  `);
+
+  // Add section styles dynamically
+  const st = document.createElement('style');
+  st.textContent = `
+    .dp-sec-btn{display:flex;align-items:center;gap:7px;width:100%;padding:9px 0;background:none;border:none;border-top:1px solid var(--c-border);color:var(--c-muted);cursor:pointer;font-size:11px;font-family:var(--font-body);letter-spacing:.10em;text-transform:uppercase;transition:var(--transition);text-align:left}
+    .dp-sec-btn:hover{color:var(--c-text)}
+    .dp-sec-btn .dp-arr{margin-left:auto;font-size:9px;transition:transform .25s}
+    .dp-sec-btn.open .dp-arr{transform:rotate(180deg)}
+    .dp-coll{overflow:hidden;max-height:0;transition:max-height .4s cubic-bezier(.16,1,.3,1)}
+    .dp-coll.open{max-height:600px}
+    #edu-weight-inp:focus{border-color:var(--c-accent)}
+    .edu-atmo-row{display:flex;align-items:center;gap:9px;margin-bottom:5px}
+    .edu-atmo-lbl{font-size:11px;color:var(--c-muted);min-width:36px}
+    .edu-atmo-track{flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
+    .edu-atmo-fill{height:100%;border-radius:3px;width:0;transition:width .75s cubic-bezier(.16,1,.3,1)}
+    .edu-atmo-pct{font-size:10px;color:var(--c-muted);min-width:38px;text-align:right;font-variant-numeric:tabular-nums}
+    .edu-int-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+    .edu-int-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+    .edu-int-txt{font-size:11px;color:var(--c-muted)}
+    .edu-miss-card{padding:9px 12px;border-radius:8px;margin-bottom:6px;background:rgba(79,195,247,.05);border:1px solid rgba(79,195,247,.13)}
+    .edu-miss-name{font-size:12px;font-weight:600;color:var(--c-text)}
+    .edu-miss-meta{font-size:10px;color:var(--c-muted);margin-top:2px;letter-spacing:.04em}
+  `;
+  document.head.appendChild(st);
+})();
+
+// ---- INJECT EDU TOOLBAR STYLES ----
+(function(){
+  const st = document.createElement('style');
+  st.textContent = `
+    #edu-toolbar{position:fixed;top:62px;left:50%;transform:translateX(-50%) translateY(-10px);z-index:45;display:flex;align-items:center;gap:6px;background:rgba(5,12,25,.9);backdrop-filter:blur(20px) saturate(1.5);border:1px solid rgba(255,255,255,.12);border-radius:40px;padding:7px 14px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s cubic-bezier(.16,1,.3,1),visibility .35s,transform .35s cubic-bezier(.16,1,.3,1);box-shadow:0 8px 32px rgba(0,0,0,.5)}
+    #edu-toolbar.show{opacity:1;visibility:visible;pointer-events:auto;transform:translateX(-50%) translateY(0)}
+    .edu-sep{width:1px;height:18px;background:rgba(255,255,255,.1);margin:0 2px}
+    .edu-icon{font-size:14px;line-height:1}
+    .edu-tool-btn{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;border:1px solid transparent;background:none;color:var(--c-muted);font-size:11px;font-family:var(--font-body);font-weight:500;letter-spacing:.07em;cursor:pointer;transition:var(--transition);white-space:nowrap}
+    .edu-tool-btn:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14);color:var(--c-text)}
+    .edu-tool-btn.active{background:rgba(79,195,247,.12);border-color:rgba(79,195,247,.35);color:var(--c-accent)}
+    .edu-tool-btn.active-gold{background:rgba(255,213,79,.10);border-color:rgba(255,213,79,.35);color:var(--c-accent2)}
+    #btn-edu{background:none;border:1px solid rgba(79,195,247,.3);border-radius:5px;color:var(--c-accent);padding:4px 10px;cursor:pointer;font-size:11px;font-family:var(--font-body);font-weight:600;letter-spacing:.08em;text-transform:uppercase;transition:var(--transition)}
+    #btn-edu:hover{background:rgba(79,195,247,.08);border-color:rgba(79,195,247,.55)}
+    #btn-edu.active{background:rgba(79,195,247,.14);border-color:var(--c-accent);box-shadow:0 0 14px rgba(79,195,247,.25)}
+    #compare-panel.cmp-vis{opacity:1!important;visibility:visible!important;pointer-events:auto!important;transform:translate(-50%,-50%) scale(1)!important}
+    #hotkeys-overlay.vis-overlay{opacity:1!important;visibility:visible!important;pointer-events:auto!important}
+    #compare-table th{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c-muted);padding:8px 6px 6px;text-align:left}
+    #compare-table th:not(:first-child){text-align:center;font-family:var(--font-display);font-size:14px;color:var(--c-text);letter-spacing:.06em;text-transform:none}
+    #compare-table td{padding:9px 6px;font-size:12px;color:var(--c-text);border-top:1px solid rgba(255,255,255,.05)}
+    #compare-table td:not(:first-child){text-align:center;font-weight:600;font-variant-numeric:tabular-nums}
+    #compare-table td:first-child{color:var(--c-muted);font-size:11px;letter-spacing:.07em;text-transform:uppercase}
+    #compare-table tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+    select.compare-sel:focus{border-color:var(--c-accent)!important}
+    #hk-grid{display:grid;grid-template-columns:auto 1fr;gap:9px 20px;align-items:center}
+    .hk-key{display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18);border-radius:5px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--c-text);font-family:var(--font-display);white-space:nowrap;min-width:48px;box-shadow:0 2px 0 rgba(0,0,0,.3)}
+    .hk-desc{font-size:12px;color:var(--c-muted)}
+  `;
+  document.head.appendChild(st);
+})();
+
+// ---- HELPERS ----
+let _curPid = null;
+
+function eduToggle(id) {
+  const sec = document.getElementById('edu-' + id);
+  const btn = document.querySelector(`[onclick="eduToggle('${id}')"]`);
   if (!sec || !btn) return;
   const open = sec.classList.toggle('open');
   btn.classList.toggle('open', open);
-  if (open) refreshSection(id);
-}
-let _currentPlanetId = null;
-function refreshSection(id) {
-  if (!_currentPlanetId) return;
-  if (id === 'weight') eduUpdateWeight(_currentPlanetId);
-  if (id === 'light')  eduUpdateLight(_currentPlanetId);
-  if (id === 'atmo')   eduUpdateAtmo(_currentPlanetId);
-  if (id === 'int')    eduUpdateInterior(_currentPlanetId);
-  if (id === 'miss')   eduUpdateMissions(_currentPlanetId);
+  if (open) _eduRefresh(id);
 }
 
-// ---- WEIGHT ----
-function eduUpdateWeight(pid) {
-  const g = EDU_GRAVITY[pid]; if (!g) return;
-  const input = document.getElementById('weight-input');
-  const m = parseFloat(input ? input.value : 60) || 60;
-  const here = (m * 9.8).toFixed(0);
-  const there = (m * g).toFixed(1);
-  const el = document.getElementById('weight-result');
-  const sub = document.getElementById('weight-sub');
-  if (el) el.textContent = there + ' Н';
-  if (sub) sub.textContent = `На Земле: ${here} Н · g = ${g} м/с²`;
-}
-document.addEventListener('input', e => {
-  if (e.target.id === 'weight-input' && _currentPlanetId) eduUpdateWeight(_currentPlanetId);
-});
-
-// ---- LIGHT TIME ----
-function eduUpdateLight(pid) {
-  const au = EDU_DIST_AU[pid]; if (!au) return;
-  const km = au * 149597870.7;
-  const sec = km / 299792;
-  const el = document.getElementById('lighttime-val');
-  const sub = document.getElementById('lighttime-sub');
-  if (el) el.textContent = sec < 120 ? sec.toFixed(0) + ' сек' : (sec/60).toFixed(1) + ' мин';
-  if (sub) sub.textContent = `${(km/1e6).toFixed(2)} млн км от Солнца · ${au.toFixed(3)} а.е.`;
+function _eduRefresh(id) {
+  if (!_curPid) return;
+  if (id==='weight') _eduWeight(_curPid);
+  if (id==='light')  _eduLight(_curPid);
+  if (id==='atmo')   _eduAtmo(_curPid);
+  if (id==='int')    _eduInt(_curPid);
+  if (id==='miss')   _eduMiss(_curPid);
 }
 
-// ---- ATMOSPHERE ----
-function eduUpdateAtmo(pid) {
-  const data = EDU_ATMO[pid] || [];
-  const el = document.getElementById('atmo-bars'); if (!el) return;
-  if (!data.length) { el.innerHTML = '<div style="font-size:11px;color:var(--c-muted);padding:6px 0">Атмосфера отсутствует или разрежена</div>'; return; }
-  el.innerHTML = data.map(d => `
-    <div class="atmo-row">
-      <span class="atmo-label">${d.g}</span>
-      <div class="atmo-track"><div class="atmo-fill" style="background:${d.c}" data-p="${d.p}"></div></div>
-      <span class="atmo-pct">${d.p}%</span>
-    </div>`).join('');
-  requestAnimationFrame(() => el.querySelectorAll('.atmo-fill').forEach(f => f.style.width = f.dataset.p + '%'));
+function _eduWeight(pid) {
+  const g=EDU_G[pid]; if(!g) return;
+  const inp=document.getElementById('edu-weight-inp');
+  const m=parseFloat(inp?inp.value:60)||60;
+  const el=document.getElementById('edu-weight-result');
+  const sub=document.getElementById('edu-weight-sub');
+  if(el) el.textContent=(m*g).toFixed(1)+' Н';
+  if(sub) sub.textContent=`На Земле: ${(m*9.8).toFixed(0)} Н · g = ${g} м/с²`;
+}
+document.addEventListener('input',e=>{if(e.target.id==='edu-weight-inp'&&_curPid)_eduWeight(_curPid);});
+
+function _eduLight(pid) {
+  const au=EDU_AU[pid]; if(!au) return;
+  const km=au*149597870.7, sec=km/299792;
+  const el=document.getElementById('edu-light-val');
+  const sub=document.getElementById('edu-light-sub');
+  if(el) el.textContent=sec<120?sec.toFixed(0)+' сек':(sec/60).toFixed(1)+' мин';
+  if(sub) sub.textContent=`${(km/1e6).toFixed(2)} млн км · ${au.toFixed(3)} а.е. от Солнца`;
 }
 
-// ---- INTERIOR ----
-function eduUpdateInterior(pid) {
-  const layers = EDU_INTERIOR[pid] || [];
-  const sw = document.getElementById('int-svg');
-  const sl = document.getElementById('int-legend');
-  if (!sw || !sl || !layers.length) return;
-  const R = 66, cx = 80, cy = 80;
-  let svg = '';
-  [...layers].reverse().forEach(l => { const r = Math.round(l.r * R); svg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${l.c}" opacity="0.92"/>`; });
-  svg += `<line x1="${cx}" y1="${cy-R-3}" x2="${cx}" y2="${cy+R+3}" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>`;
-  svg += `<line x1="${cx-R-3}" y1="${cy}" x2="${cx+R+3}" y2="${cy}" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>`;
-  sw.innerHTML = `<svg width="160" height="160" viewBox="0 0 160 160">${svg}</svg>`;
-  sl.innerHTML = layers.map(l => `<div class="interior-legend-row"><div class="interior-legend-dot" style="background:${l.c}"></div><span class="interior-legend-text">${l.l}</span></div>`).join('');
+function _eduAtmo(pid) {
+  const data=EDU_ATMO[pid]||[];
+  const el=document.getElementById('edu-atmo-bars'); if(!el) return;
+  if(!data.length){el.innerHTML='<div style="font-size:11px;color:var(--c-muted)">Атмосфера отсутствует или разрежена</div>';return;}
+  el.innerHTML=data.map(d=>`<div class="edu-atmo-row"><span class="edu-atmo-lbl">${d.g}</span><div class="edu-atmo-track"><div class="edu-atmo-fill" style="background:${d.c}" data-p="${d.p}"></div></div><span class="edu-atmo-pct">${d.p}%</span></div>`).join('');
+  requestAnimationFrame(()=>el.querySelectorAll('.edu-atmo-fill').forEach(f=>f.style.width=f.dataset.p+'%'));
 }
 
-// ---- MISSIONS ----
-function eduUpdateMissions(pid) {
-  const ms = EDU_MISSIONS[pid] || [];
-  const el = document.getElementById('miss-list'); if (!el) return;
-  if (!ms.length) { el.innerHTML = '<div style="font-size:11px;color:var(--c-muted)">Данных о миссиях нет</div>'; return; }
-  el.innerHTML = ms.map(m => `<div class="mission-card"><div class="mission-name">${m.n}</div><div class="mission-meta">${m.y} · ${m.a} — ${m.t}</div></div>`).join('');
+function _eduInt(pid) {
+  const layers=EDU_INT[pid]||[];
+  const sw=document.getElementById('edu-int-svg'), sl=document.getElementById('edu-int-leg');
+  if(!sw||!sl||!layers.length) return;
+  const R=66,cx=80,cy=80;
+  let s='';
+  [...layers].reverse().forEach(l=>{s+=`<circle cx="${cx}" cy="${cy}" r="${Math.round(l.r*R)}" fill="${l.c}" opacity=".92"/>`;});
+  s+=`<line x1="${cx}" y1="${cy-R-3}" x2="${cx}" y2="${cy+R+3}" stroke="rgba(255,255,255,.06)" stroke-width="1"/>`;
+  s+=`<line x1="${cx-R-3}" y1="${cy}" x2="${cx+R+3}" y2="${cy}" stroke="rgba(255,255,255,.06)" stroke-width="1"/>`;
+  sw.innerHTML=`<svg width="160" height="160" viewBox="0 0 160 160">${s}</svg>`;
+  sl.innerHTML=layers.map(l=>`<div class="edu-int-row"><div class="edu-int-dot" style="background:${l.c}"></div><span class="edu-int-txt">${l.l}</span></div>`).join('');
 }
 
-// ---- HOOK showDetailPanel to refresh all sections ----
+function _eduMiss(pid) {
+  const ms=EDU_MISS[pid]||[];
+  const el=document.getElementById('edu-miss-list'); if(!el) return;
+  if(!ms.length){el.innerHTML='<div style="font-size:11px;color:var(--c-muted)">Данных о миссиях нет</div>';return;}
+  el.innerHTML=ms.map(m=>`<div class="edu-miss-card"><div class="edu-miss-name">${m.n}</div><div class="edu-miss-meta">${m.y} · ${m.a} — ${m.t}</div></div>`).join('');
+}
+
+// ---- HOOK showDetailPanel ----
 {
   const _orig = showDetailPanel;
   showDetailPanel = function(idx) {
     _orig(idx);
-    _currentPlanetId = PLANETS[idx].id;
-    ['weight','light','atmo','int','miss'].forEach(id => {
-      const sec = document.getElementById('sec-' + id);
-      if (sec && sec.classList.contains('open')) refreshSection(id);
+    _curPid = PLANETS[idx].id;
+    ['weight','light','atmo','int','miss'].forEach(id=>{
+      const s=document.getElementById('edu-'+id);
+      if(s&&s.classList.contains('open')) _eduRefresh(id);
     });
   };
 }
 
-// ---- FIX 1: HOVER LABEL BUG ----
-// Wrap focusPlanet to hide label on transition
+// ---- FIX: HOVER LABEL BUG ----
 {
   const _origFP = focusPlanet;
   focusPlanet = function(idx) {
@@ -3716,33 +3809,52 @@ function eduUpdateMissions(pid) {
   };
 }
 
-// Override tickRaycast with correct focus-mode label behaviour + satellite raycasting
+// Redeclare tickRaycast in same scope — fixes hover + adds sat raycasting
+const _satHitMap = new Map(); // hitMesh → satData
+
+function _buildSatHitMap() {
+  _satHitMap.clear();
+  planetMeshes.forEach(pm => {
+    (pm.artificialSatellites||[]).forEach(sat => {
+      // Use the invisible hit sphere we'll add below
+      if (sat._hitSphere) _satHitMap.set(sat._hitSphere, sat);
+    });
+  });
+}
+
+// Add large invisible hit spheres to each satellite
+(function addSatHitSpheres() {
+  const geo = new THREE.SphereGeometry(1.8, 8, 8);
+  const mat = new THREE.MeshBasicMaterial({transparent:true, opacity:0, depthWrite:false});
+  planetMeshes.forEach(pm => {
+    (pm.artificialSatellites||[]).forEach(sat => {
+      const sphere = new THREE.Mesh(geo, mat.clone());
+      sat.mesh.add(sphere);
+      sat._hitSphere = sphere;
+    });
+  });
+  _buildSatHitMap();
+})();
+
 function tickRaycast(now) {
   if (now - lastRaycastTime < 60) return;
   lastRaycastTime = now;
   raycaster.setFromCamera(mouse, camera);
-
   const hoverLabel = document.getElementById('planet-hover-label');
+  const satPopup = document.getElementById('sat-popup');
 
-  // Satellite raycasting (only when focused on Earth)
-  const satMeshPairs = [];
-  planetMeshes.forEach(pm => {
-    (pm.artificialSatellites || []).forEach(sat => {
-      sat.mesh.traverse(child => {
-        if (child.isMesh) satMeshPairs.push({ mesh: child, sat });
-      });
-    });
-  });
-  if (satMeshPairs.length) {
-    const hits = raycaster.intersectObjects(satMeshPairs.map(p => p.mesh), false);
+  // Satellite hit test
+  const satMeshes = [..._satHitMap.keys()];
+  if (satMeshes.length) {
+    const hits = raycaster.intersectObjects(satMeshes, false);
     if (hits.length) {
-      const pair = satMeshPairs.find(p => p.mesh === hits[0].object);
-      if (pair) { showSatPopup(pair.sat); canvas.style.cursor = 'pointer'; return; }
+      const sat = _satHitMap.get(hits[0].object);
+      if (sat) { _showSatPopup(sat, satPopup); canvas.style.cursor='pointer'; return; }
     }
   }
-  hideSatPopup();
+  if (satPopup) satPopup.style.opacity = '0';
 
-  // Planet raycasting
+  // Planet hit test
   const meshes = planetMeshes.map(pm => pm.mesh);
   const hits = raycaster.intersectObjects(meshes);
   if (hits.length) {
@@ -3750,8 +3862,7 @@ function tickRaycast(now) {
     if (isOverview) {
       if (idx !== hoveredIndex) {
         if (hoveredIndex >= 0) unsetHover(hoveredIndex);
-        hoveredIndex = idx;
-        setHover(idx);
+        hoveredIndex = idx; setHover(idx);
       }
     } else {
       if (idx !== focusedIdx) {
@@ -3760,8 +3871,7 @@ function tickRaycast(now) {
         canvas.style.cursor = 'pointer';
       } else {
         if (hoverLabel) hoverLabel.classList.remove('show');
-        hoveredIndex = -1;
-        canvas.style.cursor = 'default';
+        hoveredIndex = -1; canvas.style.cursor = 'default';
       }
     }
   } else {
@@ -3770,259 +3880,171 @@ function tickRaycast(now) {
   }
 }
 
-// ---- FIX 2: SATELLITE POPUP ----
-const _satPopup = document.getElementById('sat-popup');
-function showSatPopup(sat) {
-  if (!_satPopup) return;
-  const info = SAT_INFO[sat.name];
-  if (!info) return;
-  document.getElementById('sat-icon').textContent   = info.icon;
+// ---- SATELLITE POPUP ----
+let _satMouseX = 0, _satMouseY = 0;
+window.addEventListener('mousemove', e => { _satMouseX = e.clientX; _satMouseY = e.clientY; });
+
+function _showSatPopup(sat, popup) {
+  if (!popup) return;
+  const info = SAT_INFO[sat.name]; if (!info) return;
+  document.getElementById('sat-icon').textContent   = info.ico;
   document.getElementById('sat-name').textContent   = info.name;
   document.getElementById('sat-agency').textContent = info.agency;
   document.getElementById('sat-orbit').textContent  = info.orbit;
   document.getElementById('sat-desc').textContent   = info.desc;
-  const tag = document.getElementById('sat-tag');
-  tag.textContent = info.band === 'LEO' ? 'Низкая орбита (НОО)' : info.band === 'MEO' ? 'Средняя орбита (СОО)' : 'Геостационарная (ГСО)';
-  tag.className = 'sat-popup-tag sat-tag-' + info.band.toLowerCase();
-  _satPopup.classList.add('show');
-}
-function hideSatPopup() {
-  if (_satPopup) _satPopup.classList.remove('show');
-}
-window.addEventListener('mousemove', e => {
-  if (_satPopup && _satPopup.classList.contains('show')) {
-    _satPopup.style.left = e.clientX + 'px';
-    _satPopup.style.top  = e.clientY + 'px';
+  const band = document.getElementById('sat-band');
+  if (band) {
+    band.textContent = info.band==='LEO'?'Низкая орбита (НОО)':info.band==='MEO'?'Средняя орбита (СОО)':'Геостационарная (ГСО)';
+    band.style.background = info.band==='LEO'?'rgba(79,195,247,.15)':info.band==='MEO'?'rgba(255,213,79,.14)':'rgba(79,195,100,.14)';
+    band.style.color = info.band==='LEO'?'var(--c-accent)':info.band==='MEO'?'var(--c-accent2)':'#4fc364';
   }
+  popup.style.left = _satMouseX+'px';
+  popup.style.top  = _satMouseY+'px';
+  popup.style.opacity = '1';
+}
+
+// ---- EDU TOOLBAR ----
+const _eduBar = document.getElementById('edu-toolbar');
+const _eduBtnMain = document.getElementById('btn-edu');
+let _eduOpen = false;
+if (_eduBtnMain && _eduBar) {
+  _eduBtnMain.addEventListener('click', () => {
+    _eduOpen = !_eduOpen;
+    _eduBar.classList.toggle('show', _eduOpen);
+    _eduBtnMain.classList.toggle('active', _eduOpen);
+  });
+}
+
+// ---- COMPARE ----
+const _CMP_ROWS = [['Диаметр','diameter'],['Температура','temp'],['Сутки','day'],['Гравитация','gravity'],['Масса','mass'],['Плотность','density'],['Наклон оси','axialTilt'],['Спутников','moons']];
+function _buildCompare() {
+  const aId = document.getElementById('compare-a')?.value;
+  const bId = document.getElementById('compare-b')?.value;
+  const pA = PLANETS.find(p=>p.id===aId), pB = PLANETS.find(p=>p.id===bId);
+  const tbl = document.getElementById('compare-table');
+  if (!pA||!pB||!tbl) return;
+  let h=`<thead><tr><th></th><th>${pA.name}</th><th>${pB.name}</th></tr></thead><tbody>`;
+  _CMP_ROWS.forEach(([label,key])=>{ h+=`<tr><td>${label}</td><td>${pA.facts[key]||'—'}</td><td>${pB.facts[key]||'—'}</td></tr>`; });
+  tbl.innerHTML=h+'</tbody>';
+}
+document.getElementById('compare-a')?.addEventListener('change', _buildCompare);
+document.getElementById('compare-b')?.addEventListener('change', _buildCompare);
+_buildCompare();
+
+// ---- HOTKEYS GRID ----
+(function buildHKGrid(){
+  const g = document.getElementById('hk-grid'); if (!g) return;
+  const pairs=[['1–8','Перейти к планете по номеру'],['← →','Предыдущая / Следующая планета'],['Esc','Вернуться к обзору'],['F','Полноэкранный режим'],['D','Карликовые планеты (Плутон и др.)'],['K','Комета Галлея'],['C','Панель сравнения планет'],['Alt+T','Режим учителя'],['Alt+R','Реальный масштаб'],['?','Эта подсказка']];
+  g.innerHTML = pairs.map(([k,d])=>`<span class="hk-key">${k}</span><span class="hk-desc">${d}</span>`).join('');
+})();
+
+// ---- BUTTON WIRING (null-safe) ----
+function _wire(id, fn) { document.getElementById(id)?.addEventListener('click', fn); }
+_wire('edu-btn-keys', () => {
+  const o=document.getElementById('hotkeys-overlay'); if(!o) return;
+  o.classList.toggle('vis-overlay');
+});
+document.getElementById('hotkeys-overlay')?.querySelector('button')?.addEventListener('click',()=>{
+  document.getElementById('hotkeys-overlay')?.classList.remove('vis-overlay');
+});
+_wire('edu-btn-compare', () => {
+  const p=document.getElementById('compare-panel'); if(!p) return;
+  const isVis=p.classList.toggle('cmp-vis');
+  document.getElementById('edu-btn-compare')?.classList.toggle('active',isVis);
+  if(isVis) _buildCompare();
 });
 
-// ---- FIX 3: EDU TOOLBAR ----
-let eduToolbarOpen = false;
-const _eduBtn = document.getElementById('btn-edu');
-const _eduBar = document.getElementById('edu-toolbar');
-if (_eduBtn && _eduBar) {
-  _eduBtn.addEventListener('click', () => {
-    eduToolbarOpen = !eduToolbarOpen;
-    _eduBar.classList.toggle('visible', eduToolbarOpen);
-    _eduBtn.classList.toggle('active', eduToolbarOpen);
-  });
-  // Hide toolbar when UI is hidden
-  const _origReturnToOverview = returnToOverview;
-  returnToOverview = function() {
-    _origReturnToOverview();
-    // edu toolbar stays visible in overview
-  };
-}
-
 // ---- DWARF PLANETS ----
-let dwarfVisible = false;
-const DWARFS = [
-  { id:'pluto',  name:'Плутон',  r:380, s:1.4, c:0xb09898, spd:0.000032, a:Math.random()*Math.PI*2 },
-  { id:'ceres',  name:'Церера',  r:162, s:0.9, c:0xa0a080, spd:0.000185, a:Math.random()*Math.PI*2 },
-  { id:'eris',   name:'Эрида',   r:430, s:1.3, c:0xd0d0d0, spd:0.000024, a:Math.random()*Math.PI*2 },
-  { id:'makemake',name:'Макемаке',r:410, s:1.1, c:0xc8b090, spd:0.000027, a:Math.random()*Math.PI*2 },
+let _dwarfVis = false;
+const _DWARFS = [
+  {id:'pluto',  name:'Плутон',   r:385,s:1.4,c:0xb09898,spd:.000032,a:Math.random()*Math.PI*2},
+  {id:'ceres',  name:'Церера',   r:163,s:0.9,c:0xa0a080,spd:.000185,a:Math.random()*Math.PI*2},
+  {id:'eris',   name:'Эрида',    r:428,s:1.3,c:0xd0d0d0,spd:.000024,a:Math.random()*Math.PI*2},
+  {id:'makemake',name:'Макемаке',r:412,s:1.1,c:0xc8b090,spd:.000027,a:Math.random()*Math.PI*2},
 ];
-const dwarfObjs = DWARFS.map(dp => {
-  const orb = new THREE.Mesh(new THREE.RingGeometry(dp.r-.12,dp.r+.12,128), new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.04,side:THREE.DoubleSide,depthWrite:false}));
-  orb.rotation.x = -Math.PI/2; orb.visible = false; scene.add(orb);
-  const mesh = new THREE.Mesh(new THREE.SphereGeometry(dp.s,32,32), new THREE.MeshPhongMaterial({color:dp.c,shininess:2}));
-  mesh.position.set(Math.cos(dp.a)*dp.r, 0, Math.sin(dp.a)*dp.r);
-  mesh.visible = false; scene.add(mesh);
-  return { ...dp, mesh, orb };
+const _dwarfObjs = _DWARFS.map(dp => {
+  const orb = new THREE.Mesh(
+    new THREE.RingGeometry(dp.r-.12,dp.r+.12,128),
+    new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.04,side:THREE.DoubleSide,depthWrite:false})
+  );
+  orb.rotation.x=-Math.PI/2; orb.visible=false; scene.add(orb);
+  const mesh = new THREE.Mesh(
+    new THREE.SphereGeometry(dp.s,32,32),
+    new THREE.MeshPhongMaterial({color:dp.c,shininess:2})
+  );
+  mesh.position.set(Math.cos(dp.a)*dp.r,0,Math.sin(dp.a)*dp.r);
+  mesh.visible=false; scene.add(mesh);
+  return {...dp,mesh,orb};
 });
 
 function toggleDwarfs() {
-  dwarfVisible = !dwarfVisible;
-  dwarfObjs.forEach(o => { o.mesh.visible = dwarfVisible; o.orb.visible = dwarfVisible; });
-  const b1 = document.getElementById('edu-btn-dwarfs');
-  if (b1) b1.classList.toggle('active', dwarfVisible);
+  _dwarfVis=!_dwarfVis;
+  _dwarfObjs.forEach(o=>{o.mesh.visible=_dwarfVis;o.orb.visible=_dwarfVis;});
+  document.getElementById('edu-btn-dwarfs')?.classList.toggle('active',_dwarfVis);
 }
+_wire('edu-btn-dwarfs', toggleDwarfs);
 
 // ---- HALLEY'S COMET ----
-let cometVisible = false;
-const _cometA = 260, _cometE = 0.967;
-const _cometB = _cometA * Math.sqrt(1-_cometE*_cometE);
-const _cometC = _cometA * _cometE;
-const _cometNucleus = new THREE.Mesh(new THREE.SphereGeometry(1.1,16,16), new THREE.MeshBasicMaterial({color:0xd0d8e0}));
-_cometNucleus.visible = false; scene.add(_cometNucleus);
-const _cometTailGeo = new THREE.BufferGeometry();
-const _cometTailPos = new Float32Array(100*3);
-_cometTailGeo.setAttribute('position', new THREE.BufferAttribute(_cometTailPos,3));
-const _cometTail = new THREE.Points(_cometTailGeo, new THREE.PointsMaterial({color:0xb0e0ff,size:1.4,transparent:true,opacity:.45,depthWrite:false,blending:THREE.AdditiveBlending}));
-_cometTail.visible = false; scene.add(_cometTail);
-const _cometOrbitPts = [];
-for (let i=0;i<=200;i++) { const t=(i/200)*Math.PI*2; _cometOrbitPts.push(new THREE.Vector3(_cometA*Math.cos(t)-_cometC, 0, _cometB*Math.sin(t))); }
-const _cometOrbitLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints(_cometOrbitPts), new THREE.LineBasicMaterial({color:0x3366aa,transparent:true,opacity:.18}));
-_cometOrbitLine.visible = false; scene.add(_cometOrbitLine);
-let _cometAngle = 0;
+let _cometVis=false;
+const _cA=260,_cE=.967,_cB=_cA*Math.sqrt(1-_cE*_cE),_cC=_cA*_cE;
+const _cNuc=new THREE.Mesh(new THREE.SphereGeometry(1.1,16,16),new THREE.MeshBasicMaterial({color:0xd0d8e0}));
+_cNuc.visible=false; scene.add(_cNuc);
+const _cTailPos=new Float32Array(100*3);
+const _cTailGeo=new THREE.BufferGeometry();
+_cTailGeo.setAttribute('position',new THREE.BufferAttribute(_cTailPos,3));
+const _cTail=new THREE.Points(_cTailGeo,new THREE.PointsMaterial({color:0xb0e0ff,size:1.4,transparent:true,opacity:.45,depthWrite:false,blending:THREE.AdditiveBlending}));
+_cTail.visible=false; scene.add(_cTail);
+const _cOrbitPts=[];
+for(let i=0;i<=200;i++){const t=(i/200)*Math.PI*2;_cOrbitPts.push(new THREE.Vector3(_cA*Math.cos(t)-_cC,0,_cB*Math.sin(t)));}
+const _cOrbit=new THREE.Line(new THREE.BufferGeometry().setFromPoints(_cOrbitPts),new THREE.LineBasicMaterial({color:0x3366aa,transparent:true,opacity:.18}));
+_cOrbit.visible=false; scene.add(_cOrbit);
+let _cAngle=0;
 
 function toggleComet() {
-  cometVisible = !cometVisible;
-  _cometNucleus.visible = cometVisible;
-  _cometTail.visible = cometVisible;
-  _cometOrbitLine.visible = cometVisible;
-  const b = document.getElementById('edu-btn-comet');
-  if (b) b.classList.toggle('active', cometVisible);
+  _cometVis=!_cometVis;
+  _cNuc.visible=_cTail.visible=_cOrbit.visible=_cometVis;
+  document.getElementById('edu-btn-comet')?.classList.toggle('active',_cometVis);
 }
-function tickComet() {
-  if (!cometVisible) return;
-  const dist = new THREE.Vector3(_cometNucleus.position.x, 0, _cometNucleus.position.z).length();
-  const boost = 1 + Math.max(0, (400-dist)/400) * 5;
-  _cometAngle += 0.0003 * boost * speedMultiplier;
-  if (_cometAngle > Math.PI*2) _cometAngle -= Math.PI*2;
-  const nx = _cometA*Math.cos(_cometAngle)-_cometC, nz = _cometB*Math.sin(_cometAngle);
-  _cometNucleus.position.set(nx,0,nz);
-  const ds = new THREE.Vector3(-nx,0,-nz).normalize();
-  for (let i=0;i<100;i++) {
-    const t=i/100, sp=(Math.random()-.5)*3*t;
-    _cometTailPos[i*3]   = nx+ds.x*t*45+sp;
-    _cometTailPos[i*3+1] = (Math.random()-.5)*1.5*t;
-    _cometTailPos[i*3+2] = nz+ds.z*t*45+sp;
-  }
-  _cometTailGeo.attributes.position.needsUpdate = true;
-  _cometTail.material.opacity = Math.max(.15, .3+(1-dist/400)*.5);
-}
+_wire('edu-btn-comet', toggleComet);
 
-// ---- COMPARE PANEL ----
-const CMP_ROWS = [
-  ['Диаметр','diameter'],['Температура','temp'],['Сутки','day'],
-  ['Гравитация','gravity'],['Масса','mass'],['Плотность','density'],
-  ['Наклон оси','axialTilt'],['Спутников','moons'],
-];
-function buildCompare() {
-  const aId = document.getElementById('compare-a').value;
-  const bId = document.getElementById('compare-b').value;
-  const pA = PLANETS.find(p=>p.id===aId), pB = PLANETS.find(p=>p.id===bId);
-  if (!pA||!pB) return;
-  const tbl = document.getElementById('compare-table');
-  let h = `<thead><tr><th></th><th>${pA.name}</th><th>${pB.name}</th></tr></thead><tbody>`;
-  CMP_ROWS.forEach(([label,key],i) => {
-    h += `<tr><td>${label}</td><td>${pA.facts[key]||'—'}</td><td>${pB.facts[key]||'—'}</td></tr>`;
-  });
-  tbl.innerHTML = h + '</tbody>';
+function _tickComet() {
+  if(!_cometVis) return;
+  const dist=_cNuc.position.length();
+  _cAngle+=.0003*(1+Math.max(0,(400-dist)/400)*5)*speedMultiplier;
+  if(_cAngle>Math.PI*2) _cAngle-=Math.PI*2;
+  const nx=_cA*Math.cos(_cAngle)-_cC,nz=_cB*Math.sin(_cAngle);
+  _cNuc.position.set(nx,0,nz);
+  const ds=new THREE.Vector3(-nx,0,-nz).normalize();
+  for(let i=0;i<100;i++){const t=i/100,sp=(Math.random()-.5)*3*t;_cTailPos[i*3]=nx+ds.x*t*45+sp;_cTailPos[i*3+1]=(Math.random()-.5)*1.5*t;_cTailPos[i*3+2]=nz+ds.z*t*45+sp;}
+  _cTailGeo.attributes.position.needsUpdate=true;
+  _cTail.material.opacity=Math.max(.15,.3+(1-dist/400)*.5);
 }
-function closeCompare() {
-  document.getElementById('compare-panel').classList.remove('visible');
-  const b = document.getElementById('edu-btn-compare');
-  if (b) b.classList.remove('active');
-}
-document.getElementById('compare-a').addEventListener('change', buildCompare);
-document.getElementById('compare-b').addEventListener('change', buildCompare);
-buildCompare();
-
-// ---- BUTTON WIRING ----
-document.getElementById('edu-btn-dwarfs').addEventListener('click', toggleDwarfs);
-document.getElementById('edu-btn-comet').addEventListener('click', toggleComet);
-document.getElementById('edu-btn-compare').addEventListener('click', () => {
-  const p = document.getElementById('compare-panel');
-  const isVis = p.classList.toggle('visible');
-  document.getElementById('edu-btn-compare').classList.toggle('active', isVis);
-  if (isVis) buildCompare();
-});
-document.getElementById('edu-btn-hotkeys').addEventListener('click', () => {
-  document.getElementById('hotkeys-overlay').classList.toggle('visible');
-});
 
 // ---- KEYBOARD SHORTCUTS ----
 window.addEventListener('keydown', e => {
-  const tag = document.activeElement?.tagName;
-  if (tag==='INPUT'||tag==='TEXTAREA') return;
+  const t=document.activeElement?.tagName;
+  if(t==='INPUT'||t==='TEXTAREA') return;
   switch(e.key) {
-    case '?': case '/': document.getElementById('hotkeys-overlay').classList.toggle('visible'); break;
-    case 'c': case 'C': document.getElementById('edu-btn-compare').click(); break;
-    case 'd': case 'D': toggleDwarfs(); break;
-    case 'k': case 'K': toggleComet(); break;
+    case '?':case '/': document.getElementById('hotkeys-overlay')?.classList.toggle('vis-overlay'); break;
+    case 'c':case 'C': document.getElementById('edu-btn-compare')?.click(); break;
+    case 'd':case 'D': toggleDwarfs(); break;
+    case 'k':case 'K': toggleComet(); break;
     case 'Escape':
-      document.getElementById('hotkeys-overlay').classList.remove('visible');
-      document.getElementById('compare-panel').classList.remove('visible');
+      document.getElementById('hotkeys-overlay')?.classList.remove('vis-overlay');
+      document.getElementById('compare-panel')?.classList.remove('cmp-vis');
       break;
   }
 });
 
-// ---- ANIMATE DWARF PLANETS + COMET ----
-(function patchRAF() {
-  const rAF = window.requestAnimationFrame;
-  window.requestAnimationFrame = function(cb) {
-    return rAF(function(ts) {
-      dwarfObjs.forEach(dp => {
-        if (!dwarfVisible) return;
-        dp.a += dp.spd * speedMultiplier * 1;
-        dp.mesh.position.set(Math.cos(dp.a)*dp.r, 0, Math.sin(dp.a)*dp.r);
-        dp.mesh.rotation.y += 0.004;
-      });
-      tickComet();
-      cb(ts);
-    });
-  };
-})();
-</script>
-<!-- SAT POPUP -->
-<div id="sat-popup">
-  <div id="sat-popup-inner">
-    <div class="sat-popup-head">
-      <span class="sat-popup-icon" id="sat-icon">🛸</span>
-      <div>
-        <div class="sat-popup-name" id="sat-name">—</div>
-        <div class="sat-popup-agency" id="sat-agency">—</div>
-      </div>
-    </div>
-    <div class="sat-popup-orbit" id="sat-orbit">—</div>
-    <div class="sat-popup-desc" id="sat-desc">—</div>
-    <div id="sat-tag" class="sat-popup-tag sat-tag-leo"></div>
-  </div>
-</div>
-
-<!-- COMPARE PANEL -->
-<div id="compare-panel">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div class="compare-title">📊 Сравнение планет</div>
-    <button class="compare-close-btn" onclick="closeCompare()">Закрыть ✕</button>
-  </div>
-  <div class="compare-selects">
-    <select class="compare-select" id="compare-a">
-      <option value="mercury">Меркурий</option>
-      <option value="venus">Венера</option>
-      <option value="earth" selected>Земля</option>
-      <option value="mars">Марс</option>
-      <option value="jupiter">Юпитер</option>
-      <option value="saturn">Сатурн</option>
-      <option value="uranus">Уран</option>
-      <option value="neptune">Нептун</option>
-    </select>
-    <span class="compare-vs">vs</span>
-    <select class="compare-select" id="compare-b">
-      <option value="mercury">Меркурий</option>
-      <option value="venus">Венера</option>
-      <option value="earth">Земля</option>
-      <option value="mars" selected>Марс</option>
-      <option value="jupiter">Юпитер</option>
-      <option value="saturn">Сатурн</option>
-      <option value="uranus">Уран</option>
-      <option value="neptune">Нептун</option>
-    </select>
-  </div>
-  <table class="compare-table" id="compare-table"></table>
-</div>
-
-<!-- HOTKEYS OVERLAY -->
-<div id="hotkeys-overlay">
-  <div id="hotkeys-box">
-    <div class="hotkeys-title">⌨️ Горячие клавиши</div>
-    <div class="hotkeys-grid">
-      <span class="hk-key">1–8</span><span class="hk-desc">Перейти к планете по номеру</span>
-      <span class="hk-key">← →</span><span class="hk-desc">Предыдущая / следующая планета</span>
-      <span class="hk-key">Esc</span><span class="hk-desc">Вернуться к обзору Солнечной системы</span>
-      <span class="hk-key">F</span><span class="hk-desc">Полноэкранный режим</span>
-      <span class="hk-key">D</span><span class="hk-desc">Показать карликовые планеты</span>
-      <span class="hk-key">K</span><span class="hk-desc">Комета Галлея</span>
-      <span class="hk-key">C</span><span class="hk-desc">Сравнение планет</span>
-      <span class="hk-key">Alt+T</span><span class="hk-desc">Режим учителя (управление туром)</span>
-      <span class="hk-key">Alt+R</span><span class="hk-desc">Реальный масштаб Солнечной системы</span>
-      <span class="hk-key">?</span><span class="hk-desc">Эта панель с подсказками</span>
-    </div>
-    <button class="hotkeys-close" onclick="document.getElementById('hotkeys-overlay').classList.remove('visible')">Закрыть</button>
-  </div>
-</div>
-
-</body>
+// ---- ANIMATION: use setInterval (reliable) ----
+setInterval(() => {
+  _dwarfObjs.forEach(dp => {
+    if (!_dwarfVis) return;
+    dp.a += dp.spd * speedMultiplier;
+    dp.mesh.position.set(Math.cos(dp.a)*dp.r, 0, Math.sin(dp.a)*dp.r);
+    dp.mesh.rotation.y += 0.004;
+  });
+  _tickComet();
+}, 16);
+</script></body>
 </html>
