@@ -3820,22 +3820,34 @@ function _eduMiss(pid) {
   el.innerHTML=ms.map(m=>`<div class="edu-miss-card"><div class="edu-miss-name">${m.n}</div><div class="edu-miss-meta">${m.y} · ${m.a} — ${m.t}</div></div>`).join('');
 }
 
-// ---- HOOK showDetailPanel ----
+// ---- HOOK showDetailPanel DIAG ----
 {
   const origShowDetailPanelEdu = showDetailPanel;
   showDetailPanel = function(idx){
+    console.group('showDetailPanel HOOK');
+    console.log('idx =', idx);
+
     origShowDetailPanelEdu(idx);
 
     const planet = PLANETS[idx];
-    if (!planet) return;
+    console.log('planet =', planet);
+
+    if (!planet) {
+      console.warn('planet not found by idx');
+      console.groupEnd();
+      return;
+    }
 
     curPid = planet.id;
+    console.log('curPid set to =', curPid);
 
-    eduWeight(curPid);
-    eduLight(curPid);
-    eduAtmo(curPid);
-    eduInt(curPid);
-    eduMiss(curPid);
+    try { eduWeight(curPid); console.log('eduWeight called'); } catch(e){ console.error(e); }
+    try { eduLight(curPid); console.log('eduLight called'); } catch(e){ console.error(e); }
+    try { eduAtmo(curPid); console.log('eduAtmo called'); } catch(e){ console.error(e); }
+    try { eduInt(curPid); console.log('eduInt called'); } catch(e){ console.error(e); }
+    try { eduMiss(curPid); console.log('eduMiss called'); } catch(e){ console.error(e); }
+
+    console.groupEnd();
   };
 }
 
