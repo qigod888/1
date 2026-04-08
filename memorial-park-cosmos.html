@@ -3747,13 +3747,22 @@ const SAT_INFO = {
 // ---- HELPERS ----
 let _curPid = null;
 
-function eduToggle(id) {
+ffunction eduToggle(id) {
   const sec = document.getElementById('edu-' + id);
-  const btn = document.querySelector(`[onclick="eduToggle('${id}')"]`);
-  if (!sec || !btn) return;
+  // Используем поиск по вхождению (*=), чтобы игнорировать разницу в кавычках
+  const btn = document.querySelector('[onclick*="eduToggle"][onclick*="' + id + '"]');
+  
+  if (!sec) return; // Проверяем только секцию, кнопка не должна блокировать логику
+  
   const open = sec.classList.toggle('open');
-  btn.classList.toggle('open', open);
-  if (open) _eduRefresh(id);
+  
+  if (btn) {
+    btn.classList.toggle('open', open);
+  }
+  
+  if (open) {
+    eduRefresh(id);
+  }
 }
 
 function _eduRefresh(id) {
