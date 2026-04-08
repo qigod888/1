@@ -3823,30 +3823,20 @@ function _eduMiss(pid) {
 // ---- HOOK showDetailPanel ----
 {
   const origShowDetailPanelEdu = showDetailPanel;
-showDetailPanel = function(idx){
-  origShowDetailPanelEdu(idx);
+  showDetailPanel = function(idx){
+    origShowDetailPanelEdu(idx);
 
-  const planet = PLANETS[idx];
-  if (!planet) return;
+    const planet = PLANETS[idx];
+    if (!planet) return;
 
-  curPid = planet.id;
+    curPid = planet.id;
 
-  // всегда обновляем содержимое, даже если секции пока закрыты
-  eduWeight(curPid);
-  eduLight(curPid);
-  eduAtmo(curPid);
-  eduInt(curPid);
-  eduMiss(curPid);
-
-  // если toolbar открыт — подсветка/состояние останутся актуальными
-  ['weight','light','atmo','int','miss'].forEach(id => {
-    const sec = document.getElementById('edu-' + id);
-    const btn = document.querySelector(`[onclick="eduToggle('${id}')"]`);
-    if (sec && sec.classList.contains('open') && btn) {
-      btn.classList.add('open');
-    }
-  });
-};
+    eduWeight(curPid);
+    eduLight(curPid);
+    eduAtmo(curPid);
+    eduInt(curPid);
+    eduMiss(curPid);
+  };
 }
 
 // ---- FIX: HOVER LABEL BUG ----
