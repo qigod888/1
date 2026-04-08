@@ -2054,6 +2054,9 @@ window.addEventListener('mousemove', (e) => {
   mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
   hoverLabel.style.left = e.clientX + 'px';
   hoverLabel.style.top = e.clientY + 'px';
+  // Обновляем позицию метки карликовой планеты
+  const dLbl = document.getElementById('dwarf-hover-label');
+  if (dLbl) { dLbl.style.left = e.clientX + 'px'; dLbl.style.top = e.clientY + 'px'; }
 });
 
 function tickRaycast(now) {
@@ -2061,6 +2064,26 @@ function tickRaycast(now) {
   lastRaycastTime = now;
 
   raycaster.setFromCamera(mouse, camera);
+
+  // --- Карликовые планеты: hover ---
+  const dLbl = document.getElementById('dwarf-hover-label');
+  if (_dwarfVis && typeof _dwarfObjs !== 'undefined') {
+    const dMeshes = _dwarfObjs.map(d => d.mesh);
+    const dHits = raycaster.intersectObjects(dMeshes);
+    if (dHits.length) {
+      const dObj = _dwarfObjs.find(d => d.mesh === dHits[0].object);
+      if (dObj) {
+        if (dLbl) { dLbl.textContent = dObj.name; dLbl.classList.add('show'); }
+        canvas.style.cursor = 'pointer';
+        return; // не обрабатываем планеты пока наведено на карлика
+      }
+    }
+    if (dLbl) dLbl.classList.remove('show');
+  } else {
+    if (dLbl) dLbl.classList.remove('show');
+  }
+
+  // --- Обычные планеты: hover ---
   const meshes = planetMeshes.map(pm => pm.mesh);
   const hits = raycaster.intersectObjects(meshes);
 
@@ -2073,10 +2096,8 @@ function tickRaycast(now) {
         setHover(idx);
       }
     } else {
-      // In focus mode: show cursor pointer when hovering a different planet
       hoveredIndex = idx;
     }
-    // Show pointer cursor if it's a different planet (or any planet in overview)
     const isDiff = !isOverview && idx === focusedIdx;
     canvas.style.cursor = isDiff ? 'default' : 'pointer';
   } else {
@@ -2093,8 +2114,6 @@ function setHover(idx) {
   if (planetMeshes[idx].ring) gsap.to(planetMeshes[idx].ring.scale, { x: 1.12, y: 1.12, z: 1.12, duration: 0.3 });
   hoverLabel.textContent = PLANETS[idx].name;
   hoverLabel.classList.add('show');
-
-  // highlight nav
   document.querySelectorAll('.nav-item').forEach((el, i) => {
     el.classList.toggle('active', i === idx);
   });
@@ -2110,12 +2129,23 @@ function unsetHover(idx) {
 
 // Click to focus — works in both overview and focus mode
 canvas.addEventListener('click', () => {
+
+  // --- Карликовые планеты: клик ---
+  if (_dwarfVis && typeof _dwarfObjs !== 'undefined') {
+    raycaster.setFromCamera(mouse, camera);
+    const dMeshes = _dwarfObjs.map(d => d.mesh);
+    const dHits = raycaster.intersectObjects(dMeshes);
+    if (dHits.length) {
+      const dObj = _dwarfObjs.find(d => d.mesh === dHits[0].object);
+      if (dObj) { showDwarfInfo(dObj); return; }
+    }
+  }
+
+  // --- Обычные планеты: клик ---
   if (isOverview) {
-    // In overview: click any hovered planet
     if (hoveredIndex >= 0) focusPlanet(hoveredIndex);
   } else {
-    // In focus mode: click a different planet visible in the scene to jump to it
-    if (!orbitActive) return; // ignore clicks during fly-in tween
+    if (!orbitActive) return;
     const meshes = planetMeshes.map(pm => pm.mesh);
     raycaster.setFromCamera(mouse, camera);
     const hits = raycaster.intersectObjects(meshes);
@@ -3915,7 +3945,13 @@ if (_eduBtnMain && _eduBar) {
 
 // ---- COMPARE ----
 const _CMP_ROWS = [['Диаметр','diameter'],['Температура','temp'],['Сутки','day'],['Гравитация','gravity'],['Масса','mass'],['Плотность','density'],['Наклон оси','axialTilt'],['Спутников','moons']];
-function _buildCompare() {
+function closeComparePanel() {
+  var p = document.getElementById('compare-panel');
+  if (p) p.classList.remove('cmp-vis');
+  var b = document.getElementById('edu-btn-compare');
+  if (b) b.classList.remove('active');
+}
+  function _buildCompare() {
   const aId = document.getElementById('compare-a')?.value;
   const bId = document.getElementById('compare-b')?.value;
   const pA = PLANETS.find(p=>p.id===aId), pB = PLANETS.find(p=>p.id===bId);
@@ -4010,13 +4046,22 @@ function toggleDwarfs() {
 }
 _wire('edu-btn-dwarfs', toggleDwarfs);
 
-  // Клик по карликовым планетам — показать информацию
-function showDwarfInfo(dwarfData) {
-  const d = _DWARFS.find(x => x.id === dwarfData.id);
-  if (!d) return;
-  document.getElementById('dp-tagline').textContent = d.tagline || 'Карликовая планета';
-  document.getElementById('dp-name').textContent = d.name;
+// Данные карликовых планет
+const _DWARF_DATA = {
+  pluto: {tagline:'Карликовая планета пояса Койпера',descShort:'Плутон — самый известный карликовый мир на краю Солнечной системы.',descLong:'Открыт в 1930 году. В 2006-м переклассифицирован. Зонд New Horizons (2015) обнаружил горы из водяного льда высотой 3500 м и сердцеобразное плато Томбо.',facts:{diameter:'2 376 км',temp:'−233°C',day:'6.4 земных суток',gravity:'0.62 м/с²',mass:'1.3×10²²кг',density:'1850 кг/м³',axialTilt:'122.5°',moons:'5 (Харон и др.)'}},
+  ceres: {tagline:'Карлик Главного пояса астероидов',descShort:'Церера — крупнейший объект в поясе астероидов между Марсом и Юпитером.',descLong:'Открыта в 1801 году. Зонд Dawn (2015–2018) обнаружил яркие солевые пятна в кратере Оккатор — вероятно выходы рапы из подземного резервуара.',facts:{diameter:'945 км',temp:'−105°C',day:'9.1 часа',gravity:'0.28 м/с²',mass:'9.4×10²⁰кг',density:'2162 кг/м³',axialTilt:'4°',moons:'0'}},
+  eris: {tagline:'Самая массивная карликовая планета',descShort:'Эрида на 27% массивнее Плутона — именно её открытие спровоцировало переклассификацию.',descLong:'Открыта в 2005 году. Находится в рассеянном диске за поясом Койпера. Имеет один спутник — Дисномия.',facts:{diameter:'2 326 км',temp:'−243°C',day:'~25.9 часа',gravity:'0.82 м/с²',mass:'1.66×10²²кг',density:'2520 кг/м³',axialTilt:'неизв.',moons:'1 (Дисномия)'}},
+  makemake: {tagline:'Красноватый мир пояса Койпера',descShort:'Макемаке — один из крупнейших объектов пояса Койпера с характерным красноватым цветом.',descLong:'Открыт в 2005 году, назван в честь бога-творца народа рапа-нуи. Красный цвет — органические толины. Имеет спутник MK2.',facts:{diameter:'1 430 км',temp:'−239°C',day:'22.5 часа',gravity:'0.5 м/с²',mass:'3.1×10²¹кг',density:'~1700 кг/м³',axialTilt:'неизв.',moons:'1 (MK2)'}}
+};
+
+function showDwarfInfo(dObj) {
+  const d = _DWARF_DATA[dObj.id]; if (!d) return;
+  document.getElementById('dp-tagline').textContent = d.tagline;
+  document.getElementById('dp-name').textContent = dObj.name;
   document.getElementById('dp-desc-short').textContent = d.descShort;
+  const dl = document.getElementById('dp-desc-long');
+  dl.textContent = d.descLong; dl.classList.remove('show');
+  document.getElementById('dp-read-more').textContent = 'Подробнее →';
   const f = d.facts;
   document.getElementById('f-diameter').textContent = f.diameter;
   document.getElementById('f-temp').textContent = f.temp;
@@ -4026,21 +4071,9 @@ function showDwarfInfo(dwarfData) {
   document.getElementById('f-density').textContent = f.density;
   document.getElementById('f-axialTilt').textContent = f.axialTilt;
   document.getElementById('f-moons').textContent = f.moons;
-  const descLong = document.getElementById('dp-desc-long');
-  descLong.textContent = d.descLong;
-  descLong.classList.remove('show');
-  document.getElementById('dp-read-more').onclick = () => {
-    descLong.classList.toggle('show');
-    document.getElementById('dp-read-more').textContent =
-      descLong.classList.contains('show') ? 'Свернуть ↑' : 'Подробнее →';
-  };
   document.getElementById('dp-major-moons').style.display = 'none';
   document.getElementById('dp-quiz-btn').style.display = 'none';
-  // Показать панель
-  const panel = document.getElementById('detail-panel');
-  panel.classList.add('visible');
-  // Не строим edu-секции для карликовых (нет миссий/атмосферы)
-  // Можно добавить при желании
+  document.getElementById('detail-panel').classList.add('visible');
 }
 
 // Проверка клика по карликовым в raycaster (добавить в tickRaycast или clickHandler)
