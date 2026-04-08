@@ -3822,15 +3822,31 @@ function _eduMiss(pid) {
 
 // ---- HOOK showDetailPanel ----
 {
-  const _orig = showDetailPanel;
-  showDetailPanel = function(idx) {
-    _orig(idx);
-    _curPid = PLANETS[idx].id;
-    ['weight','light','atmo','int','miss'].forEach(id=>{
-      const s=document.getElementById('edu-'+id);
-      if(s&&s.classList.contains('open')) _eduRefresh(id);
-    });
-  };
+  const origShowDetailPanelEdu = showDetailPanel;
+showDetailPanel = function(idx){
+  origShowDetailPanelEdu(idx);
+
+  const planet = PLANETS[idx];
+  if (!planet) return;
+
+  curPid = planet.id;
+
+  // всегда обновляем содержимое, даже если секции пока закрыты
+  eduWeight(curPid);
+  eduLight(curPid);
+  eduAtmo(curPid);
+  eduInt(curPid);
+  eduMiss(curPid);
+
+  // если toolbar открыт — подсветка/состояние останутся актуальными
+  ['weight','light','atmo','int','miss'].forEach(id => {
+    const sec = document.getElementById('edu-' + id);
+    const btn = document.querySelector(`[onclick="eduToggle('${id}')"]`);
+    if (sec && sec.classList.contains('open') && btn) {
+      btn.classList.add('open');
+    }
+  });
+};
 }
 
 // ---- FIX: HOVER LABEL BUG ----
