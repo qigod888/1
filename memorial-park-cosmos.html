@@ -272,15 +272,6 @@ html, body {
   flex-direction: column;
   gap: 8px;
   transition: opacity var(--transition);
-  max-height: calc(100vh - 220px);
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding-right: 4px;
-  padding-bottom: 8px;
-  scrollbar-width: none;
-}
-#navigator::-webkit-scrollbar {
-  display: none;
 }
 #navigator.hidden { opacity: 0; pointer-events: none; }
 .nav-item {
@@ -723,7 +714,7 @@ html, body {
 
 /* ===== EARTH COMPARE WIDGET ===== */
 #earth-compare {
-  #earth-compare { position: fixed; bottom: 130px; left: 22px; z-index: 45;
+  position: fixed; bottom: 80px; left: 22px; z-index: 40;
   background: rgba(5,12,25,0.82); backdrop-filter: blur(16px);
   border: 1px solid var(--c-border); border-radius: 12px;
   padding: 14px 16px; display: flex; align-items: center; gap: 12px;
@@ -800,7 +791,7 @@ html, body {
 
 /* ===== QR CODE ===== */
 #qr-widget {
-  #qr-widget { position: fixed; bottom: 24px; left: 22px; z-index: 45;
+  position: fixed; bottom: 24px; left: 22px; z-index: 40;
   background: rgba(5,12,25,0.88); backdrop-filter: blur(var(--blur));
   border: 1px solid var(--c-border); border-radius: 10px;
   padding: 10px; display: flex; flex-direction: column; align-items: center; gap: 6px;
@@ -842,57 +833,139 @@ html, body {
 .teacher-lock-btn:hover { background: rgba(255,213,79,0.16); }
 .teacher-sep { height: 1px; background: var(--c-border); }
 
-/* ===== SUN BUTTON ===== */
-#btn-sun-info {
-  background: none;
-  border: 1px solid var(--c-border);
-  border-radius: 5px;
-  color: var(--c-muted);
-  padding: 4px 8px;
-  cursor: pointer;
-  font-size: 11px;
-  transition: var(--transition);
+/* ===== WEIGHT CALCULATOR ===== */
+.dp-weight-calc { display:flex; flex-direction:column; gap:10px; }
+.dp-weight-row { display:flex; align-items:center; gap:8px; }
+.dp-weight-input {
+  flex:1; padding:7px 10px; border-radius:6px;
+  border:1px solid var(--c-border); background:rgba(5,12,25,0.7);
+  backdrop-filter:blur(var(--blur)); color:var(--c-text);
+  font-size:13px; font-family:var(--font-body); outline:none;
+  transition:var(--transition);
 }
-#btn-sun-info:hover {
-  color: var(--c-text);
-  border-color: var(--c-border-bright);
-}
+.dp-weight-input:focus { border-color:var(--c-accent); }
+.dp-weight-unit { font-size:12px; color:var(--c-muted); min-width:24px; }
+.dp-weight-result { font-size:22px; font-weight:700; color:var(--c-accent); font-family:var(--font-display); }
+.dp-weight-label { font-size:11px; color:var(--c-muted); letter-spacing:0.06em; }
 
-/* ===== SATELLITES IN DETAIL PANEL ===== */
-.dp-satellites-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+/* ===== MISSIONS PANEL ===== */
+.dp-missions { display:flex; flex-direction:column; gap:8px; }
+.mission-card {
+  display:flex; flex-direction:column; gap:2px;
+  padding:9px 12px; border-radius:7px;
+  background:rgba(79,195,247,0.06); border:1px solid rgba(79,195,247,0.15);
 }
+.mission-name { font-size:12px; font-weight:600; color:var(--c-text); }
+.mission-meta { font-size:10px; color:var(--c-muted); letter-spacing:0.06em; }
 
-.dp-satellite-card {
-  padding: 12px 14px;
-  border-radius: 10px;
-  border: 1px solid var(--c-border);
-  background: rgba(255,255,255,0.03);
+/* ===== INTERIOR STRUCTURE ===== */
+.dp-interior { display:flex; flex-direction:column; gap:8px; }
+.interior-svg-wrap { display:flex; justify-content:center; padding:4px 0; }
+.interior-legend { display:flex; flex-direction:column; gap:4px; }
+.interior-legend-row { display:flex; align-items:center; gap:7px; }
+.interior-legend-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+.interior-legend-text { font-size:11px; color:var(--c-muted); }
+
+/* ===== LIGHT TRAVEL TIME ===== */
+.dp-lighttime { display:flex; align-items:center; gap:10px; }
+.lighttime-value { font-size:19px; font-weight:700; color:var(--c-accent2); font-family:var(--font-display); }
+.lighttime-label { font-size:11px; color:var(--c-muted); line-height:1.4; }
+
+/* ===== ATMOSPHERE COMPOSITION ===== */
+.dp-atmo { display:flex; flex-direction:column; gap:8px; }
+.atmo-bars { display:flex; flex-direction:column; gap:5px; }
+.atmo-bar-row { display:flex; align-items:center; gap:8px; }
+.atmo-bar-label { font-size:10px; color:var(--c-muted); min-width:52px; letter-spacing:0.04em; }
+.atmo-bar-track { flex:1; height:5px; background:rgba(255,255,255,0.08); border-radius:3px; overflow:hidden; }
+.atmo-bar-fill { height:100%; border-radius:3px; transition:width 0.7s cubic-bezier(0.16,1,0.3,1); }
+.atmo-bar-pct { font-size:10px; color:var(--c-muted); min-width:34px; text-align:right; font-variant-numeric:tabular-nums; }
+
+/* ===== PLANET COMPARE PANEL ===== */
+#compare-panel {
+  position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+  z-index:150; width:min(700px,96vw);
+  background:rgba(5,12,25,0.97); backdrop-filter:blur(24px);
+  border:1px solid var(--c-border-bright); border-radius:18px;
+  padding:28px; display:flex; flex-direction:column; gap:18px;
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity 0.35s ease, visibility 0.35s ease, transform 0.35s cubic-bezier(0.16,1,0.3,1);
+  max-height:90vh; overflow-y:auto;
 }
-
-.dp-satellite-name {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--c-accent);
-  margin-bottom: 4px;
+#compare-panel.visible { opacity:1; visibility:visible; pointer-events:auto; }
+.compare-title { font-family:var(--font-display); font-size:18px; font-weight:700; color:var(--c-text); }
+.compare-selects { display:flex; gap:12px; align-items:center; }
+.compare-select {
+  flex:1; padding:8px 12px; border-radius:7px;
+  border:1px solid var(--c-border); background:rgba(5,12,25,0.8);
+  color:var(--c-text); font-size:13px; font-family:var(--font-body); outline:none;
+  cursor:pointer; transition:var(--transition);
 }
+.compare-select:focus { border-color:var(--c-accent); }
+.compare-vs { font-size:13px; font-weight:700; color:var(--c-muted); }
+.compare-table { width:100%; border-collapse:collapse; }
+.compare-table th { font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--c-muted); padding:6px 0; text-align:left; }
+.compare-table th:not(:first-child) { text-align:center; }
+.compare-table td { padding:8px 6px; font-size:12px; color:var(--c-text); border-top:1px solid var(--c-border); }
+.compare-table td:not(:first-child) { text-align:center; font-weight:600; font-variant-numeric:tabular-nums; }
+.compare-table td:first-child { color:var(--c-muted); font-size:11px; letter-spacing:0.06em; text-transform:uppercase; }
+.compare-table tr.highlight td { background:rgba(79,195,247,0.06); }
+.compare-close { align-self:flex-end; padding:8px 20px; border-radius:6px; background:var(--c-surface); border:1px solid var(--c-border-bright); color:var(--c-text); cursor:pointer; font-size:12px; font-family:var(--font-body); transition:var(--transition); }
+.compare-close:hover { background:var(--c-surface-hover); border-color:var(--c-accent); color:var(--c-accent); }
+#btn-compare { background:none; border:1px solid var(--c-border); border-radius:5px; color:var(--c-muted); padding:4px 8px; cursor:pointer; font-size:11px; font-family:var(--font-body); letter-spacing:0.06em; text-transform:uppercase; transition:var(--transition); }
+#btn-compare:hover { color:var(--c-text); border-color:var(--c-border-bright); }
+#btn-compare.active { border-color:rgba(79,195,247,0.5); color:var(--c-accent); }
 
-.dp-satellite-type {
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--c-muted);
-  margin-bottom: 8px;
+/* ===== HOTKEYS OVERLAY ===== */
+#hotkeys-overlay {
+  position:fixed; inset:0; z-index:300;
+  background:rgba(2,3,10,0.92); backdrop-filter:blur(20px);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity 0.35s ease, visibility 0.35s ease;
 }
-
-.dp-satellite-desc {
-  font-size: 12px;
-  line-height: 1.65;
-  color: rgba(180,190,210,0.85);
+#hotkeys-overlay.visible { opacity:1; visibility:visible; pointer-events:auto; }
+#hotkeys-box {
+  width:min(480px,94vw); background:rgba(5,14,30,0.97);
+  border:1px solid var(--c-border-bright); border-radius:18px; padding:32px;
+  display:flex; flex-direction:column; gap:18px;
+  transform:translateY(16px); transition:transform 0.35s cubic-bezier(0.16,1,0.3,1);
 }
+#hotkeys-overlay.visible #hotkeys-box { transform:translateY(0); }
+.hotkeys-title { font-family:var(--font-display); font-size:18px; font-weight:700; color:var(--c-text); }
+.hotkeys-grid { display:grid; grid-template-columns:auto 1fr; gap:8px 18px; align-items:center; }
+.hk-key {
+  display:inline-flex; align-items:center; justify-content:center;
+  background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2);
+  border-radius:5px; padding:3px 9px; font-size:11px; font-weight:600;
+  color:var(--c-text); font-family:var(--font-display); white-space:nowrap; min-width:44px;
+}
+.hk-desc { font-size:12px; color:var(--c-muted); }
+.hotkeys-close { align-self:flex-end; background:none; border:1px solid var(--c-border); border-radius:5px; padding:7px 18px; cursor:pointer; font-size:12px; color:var(--c-muted); transition:var(--transition); font-family:var(--font-body); }
+.hotkeys-close:hover { color:var(--c-text); border-color:var(--c-border-bright); }
+#btn-help { background:none; border:1px solid var(--c-border); border-radius:50%; width:26px; height:26px; color:var(--c-muted); cursor:pointer; font-size:12px; font-weight:700; transition:var(--transition); display:flex; align-items:center; justify-content:center; }
+#btn-help:hover { color:var(--c-text); border-color:var(--c-border-bright); }
 
+/* ===== DWARF PLANETS ===== */
+#btn-dwarfs { background:none; border:1px solid var(--c-border); border-radius:5px; color:var(--c-muted); padding:4px 8px; cursor:pointer; font-size:11px; font-family:var(--font-body); letter-spacing:0.06em; text-transform:uppercase; transition:var(--transition); }
+#btn-dwarfs.active { border-color:rgba(255,213,79,0.5); color:var(--c-accent2); }
+#btn-dwarfs:hover { color:var(--c-text); border-color:var(--c-border-bright); }
+
+/* ===== COMET ===== */
+/* CSS not needed — Three.js handles rendering */
+
+/* ===== SECTION TOGGLE BUTTON IN DP ===== */
+.dp-section-btn {
+  display:flex; align-items:center; gap:7px;
+  width:100%; padding:8px 0; background:none; border:none;
+  border-top:1px solid var(--c-border); color:var(--c-muted); cursor:pointer;
+  font-size:11px; font-family:var(--font-body); letter-spacing:0.10em; text-transform:uppercase;
+  transition:var(--transition); text-align:left;
+}
+.dp-section-btn:hover { color:var(--c-text); }
+.dp-section-btn .dp-arrow { margin-left:auto; font-size:10px; transition:transform 0.25s; }
+.dp-section-btn.open .dp-arrow { transform:rotate(180deg); }
+.dp-collapsible { overflow:hidden; max-height:0; transition:max-height 0.4s cubic-bezier(0.16,1,0.3,1); }
+.dp-collapsible.open { max-height:500px; }
 </style>
 </head>
 <body>
@@ -915,7 +988,7 @@ html, body {
   <div class="loader-track">
     <div id="loader-fill"></div>
   </div>
-  <div class="loader-msg" id="loader-msg">Подготовка планетария к запуску...</div>
+  <div class="loader-msg" id="loader-msg">Загрузка текстур NASA...</div>
 </div>
 
 <!-- Hero -->
@@ -935,11 +1008,17 @@ html, body {
     <span class="header-logo">SOLARIS</span>
     <div class="header-sep"></div>
     <span class="header-label">Солнечная система</span>
-<div class="header-sep"></div>
-<button id="btn-sun-info" title="Информация о Солнце">☀ Солнце</button>
       <div class="header-sep"></div>
     <button id="btn-fullscreen" title="Полный экран (F)">⛶ Экран</button>
     <button id="btn-realscale" title="Реальный масштаб (Alt+R)">⚖ Масштаб</button>
+    <div class="header-sep"></div>
+    <button id="btn-dwarfs" title="Карликовые планеты (D)">🪐 Плутон</button>
+    <div class="header-sep"></div>
+    <button id="btn-comet" title="Комета Галлея (K)">☄️ Комета</button>
+    <div class="header-sep"></div>
+    <button id="btn-compare" title="Сравнить планеты (C)">📊 Сравнить</button>
+    <div class="header-sep"></div>
+    <button id="btn-help" title="Горячие клавиши (?)">?</button>
 </div>
 
   <!-- Navigator -->
@@ -970,11 +1049,6 @@ html, body {
     <div class="dp-sep"></div>
     <div class="dp-desc-long" id="dp-desc-long"></div>
     <button class="dp-read-more" id="dp-read-more">Подробнее →</button>
-
-<div class="dp-sep"></div>
-<div class="dp-facts-title" id="dp-satellites-title">Спутники</div>
-<div id="dp-satellites-list" class="dp-satellites-list"></div>
-
     <div class="dp-sep"></div>
     <button class="dp-quiz-btn" id="dp-quiz-btn">🎓 Пройти тест по этой планете</button>
     <div class="dp-sep"></div>
@@ -986,6 +1060,73 @@ html, body {
       </div>
     </div>
   </div>
+
+  
+    <!-- Weight Calculator -->
+    <div class="dp-sep"></div>
+    <button class="dp-section-btn" id="toggle-weight" onclick="toggleSection('weight')">
+      🏋️ Вес на планете <span class="dp-arrow">▼</span>
+    </button>
+    <div class="dp-collapsible" id="sec-weight">
+      <div class="dp-weight-calc" style="padding:10px 0 4px">
+        <div class="dp-weight-row">
+          <input type="number" class="dp-weight-input" id="weight-input" placeholder="Масса, кг" min="1" max="999" value="70">
+          <span class="dp-weight-unit">кг</span>
+        </div>
+        <div class="dp-weight-result" id="weight-result">—</div>
+        <div class="dp-weight-label" id="weight-label">Введи свою массу</div>
+      </div>
+    </div>
+
+    <!-- Light Travel Time -->
+    <div class="dp-sep"></div>
+    <button class="dp-section-btn" id="toggle-light" onclick="toggleSection('light')">
+      💡 Время сигнала от Солнца <span class="dp-arrow">▼</span>
+    </button>
+    <div class="dp-collapsible" id="sec-light">
+      <div class="dp-lighttime" style="padding:10px 0 4px">
+        <div>
+          <div class="lighttime-value" id="lighttime-value">—</div>
+          <div class="lighttime-label" id="lighttime-label">мин. / сек.</div>
+        </div>
+        <div style="font-size:11px; color:var(--c-muted); line-height:1.6; max-width:180px;">
+          Время, за которое свет (299 792 км/с) достигает планеты от Солнца
+        </div>
+      </div>
+    </div>
+
+    <!-- Atmosphere Composition -->
+    <div class="dp-sep"></div>
+    <button class="dp-section-btn" id="toggle-atmo" onclick="toggleSection('atmo')">
+      🌫️ Состав атмосферы <span class="dp-arrow">▼</span>
+    </button>
+    <div class="dp-collapsible" id="sec-atmo">
+      <div class="dp-atmo" style="padding:10px 0 4px">
+        <div class="atmo-bars" id="atmo-bars"></div>
+      </div>
+    </div>
+
+    <!-- Interior Structure -->
+    <div class="dp-sep"></div>
+    <button class="dp-section-btn" id="toggle-interior" onclick="toggleSection('interior')">
+      🏗️ Внутреннее строение <span class="dp-arrow">▼</span>
+    </button>
+    <div class="dp-collapsible" id="sec-interior">
+      <div class="dp-interior" style="padding:10px 0 4px">
+        <div class="interior-svg-wrap" id="interior-svg-wrap"></div>
+        <div class="interior-legend" id="interior-legend"></div>
+      </div>
+    </div>
+
+    <!-- Missions -->
+    <div class="dp-sep"></div>
+    <button class="dp-section-btn" id="toggle-missions" onclick="toggleSection('missions')">
+      🚀 Миссии к планете <span class="dp-arrow">▼</span>
+    </button>
+    <div class="dp-collapsible" id="sec-missions">
+      <div class="dp-missions" style="padding:10px 0 4px" id="missions-list"></div>
+    </div>
+
 
   <!-- Back Button -->
   <button class="back-btn" id="back-btn">
@@ -1118,7 +1259,7 @@ const AXIAL_TILTS_DEG = {
   jupiter: 3.1, saturn: 26.7, uranus: 97.8, neptune: 28.3,
 };
 
-const NATURALSATELLITES = {
+const NATURAL_SATELLITES = {
   mercury: [],
   venus: [],
   earth: [
@@ -1152,16 +1293,6 @@ const NATURALSATELLITES = {
   ]
 };
 
-const ATMOSPHERE_CONFIG = {
-  venus:   { scale: 1.04,  color: new THREE.Vector3(0.95, 0.74, 0.35), opacity: 0.42 },
-  earth:   { scale: 1.025, color: new THREE.Vector3(0.29, 0.56, 0.85), opacity: 0.55 },
-  mars:    { scale: 1.03,  color: new THREE.Vector3(0.76, 0.38, 0.23), opacity: 0.18 },
-  jupiter: { scale: 1.03,  color: new THREE.Vector3(0.88, 0.72, 0.52), opacity: 0.16 },
-  saturn:  { scale: 1.028, color: new THREE.Vector3(0.88, 0.78, 0.58), opacity: 0.16 },
-  uranus:  { scale: 1.035, color: new THREE.Vector3(0.55, 0.88, 0.92), opacity: 0.24 },
-  neptune: { scale: 1.035, color: new THREE.Vector3(0.35, 0.50, 0.95), opacity: 0.24 }
-};
-
 const EARTH_ARTIFICIAL_SATELLITES = [
   { name: 'ISS',        orbit: 6.8,  speed: 2.2,  color: 0xe6edf7, size: 0.09, altitudeBand: 'LEO' },
   { name: 'Hubble',     orbit: 7.4,  speed: 1.95, color: 0xcfd8dc, size: 0.07, altitudeBand: 'LEO' },
@@ -1173,30 +1304,12 @@ const EARTH_ARTIFICIAL_SATELLITES = [
   { name: 'GeoSat-2',   orbit: 18.5, speed: 0.22, color: 0x4fc3f7, size: 0.09, altitudeBand: 'GEO' }
 ];
 
-const ORBIT_PLANETS = [
-  {
-    id: 'sun',
-    name: 'Солнце',
-    tagline: 'Звезда нашей системы',
-    descShort: 'Солнце — центральная звезда Солнечной системы, вокруг которой движутся все планеты, астероиды, кометы и малые тела.',
-    descLong: 'Солнце содержит почти всю массу Солнечной системы и создаёт свет, тепло и гравитацию, удерживающую планеты на орбитах. В его ядре происходит термоядерный синтез: водород превращается в гелий, выделяя огромное количество энергии. Солнечный ветер и вспышки влияют на магнитосферы планет, а энергия Солнца определяет климат и условия существования жизни на Земле.',
-    facts: {
-      diameter: '1 392 700 км',
-      temp: '≈ 5 500°C',
-      day: '≈ 25–35 земных суток',
-      gravity: '274 м/с²',
-      mass: '1.989 × 10³⁰ кг',
-      density: '1 408 кг/м³',
-      axialTilt: '7.25°',
-      moons: '—'
-    }
-  }, // ← ИСПРАВЛено: добавлена закрывающая } для объекта sun
+const PLANETS = [
   {
     id:'mercury', name:'Меркурий', tagline:'Ближайшая к Солнцу',
     descShort:'Маленький, раскалённый, безмолвный мир без атмосферы.',
     descLong:'Меркурий — наименьшая планета Солнечной системы. Отсутствие атмосферы означает экстремальные перепады температур: от +430°C днём до −180°C ночью. Кратеры хранят историю миллиардов лет.',
     facts:{diameter:'4 879 км',temp:'+430 / −180°C',day:'58 земных суток',gravity:'3.7 м/с²',mass:'3.3×10²³ кг',density:'5 427 кг/м³',axialTilt:'0.03°',moons:'0'},
-    satellites: ['У Меркурия нет естественных спутников'], // ← ИСПРАВЛЕНО: добавлены кавычки
     orbitR:50, size:1.8, speed:0.00047, rotSpeed:0.003, glowColor:[0.7,0.63,0.47],
     video:'Меркурий: Опалённый мир'
   },
@@ -1205,7 +1318,6 @@ const ORBIT_PLANETS = [
     descShort:'Самая горячая планета — ад под облаками из серной кислоты.',
     descLong:'Венера — самая горячая планета из-за плотной атмосферы CO₂. Давление у поверхности в 90 раз выше земного. Вращается в обратную сторону.',
     facts:{diameter:'12 104 км',temp:'+465°C',day:'243 земных суток',gravity:'8.87 м/с²',mass:'4.87×10²⁴ кг',density:'5 243 кг/м³',axialTilt:'177.4°',moons:'0'},
-    satellites: ['У Венеры нет естественных спутников'], // ← ИСПРАВЛЕНО: добавлены кавычки
     orbitR:75, size:4.2, speed:0.00035, rotSpeed:0.002, glowColor:[0.91,0.78,0.48],
     video:'Венера: Скрытая поверхность'
   },
@@ -1214,7 +1326,6 @@ const ORBIT_PLANETS = [
     descShort:'Единственный известный мир, где существует жизнь.',
     descLong:'Третья планета от Солнца — единственное место во Вселенной, где подтверждена жизнь. Жидкая вода, кислородная атмосфера и магнитное поле создали условия для биоразнообразия.',
     facts:{diameter:'12 742 км',temp:'+15°C',day:'24 часа',gravity:'9.8 м/с²',mass:'5.97×10²⁴ кг',density:'5 514 кг/м³',axialTilt:'23.4°',moons:'1 (Луна)'},
-    satellites: [ { name: 'Луна', type: 'Естественный спутник', desc: 'Луна — единственный естественный спутник Земли. Она влияет на приливы и отливы, стабилизирует наклон земной оси и играет важную роль в истории и условиях существования жизни на нашей планете.' } ],
     orbitR:100, size:4.5, speed:0.0003, rotSpeed:0.005, glowColor:[0.29,0.56,0.85],
     video:'Земля: Голубая точка'
   },
@@ -1223,10 +1334,6 @@ const ORBIT_PLANETS = [
     descShort:'Пустынный мир, возможно обитаемый миллиарды лет назад.',
     descLong:'Марс хранит следы древних рек. Олимп — высочайший вулкан Солнечной системы (27 км). Сегодня здесь холодная пустыня с тонкой атмосферой.',
     facts:{diameter:'6 779 км',temp:'−65°C',day:'24.6 часа',gravity:'3.71 м/с²',mass:'6.39×10²³ кг',density:'3 933 кг/м³',axialTilt:'25.2°',moons:'2 (Фобос, Деймос)'},
-    satellites: [
-      { name: 'Фобос', type: 'Естественный спутник', desc: 'Фобос — крупнейший спутник Марса, тёмный и неправильной формы. Он обращается очень близко к планете и постепенно приближается к Марсу.' },
-      { name: 'Деймос', type: 'Естественный спутник', desc: 'Деймос — меньший и более удалённый спутник Марса. Вероятно, как и Фобос, он является захваченным астероидом.' }
-    ],
     orbitR:135, size:2.9, speed:0.00024, rotSpeed:0.005, glowColor:[0.76,0.38,0.23],
     video:'Марс: Новые горизонты'
   },
@@ -1235,12 +1342,6 @@ const ORBIT_PLANETS = [
     descShort:'Газовый гигант, вмещающий 1 300 Земель.',
     descLong:'Юпитер — крупнейшая планета. Большое Красное Пятно — шторм длиной 350 лет. Магнитное поле в 20 000 раз сильнее земного.',
     facts:{diameter:'139 820 км',temp:'−110°C',day:'9.9 часа',gravity:'24.79 м/с²',mass:'1.9×10²⁷ кг',density:'1 326 кг/м³',axialTilt:'3.1°',moons:'95'},
-    satellites: [
-      { name: 'Ио', type: 'Галилеев спутник', desc: 'Ио — самый вулканически активный объект Солнечной системы. Его поверхность постоянно меняется из-за мощных извержений.' },
-      { name: 'Европа', type: 'Галилеев спутник', desc: 'Европа покрыта ледяной корой, под которой, вероятно, скрывается глобальный океан жидкой воды. Это один из главных кандидатов на поиск жизни.' },
-      { name: 'Ганимед', type: 'Галилеев спутник', desc: 'Ганимед — крупнейший спутник во всей Солнечной системе. Он больше Меркурия и обладает собственным магнитным полем.' },
-      { name: 'Каллисто', type: 'Галилеев спутник', desc: 'Каллисто — древний, сильно кратерированный спутник с одной из самых старых поверхностей в Солнечной системе.' }
-    ],
     orbitR:195, size:14, speed:0.00013, rotSpeed:0.012, glowColor:[0.78,0.63,0.44],
     video:'Юпитер: Властелин штормов'
   },
@@ -1249,12 +1350,6 @@ const ORBIT_PLANETS = [
     descShort:'Величественная система колец из льда и пыли.',
     descLong:'Кольца простираются на 282 000 км. Сатурн настолько лёгок по плотности, что мог бы плавать на воде. Ветры достигают 1 800 км/ч.',
     facts:{diameter:'116 460 км',temp:'−140°C',day:'10.7 часа',gravity:'10.44 м/с²',mass:'5.68×10²⁶ кг',density:'687 кг/м³',axialTilt:'26.7°',moons:'146'},
-    satellites: [
-      { name: 'Титан', type: 'Крупный спутник', desc: 'Титан — крупнейший спутник Сатурна, обладающий плотной атмосферой. На его поверхности есть моря и озёра жидких углеводородов.' },
-      { name: 'Энцелад', type: 'Ледяной спутник', desc: 'Энцелад выбрасывает в космос струи водяного льда. Под его ледяной корой, вероятно, скрывается жидкий океан.' },
-      { name: 'Рея', type: 'Ледяной спутник', desc: 'Рея — крупный ледяной спутник с древней кратерированной поверхностью.' },
-      { name: 'Япет', type: 'Ледяной спутник', desc: 'Япет известен резким контрастом между очень тёмной и очень светлой сторонами поверхности.' }
-    ],
     orbitR:255, size:12, speed:0.0001, rotSpeed:0.011, glowColor:[0.83,0.72,0.46],
     video:'Сатурн: Кольца вечности'
   },
@@ -1263,12 +1358,6 @@ const ORBIT_PLANETS = [
     descShort:'Планета «на боку» с уникальным наклоном оси 98°.',
     descLong:'Уран — ледяной гигант с −224°C. Магнитная ось смещена на 59°. Вращается почти «лёжа» из-за столкновения с крупным телом в прошлом.',
     facts:{diameter:'50 724 км',temp:'−195°C',day:'17.2 часа',gravity:'8.69 м/с²',mass:'8.68×10²⁵ кг',density:'1 271 кг/м³',axialTilt:'97.8°',moons:'28'},
-    satellites: [
-      { name: 'Титания', type: 'Крупный спутник', desc: 'Титания — крупнейший спутник Урана, состоящий из льда и камня, с каньонами и следами древней геологической активности.' },
-      { name: 'Оберон', type: 'Крупный спутник', desc: 'Оберон — один из крупнейших спутников Урана, покрытый кратерами и тёмными участками вещества.' },
-      { name: 'Ариэль', type: 'Крупный спутник', desc: 'Ариэль отличается сравнительно молодой поверхностью и следами тектонической активности.' },
-      { name: 'Миранда', type: 'Крупный спутник', desc: 'Миранда имеет очень необычный рельеф с гигантскими уступами и перемешанными геологическими областями.' }
-    ],
     orbitR:310, size:6.5, speed:0.00007, rotSpeed:0.007, glowColor:[0.50,0.83,0.83],
     video:'Уран: Ледяная бездна'
   },
@@ -1277,14 +1366,11 @@ const ORBIT_PLANETS = [
     descShort:'Синий, ветреный, далёкий — последний рубеж нашей системы.',
     descLong:'Нептун в 4.5 млрд км от Земли. Ветры до 2 100 км/ч — сильнейшие в системе. Спутник Тритон вращается в обратном направлении.',
     facts:{diameter:'49 244 км',temp:'−201°C',day:'16.1 часа',gravity:'11.15 м/с²',mass:'1.02×10²⁶ кг',density:'1 638 кг/м³',axialTilt:'28.3°',moons:'16'},
-    satellites: [
-      { name: 'Тритон', type: 'Крупный спутник', desc: 'Тритон движется по ретроградной орбите, то есть в обратную сторону. Вероятно, это захваченный объект из пояса Койпера.' },
-      { name: 'Протей', type: 'Естественный спутник', desc: 'Протей — крупный внутренний спутник Нептуна, тёмный и неправильной формы.' }
-    ],
     orbitR:360, size:6.0, speed:0.00005, rotSpeed:0.006, glowColor:[0.23,0.37,0.81],
     video:'Нептун: Синий странник'
   },
 ];
+
 // ============================================================
 // THREE.JS SCENE SETUP
 // ============================================================
@@ -1328,51 +1414,36 @@ scene.add(ambientLight);
 // ============================================================
 // TEXTURE LOADING
 // ============================================================
+let loadedCount = 0;
+let totalTextures = Object.keys(TEX).length;
 const textures = {};
-const texKeys = Object.keys(TEX);
-let finishedTextures = 0;
-const totalTextures = texKeys.length;
-let loaderClosed = false;
 
-function finishTexture(key, tex = null) {
-  textures[key] = tex;
-  finishedTextures++;
-
-  const pct = Math.round((finishedTextures / totalTextures) * 100);
+const loadingManager = new THREE.LoadingManager();
+loadingManager.onProgress = (url, loaded, total) => {
+  const pct = Math.round((loaded / total) * 100);
   document.getElementById('loader-fill').style.width = pct + '%';
-  document.getElementById('loader-msg').textContent = `Загружено: ${finishedTextures}/${totalTextures}`;
+  document.getElementById('loader-msg').textContent = 'Загрузка: ' + url.split('/').pop();
+};
+loadingManager.onLoad = () => {
+  document.getElementById('loader-fill').style.width = '100%';
+  setTimeout(hideLoader, 600);
+};
+loadingManager.onError = (url) => {
+  console.warn('Texture failed:', url);
+};
 
-  if (finishedTextures >= totalTextures && !loaderClosed) {
-    loaderClosed = true;
-    document.getElementById('loader-fill').style.width = '100%';
-    document.getElementById('loader-msg').textContent = 'Готово';
-    setTimeout(hideLoader, 300);
-  }
-}
+const textureLoader = new THREE.TextureLoader(loadingManager);
+// CORS: raw.githubusercontent.com sends Access-Control-Allow-Origin: *
+// so crossOrigin can be left as default (empty string) — no explicit set needed.
 
-const textureLoader = new THREE.TextureLoader();
-
-texKeys.forEach((key) => {
-  textureLoader.load(
-    TEX[key],
-    (t) => finishTexture(key, t),
+function loadTex(key) {
+  textureLoader.load(TEX[key],
+    (t) => { textures[key] = t; },
     undefined,
-    (err) => {
-      console.warn('Texture failed:', key, TEX[key], err);
-      finishTexture(key, null);
-    }
+    (err) => { console.warn('Texture failed:', key, err); textures[key] = null; }
   );
-});
-
-setTimeout(() => {
-  if (!loaderClosed) {
-    console.warn('Texture loading timeout — forcing UI start');
-    loaderClosed = true;
-    document.getElementById('loader-fill').style.width = '100%';
-    document.getElementById('loader-msg').textContent = 'Запуск без части текстур';
-    hideLoader();
-  }
-}, 8000);
+}
+Object.keys(TEX).forEach(loadTex);
 
 // ============================================================
 // SKYBOX
@@ -1486,27 +1557,23 @@ function initPostProcessing() {
 
 initPostProcessing();
 
-/// ============================================================
-// ATMOSPHERIC SHADER
+// ============================================================
+// ATMOSPHERIC SHADER (EARTH)
 // ============================================================
 const atmosphereVertexShader = `
   varying vec3 vNormal;
-
   void main() {
     vNormal = normalize(normalMatrix * normal);
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
   }
 `;
-
 const atmosphereFragmentShader = `
   uniform vec3 glowColor;
-  uniform float intensity;
   varying vec3 vNormal;
-
   void main() {
-    float rim = 1.0 - max(dot(normalize(vNormal), vec3(0.0, 0.0, 1.0)), 0.0);
-    rim = pow(rim, 2.8);
-    gl_FragColor = vec4(glowColor, rim * intensity);
+    float rim = 1.0 - dot(vNormal, vec3(0.0, 0.0, 1.0));
+    rim = pow(rim, 3.5);
+    gl_FragColor = vec4(glowColor, rim * 0.6);
   }
 `;
 
@@ -1518,16 +1585,10 @@ const orbitGroups = [];
 const hoverScales = {};
 
 function buildOrbitLine(radius) {
-  // защита от NaN/undefined
-  if (typeof radius !== 'number' || !isFinite(radius)) return;
-
   const geo = new THREE.RingGeometry(radius - 0.15, radius + 0.15, 128);
   const mat = new THREE.MeshBasicMaterial({
-    color: 0xffffff,
-    transparent: true,
-    opacity: 0.06,
-    side: THREE.DoubleSide,
-    depthWrite: false
+    color: 0xffffff, transparent: true, opacity: 0.06,
+    side: THREE.DoubleSide, depthWrite: false
   });
   const mesh = new THREE.Mesh(geo, mat);
   mesh.rotation.x = -Math.PI / 2;
@@ -1535,96 +1596,74 @@ function buildOrbitLine(radius) {
 }
 
 function buildPlanets() {
-  ORBIT_PLANETS.forEach((p, i) => {
+  PLANETS.forEach((p, i) => {
     buildOrbitLine(p.orbitR);
 
     const orbitGroup = new THREE.Group();
     scene.add(orbitGroup);
     orbitGroups.push(orbitGroup);
 
+    // Main planet sphere
     const geo = new THREE.SphereGeometry(p.size, 64, 64);
-    const shininess =
-      p.id === 'earth' ? 35 :
-      ['jupiter', 'saturn', 'uranus', 'neptune'].includes(p.id) ? 5 : 2;
-
+    const shininess = (p.id === 'earth') ? 35 : (p.id === 'jupiter' || p.id === 'saturn' || p.id === 'uranus' || p.id === 'neptune') ? 5 : 2;
     const mat = new THREE.MeshPhongMaterial({
-      color: PLANETFALLBACKCOLORS[p.id] || 0x888888,
-      shininess
+      color: PLANET_FALLBACK_COLORS[p.id] || 0x888888,
+      shininess,
     });
-
     const mesh = new THREE.Mesh(geo, mat);
-    const tiltRad = (AXIAL_TILTS_DEG[p.id] || 0) * Math.PI / 180;
+
+    // Axial tilt
+    const tiltRad = AXIAL_TILTS_DEG[p.id] * Math.PI / 180;
     mesh.rotation.z = tiltRad;
+
     orbitGroup.add(mesh);
 
-    const pm = {
-      mesh,
-      clouds: null,
-      atmosphere: null,
-      moon: null,
-      ring: null,
-      angle: Math.random() * Math.PI * 2,
-      radius: p.orbitR,
-      orbitGroup,
-      moonAngle: 0,
-      scaleTarget: 1,
-      naturalSatellites: [],
-      artificialSatellites: []
-    };
+const pm = {
+  mesh,
+  clouds: null,
+  atmosphere: null,
+  moon: null,
+  ring: null,
+  angle: Math.random() * Math.PI * 2,
+  radius: p.orbitR,
+  orbitGroup,
+  moonAngle: 0,
+  scaleTarget: 1,
+  naturalSatellites: [],
+  artificialSatellites: [],
+};
 
-    const atmCfg = ATMOSPHERE_CONFIG[p.id];
-    if (atmCfg) {
-      const atmGeo = new THREE.SphereGeometry(p.size * atmCfg.scale, 64, 64);
-      const atmMat = new THREE.ShaderMaterial({
-        vertexShader: atmosphereVertexShader,
-        fragmentShader: atmosphereFragmentShader,
-        uniforms: {
-          glowColor: { value: atmCfg.color },
-          intensity: { value: atmCfg.opacity }
-        },
-        transparent: true,
-        side: THREE.BackSide,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending
-      });
-      const atmMesh = new THREE.Mesh(atmGeo, atmMat);
-      atmMesh.rotation.z = tiltRad;
-      orbitGroup.add(atmMesh);
-      pm.atmosphere = atmMesh;
-    }
-
+    // Earth specifics
     if (p.id === 'earth') {
+      // Cloud layer
       const cloudGeo = new THREE.SphereGeometry(p.size * 1.005, 64, 64);
       const cloudMat = new THREE.MeshPhongMaterial({
-        transparent: true,
-        opacity: 0.85,
-        depthWrite: false,
-        shininess: 0,
-        color: 0xffffff
+        transparent: true, opacity: 0.85,
+        depthWrite: false, shininess: 0,
+        color: 0xffffff,
       });
       const cloudMesh = new THREE.Mesh(cloudGeo, cloudMat);
       cloudMesh.rotation.z = tiltRad;
       orbitGroup.add(cloudMesh);
       pm.clouds = cloudMesh;
 
+      // Atmosphere glow
       const atmGeo = new THREE.SphereGeometry(p.size * 1.025, 64, 64);
       const atmMat = new THREE.ShaderMaterial({
         vertexShader: atmosphereVertexShader,
         fragmentShader: atmosphereFragmentShader,
-        uniforms: {
-          glowColor: { value: new THREE.Vector3(0.29, 0.56, 0.85) },
-          intensity: { value: 1.0 }
-        },
+        uniforms: { glowColor: { value: new THREE.Vector3(0.29, 0.56, 0.85) } },
         transparent: true,
         side: THREE.FrontSide,
         depthWrite: false,
-        blending: THREE.AdditiveBlending
+        blending: THREE.AdditiveBlending,
       });
       const atmMesh = new THREE.Mesh(atmGeo, atmMat);
       atmMesh.rotation.z = tiltRad;
       orbitGroup.add(atmMesh);
       pm.atmosphere = atmMesh;
 
+      // Moon
       const moonGeo = new THREE.SphereGeometry(1.2, 32, 32);
       const moonMat = new THREE.MeshPhongMaterial({ color: 0xAAAAAA, shininess: 1 });
       const moonMesh = new THREE.Mesh(moonGeo, moonMat);
@@ -1632,83 +1671,39 @@ function buildPlanets() {
       pm.moon = moonMesh;
     }
 
-    const issGroup = new THREE.Group();
-    const issBody = new THREE.Mesh(
-      new THREE.BoxGeometry(0.18, 0.18, 0.5),
-      new THREE.MeshBasicMaterial({ color: 0xdddddd })
-    );
-    const issPanelL = new THREE.Mesh(
-      new THREE.BoxGeometry(0.55, 0.03, 0.18),
-      new THREE.MeshBasicMaterial({ color: 0x4f6fd6 })
-    );
-    const issPanelR = issPanelL.clone();
-    issPanelL.position.x = -0.42;
-    issPanelR.position.x = 0.42;
-    issGroup.add(issBody, issPanelL, issPanelR);
-    orbitGroup.add(issGroup);
-    pm.iss = issGroup;
-    pm.issAngle = Math.random() * Math.PI * 2;
-
-    pm.commSats = [];
-    for (let s = 0; s < 3; s++) {
-      const sat = new THREE.Group();
-      const satBody = new THREE.Mesh(
-        new THREE.BoxGeometry(0.12, 0.12, 0.18),
-        new THREE.MeshBasicMaterial({ color: 0xbcc6d6 })
-      );
-      const satPanel1 = new THREE.Mesh(
-        new THREE.BoxGeometry(0.26, 0.02, 0.08),
-        new THREE.MeshBasicMaterial({ color: 0x2e5bd1 })
-      );
-      const satPanel2 = satPanel1.clone();
-      satPanel1.position.x = -0.19;
-      satPanel2.position.x = 0.19;
-      sat.add(satBody, satPanel1, satPanel2);
-
-      sat.userData.orbitAngle = (Math.PI * 2 / 3) * s;
-      sat.userData.orbitRadius = p.size + 1.8 + s * 0.35;
-      sat.userData.orbitSpeed = 0.9 + s * 0.2;
-
-      orbitGroup.add(sat);
-      pm.commSats.push(sat);
-    }
-
+    // Saturn rings
     if (p.id === 'saturn') {
       const ringInner = p.size * 1.3;
       const ringOuter = p.size * 2.4;
       const ringGeo = new THREE.RingGeometry(ringInner, ringOuter, 128);
+      // UV fix for ring texture
       const ringPos = ringGeo.attributes.position;
       const ringUV = ringGeo.attributes.uv;
       const v3 = new THREE.Vector3();
-
       for (let j = 0; j < ringPos.count; j++) {
         v3.fromBufferAttribute(ringPos, j);
         const normalized = (v3.length() - ringInner) / (ringOuter - ringInner);
         ringUV.setXY(j, normalized, 0);
       }
-
       const ringMat = new THREE.MeshBasicMaterial({
         color: 0xD4B876,
         transparent: true,
         opacity: 0.85,
         side: THREE.DoubleSide,
-        depthWrite: false
+        depthWrite: false,
       });
-
       const ringMesh = new THREE.Mesh(ringGeo, ringMat);
       ringMesh.rotation.x = Math.PI / 2.5;
       orbitGroup.add(ringMesh);
       pm.ring = ringMesh;
     }
 
+    // Uranus rings (vertical)
     if (p.id === 'uranus') {
       const urRingGeo = new THREE.RingGeometry(p.size * 1.4, p.size * 1.7, 64);
       const urRingMat = new THREE.MeshBasicMaterial({
-        color: 0x7FD4D4,
-        transparent: true,
-        opacity: 0.25,
-        side: THREE.DoubleSide,
-        depthWrite: false
+        color: 0x7FD4D4, transparent: true, opacity: 0.25,
+        side: THREE.DoubleSide, depthWrite: false
       });
       const urRingMesh = new THREE.Mesh(urRingGeo, urRingMat);
       urRingMesh.rotation.z = Math.PI / 2;
@@ -1716,96 +1711,137 @@ function buildPlanets() {
       pm.ring = urRingMesh;
     }
 
-    if (typeof p.orbitR === 'number' && isFinite(p.orbitR)) {
-      mesh.position.set(
-        Math.cos(pm.angle) * p.orbitR,
-        0,
-        Math.sin(pm.angle) * p.orbitR
-      );
-    }
-
+    // Initial position
+    mesh.position.set(Math.cos(pm.angle) * p.orbitR, 0, Math.sin(pm.angle) * p.orbitR);
     if (pm.clouds) pm.clouds.position.copy(mesh.position);
     if (pm.atmosphere) pm.atmosphere.position.copy(mesh.position);
     if (pm.ring) pm.ring.position.copy(mesh.position);
 
-    const naturalList = NATURAL_SATELLITES[p.id] || [];
-    naturalList.forEach((sat, satIdx) => {
-      if (p.id === 'earth' && sat.name === 'Луна' && pm.moon) return;
+// ============================================================
+// NATURAL SATELLITES
+// ============================================================
+const naturalList = NATURAL_SATELLITES[p.id] || [];
+naturalList.forEach((sat, satIdx) => {
+  // У Земли Луна уже создаётся отдельным старым кодом — не дублируем
+  if (p.id === 'earth' && sat.name === 'Луна' && pm.moon) return;
 
-      const satGeo = new THREE.SphereGeometry(sat.size, 24, 24);
-      const satMat = new THREE.MeshPhongMaterial({
-        color: sat.color,
-        shininess: 2
-      });
-      const satMesh = new THREE.Mesh(satGeo, satMat);
+  const satGeo = new THREE.SphereGeometry(sat.size, 24, 24);
+  const satMat = new THREE.MeshPhongMaterial({
+    color: sat.color,
+    shininess: 2
+  });
+  const satMesh = new THREE.Mesh(satGeo, satMat);
 
-      const orbitLineGeo = new THREE.RingGeometry(sat.orbit - 0.03, sat.orbit + 0.03, 64);
-      const orbitLineMat = new THREE.MeshBasicMaterial({
-        color: 0xffffff,
-        transparent: true,
-        opacity: 0.08,
-        side: THREE.DoubleSide,
-        depthWrite: false
-      });
-      const orbitLine = new THREE.Mesh(orbitLineGeo, orbitLineMat);
-      orbitLine.rotation.x = -Math.PI / 2;
+  const orbitLineGeo = new THREE.RingGeometry(sat.orbit - 0.03, sat.orbit + 0.03, 64);
+  const orbitLineMat = new THREE.MeshBasicMaterial({
+    color: 0xffffff,
+    transparent: true,
+    opacity: 0.08,
+    side: THREE.DoubleSide,
+    depthWrite: false
+  });
+  const orbitLine = new THREE.Mesh(orbitLineGeo, orbitLineMat);
+  orbitLine.rotation.x = -Math.PI / 2;
 
-      orbitGroup.add(orbitLine);
-      orbitGroup.add(satMesh);
+  orbitGroup.add(orbitLine);
+  orbitGroup.add(satMesh);
 
-      pm.naturalSatellites.push({
-        ...sat,
-        mesh: satMesh,
-        orbitLine,
-        angle: Math.random() * Math.PI * 2 + satIdx
-      });
+  pm.naturalSatellites.push({
+    ...sat,
+    mesh: satMesh,
+    orbitLine,
+    angle: Math.random() * Math.PI * 2 + satIdx
+  });
+});
+
+// ============================================================
+// ARTIFICIAL SATELLITES AROUND EARTH
+// ============================================================
+if (p.id === 'earth') {
+  EARTH_ARTIFICIAL_SATELLITES.forEach((sat, satIdx) => {
+    const satGroup = new THREE.Group();
+
+    const bodyGeo = new THREE.BoxGeometry(sat.size * 1.4, sat.size * 0.5, sat.size * 0.5);
+    const bodyMat = new THREE.MeshBasicMaterial({ color: sat.color });
+    const body = new THREE.Mesh(bodyGeo, bodyMat);
+
+    const panelGeo = new THREE.BoxGeometry(sat.size * 2.4, sat.size * 0.08, sat.size * 0.7);
+    const panelMat = new THREE.MeshBasicMaterial({ color: 0x4f83cc });
+    const panel = new THREE.Mesh(panelGeo, panelMat);
+
+    satGroup.add(body);
+    satGroup.add(panel);
+
+    const orbitLineGeo = new THREE.RingGeometry(sat.orbit - 0.02, sat.orbit + 0.02, 80);
+    const orbitLineMat = new THREE.MeshBasicMaterial({
+      color: sat.altitudeBand === 'GEO' ? 0x4fc3f7 : sat.altitudeBand === 'MEO' ? 0xffd54f : 0xffffff,
+      transparent: true,
+      opacity: sat.altitudeBand === 'GEO' ? 0.16 : 0.10,
+      side: THREE.DoubleSide,
+      depthWrite: false
     });
+    const orbitLine = new THREE.Mesh(orbitLineGeo, orbitLineMat);
+    orbitLine.rotation.x = -Math.PI / 2;
 
-    if (p.id === 'earth') {
-      EARTH_ARTIFICIAL_SATELLITES.forEach((sat, satIdx) => {
-        const satGroup = new THREE.Group();
+    orbitGroup.add(orbitLine);
+    orbitGroup.add(satGroup);
 
-        const bodyGeo = new THREE.BoxGeometry(sat.size * 1.4, sat.size * 0.5, sat.size * 0.5);
-        const bodyMat = new THREE.MeshBasicMaterial({ color: sat.color });
-        const body = new THREE.Mesh(bodyGeo, bodyMat);
-
-        const panelGeo = new THREE.BoxGeometry(sat.size * 2.4, sat.size * 0.08, sat.size * 0.7);
-        const panelMat = new THREE.MeshBasicMaterial({ color: 0x4f83cc });
-        const panel = new THREE.Mesh(panelGeo, panelMat);
-
-        satGroup.add(body);
-        satGroup.add(panel);
-
-        const orbitLineGeo = new THREE.RingGeometry(sat.orbit - 0.02, sat.orbit + 0.02, 80);
-        const orbitLineMat = new THREE.MeshBasicMaterial({
-          color: sat.altitudeBand === 'GEO' ? 0x4fc3f7
-               : sat.altitudeBand === 'MEO' ? 0xffd54f
-               : 0xffffff,
-          transparent: true,
-          opacity: sat.altitudeBand === 'GEO' ? 0.16 : 0.10,
-          side: THREE.DoubleSide,
-          depthWrite: false
-        });
-        const orbitLine = new THREE.Mesh(orbitLineGeo, orbitLineMat);
-        orbitLine.rotation.x = -Math.PI / 2;
-
-        orbitGroup.add(orbitLine);
-        orbitGroup.add(satGroup);
-
-        pm.artificialSatellites.push({
-          ...sat,
-          mesh: satGroup,
-          orbitLine,
-          angle: Math.random() * Math.PI * 2 + satIdx * 0.8,
-          tiltY: sat.altitudeBand === 'LEO' ? 0.15 : sat.altitudeBand === 'MEO' ? -0.08 : 0.0
-        });
-      });
-    }
+    pm.artificialSatellites.push({
+      ...sat,
+      mesh: satGroup,
+      orbitLine,
+      angle: Math.random() * Math.PI * 2 + satIdx * 0.8,
+      tiltY: sat.altitudeBand === 'LEO' ? 0.15 : sat.altitudeBand === 'MEO' ? -0.08 : 0.0
+    });
+  });
+}
 
     planetMeshes.push(pm);
   });
 }
-  
+
+function applyPlanetTextures() {
+  PLANETS.forEach((p, i) => {
+    const pm = planetMeshes[i];
+    if (!pm) return;
+
+    const t = textures[p.id];
+    if (t) {
+      pm.mesh.material.map = t;
+      pm.mesh.material.color.setHex(0xffffff);
+      pm.mesh.material.needsUpdate = true;
+    }
+
+    if (p.id === 'earth') {
+      if (textures.earthClouds && pm.clouds) {
+        pm.clouds.material.map = textures.earthClouds;
+        pm.clouds.material.alphaMap = textures.earthClouds;
+        pm.clouds.material.needsUpdate = true;
+      }
+      if (textures.earthNormal) {
+        pm.mesh.material.normalMap = textures.earthNormal;
+        pm.mesh.material.needsUpdate = true;
+      }
+      if (textures.moon && pm.moon) {
+        pm.moon.material.map = textures.moon;
+        pm.moon.material.color.setHex(0xffffff);
+        pm.moon.material.needsUpdate = true;
+      }
+    }
+
+    if (p.id === 'saturn') {
+      if (textures.saturnRing && pm.ring) {
+        pm.ring.material.map = textures.saturnRing;
+        pm.ring.material.alphaMap = textures.saturnRing;
+        pm.ring.material.color.setHex(0xffffff);
+        pm.ring.material.needsUpdate = true;
+      }
+    }
+  });
+}
+
+buildPlanets();
+
 // ============================================================
 // LENS FLARE
 // ============================================================
@@ -1880,41 +1916,29 @@ function tickRaycast(now) {
   lastRaycastTime = now;
 
   raycaster.setFromCamera(mouse, camera);
-
-  const meshes = planetMeshes.map(pm => pm.mesh).filter(Boolean);
-  const hits = raycaster.intersectObjects(meshes, false);
+  const meshes = planetMeshes.map(pm => pm.mesh);
+  const hits = raycaster.intersectObjects(meshes);
 
   if (hits.length > 0) {
-    const hitMesh = hits[0].object;
-    const idx = planetMeshes.findIndex(pm => pm.mesh === hitMesh);
-
-    if (idx >= 0) {
-      hoverLabel.textContent = PLANETS[idx]?.name || '';
-      hoverLabel.classList.add('show');
-
-      if (isOverview) {
-        if (idx !== hoveredIndex) {
-          if (hoveredIndex >= 0) unsetHover(hoveredIndex);
-          hoveredIndex = idx;
-          setHover(idx);
-        }
-        canvas.style.cursor = 'pointer';
-      } else {
+    const idx = meshes.indexOf(hits[0].object);
+    if (isOverview) {
+      if (idx !== hoveredIndex) {
+        if (hoveredIndex >= 0) unsetHover(hoveredIndex);
         hoveredIndex = idx;
-        canvas.style.cursor = idx !== focusedIdx ? 'pointer' : 'default';
+        setHover(idx);
       }
-
-      return;
+    } else {
+      // In focus mode: show cursor pointer when hovering a different planet
+      hoveredIndex = idx;
     }
-  }
-
-  if (isOverview && hoveredIndex >= 0) {
-    unsetHover(hoveredIndex);
+    // Show pointer cursor if it's a different planet (or any planet in overview)
+    const isDiff = !isOverview && idx === focusedIdx;
+    canvas.style.cursor = isDiff ? 'default' : 'pointer';
+  } else {
+    if (isOverview && hoveredIndex >= 0) unsetHover(hoveredIndex);
     hoveredIndex = -1;
+    canvas.style.cursor = 'default';
   }
-
-  hoverLabel.classList.remove('show');
-  canvas.style.cursor = 'default';
 }
 
 function setHover(idx) {
@@ -1972,13 +1996,7 @@ let speedMultiplier = 1;
 // FOCUS PLANET (CINEMATIC FLY-IN)
 // ============================================================
 function focusPlanet(idx) {
-  if (idx < 0 || idx >= PLANETS.length) return;
-  if (teacherPlanetLocked && focusedIdx >= 0 && idx !== focusedIdx) return;
-
-  if (currentTween) {
-    currentTween.kill();
-    currentTween = null;
-  }
+  if (currentTween) { currentTween.kill(); currentTween = null; }
 
   focusedIdx = idx;
   isOverview = false;
@@ -1987,32 +2005,40 @@ function focusPlanet(idx) {
 
   const planet = PLANETS[idx];
   const pm = planetMeshes[idx];
-  const planetPos = new THREE.Vector3();
+
+  // World position of the planet
+  const planetPos = pm.mesh.position.clone();
+  // Adjust for parent if needed
   pm.mesh.getWorldPosition(planetPos);
 
+  // Calculate final camera distance: planet occupies ~17% of screen height
   const fovRad = camera.fov * Math.PI / 180;
   const finalDist = planet.size / (0.17 * Math.tan(fovRad / 2));
 
+  // Direction from planet to camera (normalized)
   const dir = new THREE.Vector3().subVectors(camera.position, planetPos).normalize();
+  // Push slightly upward
   dir.y += 0.3;
   dir.normalize();
 
   const finalPos = new THREE.Vector3(
     planetPos.x + dir.x * finalDist,
     planetPos.y + dir.y * finalDist,
-    planetPos.z + dir.z * finalDist
+    planetPos.z + dir.z * finalDist,
   );
 
+  // Mid point: arc high above ecliptic
   const midX = (camera.position.x + planetPos.x) / 2;
   const midZ = (camera.position.z + planetPos.z) / 2;
   const highY = Math.max(camera.position.y, 180);
 
-  const pmref = pm;
+  // Lock lookAt continuously during flight
+  // Use live reference to planet mesh position for tracking
+  const pm_ref = pm;
 
   currentTween = gsap.timeline({
     onComplete: () => {
-      const livePos = new THREE.Vector3();
-      pmref.mesh.getWorldPosition(livePos);
+      const livePos = pm_ref.mesh.position;
       controls.target.copy(livePos);
       controls.minDistance = planet.size * 1.4;
       controls.maxDistance = planet.size * 12;
@@ -2020,26 +2046,21 @@ function focusPlanet(idx) {
       orbitActive = true;
       currentTween = null;
     }
+  })
+  .to(camera.position, {
+    x: midX, y: highY, z: midZ,
+    duration: 1.5,
+    ease: 'power1.in',
+    onUpdate: () => camera.lookAt(pm_ref.mesh.position),
+  })
+  .to(camera.position, {
+    x: finalPos.x, y: finalPos.y, z: finalPos.z,
+    duration: 2.2,
+    ease: 'expo.out',
+    onUpdate: () => camera.lookAt(pm_ref.mesh.position),
   });
 
-  currentTween
-    .to(camera.position, {
-      x: midX,
-      y: highY,
-      z: midZ,
-      duration: 1.5,
-      ease: 'power1.inOut',
-      onUpdate: () => camera.lookAt(pmref.mesh.position)
-    })
-    .to(camera.position, {
-      x: finalPos.x,
-      y: finalPos.y,
-      z: finalPos.z,
-      duration: 2.2,
-      ease: 'expo.out',
-      onUpdate: () => camera.lookAt(pmref.mesh.position)
-    });
-
+  // Update UI
   showDetailPanel(idx);
   showFocusUI(idx);
   updateNavActive(idx);
@@ -2047,12 +2068,7 @@ function focusPlanet(idx) {
 }
 
 function returnToOverview() {
-  if (teacherPlanetLocked) return;
-
-  if (currentTween) {
-    currentTween.kill();
-    currentTween = null;
-  }
+  if (currentTween) { currentTween.kill(); currentTween = null; }
 
   controls.enabled = false;
   controls.target.set(0, 0, 0);
@@ -2066,138 +2082,57 @@ function returnToOverview() {
       focusedIdx = -1;
       currentTween = null;
     }
-  });
-
-  currentTween.to(camera.position, {
-    x: 0,
-    y: 200,
-    z: 480,
+  })
+  .to(camera.position, {
+    x: 0, y: 200, z: 480,
     duration: 2.5,
     ease: 'power2.inOut',
-    onUpdate: () => camera.lookAt(0, 0, 0)
+    onUpdate: () => camera.lookAt(0, 0, 0),
   });
 
   hideDetailPanel();
   hideFocusUI();
   updateNavActive(-1);
-  document.getElementById('earth-compare').classList.remove('visible');
-  document.getElementById('qr-widget').classList.remove('visible');
 }
 
 // ============================================================
 // UI HELPERS
 // ============================================================
-function renderSatellitesList(items, title) {
-  const titleEl = document.getElementById('dp-satellites-title');
-  const listEl = document.getElementById('dp-satellites-list');
+function showDetailPanel(idx) {
+  const p = PLANETS[idx];
+  document.getElementById('dp-tagline').textContent = p.tagline;
+  document.getElementById('dp-name').textContent = p.name;
+  document.getElementById('dp-desc-short').textContent = p.descShort;
+  document.getElementById('dp-desc-long').textContent = p.descLong;
+  document.getElementById('dp-desc-long').classList.remove('show');
+  document.getElementById('dp-read-more').textContent = 'Подробнее →';
 
-  if (!items || !items.length) {
-    titleEl.style.display = 'none';
-    listEl.style.display = 'none';
-    listEl.innerHTML = '';
-    return;
-  }
+  const f = p.facts;
+  document.getElementById('f-diameter').textContent = f.diameter;
+  document.getElementById('f-temp').textContent = f.temp;
+  document.getElementById('f-day').textContent = f.day;
+  document.getElementById('f-gravity').textContent = f.gravity;
+  document.getElementById('f-mass').textContent = f.mass;
+  document.getElementById('f-density').textContent = f.density;
+  document.getElementById('f-axialTilt').textContent = f.axialTilt;
+  document.getElementById('f-moons').textContent = f.moons;
 
-  titleEl.style.display = 'block';
-  listEl.style.display = 'flex';
-  titleEl.textContent = title || 'Спутники';
-  listEl.innerHTML = '';
+const majorMoonEl = document.getElementById('dp-major-moons');
+const majorMoons = (NATURAL_SATELLITES[p.id] || []).map(m => m.name);
 
-  items.forEach(item => {
-    const card = document.createElement('div');
-    card.className = 'dp-satellite-card';
-
-    if (typeof item === 'string') {
-      card.innerHTML = `<div class="dp-satellite-desc">${item}</div>`;
-    } else {
-      card.innerHTML = `
-        <div class="dp-satellite-name">${item.name || ''}</div>
-        <div class="dp-satellite-type">${item.type || ''}</div>
-        <div class="dp-satellite-desc">${item.desc || ''}</div>
-      `;
-    }
-
-    listEl.appendChild(card);
-  });
+if (p.id === 'earth') {
+  majorMoons.push('ISS', 'GPS', 'геостационарные спутники');
 }
 
-function showDetailPanel(idx, mode = 'planet') {
-  const data = mode === 'sun' ? SUNINFO : PLANETS[idx];
-  if (!data) return;
-
-  document.getElementById('dp-tagline').textContent = data.tagline || '';
-  document.getElementById('dp-name').textContent = data.name || '';
-  document.getElementById('dp-desc-short').textContent = data.descShort || '';
-
-  const longEl = document.getElementById('dp-desc-long');
-  longEl.textContent = data.descLong || '';
-  longEl.classList.remove('show');
-
-  const readMoreBtn = document.getElementById('dp-read-more');
-  readMoreBtn.textContent = 'Читать далее';
-
-  const f = data.facts || {};
-  document.getElementById('f-diameter').textContent = f.diameter || '—';
-  document.getElementById('f-temp').textContent = f.temp || '—';
-  document.getElementById('f-day').textContent = f.day || '—';
-  document.getElementById('f-gravity').textContent = f.gravity || '—';
-  document.getElementById('f-mass').textContent = f.mass || '—';
-  document.getElementById('f-density').textContent = f.density || '—';
-  document.getElementById('f-axialTilt').textContent = f.axialTilt || '—';
-  document.getElementById('f-moons').textContent = f.moons || '—';
-
-  const majorMoonEl = document.getElementById('dp-major-moons');
-  if (majorMoonEl) {
-    if (mode === 'planet' && idx >= 0) {
-      const p = PLANETS[idx];
-      const majorMoons = (NATURALSATELLITES[p.id] || []).map(m => m.name).filter(Boolean);
-
-      if (p.id === 'earth') {
-        majorMoons.push('ISS', 'GPS', 'Starlink');
-      }
-
-      if (majorMoons.length) {
-        majorMoonEl.style.display = 'block';
-        majorMoonEl.textContent = majorMoons.join(', ');
-      } else {
-        majorMoonEl.style.display = 'none';
-        majorMoonEl.textContent = '';
-      }
-    } else {
-      majorMoonEl.style.display = 'none';
-      majorMoonEl.textContent = '';
-    }
-  }
-
-  if (mode === 'sun') {
-    renderSatellitesList([], '');
-  } else {
-    renderSatellitesList(data.satellites || [], 'Спутники и объекты');
-  }
+if (majorMoons.length) {
+  majorMoonEl.style.display = 'block';
+  majorMoonEl.textContent = 'Ключевые спутники: ' + majorMoons.join(', ');
+} else {
+  majorMoonEl.style.display = 'none';
+  majorMoonEl.textContent = '';
+}
 
   document.getElementById('detail-panel').classList.add('visible');
-
-  if (mode === 'planet' && idx >= 0) {
-    updateEarthCompare(PLANETS[idx].id);
-    updateQRCode(idx);
-
-    const timelineSlider = document.getElementById('timeline-slider');
-    const timelineYear = document.getElementById('timeline-year');
-    if (timelineSlider && timelineYear) {
-      timelineSlider.value = 0;
-      timelineYear.textContent = '';
-    }
-
-    if (teacherFactsHidden) {
-      setTimeout(() => {
-        const fg = document.querySelector('.dp-facts-grid');
-        if (fg) fg.style.filter = 'blur(8px)';
-      }, 50);
-    }
-  } else {
-    document.getElementById('earth-compare').classList.remove('visible');
-    document.getElementById('qr-widget').classList.remove('visible');
-  }
 }
 
 function hideDetailPanel() {
@@ -2207,8 +2142,9 @@ function hideDetailPanel() {
 function showFocusUI(idx) {
   document.getElementById('back-btn').classList.add('visible');
   document.getElementById('arrow-nav').classList.add('visible');
-  document.getElementById('planet-ticker').textContent = `${String(idx + 1).padStart(2, '0')}/08`;
+  document.getElementById('planet-ticker').textContent = String(idx + 1).padStart(2, '0') + '/08';
   document.getElementById('ui-header').classList.add('hidden');
+  // Navigator stays ALWAYS visible after Start — do NOT hide it
   document.getElementById('speed-ctrl').classList.add('hidden');
 }
 
@@ -2216,6 +2152,7 @@ function hideFocusUI() {
   document.getElementById('back-btn').classList.remove('visible');
   document.getElementById('arrow-nav').classList.remove('visible');
   document.getElementById('ui-header').classList.remove('hidden');
+  // Navigator is always visible — no need to show/hide it here
   document.getElementById('speed-ctrl').classList.remove('hidden');
 }
 
@@ -2227,10 +2164,11 @@ function updateNavActive(idx) {
 
 function hideLoader() {
   document.getElementById('loader').classList.add('hidden');
+  // apply all textures
   applySkyTexture();
   applySunTexture();
   applyPlanetTextures();
-
+  // show hero
   setTimeout(() => {
     document.getElementById('hero').classList.remove('hidden');
   }, 300);
@@ -2242,20 +2180,15 @@ function hideLoader() {
 function buildNavigator() {
   const nav = document.getElementById('navigator');
   nav.innerHTML = '';
-
-  ORBIT_PLANETS.forEach((p, i) => {
+  PLANETS.forEach((p, i) => {
     const item = document.createElement('div');
     item.className = 'nav-item';
-    item.dataset.idx = i + 1; // индекс в общем PLANETS, если sun = 0
-
+    item.dataset.idx = i;
     item.innerHTML = `<div class="nav-dot"></div><span class="nav-name">${p.name}</span>`;
-
     item.addEventListener('click', () => {
-      const realIdx = PLANETS.findIndex(x => x.id === p.id);
-      if (isOverview) focusPlanet(realIdx);
-      else if (focusedIdx !== realIdx) focusPlanet(realIdx);
+      if (isOverview) focusPlanet(i);
+      else if (focusedIdx !== i) focusPlanet(i);
     });
-
     nav.appendChild(item);
   });
 }
@@ -2280,30 +2213,16 @@ document.getElementById('back-btn').addEventListener('click', returnToOverview);
 // ARROW NAV
 // ============================================================
 document.getElementById('btn-prev').addEventListener('click', () => {
-  if (focusedIdx <= 0) return;
-  const prev = getOrbitPlanetRealIndexByStep(focusedIdx, -1);
+  if (focusedIdx < 0) return;
+  const prev = (focusedIdx - 1 + PLANETS.length) % PLANETS.length;
   focusPlanet(prev);
 });
-
 document.getElementById('btn-next').addEventListener('click', () => {
-  if (focusedIdx <= 0) return;
-  const next = getOrbitPlanetRealIndexByStep(focusedIdx, +1);
+  if (focusedIdx < 0) return;
+  const next = (focusedIdx + 1) % PLANETS.length;
   focusPlanet(next);
 });
-  
-document.getElementById('btn-sun-info').addEventListener('click', () => { showDetailPanel(-1, 'sun')
-});
-  
-function showDetailPanel(idx, mode = 'planet') {
-  const data = mode === 'sun' ? SUNINFO : PLANETS[idx];
-  if (!data) return;
 
-  // ...
-  if (mode === 'sun') {
-    document.getElementById('earth-compare').classList.remove('visible');
-    document.getElementById('qr-widget').classList.remove('visible');
-  }
-}
 // ============================================================
 // START / HERO BUTTONS
 // ============================================================
@@ -2591,7 +2510,6 @@ function renderFrame() {
 // ============================================================
 function animate() {
   requestAnimationFrame(animate);
-
   const delta = Math.min(clock.getDelta(), 0.05);
 
   asteroidTick(delta);
@@ -2602,101 +2520,116 @@ function animate() {
     earthPmNight.nightMesh.position.copy(earthPmNight.mesh.position);
     earthPmNight.nightMesh.rotation.y = earthPmNight.mesh.rotation.y;
   }
+  // Sun rotation
+  sunMesh.rotation.y += 0.002 * delta;
 
-  sunMesh.rotation.y += 0.002 * delta * 60;
-
+  // Planet self-rotation + orbit
   planetMeshes.forEach((pm, i) => {
     const p = PLANETS[i];
 
-    pm.mesh.rotation.y += p.rotSpeed * delta * 60;
+    // Self-rotation
+    pm.mesh.rotation.y += p.rotSpeed * delta;
 
+    // Cloud layer (slightly faster)
     if (pm.clouds) {
-      pm.clouds.rotation.y += p.rotSpeed * 1.12 * delta * 60;
+      pm.clouds.rotation.y += p.rotSpeed * delta * 1.12;
     }
 
-    pm.angle += p.speed * speedMultiplier * delta * 60;
-
-    const pos = getOrbitPos(p, pm.angle, pm.radius || p.orbitR);
-    const nx = pos.x;
-    const nz = pos.z;
-
-    pm.mesh.position.set(nx, 0, nz);
-
-    if (pm.clouds) pm.clouds.position.set(nx, 0, nz);
-    if (pm.atmosphere) pm.atmosphere.position.set(nx, 0, nz);
-    if (pm.ring) pm.ring.position.set(nx, 0, nz);
-    if (pm.nightMesh) pm.nightMesh.position.set(nx, 0, nz);
-
-    if (!isOverview && focusedIdx === i && orbitActive && controls.enabled) {
-      controls.target.set(nx, 0, nz);
-    }
-
+    // Moon
     if (pm.moon) {
-      pm.moonAngle += 0.35 * delta * 60;
+      pm.moonAngle += 0.35 * delta;
       const moonR = p.size * 2.2;
       const moonX = moonR * Math.cos(pm.moonAngle);
       const moonZ = moonR * Math.sin(pm.moonAngle);
       const moonY = 0.2 * moonR * Math.sin(pm.moonAngle * 0.3);
-      pm.moon.position.set(nx + moonX, moonY, nz + moonZ);
+      pm.moon.position.set(moonX + pm.mesh.position.x, pm.mesh.position.y + moonY, moonZ + pm.mesh.position.z);
     }
 
-    if (pm.iss) {
-      pm.issAngle += 1.8 * delta;
-      const r = p.size * 1.18;
-      pm.iss.position.set(
-        nx + Math.cos(pm.issAngle) * r,
-        0.35 * Math.sin(pm.issAngle * 1.5) + 0.18,
-        nz + Math.sin(pm.issAngle) * r
-      );
-      pm.iss.lookAt(nx, 0, nz);
-    }
+// Natural satellites
+if (pm.naturalSatellites && pm.naturalSatellites.length) {
+  pm.naturalSatellites.forEach((sat) => {
+    sat.angle += sat.speed * delta;
+    const sx = Math.cos(sat.angle) * sat.orbit;
+    const sz = Math.sin(sat.angle) * sat.orbit;
+    const sy = sat.tiltY ? Math.sin(sat.angle * 0.8) * sat.tiltY * sat.orbit : 0;
 
-    if (pm.commSats && pm.commSats.length) {
-      pm.commSats.forEach((sat, si) => {
-        sat.userData.orbitAngle += sat.userData.orbitSpeed * delta * 60;
-        const r = sat.userData.orbitRadius;
-        sat.position.set(
-          nx + Math.cos(sat.userData.orbitAngle) * r,
-          0.8 * Math.sin(sat.userData.orbitAngle * 0.5 + si * 0.2),
-          nz + Math.sin(sat.userData.orbitAngle) * r
-        );
-        sat.lookAt(nx, 0, nz);
-      });
-    }
+    sat.mesh.position.set(
+      pm.mesh.position.x + sx,
+      pm.mesh.position.y + sy,
+      pm.mesh.position.z + sz
+    );
 
-    if (pm.naturalSatellites && pm.naturalSatellites.length) {
-      pm.naturalSatellites.forEach(sat => {
-        sat.angle += sat.speed * delta * 60;
-        const sx = Math.cos(sat.angle) * sat.orbit;
-        const sz = Math.sin(sat.angle) * sat.orbit;
-        const sy = sat.tiltY ? Math.sin(sat.angle * 0.8) * sat.tiltY * sat.orbit : 0;
+    sat.mesh.rotation.y += delta * 0.6;
+    sat.orbitLine.position.copy(pm.mesh.position);
+  });
+}
 
-        sat.mesh.position.set(nx + sx, sy, nz + sz);
-        sat.mesh.rotation.y += delta * 0.6 * 60;
-        sat.orbitLine.position.set(nx, 0, nz);
+// Artificial satellites around Earth
+if (pm.artificialSatellites && pm.artificialSatellites.length) {
+  pm.artificialSatellites.forEach((sat) => {
+    sat.angle += sat.speed * delta;
+    const sx = Math.cos(sat.angle) * sat.orbit;
+    const sz = Math.sin(sat.angle) * sat.orbit;
+    const sy = Math.sin(sat.angle * 1.5) * sat.tiltY;
 
-        const focused = !isOverview && focusedIdx === i;
-        sat.mesh.visible = focused || isOverview;
-        sat.orbitLine.material.opacity = focused ? 0.18 : 0.035;
-      });
-    }
+    sat.mesh.position.set(
+      pm.mesh.position.x + sx,
+      pm.mesh.position.y + sy,
+      pm.mesh.position.z + sz
+    );
 
-    if (pm.artificialSatellites && pm.artificialSatellites.length) {
-      pm.artificialSatellites.forEach(sat => {
-        sat.angle += sat.speed * delta * 60;
-        const sx = Math.cos(sat.angle) * sat.orbit;
-        const sz = Math.sin(sat.angle) * sat.orbit;
-        const sy = Math.sin(sat.angle * 1.5) * sat.tiltY;
+    sat.mesh.lookAt(pm.mesh.position.x, pm.mesh.position.y, pm.mesh.position.z);
+    sat.mesh.rotation.z += Math.PI / 2;
+    sat.orbitLine.position.copy(pm.mesh.position);
 
-        sat.mesh.position.set(nx + sx, sy, nz + sz);
-        sat.mesh.lookAt(nx, 0, nz);
-        sat.mesh.rotation.z = Math.PI / 2;
-        sat.orbitLine.position.set(nx, 0, nz);
+    const earthFocused = !isOverview && focusedIdx === i;
+    sat.mesh.visible = earthFocused || isOverview;
+    sat.mesh.scale.setScalar(earthFocused ? 1 : 0.7);
+  });
+}
 
-        const focused = !isOverview && focusedIdx === i;
-        sat.mesh.visible = focused || isOverview;
-        sat.orbitLine.material.opacity = focused ? 0.22 : 0.04;
-      });
+// Satellite orbit visibility depending on focus mode
+if (pm.naturalSatellites && pm.naturalSatellites.length) {
+  pm.naturalSatellites.forEach((sat) => {
+    sat.orbitLine.material.opacity = (!isOverview && focusedIdx === i) ? 0.18 : 0.035;
+  });
+}
+if (pm.artificialSatellites && pm.artificialSatellites.length) {
+  pm.artificialSatellites.forEach((sat) => {
+    sat.orbitLine.material.opacity = (!isOverview && focusedIdx === i) ? 0.22 : 0.04;
+  });
+}
+
+    // Orbital movement (only in overview or when not locked to planet)
+    if (isOverview || focusedIdx !== i) {
+pm.angle += p.speed * speedMultiplier * delta * 60;
+const orbitPos = getOrbitPos({ ...p, orbitR: pm.radius }, pm.angle);
+const nx = orbitPos.x;
+const nz = orbitPos.z;
+pm.mesh.position.set(nx, 0, nz);
+if (pm.clouds) pm.clouds.position.set(nx, 0, nz);
+if (pm.atmosphere) pm.atmosphere.position.set(nx, 0, nz);
+if (pm.ring) pm.ring.position.set(nx, 0, nz);
+
+      // Update lookAt target during tour/flyby
+      if (!isOverview && focusedIdx === i && orbitActive) {
+        controls.target.set(nx, 0, nz);
+      }
+    } else if (focusedIdx === i) {
+      // Still orbit the focused planet (it keeps moving)
+      pm.angle += p.speed * speedMultiplier * delta * 60;
+const orbitPos = getOrbitPos({ ...p, orbitR: pm.radius }, pm.angle);
+const nx = orbitPos.x;
+const nz = orbitPos.z;
+pm.mesh.position.set(nx, 0, nz);
+if (pm.clouds) pm.clouds.position.set(nx, 0, nz);
+if (pm.atmosphere) pm.atmosphere.position.set(nx, 0, nz);
+if (pm.ring) pm.ring.position.set(nx, 0, nz);
+
+      // If orbit controls enabled, update target to follow planet
+      if (orbitActive && controls.enabled) {
+        controls.target.set(nx, 0, nz);
+      }
     }
   });
 
@@ -2727,15 +2660,14 @@ window.addEventListener('keydown', (e) => {
     if (!isOverview) returnToOverview();
     if (tourActive) stopTour();
   }
-if (e.key === 'ArrowRight' && !isOverview && focusedIdx > 0) {
-  const next = getOrbitPlanetRealIndexByStep(focusedIdx, +1);
-  focusPlanet(next);
-}
-
-if (e.key === 'ArrowLeft' && !isOverview && focusedIdx > 0) {
-  const prev = getOrbitPlanetRealIndexByStep(focusedIdx, -1);
-  focusPlanet(prev);
-}
+  if (e.key === 'ArrowRight' && !isOverview) {
+    const next = (focusedIdx + 1) % PLANETS.length;
+    focusPlanet(next);
+  }
+  if (e.key === 'ArrowLeft' && !isOverview) {
+    const prev = (focusedIdx - 1 + PLANETS.length) % PLANETS.length;
+    focusPlanet(prev);
+  }
 });
 
 // ============================================================
@@ -2835,7 +2767,7 @@ const QUIZ_DATA = {
     { q: 'Тип планеты Уран:', opts: ['Газовый гигант','Ледяной гигант','Каменная','Карликовая'], a: 1 },
     { q: 'Температура на Уране:', opts: ['-100°C','-150°C','-195°C','-224°C'], a: 3 },
   ],
-    neptune: [
+  neptune: [
     { q: 'Скорость ветров на Нептуне:', opts: ['500 км/ч','800 км/ч','1500 км/ч','2100 км/ч'], a: 3 },
     { q: 'Расстояние от Нептуна до Земли:', opts: ['150 млн км','1 млрд км','2 млрд км','4.5 млрд км'], a: 3 },
     { q: 'Спутник Тритон вращается:', opts: ['Как обычно','В обратную сторону','Не вращается','Хаотично'], a: 1 },
@@ -2980,26 +2912,13 @@ document.getElementById('timeline-slider').addEventListener('input', function() 
 });
 
 function applyTimelineScale(billions) {
+  // Expand/contract orbits and sun size based on timeline
   const scaleFactor = 1 + billions * 0.08;
-  const sunScale = 1 + Math.max(0, billions * 0.15);
-
-  gsap.to(sunMesh.scale, {
-    x: sunScale,
-    y: sunScale,
-    z: sunScale,
-    duration: 0.6
-  });
-
-  if (realScaleMode) return;
-
-  ORBIT_PLANETS.forEach((p) => {
-    const meshIndex = PLANETS.findIndex(x => x.id === p.id);
-    const newR = p.orbitR * Math.max(0.5, scaleFactor);
-
-    gsap.to(planetMeshes[meshIndex], {
-      radius: newR,
-      duration: 0.8
-    });
+  const sunScale = 1 + Math.max(0, billions) * 0.15;
+  gsap.to(sunMesh.scale, { x: sunScale, y: sunScale, z: sunScale, duration: 0.6 });
+  planetMeshes.forEach((pm, i) => {
+    const newR = PLANETS[i].orbitR * Math.max(0.5, scaleFactor);
+    gsap.to(pm, { radius: newR, duration: 0.8 });
   });
 }
 
@@ -3081,28 +3000,12 @@ window.addEventListener('touchend', (e) => {
   if (e.changedTouches.length === 1) {
     const dx = e.changedTouches[0].clientX - _touchStartX;
     const dy = e.changedTouches[0].clientY - _touchStartY;
-  window.addEventListener('touchend', e => {
-  if (!swipeActive) return;
-
-  if (e.changedTouches.length === 1) {
-    const dx = e.changedTouches[0].clientX - touchStartX;
-    const dy = e.changedTouches[0].clientY - touchStartY;
-
     if (Math.abs(dx) > 60 && Math.abs(dy) < 40) {
-      if (!isOverview && focusedIdx > 0) {
-        if (dx < 0) {
-          const nextIdx = getOrbitPlanetRealIndexByStep(focusedIdx, +1);
-          focusPlanet(nextIdx);
-        } else {
-          const prevIdx = getOrbitPlanetRealIndexByStep(focusedIdx, -1);
-          focusPlanet(prevIdx);
-        }
+      if (!isOverview && focusedIdx >= 0) {
+        if (dx < 0) focusPlanet((focusedIdx + 1) % PLANETS.length);
+        else focusPlanet((focusedIdx - 1 + PLANETS.length) % PLANETS.length);
       }
     }
-  }
-
-  swipeActive = false;
-}, { passive: true });
   }
   _swipeActive = false;
 }, { passive: true });
@@ -3114,11 +3017,11 @@ window.addEventListener('touchend', (e) => {
 // The original listener is already defined; we add a second one:
 window.addEventListener('keydown', (e) => {
   // Keys 1-8: fly to planet
-const num = parseInt(e.key, 10);
-if (num >= 1 && num <= 8 && !e.altKey && !e.ctrlKey && !e.metaKey) {
-  focusPlanet(num);
-  return;
-}
+  const num = parseInt(e.key);
+  if (num >= 1 && num <= 8 && !e.altKey && !e.ctrlKey && !e.metaKey) {
+    focusPlanet(num - 1);
+    return;
+  }
   // F — fullscreen
   if (e.key === 'f' || e.key === 'F') {
     document.getElementById('btn-fullscreen').click();
@@ -3140,119 +3043,46 @@ if (num >= 1 && num <= 8 && !e.altKey && !e.ctrlKey && !e.metaKey) {
 // REAL SCALE MODE
 // ============================================================
 let realScaleMode = false;
-const REAL_ORBIT_RATIOS = {
-  mercury: 0.39,
-  venus: 0.72,
-  earth: 1.0,
-  mars: 1.52,
-  jupiter: 5.2,
-  saturn: 9.58,
-  uranus: 19.2,
-  neptune: 30.05
-};
-  
-const VISUAL_ORBITS = ORBIT_PLANETS.map(p => p.orbitR);
-const BASE_AU = 160;
+const REAL_ORBIT_RATIOS = { mercury:0.39, venus:0.72, earth:1.0, mars:1.52, jupiter:5.2, saturn:9.58, uranus:19.2, neptune:30.05 };
+const VISUAL_ORBITS = PLANETS.map(p => p.orbitR);
+const BASE_AU = 100; // earth orbit visual = 100 units
 
 document.getElementById('btn-realscale').addEventListener('click', () => {
   realScaleMode = !realScaleMode;
-
   const btn = document.getElementById('btn-realscale');
   btn.classList.toggle('active', realScaleMode);
-
   const warn = document.getElementById('realscale-warning');
   warn.classList.toggle('show', realScaleMode);
-
   if (realScaleMode) {
     setTimeout(() => warn.classList.remove('show'), 5000);
-
-    const targetRadii = [];
-    let prevR = 0;
-    let prevSize = 0;
-
-    ORBIT_PLANETS.forEach((p, i) => {
-      const nominalR = REAL_ORBIT_RATIOS[p.id] * BASE_AU;
-      const diameterRatio = REAL_DIAMETERS_KM[p.id] / REAL_DIAMETERS_KM.earth;
-      const realSize = Math.max(0.22, Math.pow(diameterRatio, 0.42) * 3.2);
-
-      let finalR = nominalR;
-      if (i > 0) {
-        const minGap = prevSize + realSize + 18;
-        if (finalR - prevR < minGap) finalR = prevR + minGap;
-      }
-
-      targetRadii.push({ finalR, realSize });
-      prevR = finalR;
-      prevSize = realSize;
+    PLANETS.forEach((p, i) => {
+      const realR = REAL_ORBIT_RATIOS[p.id] * BASE_AU;
+      const realSize = Math.max(0.3, PLANET_DIAMETERS_VISUAL[p.id] * (REAL_DIAMETERS_KM[p.id] / REAL_DIAMETERS_KM.earth) * 0.3);
+      gsap.to(planetMeshes[i], { radius: realR, duration: 2.5, ease: 'power2.inOut' });
+      gsap.to(planetMeshes[i].mesh.scale, { x: realSize / PLANETS[i].size, y: realSize / PLANETS[i].size, z: realSize / PLANETS[i].size, duration: 2.5 });
     });
-
-    ORBIT_PLANETS.forEach((p, i) => {
-      const meshIndex = PLANETS.findIndex(x => x.id === p.id);
-
-      gsap.to(planetMeshes[meshIndex], {
-        radius: targetRadii[i].finalR,
-        duration: 2.5,
-        ease: 'power2.inOut'
-      });
-
-      gsap.to(planetMeshes[meshIndex].mesh.scale, {
-        x: targetRadii[i].realSize / p.size,
-        y: targetRadii[i].realSize / p.size,
-        z: targetRadii[i].realSize / p.size,
-        duration: 2.5
-      });
-    });
-
-    gsap.to(camera.position, {
-      x: 0,
-      y: 850,
-      z: 1850,
-      duration: 3,
-      ease: 'power2.inOut',
-      onUpdate: () => camera.lookAt(0, 0, 0)
-    });
+    gsap.to(camera.position, { x: 0, y: 600, z: 1200, duration: 3, ease: 'power2.inOut', onUpdate: () => camera.lookAt(0, 0, 0) });
   } else {
-    ORBIT_PLANETS.forEach((p, i) => {
-      const meshIndex = PLANETS.findIndex(x => x.id === p.id);
-
-      gsap.to(planetMeshes[meshIndex], {
-        radius: VISUAL_ORBITS[i],
-        duration: 2.5,
-        ease: 'power2.inOut'
-      });
-
-      gsap.to(planetMeshes[meshIndex].mesh.scale, {
-        x: 1,
-        y: 1,
-        z: 1,
-        duration: 2.5
-      });
+    PLANETS.forEach((p, i) => {
+      gsap.to(planetMeshes[i], { radius: VISUAL_ORBITS[i], duration: 2.5, ease: 'power2.inOut' });
+      gsap.to(planetMeshes[i].mesh.scale, { x: 1, y: 1, z: 1, duration: 2.5 });
     });
   }
 });
-  
+
 // ============================================================
 // ELLIPTICAL ORBITS
 // ============================================================
-const ECCENTRICITY = {
-  mercury: 0.206,
-  venus: 0.007,
-  earth: 0.017,
-  mars: 0.093,
-  jupiter: 0.049,
-  saturn: 0.057,
-  uranus: 0.046,
-  neptune: 0.010
-};
+const ECCENTRICITY = { mercury:0.206, venus:0.007, earth:0.017, mars:0.093, jupiter:0.049, saturn:0.057, uranus:0.046, neptune:0.010 };
 
-function getOrbitPos(p, angle, radiusOverride = null) {
+// Override orbit position calculation to use ellipse
+function getOrbitPos(p, angle) {
   const e = ECCENTRICITY[p.id] || 0;
-  const a = radiusOverride ?? p.orbitR;
-  const b = a * Math.sqrt(1 - e * e);
-
+  const a = p.orbitR; // semi-major axis
+  const b = a * Math.sqrt(1 - e * e); // semi-minor axis
   return {
     x: a * Math.cos(angle) - a * e,
-    z: b * Math.sin(angle)
+    z: b * Math.sin(angle),
   };
 }
 
@@ -3425,8 +3255,35 @@ document.getElementById('teacher-tour-btn').addEventListener('click', () => {
 })();
 
 // ============================================================
+// PATCH focusPlanet to also update new widgets
+// ============================================================
+const _origFocusPlanet = focusPlanet;
+// We can't easily override, so patch via post-focus hooks
+// Instead, hook into showDetailPanel
+const _origShowDetailPanel = showDetailPanel;
+window.showDetailPanel = function(idx) {
+  _origShowDetailPanel(idx);
+  updateEarthCompare(PLANETS[idx].id);
+  updateQRCode(idx);
+  // Reset timeline slider
+  document.getElementById('timeline-slider').value = 0;
+  document.getElementById('timeline-year').textContent = 'Сейчас';
+  // Restore teacher facts visibility when planet changes
+  if (teacherFactsHidden) {
+    setTimeout(() => {
+      const fg = document.querySelector('.dp-facts-grid');
+      if (fg) fg.style.filter = 'blur(8px)';
+    }, 100);
+  }
+};
+
+// ============================================================
 // PATCH animate loop to update asteroids + night mesh + elliptic orbits
 // ============================================================
+const _origAnimate = animate;
+// Patch orbit positions to use elliptical calculation
+// Override planet position update in existing animate() by post-processing
+// Since we can't modify the loop directly, we add an RAF hook
 function asteroidTick(delta) {
   if (!window._asteroids || !window._asteroidMesh) return;
   const dummy = window._asteroidDummy;
@@ -3552,5 +3409,470 @@ setTimeout(() => {
     }
   });
 })();
-</script></body>
+
+// ============================================================
+// EDUCATIONAL ADDITIONS
+// ============================================================
+
+// ---- PLANET DATA EXTENSIONS ----
+const PLANET_GRAVITY = {
+  mercury: 3.7, venus: 8.87, earth: 9.8, mars: 3.71,
+  jupiter: 24.79, saturn: 10.44, uranus: 8.69, neptune: 11.15
+};
+
+const PLANET_DISTANCE_AU = {
+  mercury: 0.387, venus: 0.723, earth: 1.0, mars: 1.524,
+  jupiter: 5.203, saturn: 9.537, uranus: 19.19, neptune: 30.07
+};
+
+const ATMOSPHERE_DATA = {
+  mercury: [],
+  venus:  [{name:'CO₂', pct:96.5, color:'#d4a654'},{name:'N₂', pct:3.5, color:'#6a88c8'}],
+  earth:  [{name:'N₂', pct:78, color:'#6a88c8'},{name:'O₂', pct:21, color:'#81d4fa'},{name:'Ar', pct:0.9, color:'#9c7ec4'},{name:'CO₂', pct:0.04, color:'#d4a654'}],
+  mars:   [{name:'CO₂', pct:95.3, color:'#d4a654'},{name:'N₂', pct:2.7, color:'#6a88c8'},{name:'Ar', pct:1.6, color:'#9c7ec4'}],
+  jupiter:[{name:'H₂', pct:89.8, color:'#e8c87a'},{name:'He', pct:10.2, color:'#c8a898'}],
+  saturn: [{name:'H₂', pct:96.3, color:'#d4b876'},{name:'He', pct:3.25, color:'#c8a898'}],
+  uranus: [{name:'H₂', pct:82.5, color:'#7FD4D4'},{name:'He', pct:15.2, color:'#9fc8d0'},{name:'CH₄', pct:2.3, color:'#4da8a8'}],
+  neptune:[{name:'H₂', pct:80, color:'#4fc3f7'},{name:'He', pct:19, color:'#81a8d4'},{name:'CH₄', pct:1.5, color:'#3b8cbf'}]
+};
+
+const INTERIOR_DATA = {
+  mercury: [{label:'Кора', r:0.95, color:'#9e9e9e'},{label:'Мантия', r:0.60, color:'#8b6f4e'},{label:'Ядро (Fe)', r:0.42, color:'#b5651d'}],
+  venus:   [{label:'Кора', r:0.95, color:'#c8b870'},{label:'Мантия', r:0.55, color:'#b87850'},{label:'Ядро (Fe)', r:0.35, color:'#c85028'}],
+  earth:   [{label:'Кора', r:0.95, color:'#5a8f30'},{label:'Мантия', r:0.55, color:'#c87832'},{label:'Внеш. ядро', r:0.35, color:'#c83222'},{label:'Внутр. ядро', r:0.18, color:'#e8a040'}],
+  mars:    [{label:'Кора', r:0.95, color:'#c05030'},{label:'Мантия', r:0.55, color:'#a86040'},{label:'Ядро (Fe,S)', r:0.30, color:'#c84828'}],
+  jupiter: [{label:'Атмосфера', r:0.95, color:'#c8a070'},{label:'H₂ жидкий', r:0.70, color:'#b07858'},{label:'H металл.', r:0.40, color:'#806040'},{label:'Ядро', r:0.15, color:'#505050'}],
+  saturn:  [{label:'Атмосфера', r:0.95, color:'#d4b876'},{label:'H₂ жидкий', r:0.65, color:'#b09060'},{label:'H металл.', r:0.35, color:'#807050'},{label:'Ядро', r:0.15, color:'#505050'}],
+  uranus:  [{label:'Атмосфера', r:0.95, color:'#7FD4D4'},{label:'Лёд (H₂O)', r:0.65, color:'#5fb0c0'},{label:'Ядро (скала)', r:0.25, color:'#708090'}],
+  neptune: [{label:'Атмосфера', r:0.95, color:'#4060c0'},{label:'Лёд/вода', r:0.60, color:'#3050a0'},{label:'Ядро (силикат)', r:0.20, color:'#506080'}]
+};
+
+const MISSIONS_DATA = {
+  mercury: [
+    {name:'Mariner 10', year:'1974-75', agency:'NASA', note:'Первый облёт, 45% поверхности'},
+    {name:'MESSENGER', year:'2011-15', agency:'NASA', note:'Орбита, полная карта поверхности'}
+  ],
+  venus: [
+    {name:'Venera 7', year:'1970', agency:'СССР', note:'Первая посадка на другой планете'},
+    {name:'Magellan', year:'1990-94', agency:'NASA', note:'Радарное картографирование поверхности'},
+    {name:'Venus Express', year:'2006-14', agency:'ESA', note:'Исследование атмосферы'}
+  ],
+  earth: [
+    {name:'Explorer 1', year:'1958', agency:'США', note:'Первый спутник США'},
+    {name:'МКС', year:'1998–', agency:'NASA/РКА', note:'Постоянное присутствие с 2000'},
+    {name:'Hubble', year:'1990–', agency:'NASA/ESA', note:'Космический телескоп'}
+  ],
+  mars: [
+    {name:'Mariner 9', year:'1971', agency:'NASA', note:'Первый орбитальный аппарат'},
+    {name:'Viking 1/2', year:'1976', agency:'NASA', note:'Посадка, поиск жизни'},
+    {name:'Curiosity', year:'2012–', agency:'NASA', note:'Марсоход, кратер Гейл'},
+    {name:'Perseverance', year:'2021–', agency:'NASA', note:'Взятие образцов, вертолёт Ingenuity'}
+  ],
+  jupiter: [
+    {name:'Pioneer 10', year:'1973', agency:'NASA', note:'Первый пролёт'},
+    {name:'Voyager 1/2', year:'1979', agency:'NASA', note:'Открытие колец, снимки лун'},
+    {name:'Galileo', year:'1995-2003', agency:'NASA', note:'Орбита, зонд в атмосферу'},
+    {name:'Juno', year:'2016–', agency:'NASA', note:'Магнитное поле, полюса'}
+  ],
+  saturn: [
+    {name:'Pioneer 11', year:'1979', agency:'NASA', note:'Первый пролёт'},
+    {name:'Voyager 1/2', year:'1980-81', agency:'NASA', note:'Детальные снимки колец'},
+    {name:'Cassini', year:'2004-17', agency:'NASA/ESA', note:'13 лет на орбите, зонд Гюйгенс на Титан'}
+  ],
+  uranus: [
+    {name:'Voyager 2', year:'1986', agency:'NASA', note:'Единственный визит, открыл 10 лун'}
+  ],
+  neptune: [
+    {name:'Voyager 2', year:'1989', agency:'NASA', note:'Единственный визит, Большое Тёмное Пятно'}
+  ]
+};
+
+// ---- TOGGLE SECTION ----
+function toggleSection(id) {
+  const sec = document.getElementById('sec-' + id);
+  const btn = document.getElementById('toggle-' + id);
+  if (!sec || !btn) return;
+  const isOpen = sec.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+}
+
+// ---- WEIGHT CALCULATOR ----
+function updateWeightCalc(planetId) {
+  const g = PLANET_GRAVITY[planetId];
+  const input = document.getElementById('weight-input');
+  const result = document.getElementById('weight-result');
+  const label = document.getElementById('weight-label');
+  if (!g || !input || !result) return;
+  const mass = parseFloat(input.value) || 70;
+  const weightHere = mass * 9.8;
+  const weightThere = mass * g;
+  result.textContent = weightThere.toFixed(1) + ' Н';
+  label.textContent = `Vs Земля: ${weightHere.toFixed(1)} Н • Гравитация: ${g} м/с²`;
+}
+document.addEventListener('input', (e) => {
+  if (e.target.id === 'weight-input') {
+    const idx = window._currentDetailIdx >= 0 ? window._currentDetailIdx : -1;
+    if (idx >= 0) updateWeightCalc(PLANETS[idx].id);
+  }
+});
+
+// ---- LIGHT TRAVEL TIME ----
+function updateLightTime(planetId) {
+  const au = PLANET_DISTANCE_AU[planetId];
+  const el = document.getElementById('lighttime-value');
+  const lbl = document.getElementById('lighttime-label');
+  if (!au || !el) return;
+  const km = au * 149597870.7;
+  const sec = km / 299792;
+  if (sec < 120) {
+    el.textContent = sec.toFixed(0) + ' сек';
+    lbl.textContent = `${(km/1e6).toFixed(2)} млн км от Солнца`;
+  } else {
+    el.textContent = (sec/60).toFixed(1) + ' мин';
+    lbl.textContent = `${(km/1e6).toFixed(2)} млн км от Солнца`;
+  }
+}
+
+// ---- ATMOSPHERE BARS ----
+function updateAtmosphere(planetId) {
+  const data = ATMOSPHERE_DATA[planetId] || [];
+  const container = document.getElementById('atmo-bars');
+  if (!container) return;
+  if (data.length === 0) {
+    container.innerHTML = '<div style="font-size:11px;color:var(--c-muted);padding:6px 0;">Атмосфера отсутствует или неизвестна</div>';
+    return;
+  }
+  container.innerHTML = data.map(d => `
+    <div class="atmo-bar-row">
+      <span class="atmo-bar-label">${d.name}</span>
+      <div class="atmo-bar-track"><div class="atmo-bar-fill" style="width:0%;background:${d.color}" data-pct="${d.pct}"></div></div>
+      <span class="atmo-bar-pct">${d.pct}%</span>
+    </div>`).join('');
+  // Animate bars after render
+  requestAnimationFrame(() => {
+    container.querySelectorAll('.atmo-bar-fill').forEach(el => {
+      el.style.width = el.dataset.pct + '%';
+    });
+  });
+}
+
+// ---- INTERIOR STRUCTURE SVG ----
+function updateInterior(planetId) {
+  const layers = INTERIOR_DATA[planetId] || [];
+  const wrap = document.getElementById('interior-svg-wrap');
+  const legend = document.getElementById('interior-legend');
+  if (!wrap || !legend || layers.length === 0) return;
+  const R = 66;
+  const cx = 80, cy = 80;
+  let circles = '';
+  [...layers].reverse().forEach(layer => {
+    const r = Math.round(layer.r * R);
+    circles += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${layer.color}" opacity="0.92"/>`;
+  });
+  // dividing lines
+  circles += `<line x1="${cx}" y1="${cy-R-4}" x2="${cx}" y2="${cy+R+4}" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>`;
+  circles += `<line x1="${cx-R-4}" y1="${cy}" x2="${cx+R+4}" y2="${cy}" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>`;
+  wrap.innerHTML = `<svg width="160" height="160" viewBox="0 0 160 160">${circles}</svg>`;
+  legend.innerHTML = layers.map(l =>
+    `<div class="interior-legend-row"><div class="interior-legend-dot" style="background:${l.color}"></div><span class="interior-legend-text">${l.label}</span></div>`
+  ).join('');
+}
+
+// ---- MISSIONS LIST ----
+function updateMissions(planetId) {
+  const missions = MISSIONS_DATA[planetId] || [];
+  const container = document.getElementById('missions-list');
+  if (!container) return;
+  if (missions.length === 0) {
+    container.innerHTML = '<div style="font-size:11px;color:var(--c-muted);padding:6px 0;">Данные о миссиях отсутствуют</div>';
+    return;
+  }
+  container.innerHTML = missions.map(m => `
+    <div class="mission-card">
+      <span class="mission-name">${m.name}</span>
+      <span class="mission-meta">${m.year} · ${m.agency} — ${m.note}</span>
+    </div>`).join('');
+}
+
+// ---- PATCH showDetailPanel to trigger all new sections ----
+window._currentDetailIdx = -1;
+const _origShowDP = showDetailPanel;
+showDetailPanel = function(idx) {
+  _origShowDP(idx);
+  window._currentDetailIdx = idx;
+  const pid = PLANETS[idx].id;
+  updateWeightCalc(pid);
+  updateLightTime(pid);
+  updateAtmosphere(pid);
+  updateInterior(pid);
+  updateMissions(pid);
+};
+
+// ---- COMPARE PANEL ----
+const COMPARE_ROWS = [
+  {label:'Диаметр',    key:'diameter'},
+  {label:'Температура',key:'temp'},
+  {label:'Сутки',      key:'day'},
+  {label:'Гравитация', key:'gravity'},
+  {label:'Масса',      key:'mass'},
+  {label:'Плотность',  key:'density'},
+  {label:'Наклон оси', key:'axialTilt'},
+  {label:'Спутники',   key:'moons'},
+];
+function buildCompareTable() {
+  const aId = document.getElementById('compare-a').value;
+  const bId = document.getElementById('compare-b').value;
+  const pA = PLANETS.find(p => p.id === aId);
+  const pB = PLANETS.find(p => p.id === bId);
+  if (!pA || !pB) return;
+  const tbl = document.getElementById('compare-table');
+  let html = `<thead><tr><th></th><th>${pA.name}</th><th>${pB.name}</th></tr></thead><tbody>`;
+  COMPARE_ROWS.forEach((r, i) => {
+    html += `<tr class="${i%2===0?'highlight':''}"><td>${r.label}</td><td>${pA.facts[r.key]||'—'}</td><td>${pB.facts[r.key]||'—'}</td></tr>`;
+  });
+  html += `</tbody>`;
+  tbl.innerHTML = html;
+}
+document.getElementById('compare-a').addEventListener('change', buildCompareTable);
+document.getElementById('compare-b').addEventListener('change', buildCompareTable);
+buildCompareTable();
+
+document.getElementById('btn-compare').addEventListener('click', () => {
+  const panel = document.getElementById('compare-panel');
+  const btn = document.getElementById('btn-compare');
+  const isVis = panel.classList.toggle('visible');
+  btn.classList.toggle('active', isVis);
+  if (isVis) buildCompareTable();
+});
+
+// ---- KEYBOARD SHORTCUTS ADDITIONS ----
+window.addEventListener('keydown', (e) => {
+  const activeTag = document.activeElement ? document.activeElement.tagName : '';
+  const isTyping = activeTag === 'INPUT' || activeTag === 'TEXTAREA';
+  if (isTyping) return;
+  // ? → hotkeys
+  if (e.key === '?' || e.key === '/') {
+    document.getElementById('hotkeys-overlay').classList.toggle('visible');
+  }
+  // C → compare
+  if (e.key === 'c' || e.key === 'C') {
+    document.getElementById('btn-compare').click();
+  }
+  // D → dwarf planets toggle
+  if (e.key === 'd' || e.key === 'D') {
+    document.getElementById('btn-dwarfs').click();
+  }
+  // Esc → close overlays
+  if (e.key === 'Escape') {
+    document.getElementById('hotkeys-overlay').classList.remove('visible');
+    document.getElementById('compare-panel').classList.remove('visible');
+    document.getElementById('btn-compare').classList.remove('active');
+  }
+});
+
+// ---- DWARF PLANETS ----
+let dwarfPlanetsVisible = false;
+const DWARF_PLANETS = [
+  {id:'pluto',  name:'Плутон',  r:390, size:1.4, color:0xb09898, speed:0.000035, angle:Math.random()*Math.PI*2},
+  {id:'ceres',  name:'Церера',  r:160, size:0.9, color:0xa0a080, speed:0.000190, angle:Math.random()*Math.PI*2},
+  {id:'eris',   name:'Эрида',   r:440, size:1.3, color:0xd0d0d0, speed:0.000028, angle:Math.random()*Math.PI*2},
+];
+const dwarfMeshes = [];
+const dwarfOrbitLines = [];
+
+function buildDwarfPlanets() {
+  DWARF_PLANETS.forEach(dp => {
+    // Orbit line
+    const oGeo = new THREE.RingGeometry(dp.r - 0.12, dp.r + 0.12, 128);
+    const oMat = new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:0.04, side:THREE.DoubleSide, depthWrite:false});
+    const oMesh = new THREE.Mesh(oGeo, oMat);
+    oMesh.rotation.x = -Math.PI/2;
+    oMesh.visible = false;
+    scene.add(oMesh);
+    dwarfOrbitLines.push(oMesh);
+    // Planet
+    const geo = new THREE.SphereGeometry(dp.size, 32, 32);
+    const mat = new THREE.MeshPhongMaterial({color:dp.color, shininess:2});
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(Math.cos(dp.angle)*dp.r, 0, Math.sin(dp.angle)*dp.r);
+    mesh.visible = false;
+    scene.add(mesh);
+    dwarfMeshes.push({mesh, ...dp});
+  });
+}
+
+buildDwarfPlanets();
+
+document.getElementById('btn-dwarfs').addEventListener('click', () => {
+  dwarfPlanetsVisible = !dwarfPlanetsVisible;
+  document.getElementById('btn-dwarfs').classList.toggle('active', dwarfPlanetsVisible);
+  dwarfMeshes.forEach((dm, i) => {
+    dm.mesh.visible = dwarfPlanetsVisible;
+    dwarfOrbitLines[i].visible = dwarfPlanetsVisible;
+  });
+});
+
+// Animate dwarf planets (hooked into existing RAF via monkey-patching)
+(function hookDwarfAnimation() {
+  const origAnimate = window.animate || animate;
+  function dwarfTick() {
+    if (!dwarfPlanetsVisible) return;
+    const delta = clock.getDelta ? 0.016 : 0.016;
+    dwarfMeshes.forEach((dm) => {
+      dm.angle += dm.speed * speedMultiplier * 60 * 0.016;
+      dm.mesh.position.set(Math.cos(dm.angle)*dm.r, 0, Math.sin(dm.angle)*dm.r);
+      dm.mesh.rotation.y += 0.003;
+    });
+  }
+  // Patch into RAF loop
+  const rawAnimFn = animate;
+  window.dwarfTick = dwarfTick;
+})();
+
+// ---- HALLEY'S COMET ----
+(function buildHalleysComet() {
+  // Halley: a=17.8 AU, e=0.967, scaled
+  const a = 260;  // semi-major axis (visual units)
+  const e = 0.967;
+  const b = a * Math.sqrt(1 - e*e);
+  const c = a * e; // focus offset
+
+  // Comet nucleus
+  const nucleusGeo = new THREE.SphereGeometry(1.0, 16, 16);
+  const nucleusMat = new THREE.MeshBasicMaterial({color: 0xd0d8e0});
+  const nucleus = new THREE.Mesh(nucleusGeo, nucleusMat);
+  nucleus.visible = false;
+  scene.add(nucleus);
+
+  // Tail (sprite-like particles)
+  const tailCount = 80;
+  const tailGeo = new THREE.BufferGeometry();
+  const tailPos = new Float32Array(tailCount * 3);
+  tailGeo.setAttribute('position', new THREE.BufferAttribute(tailPos, 3));
+  const tailMat = new THREE.PointsMaterial({color:0xc0e8ff, size:1.2, transparent:true, opacity:0.45, depthWrite:false, blending:THREE.AdditiveBlending});
+  const tail = new THREE.Points(tailGeo, tailMat);
+  tail.visible = false;
+  scene.add(tail);
+
+  // Orbit line
+  const orbitPts = [];
+  for (let i = 0; i <= 180; i++) {
+    const t = (i / 180) * Math.PI * 2;
+    orbitPts.push(new THREE.Vector3(a*Math.cos(t) - c, 0, b*Math.sin(t)));
+  }
+  const orbitCurve = new THREE.BufferGeometry().setFromPoints(orbitPts);
+  const orbitMat = new THREE.LineBasicMaterial({color:0x4488aa, transparent:true, opacity:0.20});
+  const orbitLine = new THREE.Line(orbitCurve, orbitMat);
+  orbitLine.visible = false;
+  scene.add(orbitLine);
+
+  let cometAngle = 0;
+  let cometVisible = false;
+
+  window.toggleComet = function() {
+    cometVisible = !cometVisible;
+    nucleus.visible = cometVisible;
+    tail.visible = cometVisible;
+    orbitLine.visible = cometVisible;
+    document.getElementById('btn-comet').classList.toggle('active', cometVisible);
+  };
+
+  window.tickComet = function(delta) {
+    if (!cometVisible) return;
+    // speed varies by distance (Kepler-like)
+    const distFromSun = new THREE.Vector3(nucleus.position.x, 0, nucleus.position.z).length();
+    const baseSpeed = 0.0004;
+    const speedBoost = 1 + Math.max(0, (400-distFromSun)/400) * 6;
+    cometAngle += baseSpeed * speedBoost * speedMultiplier;
+    if (cometAngle > Math.PI * 2) cometAngle -= Math.PI * 2;
+
+    const nx = a * Math.cos(cometAngle) - c;
+    const nz = b * Math.sin(cometAngle);
+    nucleus.position.set(nx, 0, nz);
+
+    // Tail points away from Sun
+    const dirToSun = new THREE.Vector3(-nx, 0, -nz).normalize();
+    const tailPositions = tail.geometry.attributes.position.array;
+    for (let i = 0; i < tailCount; i++) {
+      const t = (i / tailCount);
+      const spread = (Math.random() - 0.5) * 3 * t;
+      const spreadZ = (Math.random() - 0.5) * 3 * t;
+      tailPositions[i*3]   = nx + dirToSun.x * t * 40 + spread;
+      tailPositions[i*3+1] = (Math.random()-0.5) * 1.5 * t;
+      tailPositions[i*3+2] = nz + dirToSun.z * t * 40 + spreadZ;
+    }
+    tail.geometry.attributes.position.needsUpdate = true;
+    tailMat.opacity = 0.3 + (1-distFromSun/400) * 0.4;
+  };
+})();
+
+// ---- PATCH ANIMATE TO INCLUDE NEW TICKS ----
+const _origAnimFn = animate;
+(function patchAnimate() {
+  // We'll hook into requestAnimationFrame via a wrapper
+  const rAF = window.requestAnimationFrame;
+  let lastDelta = 0;
+  window.requestAnimationFrame = function(cb) {
+    return rAF(function(ts) {
+      const delta = (ts - lastDelta) / 1000;
+      lastDelta = ts;
+      if (window.dwarfTick) window.dwarfTick();
+      if (window.tickComet) window.tickComet(Math.min(delta, 0.05));
+      cb(ts);
+    });
+  };
+})();
+
+</script>
+<!-- Planet Compare Panel -->
+<div id="compare-panel">
+  <div class="compare-title">📊 Сравнение планет</div>
+  <div class="compare-selects">
+    <select class="compare-select" id="compare-a">
+      <option value="mercury">Меркурий</option>
+      <option value="venus">Венера</option>
+      <option value="earth" selected>Земля</option>
+      <option value="mars">Марс</option>
+      <option value="jupiter">Юпитер</option>
+      <option value="saturn">Сатурн</option>
+      <option value="uranus">Уран</option>
+      <option value="neptune">Нептун</option>
+    </select>
+    <span class="compare-vs">VS</span>
+    <select class="compare-select" id="compare-b">
+      <option value="mercury">Меркурий</option>
+      <option value="venus">Венера</option>
+      <option value="earth">Земля</option>
+      <option value="mars" selected>Марс</option>
+      <option value="jupiter">Юпитер</option>
+      <option value="saturn">Сатурн</option>
+      <option value="uranus">Уран</option>
+      <option value="neptune">Нептун</option>
+    </select>
+  </div>
+  <table class="compare-table" id="compare-table"></table>
+  <button class="compare-close" onclick="document.getElementById('compare-panel').classList.remove('visible');document.getElementById('btn-compare').classList.remove('active');">Закрыть</button>
+</div>
+
+<!-- Hotkeys Overlay -->
+<div id="hotkeys-overlay">
+  <div id="hotkeys-box">
+    <div class="hotkeys-title">⌨️ Горячие клавиши</div>
+    <div class="hotkeys-grid">
+      <span class="hk-key">1 – 8</span><span class="hk-desc">Перейти к планете</span>
+      <span class="hk-key">← / →</span><span class="hk-desc">Предыдущая / Следующая</span>
+      <span class="hk-key">Esc</span><span class="hk-desc">Вернуться к обзору</span>
+      <span class="hk-key">F</span><span class="hk-desc">Полноэкранный режим</span>
+      <span class="hk-key">Alt+T</span><span class="hk-desc">Панель учителя</span>
+      <span class="hk-key">Alt+R</span><span class="hk-desc">Реальный масштаб</span>
+      <span class="hk-key">D</span><span class="hk-desc">Карликовые планеты</span>
+      <span class="hk-key">C</span><span class="hk-desc">Сравнить планеты</span>
+      <span class="hk-key">Scroll</span><span class="hk-desc">Навигация / Зум</span>
+      <span class="hk-key">?</span><span class="hk-desc">Эта подсказка</span>
+    </div>
+    <button class="hotkeys-close" onclick="document.getElementById('hotkeys-overlay').classList.remove('visible')">Закрыть</button>
+  </div>
+</div>
+
+</body>
 </html>
