@@ -833,139 +833,285 @@ html, body {
 .teacher-lock-btn:hover { background: rgba(255,213,79,0.16); }
 .teacher-sep { height: 1px; background: var(--c-border); }
 
-/* ===== WEIGHT CALCULATOR ===== */
-.dp-weight-calc { display:flex; flex-direction:column; gap:10px; }
-.dp-weight-row { display:flex; align-items:center; gap:8px; }
-.dp-weight-input {
-  flex:1; padding:7px 10px; border-radius:6px;
-  border:1px solid var(--c-border); background:rgba(5,12,25,0.7);
-  backdrop-filter:blur(var(--blur)); color:var(--c-text);
-  font-size:13px; font-family:var(--font-body); outline:none;
-  transition:var(--transition);
+/* ===========================
+   EDU TOOLBAR (floating row)
+   =========================== */
+#edu-toolbar {
+  position: fixed;
+  top: 62px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(5, 12, 25, 0.88);
+  backdrop-filter: blur(20px) saturate(1.5);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 40px;
+  padding: 7px 14px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.35s cubic-bezier(0.16,1,0.3,1),
+              visibility 0.35s,
+              transform 0.35s cubic-bezier(0.16,1,0.3,1);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(79,195,247,0.06);
 }
-.dp-weight-input:focus { border-color:var(--c-accent); }
-.dp-weight-unit { font-size:12px; color:var(--c-muted); min-width:24px; }
-.dp-weight-result { font-size:22px; font-weight:700; color:var(--c-accent); font-family:var(--font-display); }
-.dp-weight-label { font-size:11px; color:var(--c-muted); letter-spacing:0.06em; }
-
-/* ===== MISSIONS PANEL ===== */
-.dp-missions { display:flex; flex-direction:column; gap:8px; }
-.mission-card {
-  display:flex; flex-direction:column; gap:2px;
-  padding:9px 12px; border-radius:7px;
-  background:rgba(79,195,247,0.06); border:1px solid rgba(79,195,247,0.15);
+#edu-toolbar.visible {
+  opacity: 1; visibility: visible; pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
 }
-.mission-name { font-size:12px; font-weight:600; color:var(--c-text); }
-.mission-meta { font-size:10px; color:var(--c-muted); letter-spacing:0.06em; }
-
-/* ===== INTERIOR STRUCTURE ===== */
-.dp-interior { display:flex; flex-direction:column; gap:8px; }
-.interior-svg-wrap { display:flex; justify-content:center; padding:4px 0; }
-.interior-legend { display:flex; flex-direction:column; gap:4px; }
-.interior-legend-row { display:flex; align-items:center; gap:7px; }
-.interior-legend-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
-.interior-legend-text { font-size:11px; color:var(--c-muted); }
-
-/* ===== LIGHT TRAVEL TIME ===== */
-.dp-lighttime { display:flex; align-items:center; gap:10px; }
-.lighttime-value { font-size:19px; font-weight:700; color:var(--c-accent2); font-family:var(--font-display); }
-.lighttime-label { font-size:11px; color:var(--c-muted); line-height:1.4; }
-
-/* ===== ATMOSPHERE COMPOSITION ===== */
-.dp-atmo { display:flex; flex-direction:column; gap:8px; }
-.atmo-bars { display:flex; flex-direction:column; gap:5px; }
-.atmo-bar-row { display:flex; align-items:center; gap:8px; }
-.atmo-bar-label { font-size:10px; color:var(--c-muted); min-width:52px; letter-spacing:0.04em; }
-.atmo-bar-track { flex:1; height:5px; background:rgba(255,255,255,0.08); border-radius:3px; overflow:hidden; }
-.atmo-bar-fill { height:100%; border-radius:3px; transition:width 0.7s cubic-bezier(0.16,1,0.3,1); }
-.atmo-bar-pct { font-size:10px; color:var(--c-muted); min-width:34px; text-align:right; font-variant-numeric:tabular-nums; }
-
-/* ===== PLANET COMPARE PANEL ===== */
-#compare-panel {
-  position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
-  z-index:150; width:min(700px,96vw);
-  background:rgba(5,12,25,0.97); backdrop-filter:blur(24px);
-  border:1px solid var(--c-border-bright); border-radius:18px;
-  padding:28px; display:flex; flex-direction:column; gap:18px;
-  opacity:0; visibility:hidden; pointer-events:none;
-  transition:opacity 0.35s ease, visibility 0.35s ease, transform 0.35s cubic-bezier(0.16,1,0.3,1);
-  max-height:90vh; overflow-y:auto;
+#edu-toolbar .edu-sep {
+  width: 1px; height: 18px;
+  background: rgba(255,255,255,0.1);
+  margin: 0 2px;
 }
-#compare-panel.visible { opacity:1; visibility:visible; pointer-events:auto; }
-.compare-title { font-family:var(--font-display); font-size:18px; font-weight:700; color:var(--c-text); }
-.compare-selects { display:flex; gap:12px; align-items:center; }
-.compare-select {
-  flex:1; padding:8px 12px; border-radius:7px;
-  border:1px solid var(--c-border); background:rgba(5,12,25,0.8);
-  color:var(--c-text); font-size:13px; font-family:var(--font-body); outline:none;
-  cursor:pointer; transition:var(--transition);
+.edu-tool-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  background: none;
+  color: var(--c-muted);
+  font-size: 11px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
 }
-.compare-select:focus { border-color:var(--c-accent); }
-.compare-vs { font-size:13px; font-weight:700; color:var(--c-muted); }
-.compare-table { width:100%; border-collapse:collapse; }
-.compare-table th { font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--c-muted); padding:6px 0; text-align:left; }
-.compare-table th:not(:first-child) { text-align:center; }
-.compare-table td { padding:8px 6px; font-size:12px; color:var(--c-text); border-top:1px solid var(--c-border); }
-.compare-table td:not(:first-child) { text-align:center; font-weight:600; font-variant-numeric:tabular-nums; }
-.compare-table td:first-child { color:var(--c-muted); font-size:11px; letter-spacing:0.06em; text-transform:uppercase; }
-.compare-table tr.highlight td { background:rgba(79,195,247,0.06); }
-.compare-close { align-self:flex-end; padding:8px 20px; border-radius:6px; background:var(--c-surface); border:1px solid var(--c-border-bright); color:var(--c-text); cursor:pointer; font-size:12px; font-family:var(--font-body); transition:var(--transition); }
-.compare-close:hover { background:var(--c-surface-hover); border-color:var(--c-accent); color:var(--c-accent); }
-#btn-compare { background:none; border:1px solid var(--c-border); border-radius:5px; color:var(--c-muted); padding:4px 8px; cursor:pointer; font-size:11px; font-family:var(--font-body); letter-spacing:0.06em; text-transform:uppercase; transition:var(--transition); }
-#btn-compare:hover { color:var(--c-text); border-color:var(--c-border-bright); }
-#btn-compare.active { border-color:rgba(79,195,247,0.5); color:var(--c-accent); }
-
-/* ===== HOTKEYS OVERLAY ===== */
-#hotkeys-overlay {
-  position:fixed; inset:0; z-index:300;
-  background:rgba(2,3,10,0.92); backdrop-filter:blur(20px);
-  display:flex; align-items:center; justify-content:center;
-  opacity:0; visibility:hidden; pointer-events:none;
-  transition:opacity 0.35s ease, visibility 0.35s ease;
+.edu-tool-btn:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.14);
+  color: var(--c-text);
 }
-#hotkeys-overlay.visible { opacity:1; visibility:visible; pointer-events:auto; }
-#hotkeys-box {
-  width:min(480px,94vw); background:rgba(5,14,30,0.97);
-  border:1px solid var(--c-border-bright); border-radius:18px; padding:32px;
-  display:flex; flex-direction:column; gap:18px;
-  transform:translateY(16px); transition:transform 0.35s cubic-bezier(0.16,1,0.3,1);
+.edu-tool-btn.active {
+  background: rgba(79,195,247,0.12);
+  border-color: rgba(79,195,247,0.35);
+  color: var(--c-accent);
 }
-#hotkeys-overlay.visible #hotkeys-box { transform:translateY(0); }
-.hotkeys-title { font-family:var(--font-display); font-size:18px; font-weight:700; color:var(--c-text); }
-.hotkeys-grid { display:grid; grid-template-columns:auto 1fr; gap:8px 18px; align-items:center; }
-.hk-key {
-  display:inline-flex; align-items:center; justify-content:center;
-  background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2);
-  border-radius:5px; padding:3px 9px; font-size:11px; font-weight:600;
-  color:var(--c-text); font-family:var(--font-display); white-space:nowrap; min-width:44px;
+.edu-tool-btn.active-gold {
+  background: rgba(255,213,79,0.10);
+  border-color: rgba(255,213,79,0.35);
+  color: var(--c-accent2);
 }
-.hk-desc { font-size:12px; color:var(--c-muted); }
-.hotkeys-close { align-self:flex-end; background:none; border:1px solid var(--c-border); border-radius:5px; padding:7px 18px; cursor:pointer; font-size:12px; color:var(--c-muted); transition:var(--transition); font-family:var(--font-body); }
-.hotkeys-close:hover { color:var(--c-text); border-color:var(--c-border-bright); }
-#btn-help { background:none; border:1px solid var(--c-border); border-radius:50%; width:26px; height:26px; color:var(--c-muted); cursor:pointer; font-size:12px; font-weight:700; transition:var(--transition); display:flex; align-items:center; justify-content:center; }
-#btn-help:hover { color:var(--c-text); border-color:var(--c-border-bright); }
+.edu-tool-icon { font-size: 14px; line-height: 1; }
+#btn-edu {
+  background: none;
+  border: 1px solid rgba(79,195,247,0.3);
+  border-radius: 5px;
+  color: var(--c-accent);
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 11px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: var(--transition);
+}
+#btn-edu:hover {
+  background: rgba(79,195,247,0.08);
+  border-color: rgba(79,195,247,0.55);
+}
+#btn-edu.active {
+  background: rgba(79,195,247,0.14);
+  border-color: var(--c-accent);
+  box-shadow: 0 0 14px rgba(79,195,247,0.25);
+}
 
-/* ===== DWARF PLANETS ===== */
-#btn-dwarfs { background:none; border:1px solid var(--c-border); border-radius:5px; color:var(--c-muted); padding:4px 8px; cursor:pointer; font-size:11px; font-family:var(--font-body); letter-spacing:0.06em; text-transform:uppercase; transition:var(--transition); }
-#btn-dwarfs.active { border-color:rgba(255,213,79,0.5); color:var(--c-accent2); }
-#btn-dwarfs:hover { color:var(--c-text); border-color:var(--c-border-bright); }
+/* ===========================
+   SATELLITE POPUP
+   =========================== */
+#sat-popup {
+  position: fixed;
+  z-index: 80;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+  transform: translate(-50%, calc(-100% - 14px));
+}
+#sat-popup.show { opacity: 1; }
+#sat-popup-inner {
+  background: rgba(3, 10, 22, 0.96);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px;
+  padding: 13px 16px;
+  min-width: 210px;
+  max-width: 270px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(79,195,247,0.08);
+}
+#sat-popup-inner::after {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(255,255,255,0.15);
+  border-bottom: 0;
+}
+.sat-popup-head {
+  display: flex; align-items: center; gap: 9px; margin-bottom: 8px;
+}
+.sat-popup-icon { font-size: 20px; line-height: 1; }
+.sat-popup-name { font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--c-text); }
+.sat-popup-agency { font-size: 10px; color: var(--c-accent); letter-spacing: 0.07em; margin-top: 1px; }
+.sat-popup-orbit {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(255,255,255,0.06); border-radius: 4px;
+  padding: 3px 8px; font-size: 10px; color: var(--c-muted);
+  letter-spacing: 0.06em; margin-bottom: 8px;
+}
+.sat-popup-desc { font-size: 11px; color: rgba(180,190,210,0.85); line-height: 1.55; }
+.sat-popup-tag {
+  display: inline-block;
+  margin-top: 7px; padding: 2px 8px; border-radius: 3px;
+  font-size: 9px; letter-spacing: 0.09em; font-weight: 600;
+  text-transform: uppercase;
+}
+.sat-tag-leo { background: rgba(79,195,247,0.15); color: var(--c-accent); }
+.sat-tag-meo { background: rgba(255,213,79,0.14); color: var(--c-accent2); }
+.sat-tag-geo { background: rgba(79,195,100,0.14); color: #4fc364; }
 
-/* ===== COMET ===== */
-/* CSS not needed — Three.js handles rendering */
-
-/* ===== SECTION TOGGLE BUTTON IN DP ===== */
+/* ===========================
+   DETAIL PANEL COLLAPSIBLE SECTIONS
+   =========================== */
 .dp-section-btn {
-  display:flex; align-items:center; gap:7px;
-  width:100%; padding:8px 0; background:none; border:none;
-  border-top:1px solid var(--c-border); color:var(--c-muted); cursor:pointer;
-  font-size:11px; font-family:var(--font-body); letter-spacing:0.10em; text-transform:uppercase;
-  transition:var(--transition); text-align:left;
+  display: flex; align-items: center; gap: 7px;
+  width: 100%; padding: 9px 0; background: none; border: none;
+  border-top: 1px solid var(--c-border); color: var(--c-muted); cursor: pointer;
+  font-size: 11px; font-family: var(--font-body); letter-spacing: 0.10em;
+  text-transform: uppercase; transition: var(--transition); text-align: left;
 }
-.dp-section-btn:hover { color:var(--c-text); }
-.dp-section-btn .dp-arrow { margin-left:auto; font-size:10px; transition:transform 0.25s; }
-.dp-section-btn.open .dp-arrow { transform:rotate(180deg); }
-.dp-collapsible { overflow:hidden; max-height:0; transition:max-height 0.4s cubic-bezier(0.16,1,0.3,1); }
-.dp-collapsible.open { max-height:500px; }
+.dp-section-btn:hover { color: var(--c-text); }
+.dp-section-btn .dp-arrow { margin-left: auto; font-size: 9px; transition: transform 0.25s; color: var(--c-muted); }
+.dp-section-btn.open .dp-arrow { transform: rotate(180deg); }
+.dp-collapsible { overflow: hidden; max-height: 0; transition: max-height 0.4s cubic-bezier(0.16,1,0.3,1); }
+.dp-collapsible.open { max-height: 600px; }
+
+/* Weight Calc */
+.dp-weight-input {
+  width: 100%; padding: 8px 12px; border-radius: 7px;
+  border: 1px solid var(--c-border); background: rgba(5,12,25,0.7);
+  color: var(--c-text); font-size: 14px; font-family: var(--font-body); outline: none;
+  transition: var(--transition); margin-bottom: 6px;
+}
+.dp-weight-input:focus { border-color: var(--c-accent); }
+.dp-weight-result { font-family: var(--font-display); font-size: 26px; font-weight: 700; color: var(--c-accent); }
+.dp-weight-sub { font-size: 11px; color: var(--c-muted); margin-top: 3px; }
+
+/* Atmosphere bars */
+.atmo-row { display: flex; align-items: center; gap: 9px; margin-bottom: 5px; }
+.atmo-label { font-size: 11px; color: var(--c-muted); min-width: 36px; letter-spacing: 0.04em; }
+.atmo-track { flex: 1; height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+.atmo-fill  { height: 100%; border-radius: 3px; width: 0; transition: width 0.75s cubic-bezier(0.16,1,0.3,1); }
+.atmo-pct   { font-size: 10px; color: var(--c-muted); min-width: 38px; text-align: right; font-variant-numeric: tabular-nums; }
+
+/* Interior SVG */
+.interior-svg-wrap { display: flex; justify-content: center; padding: 4px 0 6px; }
+.interior-legend-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.interior-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.interior-legend-text { font-size: 11px; color: var(--c-muted); }
+
+/* Light time */
+.lighttime-big { font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--c-accent2); }
+.lighttime-sub { font-size: 11px; color: var(--c-muted); margin-top: 3px; line-height: 1.5; }
+
+/* Mission cards */
+.mission-card {
+  padding: 9px 12px; border-radius: 8px; margin-bottom: 6px;
+  background: rgba(79,195,247,0.05); border: 1px solid rgba(79,195,247,0.13);
+}
+.mission-name { font-size: 12px; font-weight: 600; color: var(--c-text); }
+.mission-meta { font-size: 10px; color: var(--c-muted); margin-top: 2px; letter-spacing: 0.04em; }
+
+/* ===========================
+   PLANET COMPARE PANEL
+   =========================== */
+#compare-panel {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.97);
+  z-index: 150; width: min(680px, 96vw);
+  background: rgba(3, 9, 20, 0.97); backdrop-filter: blur(28px);
+  border: 1px solid rgba(255,255,255,0.14); border-radius: 18px;
+  padding: 28px; display: flex; flex-direction: column; gap: 18px;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 0.35s ease, visibility 0.35s, transform 0.35s cubic-bezier(0.16,1,0.3,1);
+  max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+}
+#compare-panel.visible {
+  opacity: 1; visibility: visible; pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+.compare-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--c-text); }
+.compare-selects { display: flex; gap: 12px; align-items: center; }
+.compare-select {
+  flex: 1; padding: 9px 13px; border-radius: 8px;
+  border: 1px solid var(--c-border); background: rgba(5,12,25,0.85);
+  color: var(--c-text); font-size: 13px; font-family: var(--font-body);
+  outline: none; cursor: pointer; transition: var(--transition);
+}
+.compare-select:focus { border-color: var(--c-accent); }
+.compare-vs { font-size: 13px; font-weight: 700; color: var(--c-muted); }
+.compare-table { width: 100%; border-collapse: collapse; }
+.compare-table th {
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--c-muted); padding: 8px 6px 6px; text-align: left;
+}
+.compare-table th:not(:first-child) { text-align: center; font-family: var(--font-display); font-size: 14px; color: var(--c-text); letter-spacing: 0.06em; text-transform: none; }
+.compare-table td { padding: 9px 6px; font-size: 13px; color: var(--c-text); border-top: 1px solid rgba(255,255,255,0.05); }
+.compare-table td:not(:first-child) { text-align: center; font-weight: 600; font-variant-numeric: tabular-nums; }
+.compare-table td:first-child { color: var(--c-muted); font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase; }
+.compare-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+.compare-close-btn {
+  align-self: flex-end; padding: 9px 22px; border-radius: 7px;
+  background: var(--c-surface); border: 1px solid var(--c-border-bright);
+  color: var(--c-text); cursor: pointer; font-size: 12px; font-family: var(--font-body);
+  transition: var(--transition);
+}
+.compare-close-btn:hover { background: var(--c-surface-hover); border-color: var(--c-accent); color: var(--c-accent); }
+
+/* ===========================
+   HOTKEYS OVERLAY
+   =========================== */
+#hotkeys-overlay {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(2,3,10,0.88); backdrop-filter: blur(20px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 0.35s ease, visibility 0.35s;
+}
+#hotkeys-overlay.visible { opacity: 1; visibility: visible; pointer-events: auto; }
+#hotkeys-box {
+  width: min(460px,94vw); background: rgba(5,14,30,0.98);
+  border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 32px;
+  display: flex; flex-direction: column; gap: 18px;
+  transform: translateY(12px); transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+}
+#hotkeys-overlay.visible #hotkeys-box { transform: translateY(0); }
+.hotkeys-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--c-text); }
+.hotkeys-grid { display: grid; grid-template-columns: auto 1fr; gap: 9px 20px; align-items: center; }
+.hk-key {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 5px; padding: 4px 10px; font-size: 11px; font-weight: 700;
+  color: var(--c-text); font-family: var(--font-display); white-space: nowrap; min-width: 48px;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.3);
+}
+.hk-desc { font-size: 12px; color: var(--c-muted); }
+.hotkeys-close {
+  align-self: flex-end; background: none; border: 1px solid var(--c-border);
+  border-radius: 6px; padding: 8px 20px; cursor: pointer; font-size: 12px;
+  color: var(--c-muted); transition: var(--transition); font-family: var(--font-body);
+}
+.hotkeys-close:hover { color: var(--c-text); border-color: var(--c-border-bright); }
 </style>
 </head>
 <body>
@@ -1007,18 +1153,32 @@ html, body {
   <div id="ui-header" class="hidden">
     <span class="header-logo">SOLARIS</span>
     <div class="header-sep"></div>
+
+  <!-- EDU TOOLBAR -->
+  <div id="edu-toolbar">
+    <button class="edu-tool-btn" id="edu-btn-dwarfs" title="Карликовые планеты: Плутон, Церера, Эрида (D)">
+      <span class="edu-tool-icon">🪐</span>Плутон и др.
+    </button>
+    <div class="edu-sep"></div>
+    <button class="edu-tool-btn" id="edu-btn-comet" title="Комета Галлея (K)">
+      <span class="edu-tool-icon">☄️</span>Комета
+    </button>
+    <div class="edu-sep"></div>
+    <button class="edu-tool-btn" id="edu-btn-compare" title="Сравнить две планеты (C)">
+      <span class="edu-tool-icon">📊</span>Сравнить
+    </button>
+    <div class="edu-sep"></div>
+    <button class="edu-tool-btn" id="edu-btn-hotkeys" title="Горячие клавиши (?)">
+      <span class="edu-tool-icon">⌨️</span>Клавиши
+    </button>
+  </div>
+
     <span class="header-label">Солнечная система</span>
       <div class="header-sep"></div>
     <button id="btn-fullscreen" title="Полный экран (F)">⛶ Экран</button>
     <button id="btn-realscale" title="Реальный масштаб (Alt+R)">⚖ Масштаб</button>
     <div class="header-sep"></div>
-    <button id="btn-dwarfs" title="Карликовые планеты (D)">🪐 Плутон</button>
-    <div class="header-sep"></div>
-    <button id="btn-comet" title="Комета Галлея (K)">☄️ Комета</button>
-    <div class="header-sep"></div>
-    <button id="btn-compare" title="Сравнить планеты (C)">📊 Сравнить</button>
-    <div class="header-sep"></div>
-    <button id="btn-help" title="Горячие клавиши (?)">?</button>
+    <button id="btn-edu" title="Образовательные инструменты">🎓 Инструменты</button>
 </div>
 
   <!-- Navigator -->
@@ -1062,69 +1222,54 @@ html, body {
   </div>
 
   
-    <!-- Weight Calculator -->
-    <div class="dp-sep"></div>
-    <button class="dp-section-btn" id="toggle-weight" onclick="toggleSection('weight')">
-      🏋️ Вес на планете <span class="dp-arrow">▼</span>
+    <!-- WEIGHT CALCULATOR -->
+    <button class="dp-section-btn" id="toggle-weight" onclick="dpToggle('weight')">
+      🏋️&nbsp;Вес на планете <span class="dp-arrow">▼</span>
     </button>
     <div class="dp-collapsible" id="sec-weight">
-      <div class="dp-weight-calc" style="padding:10px 0 4px">
-        <div class="dp-weight-row">
-          <input type="number" class="dp-weight-input" id="weight-input" placeholder="Масса, кг" min="1" max="999" value="70">
-          <span class="dp-weight-unit">кг</span>
-        </div>
+      <div style="padding:10px 0 6px">
+        <input type="number" class="dp-weight-input" id="weight-input" placeholder="Твоя масса, кг" min="1" max="500" value="60">
         <div class="dp-weight-result" id="weight-result">—</div>
-        <div class="dp-weight-label" id="weight-label">Введи свою массу</div>
+        <div class="dp-weight-sub" id="weight-sub">Введи массу, чтобы узнать свой вес</div>
       </div>
     </div>
 
-    <!-- Light Travel Time -->
-    <div class="dp-sep"></div>
-    <button class="dp-section-btn" id="toggle-light" onclick="toggleSection('light')">
-      💡 Время сигнала от Солнца <span class="dp-arrow">▼</span>
+    <!-- LIGHT TRAVEL TIME -->
+    <button class="dp-section-btn" id="toggle-light" onclick="dpToggle('light')">
+      💡&nbsp;Сигнал от Солнца <span class="dp-arrow">▼</span>
     </button>
     <div class="dp-collapsible" id="sec-light">
-      <div class="dp-lighttime" style="padding:10px 0 4px">
-        <div>
-          <div class="lighttime-value" id="lighttime-value">—</div>
-          <div class="lighttime-label" id="lighttime-label">мин. / сек.</div>
-        </div>
-        <div style="font-size:11px; color:var(--c-muted); line-height:1.6; max-width:180px;">
-          Время, за которое свет (299 792 км/с) достигает планеты от Солнца
-        </div>
+      <div style="padding:10px 0 6px">
+        <div class="lighttime-big" id="lighttime-val">—</div>
+        <div class="lighttime-sub" id="lighttime-sub">Скорость света: 299 792 км/с</div>
       </div>
     </div>
 
-    <!-- Atmosphere Composition -->
-    <div class="dp-sep"></div>
-    <button class="dp-section-btn" id="toggle-atmo" onclick="toggleSection('atmo')">
-      🌫️ Состав атмосферы <span class="dp-arrow">▼</span>
+    <!-- ATMOSPHERE -->
+    <button class="dp-section-btn" id="toggle-atmo" onclick="dpToggle('atmo')">
+      🌫️&nbsp;Состав атмосферы <span class="dp-arrow">▼</span>
     </button>
     <div class="dp-collapsible" id="sec-atmo">
-      <div class="dp-atmo" style="padding:10px 0 4px">
-        <div class="atmo-bars" id="atmo-bars"></div>
+      <div id="atmo-bars" style="padding:10px 0 6px"></div>
+    </div>
+
+    <!-- INTERIOR STRUCTURE -->
+    <button class="dp-section-btn" id="toggle-int" onclick="dpToggle('int')">
+      🏗️&nbsp;Внутреннее строение <span class="dp-arrow">▼</span>
+    </button>
+    <div class="dp-collapsible" id="sec-int">
+      <div style="padding:10px 0 4px">
+        <div class="interior-svg-wrap" id="int-svg"></div>
+        <div id="int-legend"></div>
       </div>
     </div>
 
-    <!-- Interior Structure -->
-    <div class="dp-sep"></div>
-    <button class="dp-section-btn" id="toggle-interior" onclick="toggleSection('interior')">
-      🏗️ Внутреннее строение <span class="dp-arrow">▼</span>
+    <!-- MISSIONS -->
+    <button class="dp-section-btn" id="toggle-miss" onclick="dpToggle('miss')">
+      🚀&nbsp;Миссии к планете <span class="dp-arrow">▼</span>
     </button>
-    <div class="dp-collapsible" id="sec-interior">
-      <div class="dp-interior" style="padding:10px 0 4px">
-        <div class="interior-svg-wrap" id="interior-svg-wrap"></div>
-        <div class="interior-legend" id="interior-legend"></div>
-      </div>
-    </div>
-
-    <!-- Missions -->
-    <div class="dp-sep"></div>
-    <button class="dp-section-btn" id="toggle-missions" onclick="toggleSection('missions')">
-      🚀 Миссии к планете <span class="dp-arrow">▼</span>
-    </button>
-    <div class="dp-collapsible" id="sec-missions">
-      <div class="dp-missions" style="padding:10px 0 4px" id="missions-list"></div>
+    <div class="dp-collapsible" id="sec-miss">
+      <div id="miss-list" style="padding:10px 0 6px"></div>
     </div>
 
 
@@ -3410,423 +3555,429 @@ setTimeout(() => {
   });
 })();
 
-// ============================================================
-// EDUCATIONAL ADDITIONS
-// ============================================================
+// ================================================================
+// SOLARIS EDU — EDUCATIONAL EXTENSIONS v2.0
+// Fixes: hover label bug, premium toolbar, satellite descriptions
+// ================================================================
 
-// ---- PLANET DATA EXTENSIONS ----
-const PLANET_GRAVITY = {
-  mercury: 3.7, venus: 8.87, earth: 9.8, mars: 3.71,
-  jupiter: 24.79, saturn: 10.44, uranus: 8.69, neptune: 11.15
-};
+// ---- DATA ----
+const EDU_GRAVITY = { mercury:3.7, venus:8.87, earth:9.8, mars:3.71, jupiter:24.79, saturn:10.44, uranus:8.69, neptune:11.15 };
+const EDU_DIST_AU = { mercury:0.387, venus:0.723, earth:1.0, mars:1.524, jupiter:5.203, saturn:9.537, uranus:19.19, neptune:30.07 };
 
-const PLANET_DISTANCE_AU = {
-  mercury: 0.387, venus: 0.723, earth: 1.0, mars: 1.524,
-  jupiter: 5.203, saturn: 9.537, uranus: 19.19, neptune: 30.07
-};
-
-const ATMOSPHERE_DATA = {
+const EDU_ATMO = {
   mercury: [],
-  venus:  [{name:'CO₂', pct:96.5, color:'#d4a654'},{name:'N₂', pct:3.5, color:'#6a88c8'}],
-  earth:  [{name:'N₂', pct:78, color:'#6a88c8'},{name:'O₂', pct:21, color:'#81d4fa'},{name:'Ar', pct:0.9, color:'#9c7ec4'},{name:'CO₂', pct:0.04, color:'#d4a654'}],
-  mars:   [{name:'CO₂', pct:95.3, color:'#d4a654'},{name:'N₂', pct:2.7, color:'#6a88c8'},{name:'Ar', pct:1.6, color:'#9c7ec4'}],
-  jupiter:[{name:'H₂', pct:89.8, color:'#e8c87a'},{name:'He', pct:10.2, color:'#c8a898'}],
-  saturn: [{name:'H₂', pct:96.3, color:'#d4b876'},{name:'He', pct:3.25, color:'#c8a898'}],
-  uranus: [{name:'H₂', pct:82.5, color:'#7FD4D4'},{name:'He', pct:15.2, color:'#9fc8d0'},{name:'CH₄', pct:2.3, color:'#4da8a8'}],
-  neptune:[{name:'H₂', pct:80, color:'#4fc3f7'},{name:'He', pct:19, color:'#81a8d4'},{name:'CH₄', pct:1.5, color:'#3b8cbf'}]
+  venus:   [{g:'CO₂',p:96.5,c:'#d4a654'},{g:'N₂',p:3.5,c:'#6a88c8'}],
+  earth:   [{g:'N₂',p:78,c:'#6a88c8'},{g:'O₂',p:21,c:'#81d4fa'},{g:'Ar',p:0.9,c:'#9c7ec4'},{g:'CO₂',p:0.04,c:'#d4a654'}],
+  mars:    [{g:'CO₂',p:95.3,c:'#d4a654'},{g:'N₂',p:2.7,c:'#6a88c8'},{g:'Ar',p:1.6,c:'#9c7ec4'}],
+  jupiter: [{g:'H₂',p:89.8,c:'#e8c87a'},{g:'He',p:10.2,c:'#c8a898'}],
+  saturn:  [{g:'H₂',p:96.3,c:'#d4b876'},{g:'He',p:3.25,c:'#c8a898'}],
+  uranus:  [{g:'H₂',p:82.5,c:'#7FD4D4'},{g:'He',p:15.2,c:'#9fc8d0'},{g:'CH₄',p:2.3,c:'#4da8a8'}],
+  neptune: [{g:'H₂',p:80,c:'#4fc3f7'},{g:'He',p:19,c:'#81a8d4'},{g:'CH₄',p:1.5,c:'#3b8cbf'}]
 };
 
-const INTERIOR_DATA = {
-  mercury: [{label:'Кора', r:0.95, color:'#9e9e9e'},{label:'Мантия', r:0.60, color:'#8b6f4e'},{label:'Ядро (Fe)', r:0.42, color:'#b5651d'}],
-  venus:   [{label:'Кора', r:0.95, color:'#c8b870'},{label:'Мантия', r:0.55, color:'#b87850'},{label:'Ядро (Fe)', r:0.35, color:'#c85028'}],
-  earth:   [{label:'Кора', r:0.95, color:'#5a8f30'},{label:'Мантия', r:0.55, color:'#c87832'},{label:'Внеш. ядро', r:0.35, color:'#c83222'},{label:'Внутр. ядро', r:0.18, color:'#e8a040'}],
-  mars:    [{label:'Кора', r:0.95, color:'#c05030'},{label:'Мантия', r:0.55, color:'#a86040'},{label:'Ядро (Fe,S)', r:0.30, color:'#c84828'}],
-  jupiter: [{label:'Атмосфера', r:0.95, color:'#c8a070'},{label:'H₂ жидкий', r:0.70, color:'#b07858'},{label:'H металл.', r:0.40, color:'#806040'},{label:'Ядро', r:0.15, color:'#505050'}],
-  saturn:  [{label:'Атмосфера', r:0.95, color:'#d4b876'},{label:'H₂ жидкий', r:0.65, color:'#b09060'},{label:'H металл.', r:0.35, color:'#807050'},{label:'Ядро', r:0.15, color:'#505050'}],
-  uranus:  [{label:'Атмосфера', r:0.95, color:'#7FD4D4'},{label:'Лёд (H₂O)', r:0.65, color:'#5fb0c0'},{label:'Ядро (скала)', r:0.25, color:'#708090'}],
-  neptune: [{label:'Атмосфера', r:0.95, color:'#4060c0'},{label:'Лёд/вода', r:0.60, color:'#3050a0'},{label:'Ядро (силикат)', r:0.20, color:'#506080'}]
+const EDU_INTERIOR = {
+  mercury: [{l:'Кора',r:.95,c:'#9e9e9e'},{l:'Мантия',r:.60,c:'#8b6f4e'},{l:'Ядро (Fe)',r:.42,c:'#b5651d'}],
+  venus:   [{l:'Кора',r:.95,c:'#c8b870'},{l:'Мантия',r:.55,c:'#b87850'},{l:'Ядро (Fe)',r:.35,c:'#c85028'}],
+  earth:   [{l:'Кора',r:.95,c:'#5a8f30'},{l:'Мантия',r:.55,c:'#c87832'},{l:'Внеш. ядро',r:.35,c:'#c83222'},{l:'Внутр. ядро',r:.18,c:'#e8a040'}],
+  mars:    [{l:'Кора',r:.95,c:'#c05030'},{l:'Мантия',r:.55,c:'#a86040'},{l:'Ядро (Fe,S)',r:.30,c:'#c84828'}],
+  jupiter: [{l:'Атмосфера',r:.95,c:'#c8a070'},{l:'H₂ жидкий',r:.70,c:'#b07858'},{l:'H металл.',r:.40,c:'#806040'},{l:'Ядро',r:.15,c:'#505050'}],
+  saturn:  [{l:'Атмосфера',r:.95,c:'#d4b876'},{l:'H₂ жидкий',r:.65,c:'#b09060'},{l:'H металл.',r:.35,c:'#807050'},{l:'Ядро',r:.15,c:'#505050'}],
+  uranus:  [{l:'Атмосфера',r:.95,c:'#7FD4D4'},{l:'Лёд (H₂O)',r:.65,c:'#5fb0c0'},{l:'Ядро (скала)',r:.25,c:'#708090'}],
+  neptune: [{l:'Атмосфера',r:.95,c:'#4060c0'},{l:'Лёд/вода',r:.60,c:'#3050a0'},{l:'Ядро (силикат)',r:.20,c:'#506080'}]
 };
 
-const MISSIONS_DATA = {
-  mercury: [
-    {name:'Mariner 10', year:'1974-75', agency:'NASA', note:'Первый облёт, 45% поверхности'},
-    {name:'MESSENGER', year:'2011-15', agency:'NASA', note:'Орбита, полная карта поверхности'}
-  ],
-  venus: [
-    {name:'Venera 7', year:'1970', agency:'СССР', note:'Первая посадка на другой планете'},
-    {name:'Magellan', year:'1990-94', agency:'NASA', note:'Радарное картографирование поверхности'},
-    {name:'Venus Express', year:'2006-14', agency:'ESA', note:'Исследование атмосферы'}
-  ],
-  earth: [
-    {name:'Explorer 1', year:'1958', agency:'США', note:'Первый спутник США'},
-    {name:'МКС', year:'1998–', agency:'NASA/РКА', note:'Постоянное присутствие с 2000'},
-    {name:'Hubble', year:'1990–', agency:'NASA/ESA', note:'Космический телескоп'}
-  ],
-  mars: [
-    {name:'Mariner 9', year:'1971', agency:'NASA', note:'Первый орбитальный аппарат'},
-    {name:'Viking 1/2', year:'1976', agency:'NASA', note:'Посадка, поиск жизни'},
-    {name:'Curiosity', year:'2012–', agency:'NASA', note:'Марсоход, кратер Гейл'},
-    {name:'Perseverance', year:'2021–', agency:'NASA', note:'Взятие образцов, вертолёт Ingenuity'}
-  ],
-  jupiter: [
-    {name:'Pioneer 10', year:'1973', agency:'NASA', note:'Первый пролёт'},
-    {name:'Voyager 1/2', year:'1979', agency:'NASA', note:'Открытие колец, снимки лун'},
-    {name:'Galileo', year:'1995-2003', agency:'NASA', note:'Орбита, зонд в атмосферу'},
-    {name:'Juno', year:'2016–', agency:'NASA', note:'Магнитное поле, полюса'}
-  ],
-  saturn: [
-    {name:'Pioneer 11', year:'1979', agency:'NASA', note:'Первый пролёт'},
-    {name:'Voyager 1/2', year:'1980-81', agency:'NASA', note:'Детальные снимки колец'},
-    {name:'Cassini', year:'2004-17', agency:'NASA/ESA', note:'13 лет на орбите, зонд Гюйгенс на Титан'}
-  ],
-  uranus: [
-    {name:'Voyager 2', year:'1986', agency:'NASA', note:'Единственный визит, открыл 10 лун'}
-  ],
-  neptune: [
-    {name:'Voyager 2', year:'1989', agency:'NASA', note:'Единственный визит, Большое Тёмное Пятно'}
-  ]
+const EDU_MISSIONS = {
+  mercury: [{n:'Mariner 10',y:'1974–75',a:'NASA',t:'Первый пролёт, 45% поверхности'},{n:'MESSENGER',y:'2011–15',a:'NASA',t:'Орбита, полная карта поверхности'}],
+  venus:   [{n:'Venera 7',y:'1970',a:'СССР',t:'Первая мягкая посадка на другой планете'},{n:'Magellan',y:'1990–94',a:'NASA',t:'Радарное картографирование'},{n:'Venus Express',y:'2006–14',a:'ESA',t:'Исследование атмосферы и климата'}],
+  earth:   [{n:'Explorer 1',y:'1958',a:'США',t:'Первый спутник США'},{n:'МКС',y:'1998–н.в.',a:'NASA/РКА/ESA',t:'Постоянная обитаемая лаборатория'},{n:'Hubble',y:'1990–н.в.',a:'NASA/ESA',t:'Космический телескоп, > 1 млн снимков'}],
+  mars:    [{n:'Mariner 9',y:'1971',a:'NASA',t:'Первый орбитальный аппарат'},{n:'Viking 1/2',y:'1976',a:'NASA',t:'Посадка, поиск признаков жизни'},{n:'Curiosity',y:'2012–н.в.',a:'NASA',t:'Марсоход, кратер Гейл'},{n:'Perseverance + Ingenuity',y:'2021–н.в.',a:'NASA',t:'Взятие образцов породы, первый вертолёт'}],
+  jupiter: [{n:'Pioneer 10',y:'1973',a:'NASA',t:'Первый пролёт'},{n:'Voyager 1/2',y:'1979',a:'NASA',t:'Открытие колец, детальные снимки лун'},{n:'Galileo',y:'1995–2003',a:'NASA',t:'13 орбит, зонд в атмосферу'},{n:'Juno',y:'2016–н.в.',a:'NASA',t:'Магнитное поле, полюса планеты'}],
+  saturn:  [{n:'Pioneer 11',y:'1979',a:'NASA',t:'Первый пролёт'},{n:'Voyager 1/2',y:'1980–81',a:'NASA',t:'Детальные снимки колец и лун'},{n:'Cassini-Гюйгенс',y:'2004–17',a:'NASA/ESA',t:'13 лет на орбите; Гюйгенс — посадка на Титан'}],
+  uranus:  [{n:'Voyager 2',y:'1986',a:'NASA',t:'Единственный визит, открыл 10 новых лун и кольца'}],
+  neptune: [{n:'Voyager 2',y:'1989',a:'NASA',t:'Единственный визит, Большое Тёмное Пятно, скорость ветра 2100 км/ч'}]
 };
 
-// ---- TOGGLE SECTION ----
-function toggleSection(id) {
+const SAT_INFO = {
+  'ISS':       { icon:'🛸', name:'МКС — Международная космическая станция', agency:'NASA · Роскосмос · ESA · JAXA', orbit:'НОО · ~400 км', desc:'Обитаемая исследовательская станция, летит со скоростью 27 600 км/ч и облетает Землю каждые 90 минут. Экипаж из 6–7 человек постоянно работает там с 2000 года. Размером с футбольное поле (109 × 73 м).', band:'LEO' },
+  'Hubble':    { icon:'🔭', name:'Космический телескоп Хаббл', agency:'NASA · ESA', orbit:'НОО · ~547 км', desc:'Работает с 1990 года. Позволил учёным определить возраст Вселенной, открыть тёмную энергию и сделать более 1,5 млн снимков 47 000 объектов. Разрешение в 10× лучше наземных телескопов.', band:'LEO' },
+  'Starlink-A': { icon:'📡', name:'Starlink — широкополосный интернет-спутник', agency:'SpaceX', orbit:'НОО · ~550 км', desc:'Спутники группировки Starlink обеспечивают высокоскоростной интернет по всей планете. К 2026 году на орбите более 6 000 спутников. Каждый весит ~295 кг и работает ~5 лет.', band:'LEO' },
+  'Starlink-B': { icon:'📡', name:'Starlink — широкополосный интернет-спутник', agency:'SpaceX', orbit:'НОО · ~550 км', desc:'Второй сегмент группировки. Спутники двигаются в ином наклонении орбиты, создавая глобальное покрытие. При ясном небе их можно видеть невооружённым глазом вскоре после заката.', band:'LEO' },
+  'GPS':       { icon:'🛰️', name:'GPS — система глобального позиционирования', agency:'ВВС США', orbit:'СОО · ~20 200 км', desc:'Созвездие из 31 спутника, запущенных США с 1973 года. Ваш телефон получает сигналы от ≥4 спутников и вычисляет позицию с точностью до 30 см. Использует теорию относительности для коррекции хода часов.', band:'MEO' },
+  'Galileo':   { icon:'🛰️', name:'Galileo — европейская навигационная система', agency:'ESA · ЕС', orbit:'СОО · ~23 222 км', desc:'Европейский аналог GPS. 30 спутников обеспечивают точность до 1 метра для гражданских пользователей и до 20 см для специальных приложений. Независима от военного контроля США.', band:'MEO' },
+  'GeoSat-1':  { icon:'🌐', name:'Геостационарный спутник связи', agency:'Различные операторы', orbit:'ГСО · 35 786 км', desc:'На высоте ~36 000 км спутник вращается синхронно с Землёй и кажется «висящим» в одной точке неба. Один спутник покрывает 42% поверхности Земли. Используется для ТВ-вещания, телефонии и интернета.', band:'GEO' },
+  'GeoSat-2':  { icon:'🌐', name:'Геостационарный метеоспутник', agency:'Различные агентства', orbit:'ГСО · 35 786 км', desc:'Метеоспутники на ГСО непрерывно снимают облачный покров Земли. Именно с них поступают снимки в прогнозы погоды. Три таких спутника покрывают практически всю поверхность планеты.', band:'GEO' }
+};
+
+// ---- SECTION TOGGLE ----
+function dpToggle(id) {
   const sec = document.getElementById('sec-' + id);
   const btn = document.getElementById('toggle-' + id);
   if (!sec || !btn) return;
-  const isOpen = sec.classList.toggle('open');
-  btn.classList.toggle('open', isOpen);
+  const open = sec.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  if (open) refreshSection(id);
+}
+let _currentPlanetId = null;
+function refreshSection(id) {
+  if (!_currentPlanetId) return;
+  if (id === 'weight') eduUpdateWeight(_currentPlanetId);
+  if (id === 'light')  eduUpdateLight(_currentPlanetId);
+  if (id === 'atmo')   eduUpdateAtmo(_currentPlanetId);
+  if (id === 'int')    eduUpdateInterior(_currentPlanetId);
+  if (id === 'miss')   eduUpdateMissions(_currentPlanetId);
 }
 
-// ---- WEIGHT CALCULATOR ----
-function updateWeightCalc(planetId) {
-  const g = PLANET_GRAVITY[planetId];
+// ---- WEIGHT ----
+function eduUpdateWeight(pid) {
+  const g = EDU_GRAVITY[pid]; if (!g) return;
   const input = document.getElementById('weight-input');
-  const result = document.getElementById('weight-result');
-  const label = document.getElementById('weight-label');
-  if (!g || !input || !result) return;
-  const mass = parseFloat(input.value) || 70;
-  const weightHere = mass * 9.8;
-  const weightThere = mass * g;
-  result.textContent = weightThere.toFixed(1) + ' Н';
-  label.textContent = `Vs Земля: ${weightHere.toFixed(1)} Н • Гравитация: ${g} м/с²`;
+  const m = parseFloat(input ? input.value : 60) || 60;
+  const here = (m * 9.8).toFixed(0);
+  const there = (m * g).toFixed(1);
+  const el = document.getElementById('weight-result');
+  const sub = document.getElementById('weight-sub');
+  if (el) el.textContent = there + ' Н';
+  if (sub) sub.textContent = `На Земле: ${here} Н · g = ${g} м/с²`;
 }
-document.addEventListener('input', (e) => {
-  if (e.target.id === 'weight-input') {
-    const idx = window._currentDetailIdx >= 0 ? window._currentDetailIdx : -1;
-    if (idx >= 0) updateWeightCalc(PLANETS[idx].id);
-  }
+document.addEventListener('input', e => {
+  if (e.target.id === 'weight-input' && _currentPlanetId) eduUpdateWeight(_currentPlanetId);
 });
 
-// ---- LIGHT TRAVEL TIME ----
-function updateLightTime(planetId) {
-  const au = PLANET_DISTANCE_AU[planetId];
-  const el = document.getElementById('lighttime-value');
-  const lbl = document.getElementById('lighttime-label');
-  if (!au || !el) return;
+// ---- LIGHT TIME ----
+function eduUpdateLight(pid) {
+  const au = EDU_DIST_AU[pid]; if (!au) return;
   const km = au * 149597870.7;
   const sec = km / 299792;
-  if (sec < 120) {
-    el.textContent = sec.toFixed(0) + ' сек';
-    lbl.textContent = `${(km/1e6).toFixed(2)} млн км от Солнца`;
-  } else {
-    el.textContent = (sec/60).toFixed(1) + ' мин';
-    lbl.textContent = `${(km/1e6).toFixed(2)} млн км от Солнца`;
-  }
+  const el = document.getElementById('lighttime-val');
+  const sub = document.getElementById('lighttime-sub');
+  if (el) el.textContent = sec < 120 ? sec.toFixed(0) + ' сек' : (sec/60).toFixed(1) + ' мин';
+  if (sub) sub.textContent = `${(km/1e6).toFixed(2)} млн км от Солнца · ${au.toFixed(3)} а.е.`;
 }
 
-// ---- ATMOSPHERE BARS ----
-function updateAtmosphere(planetId) {
-  const data = ATMOSPHERE_DATA[planetId] || [];
-  const container = document.getElementById('atmo-bars');
-  if (!container) return;
-  if (data.length === 0) {
-    container.innerHTML = '<div style="font-size:11px;color:var(--c-muted);padding:6px 0;">Атмосфера отсутствует или неизвестна</div>';
-    return;
-  }
-  container.innerHTML = data.map(d => `
-    <div class="atmo-bar-row">
-      <span class="atmo-bar-label">${d.name}</span>
-      <div class="atmo-bar-track"><div class="atmo-bar-fill" style="width:0%;background:${d.color}" data-pct="${d.pct}"></div></div>
-      <span class="atmo-bar-pct">${d.pct}%</span>
+// ---- ATMOSPHERE ----
+function eduUpdateAtmo(pid) {
+  const data = EDU_ATMO[pid] || [];
+  const el = document.getElementById('atmo-bars'); if (!el) return;
+  if (!data.length) { el.innerHTML = '<div style="font-size:11px;color:var(--c-muted);padding:6px 0">Атмосфера отсутствует или разрежена</div>'; return; }
+  el.innerHTML = data.map(d => `
+    <div class="atmo-row">
+      <span class="atmo-label">${d.g}</span>
+      <div class="atmo-track"><div class="atmo-fill" style="background:${d.c}" data-p="${d.p}"></div></div>
+      <span class="atmo-pct">${d.p}%</span>
     </div>`).join('');
-  // Animate bars after render
-  requestAnimationFrame(() => {
-    container.querySelectorAll('.atmo-bar-fill').forEach(el => {
-      el.style.width = el.dataset.pct + '%';
+  requestAnimationFrame(() => el.querySelectorAll('.atmo-fill').forEach(f => f.style.width = f.dataset.p + '%'));
+}
+
+// ---- INTERIOR ----
+function eduUpdateInterior(pid) {
+  const layers = EDU_INTERIOR[pid] || [];
+  const sw = document.getElementById('int-svg');
+  const sl = document.getElementById('int-legend');
+  if (!sw || !sl || !layers.length) return;
+  const R = 66, cx = 80, cy = 80;
+  let svg = '';
+  [...layers].reverse().forEach(l => { const r = Math.round(l.r * R); svg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${l.c}" opacity="0.92"/>`; });
+  svg += `<line x1="${cx}" y1="${cy-R-3}" x2="${cx}" y2="${cy+R+3}" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>`;
+  svg += `<line x1="${cx-R-3}" y1="${cy}" x2="${cx+R+3}" y2="${cy}" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>`;
+  sw.innerHTML = `<svg width="160" height="160" viewBox="0 0 160 160">${svg}</svg>`;
+  sl.innerHTML = layers.map(l => `<div class="interior-legend-row"><div class="interior-legend-dot" style="background:${l.c}"></div><span class="interior-legend-text">${l.l}</span></div>`).join('');
+}
+
+// ---- MISSIONS ----
+function eduUpdateMissions(pid) {
+  const ms = EDU_MISSIONS[pid] || [];
+  const el = document.getElementById('miss-list'); if (!el) return;
+  if (!ms.length) { el.innerHTML = '<div style="font-size:11px;color:var(--c-muted)">Данных о миссиях нет</div>'; return; }
+  el.innerHTML = ms.map(m => `<div class="mission-card"><div class="mission-name">${m.n}</div><div class="mission-meta">${m.y} · ${m.a} — ${m.t}</div></div>`).join('');
+}
+
+// ---- HOOK showDetailPanel to refresh all sections ----
+{
+  const _orig = showDetailPanel;
+  showDetailPanel = function(idx) {
+    _orig(idx);
+    _currentPlanetId = PLANETS[idx].id;
+    ['weight','light','atmo','int','miss'].forEach(id => {
+      const sec = document.getElementById('sec-' + id);
+      if (sec && sec.classList.contains('open')) refreshSection(id);
+    });
+  };
+}
+
+// ---- FIX 1: HOVER LABEL BUG ----
+// Wrap focusPlanet to hide label on transition
+{
+  const _origFP = focusPlanet;
+  focusPlanet = function(idx) {
+    const hl = document.getElementById('planet-hover-label');
+    if (hl) hl.classList.remove('show');
+    hoveredIndex = -1;
+    _origFP(idx);
+  };
+}
+
+// Override tickRaycast with correct focus-mode label behaviour + satellite raycasting
+function tickRaycast(now) {
+  if (now - lastRaycastTime < 60) return;
+  lastRaycastTime = now;
+  raycaster.setFromCamera(mouse, camera);
+
+  const hoverLabel = document.getElementById('planet-hover-label');
+
+  // Satellite raycasting (only when focused on Earth)
+  const satMeshPairs = [];
+  planetMeshes.forEach(pm => {
+    (pm.artificialSatellites || []).forEach(sat => {
+      sat.mesh.traverse(child => {
+        if (child.isMesh) satMeshPairs.push({ mesh: child, sat });
+      });
     });
   });
-}
-
-// ---- INTERIOR STRUCTURE SVG ----
-function updateInterior(planetId) {
-  const layers = INTERIOR_DATA[planetId] || [];
-  const wrap = document.getElementById('interior-svg-wrap');
-  const legend = document.getElementById('interior-legend');
-  if (!wrap || !legend || layers.length === 0) return;
-  const R = 66;
-  const cx = 80, cy = 80;
-  let circles = '';
-  [...layers].reverse().forEach(layer => {
-    const r = Math.round(layer.r * R);
-    circles += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${layer.color}" opacity="0.92"/>`;
-  });
-  // dividing lines
-  circles += `<line x1="${cx}" y1="${cy-R-4}" x2="${cx}" y2="${cy+R+4}" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>`;
-  circles += `<line x1="${cx-R-4}" y1="${cy}" x2="${cx+R+4}" y2="${cy}" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>`;
-  wrap.innerHTML = `<svg width="160" height="160" viewBox="0 0 160 160">${circles}</svg>`;
-  legend.innerHTML = layers.map(l =>
-    `<div class="interior-legend-row"><div class="interior-legend-dot" style="background:${l.color}"></div><span class="interior-legend-text">${l.label}</span></div>`
-  ).join('');
-}
-
-// ---- MISSIONS LIST ----
-function updateMissions(planetId) {
-  const missions = MISSIONS_DATA[planetId] || [];
-  const container = document.getElementById('missions-list');
-  if (!container) return;
-  if (missions.length === 0) {
-    container.innerHTML = '<div style="font-size:11px;color:var(--c-muted);padding:6px 0;">Данные о миссиях отсутствуют</div>';
-    return;
+  if (satMeshPairs.length) {
+    const hits = raycaster.intersectObjects(satMeshPairs.map(p => p.mesh), false);
+    if (hits.length) {
+      const pair = satMeshPairs.find(p => p.mesh === hits[0].object);
+      if (pair) { showSatPopup(pair.sat); canvas.style.cursor = 'pointer'; return; }
+    }
   }
-  container.innerHTML = missions.map(m => `
-    <div class="mission-card">
-      <span class="mission-name">${m.name}</span>
-      <span class="mission-meta">${m.year} · ${m.agency} — ${m.note}</span>
-    </div>`).join('');
+  hideSatPopup();
+
+  // Planet raycasting
+  const meshes = planetMeshes.map(pm => pm.mesh);
+  const hits = raycaster.intersectObjects(meshes);
+  if (hits.length) {
+    const idx = meshes.indexOf(hits[0].object);
+    if (isOverview) {
+      if (idx !== hoveredIndex) {
+        if (hoveredIndex >= 0) unsetHover(hoveredIndex);
+        hoveredIndex = idx;
+        setHover(idx);
+      }
+    } else {
+      if (idx !== focusedIdx) {
+        hoveredIndex = idx;
+        if (hoverLabel) { hoverLabel.textContent = PLANETS[idx].name; hoverLabel.classList.add('show'); }
+        canvas.style.cursor = 'pointer';
+      } else {
+        if (hoverLabel) hoverLabel.classList.remove('show');
+        hoveredIndex = -1;
+        canvas.style.cursor = 'default';
+      }
+    }
+  } else {
+    if (isOverview && hoveredIndex >= 0) { unsetHover(hoveredIndex); hoveredIndex = -1; canvas.style.cursor = 'default'; }
+    else if (!isOverview) { if (hoverLabel) hoverLabel.classList.remove('show'); hoveredIndex = -1; canvas.style.cursor = 'default'; }
+  }
 }
 
-// ---- PATCH showDetailPanel to trigger all new sections ----
-window._currentDetailIdx = -1;
-const _origShowDP = showDetailPanel;
-showDetailPanel = function(idx) {
-  _origShowDP(idx);
-  window._currentDetailIdx = idx;
-  const pid = PLANETS[idx].id;
-  updateWeightCalc(pid);
-  updateLightTime(pid);
-  updateAtmosphere(pid);
-  updateInterior(pid);
-  updateMissions(pid);
-};
-
-// ---- COMPARE PANEL ----
-const COMPARE_ROWS = [
-  {label:'Диаметр',    key:'diameter'},
-  {label:'Температура',key:'temp'},
-  {label:'Сутки',      key:'day'},
-  {label:'Гравитация', key:'gravity'},
-  {label:'Масса',      key:'mass'},
-  {label:'Плотность',  key:'density'},
-  {label:'Наклон оси', key:'axialTilt'},
-  {label:'Спутники',   key:'moons'},
-];
-function buildCompareTable() {
-  const aId = document.getElementById('compare-a').value;
-  const bId = document.getElementById('compare-b').value;
-  const pA = PLANETS.find(p => p.id === aId);
-  const pB = PLANETS.find(p => p.id === bId);
-  if (!pA || !pB) return;
-  const tbl = document.getElementById('compare-table');
-  let html = `<thead><tr><th></th><th>${pA.name}</th><th>${pB.name}</th></tr></thead><tbody>`;
-  COMPARE_ROWS.forEach((r, i) => {
-    html += `<tr class="${i%2===0?'highlight':''}"><td>${r.label}</td><td>${pA.facts[r.key]||'—'}</td><td>${pB.facts[r.key]||'—'}</td></tr>`;
-  });
-  html += `</tbody>`;
-  tbl.innerHTML = html;
+// ---- FIX 2: SATELLITE POPUP ----
+const _satPopup = document.getElementById('sat-popup');
+function showSatPopup(sat) {
+  if (!_satPopup) return;
+  const info = SAT_INFO[sat.name];
+  if (!info) return;
+  document.getElementById('sat-icon').textContent   = info.icon;
+  document.getElementById('sat-name').textContent   = info.name;
+  document.getElementById('sat-agency').textContent = info.agency;
+  document.getElementById('sat-orbit').textContent  = info.orbit;
+  document.getElementById('sat-desc').textContent   = info.desc;
+  const tag = document.getElementById('sat-tag');
+  tag.textContent = info.band === 'LEO' ? 'Низкая орбита (НОО)' : info.band === 'MEO' ? 'Средняя орбита (СОО)' : 'Геостационарная (ГСО)';
+  tag.className = 'sat-popup-tag sat-tag-' + info.band.toLowerCase();
+  _satPopup.classList.add('show');
 }
-document.getElementById('compare-a').addEventListener('change', buildCompareTable);
-document.getElementById('compare-b').addEventListener('change', buildCompareTable);
-buildCompareTable();
-
-document.getElementById('btn-compare').addEventListener('click', () => {
-  const panel = document.getElementById('compare-panel');
-  const btn = document.getElementById('btn-compare');
-  const isVis = panel.classList.toggle('visible');
-  btn.classList.toggle('active', isVis);
-  if (isVis) buildCompareTable();
+function hideSatPopup() {
+  if (_satPopup) _satPopup.classList.remove('show');
+}
+window.addEventListener('mousemove', e => {
+  if (_satPopup && _satPopup.classList.contains('show')) {
+    _satPopup.style.left = e.clientX + 'px';
+    _satPopup.style.top  = e.clientY + 'px';
+  }
 });
 
-// ---- KEYBOARD SHORTCUTS ADDITIONS ----
-window.addEventListener('keydown', (e) => {
-  const activeTag = document.activeElement ? document.activeElement.tagName : '';
-  const isTyping = activeTag === 'INPUT' || activeTag === 'TEXTAREA';
-  if (isTyping) return;
-  // ? → hotkeys
-  if (e.key === '?' || e.key === '/') {
-    document.getElementById('hotkeys-overlay').classList.toggle('visible');
-  }
-  // C → compare
-  if (e.key === 'c' || e.key === 'C') {
-    document.getElementById('btn-compare').click();
-  }
-  // D → dwarf planets toggle
-  if (e.key === 'd' || e.key === 'D') {
-    document.getElementById('btn-dwarfs').click();
-  }
-  // Esc → close overlays
-  if (e.key === 'Escape') {
-    document.getElementById('hotkeys-overlay').classList.remove('visible');
-    document.getElementById('compare-panel').classList.remove('visible');
-    document.getElementById('btn-compare').classList.remove('active');
-  }
-});
+// ---- FIX 3: EDU TOOLBAR ----
+let eduToolbarOpen = false;
+const _eduBtn = document.getElementById('btn-edu');
+const _eduBar = document.getElementById('edu-toolbar');
+if (_eduBtn && _eduBar) {
+  _eduBtn.addEventListener('click', () => {
+    eduToolbarOpen = !eduToolbarOpen;
+    _eduBar.classList.toggle('visible', eduToolbarOpen);
+    _eduBtn.classList.toggle('active', eduToolbarOpen);
+  });
+  // Hide toolbar when UI is hidden
+  const _origReturnToOverview = returnToOverview;
+  returnToOverview = function() {
+    _origReturnToOverview();
+    // edu toolbar stays visible in overview
+  };
+}
 
 // ---- DWARF PLANETS ----
-let dwarfPlanetsVisible = false;
-const DWARF_PLANETS = [
-  {id:'pluto',  name:'Плутон',  r:390, size:1.4, color:0xb09898, speed:0.000035, angle:Math.random()*Math.PI*2},
-  {id:'ceres',  name:'Церера',  r:160, size:0.9, color:0xa0a080, speed:0.000190, angle:Math.random()*Math.PI*2},
-  {id:'eris',   name:'Эрида',   r:440, size:1.3, color:0xd0d0d0, speed:0.000028, angle:Math.random()*Math.PI*2},
+let dwarfVisible = false;
+const DWARFS = [
+  { id:'pluto',  name:'Плутон',  r:380, s:1.4, c:0xb09898, spd:0.000032, a:Math.random()*Math.PI*2 },
+  { id:'ceres',  name:'Церера',  r:162, s:0.9, c:0xa0a080, spd:0.000185, a:Math.random()*Math.PI*2 },
+  { id:'eris',   name:'Эрида',   r:430, s:1.3, c:0xd0d0d0, spd:0.000024, a:Math.random()*Math.PI*2 },
+  { id:'makemake',name:'Макемаке',r:410, s:1.1, c:0xc8b090, spd:0.000027, a:Math.random()*Math.PI*2 },
 ];
-const dwarfMeshes = [];
-const dwarfOrbitLines = [];
-
-function buildDwarfPlanets() {
-  DWARF_PLANETS.forEach(dp => {
-    // Orbit line
-    const oGeo = new THREE.RingGeometry(dp.r - 0.12, dp.r + 0.12, 128);
-    const oMat = new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:0.04, side:THREE.DoubleSide, depthWrite:false});
-    const oMesh = new THREE.Mesh(oGeo, oMat);
-    oMesh.rotation.x = -Math.PI/2;
-    oMesh.visible = false;
-    scene.add(oMesh);
-    dwarfOrbitLines.push(oMesh);
-    // Planet
-    const geo = new THREE.SphereGeometry(dp.size, 32, 32);
-    const mat = new THREE.MeshPhongMaterial({color:dp.color, shininess:2});
-    const mesh = new THREE.Mesh(geo, mat);
-    mesh.position.set(Math.cos(dp.angle)*dp.r, 0, Math.sin(dp.angle)*dp.r);
-    mesh.visible = false;
-    scene.add(mesh);
-    dwarfMeshes.push({mesh, ...dp});
-  });
-}
-
-buildDwarfPlanets();
-
-document.getElementById('btn-dwarfs').addEventListener('click', () => {
-  dwarfPlanetsVisible = !dwarfPlanetsVisible;
-  document.getElementById('btn-dwarfs').classList.toggle('active', dwarfPlanetsVisible);
-  dwarfMeshes.forEach((dm, i) => {
-    dm.mesh.visible = dwarfPlanetsVisible;
-    dwarfOrbitLines[i].visible = dwarfPlanetsVisible;
-  });
+const dwarfObjs = DWARFS.map(dp => {
+  const orb = new THREE.Mesh(new THREE.RingGeometry(dp.r-.12,dp.r+.12,128), new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.04,side:THREE.DoubleSide,depthWrite:false}));
+  orb.rotation.x = -Math.PI/2; orb.visible = false; scene.add(orb);
+  const mesh = new THREE.Mesh(new THREE.SphereGeometry(dp.s,32,32), new THREE.MeshPhongMaterial({color:dp.c,shininess:2}));
+  mesh.position.set(Math.cos(dp.a)*dp.r, 0, Math.sin(dp.a)*dp.r);
+  mesh.visible = false; scene.add(mesh);
+  return { ...dp, mesh, orb };
 });
 
-// Animate dwarf planets (hooked into existing RAF via monkey-patching)
-(function hookDwarfAnimation() {
-  const origAnimate = window.animate || animate;
-  function dwarfTick() {
-    if (!dwarfPlanetsVisible) return;
-    const delta = clock.getDelta ? 0.016 : 0.016;
-    dwarfMeshes.forEach((dm) => {
-      dm.angle += dm.speed * speedMultiplier * 60 * 0.016;
-      dm.mesh.position.set(Math.cos(dm.angle)*dm.r, 0, Math.sin(dm.angle)*dm.r);
-      dm.mesh.rotation.y += 0.003;
-    });
-  }
-  // Patch into RAF loop
-  const rawAnimFn = animate;
-  window.dwarfTick = dwarfTick;
-})();
+function toggleDwarfs() {
+  dwarfVisible = !dwarfVisible;
+  dwarfObjs.forEach(o => { o.mesh.visible = dwarfVisible; o.orb.visible = dwarfVisible; });
+  const b1 = document.getElementById('edu-btn-dwarfs');
+  if (b1) b1.classList.toggle('active', dwarfVisible);
+}
 
 // ---- HALLEY'S COMET ----
-(function buildHalleysComet() {
-  // Halley: a=17.8 AU, e=0.967, scaled
-  const a = 260;  // semi-major axis (visual units)
-  const e = 0.967;
-  const b = a * Math.sqrt(1 - e*e);
-  const c = a * e; // focus offset
+let cometVisible = false;
+const _cometA = 260, _cometE = 0.967;
+const _cometB = _cometA * Math.sqrt(1-_cometE*_cometE);
+const _cometC = _cometA * _cometE;
+const _cometNucleus = new THREE.Mesh(new THREE.SphereGeometry(1.1,16,16), new THREE.MeshBasicMaterial({color:0xd0d8e0}));
+_cometNucleus.visible = false; scene.add(_cometNucleus);
+const _cometTailGeo = new THREE.BufferGeometry();
+const _cometTailPos = new Float32Array(100*3);
+_cometTailGeo.setAttribute('position', new THREE.BufferAttribute(_cometTailPos,3));
+const _cometTail = new THREE.Points(_cometTailGeo, new THREE.PointsMaterial({color:0xb0e0ff,size:1.4,transparent:true,opacity:.45,depthWrite:false,blending:THREE.AdditiveBlending}));
+_cometTail.visible = false; scene.add(_cometTail);
+const _cometOrbitPts = [];
+for (let i=0;i<=200;i++) { const t=(i/200)*Math.PI*2; _cometOrbitPts.push(new THREE.Vector3(_cometA*Math.cos(t)-_cometC, 0, _cometB*Math.sin(t))); }
+const _cometOrbitLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints(_cometOrbitPts), new THREE.LineBasicMaterial({color:0x3366aa,transparent:true,opacity:.18}));
+_cometOrbitLine.visible = false; scene.add(_cometOrbitLine);
+let _cometAngle = 0;
 
-  // Comet nucleus
-  const nucleusGeo = new THREE.SphereGeometry(1.0, 16, 16);
-  const nucleusMat = new THREE.MeshBasicMaterial({color: 0xd0d8e0});
-  const nucleus = new THREE.Mesh(nucleusGeo, nucleusMat);
-  nucleus.visible = false;
-  scene.add(nucleus);
-
-  // Tail (sprite-like particles)
-  const tailCount = 80;
-  const tailGeo = new THREE.BufferGeometry();
-  const tailPos = new Float32Array(tailCount * 3);
-  tailGeo.setAttribute('position', new THREE.BufferAttribute(tailPos, 3));
-  const tailMat = new THREE.PointsMaterial({color:0xc0e8ff, size:1.2, transparent:true, opacity:0.45, depthWrite:false, blending:THREE.AdditiveBlending});
-  const tail = new THREE.Points(tailGeo, tailMat);
-  tail.visible = false;
-  scene.add(tail);
-
-  // Orbit line
-  const orbitPts = [];
-  for (let i = 0; i <= 180; i++) {
-    const t = (i / 180) * Math.PI * 2;
-    orbitPts.push(new THREE.Vector3(a*Math.cos(t) - c, 0, b*Math.sin(t)));
+function toggleComet() {
+  cometVisible = !cometVisible;
+  _cometNucleus.visible = cometVisible;
+  _cometTail.visible = cometVisible;
+  _cometOrbitLine.visible = cometVisible;
+  const b = document.getElementById('edu-btn-comet');
+  if (b) b.classList.toggle('active', cometVisible);
+}
+function tickComet() {
+  if (!cometVisible) return;
+  const dist = new THREE.Vector3(_cometNucleus.position.x, 0, _cometNucleus.position.z).length();
+  const boost = 1 + Math.max(0, (400-dist)/400) * 5;
+  _cometAngle += 0.0003 * boost * speedMultiplier;
+  if (_cometAngle > Math.PI*2) _cometAngle -= Math.PI*2;
+  const nx = _cometA*Math.cos(_cometAngle)-_cometC, nz = _cometB*Math.sin(_cometAngle);
+  _cometNucleus.position.set(nx,0,nz);
+  const ds = new THREE.Vector3(-nx,0,-nz).normalize();
+  for (let i=0;i<100;i++) {
+    const t=i/100, sp=(Math.random()-.5)*3*t;
+    _cometTailPos[i*3]   = nx+ds.x*t*45+sp;
+    _cometTailPos[i*3+1] = (Math.random()-.5)*1.5*t;
+    _cometTailPos[i*3+2] = nz+ds.z*t*45+sp;
   }
-  const orbitCurve = new THREE.BufferGeometry().setFromPoints(orbitPts);
-  const orbitMat = new THREE.LineBasicMaterial({color:0x4488aa, transparent:true, opacity:0.20});
-  const orbitLine = new THREE.Line(orbitCurve, orbitMat);
-  orbitLine.visible = false;
-  scene.add(orbitLine);
+  _cometTailGeo.attributes.position.needsUpdate = true;
+  _cometTail.material.opacity = Math.max(.15, .3+(1-dist/400)*.5);
+}
 
-  let cometAngle = 0;
-  let cometVisible = false;
+// ---- COMPARE PANEL ----
+const CMP_ROWS = [
+  ['Диаметр','diameter'],['Температура','temp'],['Сутки','day'],
+  ['Гравитация','gravity'],['Масса','mass'],['Плотность','density'],
+  ['Наклон оси','axialTilt'],['Спутников','moons'],
+];
+function buildCompare() {
+  const aId = document.getElementById('compare-a').value;
+  const bId = document.getElementById('compare-b').value;
+  const pA = PLANETS.find(p=>p.id===aId), pB = PLANETS.find(p=>p.id===bId);
+  if (!pA||!pB) return;
+  const tbl = document.getElementById('compare-table');
+  let h = `<thead><tr><th></th><th>${pA.name}</th><th>${pB.name}</th></tr></thead><tbody>`;
+  CMP_ROWS.forEach(([label,key],i) => {
+    h += `<tr><td>${label}</td><td>${pA.facts[key]||'—'}</td><td>${pB.facts[key]||'—'}</td></tr>`;
+  });
+  tbl.innerHTML = h + '</tbody>';
+}
+function closeCompare() {
+  document.getElementById('compare-panel').classList.remove('visible');
+  const b = document.getElementById('edu-btn-compare');
+  if (b) b.classList.remove('active');
+}
+document.getElementById('compare-a').addEventListener('change', buildCompare);
+document.getElementById('compare-b').addEventListener('change', buildCompare);
+buildCompare();
 
-  window.toggleComet = function() {
-    cometVisible = !cometVisible;
-    nucleus.visible = cometVisible;
-    tail.visible = cometVisible;
-    orbitLine.visible = cometVisible;
-    document.getElementById('btn-comet').classList.toggle('active', cometVisible);
-  };
+// ---- BUTTON WIRING ----
+document.getElementById('edu-btn-dwarfs').addEventListener('click', toggleDwarfs);
+document.getElementById('edu-btn-comet').addEventListener('click', toggleComet);
+document.getElementById('edu-btn-compare').addEventListener('click', () => {
+  const p = document.getElementById('compare-panel');
+  const isVis = p.classList.toggle('visible');
+  document.getElementById('edu-btn-compare').classList.toggle('active', isVis);
+  if (isVis) buildCompare();
+});
+document.getElementById('edu-btn-hotkeys').addEventListener('click', () => {
+  document.getElementById('hotkeys-overlay').classList.toggle('visible');
+});
 
-  window.tickComet = function(delta) {
-    if (!cometVisible) return;
-    // speed varies by distance (Kepler-like)
-    const distFromSun = new THREE.Vector3(nucleus.position.x, 0, nucleus.position.z).length();
-    const baseSpeed = 0.0004;
-    const speedBoost = 1 + Math.max(0, (400-distFromSun)/400) * 6;
-    cometAngle += baseSpeed * speedBoost * speedMultiplier;
-    if (cometAngle > Math.PI * 2) cometAngle -= Math.PI * 2;
+// ---- KEYBOARD SHORTCUTS ----
+window.addEventListener('keydown', e => {
+  const tag = document.activeElement?.tagName;
+  if (tag==='INPUT'||tag==='TEXTAREA') return;
+  switch(e.key) {
+    case '?': case '/': document.getElementById('hotkeys-overlay').classList.toggle('visible'); break;
+    case 'c': case 'C': document.getElementById('edu-btn-compare').click(); break;
+    case 'd': case 'D': toggleDwarfs(); break;
+    case 'k': case 'K': toggleComet(); break;
+    case 'Escape':
+      document.getElementById('hotkeys-overlay').classList.remove('visible');
+      document.getElementById('compare-panel').classList.remove('visible');
+      break;
+  }
+});
 
-    const nx = a * Math.cos(cometAngle) - c;
-    const nz = b * Math.sin(cometAngle);
-    nucleus.position.set(nx, 0, nz);
-
-    // Tail points away from Sun
-    const dirToSun = new THREE.Vector3(-nx, 0, -nz).normalize();
-    const tailPositions = tail.geometry.attributes.position.array;
-    for (let i = 0; i < tailCount; i++) {
-      const t = (i / tailCount);
-      const spread = (Math.random() - 0.5) * 3 * t;
-      const spreadZ = (Math.random() - 0.5) * 3 * t;
-      tailPositions[i*3]   = nx + dirToSun.x * t * 40 + spread;
-      tailPositions[i*3+1] = (Math.random()-0.5) * 1.5 * t;
-      tailPositions[i*3+2] = nz + dirToSun.z * t * 40 + spreadZ;
-    }
-    tail.geometry.attributes.position.needsUpdate = true;
-    tailMat.opacity = 0.3 + (1-distFromSun/400) * 0.4;
-  };
-})();
-
-// ---- PATCH ANIMATE TO INCLUDE NEW TICKS ----
-const _origAnimFn = animate;
-(function patchAnimate() {
-  // We'll hook into requestAnimationFrame via a wrapper
+// ---- ANIMATE DWARF PLANETS + COMET ----
+(function patchRAF() {
   const rAF = window.requestAnimationFrame;
-  let lastDelta = 0;
   window.requestAnimationFrame = function(cb) {
     return rAF(function(ts) {
-      const delta = (ts - lastDelta) / 1000;
-      lastDelta = ts;
-      if (window.dwarfTick) window.dwarfTick();
-      if (window.tickComet) window.tickComet(Math.min(delta, 0.05));
+      dwarfObjs.forEach(dp => {
+        if (!dwarfVisible) return;
+        dp.a += dp.spd * speedMultiplier * 1;
+        dp.mesh.position.set(Math.cos(dp.a)*dp.r, 0, Math.sin(dp.a)*dp.r);
+        dp.mesh.rotation.y += 0.004;
+      });
+      tickComet();
       cb(ts);
     });
   };
 })();
-
 </script>
-<!-- Planet Compare Panel -->
+<!-- SAT POPUP -->
+<div id="sat-popup">
+  <div id="sat-popup-inner">
+    <div class="sat-popup-head">
+      <span class="sat-popup-icon" id="sat-icon">🛸</span>
+      <div>
+        <div class="sat-popup-name" id="sat-name">—</div>
+        <div class="sat-popup-agency" id="sat-agency">—</div>
+      </div>
+    </div>
+    <div class="sat-popup-orbit" id="sat-orbit">—</div>
+    <div class="sat-popup-desc" id="sat-desc">—</div>
+    <div id="sat-tag" class="sat-popup-tag sat-tag-leo"></div>
+  </div>
+</div>
+
+<!-- COMPARE PANEL -->
 <div id="compare-panel">
-  <div class="compare-title">📊 Сравнение планет</div>
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <div class="compare-title">📊 Сравнение планет</div>
+    <button class="compare-close-btn" onclick="closeCompare()">Закрыть ✕</button>
+  </div>
   <div class="compare-selects">
     <select class="compare-select" id="compare-a">
       <option value="mercury">Меркурий</option>
@@ -3838,7 +3989,7 @@ const _origAnimFn = animate;
       <option value="uranus">Уран</option>
       <option value="neptune">Нептун</option>
     </select>
-    <span class="compare-vs">VS</span>
+    <span class="compare-vs">vs</span>
     <select class="compare-select" id="compare-b">
       <option value="mercury">Меркурий</option>
       <option value="venus">Венера</option>
@@ -3851,24 +4002,23 @@ const _origAnimFn = animate;
     </select>
   </div>
   <table class="compare-table" id="compare-table"></table>
-  <button class="compare-close" onclick="document.getElementById('compare-panel').classList.remove('visible');document.getElementById('btn-compare').classList.remove('active');">Закрыть</button>
 </div>
 
-<!-- Hotkeys Overlay -->
+<!-- HOTKEYS OVERLAY -->
 <div id="hotkeys-overlay">
   <div id="hotkeys-box">
     <div class="hotkeys-title">⌨️ Горячие клавиши</div>
     <div class="hotkeys-grid">
-      <span class="hk-key">1 – 8</span><span class="hk-desc">Перейти к планете</span>
-      <span class="hk-key">← / →</span><span class="hk-desc">Предыдущая / Следующая</span>
-      <span class="hk-key">Esc</span><span class="hk-desc">Вернуться к обзору</span>
+      <span class="hk-key">1–8</span><span class="hk-desc">Перейти к планете по номеру</span>
+      <span class="hk-key">← →</span><span class="hk-desc">Предыдущая / следующая планета</span>
+      <span class="hk-key">Esc</span><span class="hk-desc">Вернуться к обзору Солнечной системы</span>
       <span class="hk-key">F</span><span class="hk-desc">Полноэкранный режим</span>
-      <span class="hk-key">Alt+T</span><span class="hk-desc">Панель учителя</span>
-      <span class="hk-key">Alt+R</span><span class="hk-desc">Реальный масштаб</span>
-      <span class="hk-key">D</span><span class="hk-desc">Карликовые планеты</span>
-      <span class="hk-key">C</span><span class="hk-desc">Сравнить планеты</span>
-      <span class="hk-key">Scroll</span><span class="hk-desc">Навигация / Зум</span>
-      <span class="hk-key">?</span><span class="hk-desc">Эта подсказка</span>
+      <span class="hk-key">D</span><span class="hk-desc">Показать карликовые планеты</span>
+      <span class="hk-key">K</span><span class="hk-desc">Комета Галлея</span>
+      <span class="hk-key">C</span><span class="hk-desc">Сравнение планет</span>
+      <span class="hk-key">Alt+T</span><span class="hk-desc">Режим учителя (управление туром)</span>
+      <span class="hk-key">Alt+R</span><span class="hk-desc">Реальный масштаб Солнечной системы</span>
+      <span class="hk-key">?</span><span class="hk-desc">Эта панель с подсказками</span>
     </div>
     <button class="hotkeys-close" onclick="document.getElementById('hotkeys-overlay').classList.remove('visible')">Закрыть</button>
   </div>
