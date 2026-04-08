@@ -2067,6 +2067,10 @@ function syncDwarfGlobals() {
   if (typeof _dwarfVis !== 'undefined') dwarfVis = _dwarfVis;
   if (typeof _dwarfObjs !== 'undefined' && Array.isArray(_dwarfObjs)) dwarfObjs = _dwarfObjs;
 }
+
+  let dwarfVis = false;
+let dwarfObjs = [];
+  
 function tickRaycast(now) {
   if (now - lastRaycastTime < 60) return;
   lastRaycastTime = now;
