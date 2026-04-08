@@ -145,7 +145,12 @@ html, body {
   0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
   40% { transform: scale(1); opacity: 1; }
 }
-
+  
+@keyframes star-twinkle {
+  0%   { opacity: 0.55; }
+  50%  { opacity: 0.85; }
+  100% { opacity: 0.55; }
+}
 /* ===== HERO ===== */
 #hero {
   position: fixed;
@@ -1299,6 +1304,20 @@ html, body {
     min-width: auto;
   }
 }
+  .stars-twinkle-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.12) 0, transparent 45%),
+    radial-gradient(circle at 80% 30%, rgba(255,255,255,0.08) 0, transparent 55%),
+    radial-gradient(circle at 30% 80%, rgba(255,255,255,0.07) 0, transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(255,255,255,0.06) 0, transparent 40%);
+  mix-blend-mode: screen;
+  opacity: 0.7;
+  animation: star-twinkle 6s ease-in-out infinite alternate;
+}
 </style>
 /* SOLARIS EDU v3 */
 </style>
@@ -1307,7 +1326,7 @@ html, body {
 
 <!-- Canvas -->
 <canvas id="c"></canvas>
-
+<div class="stars-twinkle-overlay"></div>
 <!-- Lens Flare -->
 <div id="lens-flare"></div>
 
