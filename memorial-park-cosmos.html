@@ -2317,55 +2317,18 @@ function unsetHover(idx) {
 }
 
 // Click to focus — works in both overview and focus mode
-canvas.addEventListener('click', (e) => {
-  // На мобильных: лёгкие тап-ошибки — не должны перескакивать планету
-  if (isOverview) {
-    // В обзоре — только по реально наведённой планете
-    if (hoveredIndex >= 0) {
-      focusPlanet(hoveredIndex);
-    }
-    return;
-  }
+canvas.addEventListener('click', () => {
 
-  // В режиме фокуса
-  if (!orbitActive) return; // во время перелёта игнорируем клики
-
-  // Пересчёт координат мыши под конкретный клик (а не последний move)
-  const rect = canvas.getBoundingClientRect();
-  const mx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-  const my = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-
-  const meshes = planetMeshes.map(pm => pm.mesh);
-  raycaster.setFromCamera({ x: mx, y: my }, camera);
-  const hits = raycaster.intersectObjects(meshes);
-
-  // Если по пустоте — ничего не делаем
-  if (hits.length === 0) {
-    return;
-  }
-
-  const idx = meshes.indexOf(hits[0].object);
-  if (idx < 0 || idx === focusedIdx) return;
-
-  // Дополнительное «смягчение» на мобильных:
-  // если экран маленький, требуем более точного попадания
-  const isSmallScreen = window.innerWidth <= 768;
-  if (isSmallScreen) {
-    // Проверяем, что клик ближе к центру планеты,
-    // а не где-то по краю/рядом
-    const hitPoint = hits[0].point.clone();
-    const planetPos = planetMeshes[idx].mesh.position.clone();
-    const dist = hitPoint.distanceTo(planetPos);
-
-    // Если клик слишком далеко от центра сферы (примерно > размера планеты * 1.2) — игнорируем
-    const approxRadius = PLANETS[idx].size || 4;
-    if (dist > approxRadius * 1.2) {
-      return;
+  // --- Карликовые планеты: клик ---
+  if (_dwarfVis && typeof _dwarfObjs !== 'undefined') {
+    raycaster.setFromCamera(mouse, camera);
+    const dMeshes = _dwarfObjs.map(d => d.mesh);
+    const dHits = raycaster.intersectObjects(dMeshes);
+    if (dHits.length) {
+      const dObj = _dwarfObjs.find(d => d.mesh === dHits[0].object);
+      if (dObj) { showDwarfInfo(dObj); return; }
     }
   }
-
-  focusPlanet(idx);
-});
 
   // --- Обычные планеты: клик ---
   if (isOverview) {
