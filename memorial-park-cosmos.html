@@ -1214,7 +1214,7 @@ html, body {
     <button class="dp-quiz-btn" id="dp-quiz-btn">🎓 Пройти тест по этой планете</button>
     <div class="dp-sep"></div>
     <div class="dp-timeline">
-      <div class="dp-timeline-label">⏱ Временна́я шкала</div>
+      <div class="dp-timeline-label">🔭 Вид: Экватор ↔ Полюс</div>
       <div class="dp-timeline-row">
         <input type="range" id="timeline-slider" min="-4" max="5" step="0.1" value="0">
         <span id="timeline-year">Сейчас</span>
@@ -1336,8 +1336,7 @@ html, body {
 <div id="compare-panel" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.96);z-index:150;width:min(680px,96vw);background:rgba(3,9,20,.97);backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,.15);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:18px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s,visibility .35s,transform .35s cubic-bezier(.16,1,.3,1);max-height:90vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.7)">
   <div style="display:flex;justify-content:space-between;align-items:center">
     <div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--c-text)">📊 Сравнение планет</div>
-    <button onclick="document.getElementById('compare-panel').style.cssText+='opacity:0;visibility:hidden;pointer-events:none';document.getElementById('edu-btn-compare').classList.remove('active')" style="background:none;border:1px solid var(--c-border);border-radius:6px;padding:7px 18px;cursor:pointer;font-size:12px;color:var(--c-muted);font-family:var(--font-body);transition:var(--transition)">Закрыть ✕</button>
-  </div>
+<button id="compare-close-btn" onclick="closeComparePanel()" style="background:none;border:1px solid var(--c-border);border-radius:6px;padding:7px 18px;cursor:pointer;font-size:12px;color:var(--c-muted);font-family:var(--font-body);transition:var(--transition)">Закрыть ✕</button>  </div>
   <div style="display:flex;gap:12px;align-items:center">
     <select id="compare-a" style="flex:1;padding:9px 13px;border-radius:8px;border:1px solid var(--c-border);background:rgba(5,12,25,.85);color:var(--c-text);font-size:13px;font-family:var(--font-body);outline:none;cursor:pointer">
       <option value="mercury">Меркурий</option><option value="venus">Венера</option>
@@ -1440,14 +1439,14 @@ const NATURAL_SATELLITES = {
 };
 
 const EARTH_ARTIFICIAL_SATELLITES = [
-  { name: 'ISS',        orbit: 6.8,  speed: 2.2,  color: 0xe6edf7, size: 0.09, altitudeBand: 'LEO' },
-  { name: 'Hubble',     orbit: 7.4,  speed: 1.95, color: 0xcfd8dc, size: 0.07, altitudeBand: 'LEO' },
-  { name: 'Starlink-A', orbit: 8.2,  speed: 1.65, color: 0xb0bec5, size: 0.05, altitudeBand: 'LEO' },
-  { name: 'Starlink-B', orbit: 8.5,  speed: 1.60, color: 0xb0bec5, size: 0.05, altitudeBand: 'LEO' },
-  { name: 'GPS',        orbit: 12.5, speed: 0.72, color: 0xffd54f, size: 0.08, altitudeBand: 'MEO' },
-  { name: 'Galileo',    orbit: 13.3, speed: 0.64, color: 0xffca28, size: 0.08, altitudeBand: 'MEO' },
-  { name: 'GeoSat-1',   orbit: 18.5, speed: 0.22, color: 0x81d4fa, size: 0.09, altitudeBand: 'GEO' },
-  { name: 'GeoSat-2',   orbit: 18.5, speed: 0.22, color: 0x4fc3f7, size: 0.09, altitudeBand: 'GEO' }
+  { name: 'ISS',        orbit: 6.8,  speed: 0.38, color: 0xe6edf7, size: 0.09, altitudeBand: 'LEO' },
+  { name: 'Hubble',     orbit: 7.4,  speed: 0.32, color: 0xcfd8dc, size: 0.07, altitudeBand: 'LEO' },
+  { name: 'Starlink-A', orbit: 8.2,  speed: 0.27, color: 0xb0bec5, size: 0.05, altitudeBand: 'LEO' },
+  { name: 'Starlink-B', orbit: 8.5,  speed: 0.25, color: 0xb0bec5, size: 0.05, altitudeBand: 'LEO' },
+  { name: 'GPS',        orbit: 12.5, speed: 0.13, color: 0xffd54f, size: 0.08, altitudeBand: 'MEO' },
+  { name: 'Galileo',    orbit: 13.3, speed: 0.11, color: 0xffca28, size: 0.08, altitudeBand: 'MEO' },
+  { name: 'GeoSat-1',   orbit: 18.5, speed: 0.06, color: 0x81d4fa, size: 0.09, altitudeBand: 'GEO' },
+  { name: 'GeoSat-2',   orbit: 18.5, speed: 0.06, color: 0x4fc3f7, size: 0.09, altitudeBand: 'GEO' }
 ];
 
 const PLANETS = [
@@ -2674,12 +2673,11 @@ function animate() {
     const p = PLANETS[i];
 
     // Self-rotation
-    pm.mesh.rotation.y += p.rotSpeed * delta;
-
-    // Cloud layer (slightly faster)
-    if (pm.clouds) {
-      pm.clouds.rotation.y += p.rotSpeed * delta * 1.12;
-    }
+    pm.mesh.rotation.y += p.rotSpeed * speedMultiplier * delta * 50;
+if (pm.nightMesh) pm.nightMesh.rotation.y = pm.mesh.rotation.y;
+if (pm.clouds) {
+  pm.clouds.rotation.y += p.rotSpeed * speedMultiplier * delta * 1.12 * 50;
+}
 
     // Moon
     if (pm.moon) {
@@ -3957,10 +3955,38 @@ _wire('edu-btn-compare', () => {
 // ---- DWARF PLANETS ----
 let _dwarfVis = false;
 const _DWARFS = [
-  {id:'pluto',  name:'Плутон',   r:385,s:1.4,c:0xb09898,spd:.000032,a:Math.random()*Math.PI*2},
-  {id:'ceres',  name:'Церера',   r:163,s:0.9,c:0xa0a080,spd:.000185,a:Math.random()*Math.PI*2},
-  {id:'eris',   name:'Эрида',    r:428,s:1.3,c:0xd0d0d0,spd:.000024,a:Math.random()*Math.PI*2},
-  {id:'makemake',name:'Макемаке',r:412,s:1.1,c:0xc8b090,spd:.000027,a:Math.random()*Math.PI*2},
+  {
+    id:'pluto', name:'Плутон', r:385, s:1.4, c:0xb09898, spd:.000032,
+    a:Math.random()*Math.PI*2,
+    tagline:'Бывшая планета, ныне — карликовая',
+    descShort:'Плутон — самый известный карликовый мир на краю Солнечной системы.',
+    descLong:'Открыт в 1930 году Клайдом Томбо. В 2006 году переклассифицирован в карликовые планеты. Зонд New Horizons в 2015 году показал горы из водяного льда высотой 3500 м и огромное сердцеобразное плато Томбо. Имеет 5 спутников, крупнейший — Харон.',
+    facts:{diameter:'2 376 км',temp:'−233°C',day:'6.4 земных суток',gravity:'0.62 м/с²',mass:'1.3×10²²кг',density:'1850 кг/м³',axialTilt:'122.5°',moons:'5 (Харон и др.)'},
+  },
+  {
+    id:'ceres', name:'Церера', r:163, s:0.9, c:0xa0a080, spd:.000185,
+    a:Math.random()*Math.PI*2,
+    tagline:'Карлик Главного пояса астероидов',
+    descShort:'Церера — крупнейший объект в поясе астероидов между Марсом и Юпитером.',
+    descLong:'Открыта в 1801 году. Зонд Dawn (2015–2018) обнаружил яркие солевые отложения в кратере Оккатор — вероятно, выходы рапы из подземного океана. Возможно, Церера хранит жидкую воду под поверхностью.',
+    facts:{diameter:'945 км',temp:'−105°C',day:'9.1 часа',gravity:'0.28 м/с²',mass:'9.4×10²⁰кг',density:'2162 кг/м³',axialTilt:'4°',moons:'0'},
+  },
+  {
+    id:'eris', name:'Эрида', r:428, s:1.3, c:0xd0d0d0, spd:.000024,
+    a:Math.random()*Math.PI*2,
+    tagline:'Самая массивная карликовая планета',
+    descShort:'Эрида чуть меньше Плутона по размеру, но на 27% массивнее — это она спровоцировала переклассификацию.',
+    descLong:'Открыта в 2005 году Майклом Брауном. Именно открытие Эриды привело к пересмотру определения планеты в 2006 году. Находится в рассеянном диске — дальней части пояса Койпера. Имеет один спутник — Дисномия.',
+    facts:{diameter:'2326 км',temp:'−243°C',day:'~25.9 часа',gravity:'0.82 м/с²',mass:'1.66×10²²кг',density:'2520 кг/м³',axialTilt:'неизв.',moons:'1 (Дисномия)'},
+  },
+  {
+    id:'makemake', name:'Макемаке', r:412, s:1.1, c:0xc8b090, spd:.000027,
+    a:Math.random()*Math.PI*2,
+    tagline:'Красноватый мир в поясе Койпера',
+    descShort:'Макемаке — один из крупнейших объектов пояса Койпера с характерным красноватым цветом.',
+    descLong:'Открыт в 2005 году, назван в честь бога-творца народа рапа-нуи (острова Пасхи). Красноватый цвет объясняется толинами — органическими веществами, образующимися под действием космического излучения. Имеет один маленький спутник — Mk 2 (MK2).',
+    facts:{diameter:'1430 км',temp:'−239°C',day:'22.5 часа',gravity:'0.5 м/с²',mass:'3.1×10²¹кг',density:'~1700 кг/м³',axialTilt:'неизв.',moons:'1 (MK2)'},
+  },
 ];
 const _dwarfObjs = _DWARFS.map(dp => {
   const orb = new THREE.Mesh(
