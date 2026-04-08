@@ -2067,7 +2067,7 @@ function tickRaycast(now) {
 
   // --- Карликовые планеты: hover ---
   const dLbl = document.getElementById('dwarf-hover-label');
-  if (_dwarfVis && typeof _dwarfObjs !== 'undefined') {
+  if (dwarfVis && typeof _dwarfObjs !== 'undefined') {
     const dMeshes = _dwarfObjs.map(d => d.mesh);
     const dHits = raycaster.intersectObjects(dMeshes);
     if (dHits.length) {
@@ -2131,7 +2131,7 @@ function unsetHover(idx) {
 canvas.addEventListener('click', () => {
 
   // --- Карликовые планеты: клик ---
-  if (_dwarfVis && typeof _dwarfObjs !== 'undefined') {
+  if (dwarfVis && typeof _dwarfObjs !== 'undefined') {
     raycaster.setFromCamera(mouse, camera);
     const dMeshes = _dwarfObjs.map(d => d.mesh);
     const dHits = raycaster.intersectObjects(dMeshes);
@@ -2166,7 +2166,6 @@ let focusedIdx = -1;
 let currentTween = null;
 let orbitActive = false;
 let speedMultiplier = 1;
-let _dwarfVis = false;
   
 // ============================================================
 // FOCUS PLANET (CINEMATIC FLY-IN)
@@ -3997,7 +3996,7 @@ _wire('edu-btn-compare', () => {
 });
 
 // ---- DWARF PLANETS ----
-let _dwarfVis = false;
+let dwarfVis = false;
 const _DWARFS = [
   {
     id:'pluto', name:'Плутон', r:385, s:1.4, c:0xb09898, spd:.000032,
@@ -4048,9 +4047,9 @@ const _dwarfObjs = _DWARFS.map(dp => {
 });
 
 function toggleDwarfs() {
-  _dwarfVis=!_dwarfVis;
-  _dwarfObjs.forEach(o=>{o.mesh.visible=_dwarfVis;o.orb.visible=_dwarfVis;});
-  document.getElementById('edu-btn-dwarfs')?.classList.toggle('active',_dwarfVis);
+  dwarfVis=!dwarfVis;
+  _dwarfObjs.forEach(o=>{o.mesh.visible=dwarfVis;o.orb.visible=dwarfVis;});
+  document.getElementById('edu-btn-dwarfs')?.classList.toggle('active',dwarfVis);
 }
 _wire('edu-btn-dwarfs', toggleDwarfs);
 
@@ -4086,7 +4085,7 @@ function showDwarfInfo(dObj) {
 
 // Проверка клика по карликовым в raycaster (добавить в tickRaycast или clickHandler)
 function checkDwarfClick(event) {
-  if (!_dwarfVis) return false;
+  if (!dwarfVis) return false;
   const rect = canvas.getBoundingClientRect();
   const mx = ((event.clientX - rect.left) / rect.width) * 2 - 1;
   const my = -((event.clientY - rect.top) / rect.height) * 2 + 1;
@@ -4158,7 +4157,7 @@ window.addEventListener('keydown', e => {
 // ---- ANIMATION: use setInterval (reliable) ----
 setInterval(() => {
   _dwarfObjs.forEach(dp => {
-    if (!_dwarfVis) return;
+    if (!dwarfVis) return;
     dp.a += dp.spd * speedMultiplier;
     dp.mesh.position.set(Math.cos(dp.a)*dp.r, 0, Math.sin(dp.a)*dp.r);
     dp.mesh.rotation.y += 0.004;
