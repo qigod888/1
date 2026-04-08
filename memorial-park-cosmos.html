@@ -3749,21 +3749,23 @@ let _curPid = null;
 
 function eduToggle(id) {
   const sec = document.getElementById('edu-' + id);
-  const btn = document.querySelector(`[onclick="eduToggle('${id}')"]`);
-  if (!sec || !btn) return;
+  // Ищем кнопку, которая вызывает eduToggle с этим id (с кавычками или без)
+  const btn = document.querySelector('[onclick*="eduToggle"][onclick*="' + id + '"]');
+  if (!sec) return;
   const open = sec.classList.toggle('open');
-  btn.classList.toggle('open', open);
-  if (open) _eduRefresh(id);
+  if (btn) btn.classList.toggle('open', open);
+  if (open) eduRefresh(id);
 }
 
-function _eduRefresh(id) {
-  if (!_curPid) return;
-  if (id==='weight') _eduWeight(_curPid);
-  if (id==='light')  _eduLight(_curPid);
-  if (id==='atmo')   _eduAtmo(_curPid);
-  if (id==='int')    _eduInt(_curPid);
-  if (id==='miss')   _eduMiss(_curPid);
-}
+function eduRefresh(id) {
+  if (!curPid) {
+    // Попытка восстановить curPid из видимой панели
+    if (typeof focusedIdx !== 'undefined' && focusedIdx >= 0 && window.PLANETS) {
+      curPid = PLANETS[focusedIdx].id;
+    } else {
+      return;
+    }
+  }
 
 function _eduWeight(pid) {
   const g=EDU_G[pid]; if(!g) return;
