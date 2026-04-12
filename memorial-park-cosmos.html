@@ -662,7 +662,64 @@ html, body {
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
+  
+/* SYSTEM ZOOM */
+#system-zoom{
+  position: fixed;
+  top: 62px;
+  right: 22px;
+  z-index: 41;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(5,12,25,0.88);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--c-text);
+  font-size: 11px;
+  letter-spacing: .06em;
+}
 
+#system-zoom.hidden{
+  opacity: 0;
+  pointer-events: none;
+}
+
+.syszoom-label{
+  color: var(--c-muted);
+  text-transform: uppercase;
+}
+
+#system-zoom-slider{
+  width: 150px;
+}
+
+#system-zoom-val{
+  min-width: 42px;
+  text-align: right;
+  color: var(--c-accent);
+  font-family: var(--font-display);
+}
+
+#system-top-btn{
+  background: none;
+  border: 1px solid var(--c-border);
+  color: var(--c-muted);
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 11px;
+  font-family: var(--font-body);
+  transition: var(--transition);
+}
+
+#system-top-btn:hover{
+  color: var(--c-text);
+  border-color: var(--c-border-bright);
+}
+  
 /* ===== SCROLLBAR ===== */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -1212,19 +1269,19 @@ html, body {
 
   /* === МОБИЛЬНАЯ ВЕРСТКА ШАПКИ, СКОРОСТИ И ПАНЕЛИ === */
 @media (max-width: 768px) {
-  #ui-header {
-    top: 10px;
+  #system-zoom{
+    top: 146px;
     left: 10px;
     right: 10px;
-    transform: none;
     width: calc(100vw - 20px);
-    max-width: none;
-    border-radius: 16px;
-    padding: 10px 12px;
-    justify-content: space-between;
-    gap: 10px;
+    justify-content: center;
     flex-wrap: wrap;
   }
+
+  #system-zoom-slider{
+    width: 100%;
+  }
+}
 
   .header-logo {
     font-size: 14px;
@@ -1451,7 +1508,14 @@ html, body {
   </div>
   <button class="speed-btn" id="speed-up">+</button>
 </div>
-
+  
+<div id="system-zoom" class="hidden">
+  <span class="syszoom-label">Масштаб</span>
+  <input id="system-zoom-slider" type="range" min="0" max="100" value="35">
+  <span id="system-zoom-val">35%</span>
+  <button id="system-top-btn" type="button">Вид сверху</button>
+</div>
+  
 <!-- Audio Status -->
 <button id="audio-status">
   <span class="audio-icon">🔇</span>
@@ -2428,13 +2492,45 @@ let focusedIdx = -1;
 let currentTween = null;
 let orbitActive = false;
 let speedMultiplier = 1;
-  
+  let overviewFreeMode = false;
+
+function enableOverviewControls(topView = false) {
+  overviewFreeMode = true;
+  controls.enabled = true;
+  controls.enablePan = false;
+  controls.enableDamping = true;
+  controls.minDistance = 120;
+  controls.maxDistance = 2200;
+  controls.target.set(0, 0, 0);
+
+  if (topView) {
+    gsap.to(camera.position, {
+      x: 0,
+      y: 900,
+      z: 0.01,
+      duration: 1.2,
+      ease: 'power2.inOut',
+      onUpdate: () => camera.lookAt(0, 0, 0)
+    });
+  }
+}
+
+function disableOverviewControls() {
+  overviewFreeMode = false;
+  if (isOverview) {
+    controls.enabled = false;
+    controls.target.set(0, 0, 0);
+  }
+}
 const SIM_DAYS_PER_SEC = 10;
 // ============================================================
 // FOCUS PLANET (CINEMATIC FLY-IN)
 // ============================================================
 function focusPlanet(idx) {
-  if (currentTween) { currentTween.kill(); currentTween = null; }
+  if (currentTween) {
+    currentTween.kill();
+    currentTween = null;
+  }
 
   focusedIdx = idx;
   isOverview = false;
@@ -2444,65 +2540,60 @@ function focusPlanet(idx) {
   const planet = PLANETS[idx];
   const pm = planetMeshes[idx];
 
-  // World position of the planet
   const planetPos = pm.mesh.position.clone();
-  // Adjust for parent if needed
   pm.mesh.getWorldPosition(planetPos);
 
-  // Calculate final camera distance: planet occupies ~17% of screen height
   const fovRad = camera.fov * Math.PI / 180;
-  const finalDist = planet.size / (0.17 * Math.tan(fovRad / 2));
+  const finalDist = planet.size / 0.17 / Math.tan(fovRad / 2);
 
-  // Direction from planet to camera (normalized)
   const dir = new THREE.Vector3().subVectors(camera.position, planetPos).normalize();
-  // Push slightly upward
   dir.y += 0.3;
   dir.normalize();
 
   const finalPos = new THREE.Vector3(
     planetPos.x + dir.x * finalDist,
     planetPos.y + dir.y * finalDist,
-    planetPos.z + dir.z * finalDist,
+    planetPos.z + dir.z * finalDist
   );
 
-  // Mid point: arc high above ecliptic
-   const pmref = pm;
+  const midX = (camera.position.x + planetPos.x) / 2;
+  const midZ = (camera.position.z + planetPos.z) / 2;
+  const highY = Math.max(camera.position.y, 180);
 
-// Плавная дуга: средняя точка слегка приподнята пропорционально расстоянию
-const startPos = camera.position.clone();
-const dist = startPos.distanceTo(finalPos);
-const midPos = new THREE.Vector3(
-  (startPos.x + finalPos.x) / 2,
-  Math.max(startPos.y, finalPos.y) + dist * 0.12,  // мягкий подъём ~12% от расстояния
-  (startPos.z + finalPos.z) / 2
-);
-const curve = new THREE.CatmullRomCurve3([startPos, midPos, finalPos]);
+  const pmref = pm;
 
-const progress = { t: 0 };
-currentTween = gsap.to(progress, {
-  t: 1,
-  duration: 3.5,
-  ease: 'power2.inOut',
-  onUpdate: () => {
-    const p = curve.getPoint(progress.t);
-    camera.position.copy(p);
-    camera.lookAt(pmref.mesh.position);
-    controls.target.lerp(pmref.mesh.position, 0.05);
-  },
-  onComplete: () => {
-    controls.target.copy(pmref.mesh.position);
-    controls.minDistance = planet.size * 1.4;
-    controls.maxDistance = planet.size * 12;
-    controls.enabled = true;
-    orbitActive = true;
-    currentTween = null;
-  }
-});
+  currentTween = gsap.timeline({
+    onComplete: () => {
+      const livePos = pmref.mesh.position.clone();
+      controls.target.copy(livePos);
+      controls.minDistance = planet.size * 1.4;
+      controls.maxDistance = planet.size * 12;
+      controls.enabled = true;
+      orbitActive = true;
+      currentTween = null;
+    }
+  })
+  .to(camera.position, {
+    x: midX,
+    y: highY,
+    z: midZ,
+    duration: 1.5,
+    ease: 'power1.inOut',
+    onUpdate: () => camera.lookAt(pmref.mesh.position)
+  })
+  .to(camera.position, {
+    x: finalPos.x,
+    y: finalPos.y,
+    z: finalPos.z,
+    duration: 2.2,
+    ease: 'expo.out',
+    onUpdate: () => camera.lookAt(pmref.mesh.position)
+  });
 
-  // Update UI
   showDetailPanel(idx);
   showFocusUI(idx);
   updateNavActive(idx);
+  updateSystemZoomUI();
   playPlanetAudio(idx);
 }
 
@@ -2533,7 +2624,28 @@ function returnToOverview() {
   hideFocusUI();
   updateNavActive(-1);
 }
+  
+const origShowFocusUI = showFocusUI;
+showFocusUI = function(idx) {
+  origShowFocusUI(idx);
+  updateSystemZoomUI();
+};
 
+const origHideFocusUI = hideFocusUI;
+hideFocusUI = function() {
+  origHideFocusUI();
+  updateSystemZoomUI();
+};
+
+const origReturnToOverview2 = returnToOverview;
+returnToOverview = function() {
+  origReturnToOverview2();
+  setTimeout(() => {
+    updateSystemZoomUI();
+    disableOverviewControls();
+    if (systemZoomSlider) applySystemZoom(parseFloat(systemZoomSlider.value || 35));
+  }, 2600);
+};
 // ============================================================
 // UI HELPERS
 // ============================================================
@@ -2733,6 +2845,47 @@ document.getElementById('speed-up').addEventListener('click', () => {
   speedIdx = Math.min(speedIdx + 1, SPEED_STEPS.length - 1);
   updateSpeed();
 });
+
+  const systemZoom = document.getElementById('system-zoom');
+const systemZoomSlider = document.getElementById('system-zoom-slider');
+const systemZoomVal = document.getElementById('system-zoom-val');
+const systemTopBtn = document.getElementById('system-top-btn');
+
+function updateSystemZoomUI() {
+  if (!systemZoom) return;
+  if (isOverview) systemZoom.classList.remove('hidden');
+  else systemZoom.classList.add('hidden');
+}
+
+function applySystemZoom(val) {
+  const t = val / 100;
+  const dist = 220 + (1 - t) * 1180;
+
+  if (!overviewFreeMode) enableOverviewControls(false);
+
+  const dir = camera.position.clone().sub(controls.target);
+  if (dir.lengthSq() < 0.0001) dir.set(0, 0.35, 1);
+
+  dir.normalize().multiplyScalar(dist);
+
+  camera.position.copy(controls.target.clone().add(dir));
+  controls.update();
+
+  systemZoomVal.textContent = `${Math.round(val)}%`;
+}
+
+if (systemZoomSlider) {
+  systemZoomSlider.addEventListener('input', function () {
+    applySystemZoom(parseFloat(this.value));
+  });
+}
+
+if (systemTopBtn) {
+  systemTopBtn.addEventListener('click', function () {
+    enableOverviewControls(true);
+  });
+}
+  
 document.getElementById('speed-down').addEventListener('click', () => {
   speedIdx = Math.max(speedIdx - 1, 0);
   updateSpeed();
@@ -4129,7 +4282,11 @@ function _eduWeight(pid) {
   if(sub) sub.textContent=`На Земле: ${(m*9.8).toFixed(0)} Н · g = ${g} м/с²`;
 }
 document.addEventListener('input',e=>{if(e.target.id==='edu-weight-inp'&&_curPid)_eduWeight(_curPid);});
-
+document.addEventListener('wheel', e => {
+  if (e.target && e.target.id === 'edu-weight-inp') {
+    e.stopPropagation();
+  }
+}, { passive: true });
 document.addEventListener('wheel', e => {
   if (e.target && e.target.closest('#detail-panel input, #detail-panel textarea, #detail-panel select')) {
     e.stopPropagation();
