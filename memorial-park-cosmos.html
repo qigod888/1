@@ -3004,6 +3004,7 @@ function animate() {
     earthPmNight.nightMesh.position.copy(earthPmNight.mesh.position);
     earthPmNight.nightMesh.rotation.y = earthPmNight.mesh.rotation.y;
   }
+
   // Sun rotation
   sunMesh.rotation.y += 0.002 * delta;
 
@@ -3011,53 +3012,48 @@ function animate() {
   planetMeshes.forEach((pm, i) => {
     const p = PLANETS[i];
 
-// Симуляционное время в сутках за этот кадр
-const simDays = delta * SIM_DAYS_PER_SEC * speedMultiplier;
+    // Симуляционное время в сутках за этот кадр
+    const simDays = delta * SIM_DAYS_PER_SEC * speedMultiplier;
 
-// Self-rotation — через реальный dayLengthHours (знак = направление)
-if (p.dayLengthHours) {
-  pm.mesh.rotation.y += (2 * Math.PI / (Math.abs(p.dayLengthHours) / 24)) * simDays * Math.sign(p.dayLengthHours);
-} else {
-  pm.mesh.rotation.y += p.rotSpeed * speedMultiplier * delta * 50;
-}
-if (pm.nightMesh) pm.nightMesh.rotation.y = pm.mesh.rotation.y;
-if (pm.clouds) {
-  pm.clouds.rotation.y += (2 * Math.PI / (Math.abs(p.dayLengthHours || 24) / 24)) * simDays * Math.sign(p.dayLengthHours || 1) * 1.012;
-}
+    // Self-rotation — визуальный rotSpeed, знак из dayLengthHours
+    const rotDir = Math.sign(p.dayLengthHours || 1);
+    pm.mesh.rotation.y += p.rotSpeed * speedMultiplier * delta * 50 * rotDir;
+    if (pm.nightMesh) pm.nightMesh.rotation.y = pm.mesh.rotation.y;
+    if (pm.clouds) {
+      pm.clouds.rotation.y += p.rotSpeed * speedMultiplier * delta * 1.12 * 50 * rotDir;
+    }
 
-// Moon — реальный орбитальный период 27.32 сут
-if (pm.moon) {
-  pm.moonAngle += (2 * Math.PI / 27.32) * simDays;
-  const moonR = p.size * 2.2;
-  const moonX = moonR * Math.cos(pm.moonAngle);
-  const moonZ = moonR * Math.sin(pm.moonAngle);
-  const moonY = 0.2 * moonR * Math.sin(pm.moonAngle * 0.3);
-  pm.moon.position.set(
-    moonX + pm.mesh.position.x,
-    pm.mesh.position.y + moonY,
-    moonZ + pm.mesh.position.z
-  );
-}
+    // Moon — реальный орбитальный период 27.32 сут
+    if (pm.moon) {
+      pm.moonAngle += (2 * Math.PI / 27.32) * simDays;
+      const moonR = p.size * 2.2;
+      const moonX = moonR * Math.cos(pm.moonAngle);
+      const moonZ = moonR * Math.sin(pm.moonAngle);
+      const moonY = 0.2 * moonR * Math.sin(pm.moonAngle * 0.3);
+      pm.moon.position.set(
+        moonX + pm.mesh.position.x,
+        pm.mesh.position.y + moonY,
+        moonZ + pm.mesh.position.z
+      );
+    }
+
+    // Natural satellites
+    if (pm.naturalSatellites && pm.naturalSatellites.length) {
+      pm.naturalSatellites.forEach((sat) => {
+        sat.angle += sat.speed * delta;
+        const sx = Math.cos(sat.angle) * sat.orbit;
+        const sz = Math.sin(sat.angle) * sat.orbit;
+        const sy = sat.tiltY ? Math.sin(sat.angle * 0.8) * sat.tiltY * sat.orbit : 0;
+        sat.mesh.position.set(
+          pm.mesh.position.x + sx,
+          pm.mesh.position.y + sy,
+          pm.mesh.position.z + sz
+        );
+        sat.mesh.rotation.y += delta * 0.6;
+        sat.orbitLine.position.copy(pm.mesh.position);
+      });
+    }
     
-// Natural satellites
-if (pm.naturalSatellites && pm.naturalSatellites.length) {
-  pm.naturalSatellites.forEach((sat) => {
-    sat.angle += sat.speed * delta;
-    const sx = Math.cos(sat.angle) * sat.orbit;
-    const sz = Math.sin(sat.angle) * sat.orbit;
-    const sy = sat.tiltY ? Math.sin(sat.angle * 0.8) * sat.tiltY * sat.orbit : 0;
-
-    sat.mesh.position.set(
-      pm.mesh.position.x + sx,
-      pm.mesh.position.y + sy,
-      pm.mesh.position.z + sz
-    );
-
-    sat.mesh.rotation.y += delta * 0.6;
-    sat.orbitLine.position.copy(pm.mesh.position);
-  });
-}
-
 // Artificial satellites around Earth
 if (pm.artificialSatellites && pm.artificialSatellites.length) {
   pm.artificialSatellites.forEach((sat) => {
@@ -4289,7 +4285,7 @@ let _eduOpen = false;
 if (_eduBtnMain && _eduBar) {
   _eduBtnMain.addEventListener('click', () => {
     _eduOpen = !_eduOpen;
-    _eduBar.classList.toggle('show', _eduOpen);
+    _eduBar.classList.toggle('visible', _eduOpen);  // ← было 'show', стало 'visible'
     _eduBtnMain.classList.toggle('active', _eduOpen);
   });
 }
