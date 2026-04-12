@@ -1117,6 +1117,8 @@ html, body {
 .dp-section-btn.open .dp-arrow { transform: rotate(180deg); }
 .dp-collapsible { overflow: hidden; max-height: 0; transition: max-height 0.4s cubic-bezier(0.16,1,0.3,1); }
 .dp-collapsible.open { max-height: 600px; }
+.dp-coll { overflow: hidden; max-height: 0; transition: max-height 0.4s cubic-bezier(0.16,1,0.3,1); }
+.dp-coll.open { max-height: 600px; }
 
 /* Weight Calc */
 .dp-weight-input {
@@ -4100,13 +4102,9 @@ function eduToggle(id) {
   btn.classList.toggle('open', open);
   if (open) {
     eduRefresh(id);
-    // Скроллим панель чтобы секция была видна
     setTimeout(() => {
-      const panel = document.getElementById('detail-panel');
-      const btnTop = btn.getBoundingClientRect().top;
-      const panelTop = panel.getBoundingClientRect().top;
-      panel.scrollTop += (btnTop - panelTop) - 12;
-    }, 50);
+      sec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 420);
   }
 }
 
