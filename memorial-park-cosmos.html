@@ -1298,6 +1298,33 @@ html, body {
     text-align: left;
     min-width: auto;
   }
+    /* edu-toolbar mobile */
+  #edu-toolbar {
+    top: 66px;
+    left: 10px;
+    right: 10px;
+    transform: none;
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    border-radius: 14px;
+    padding: 6px 8px;
+    gap: 4px;
+  }
+
+  #edu-toolbar.visible {
+    transform: none;   /* перебивает desktop-вариант translateX(-50%) translateY(0) */
+  }
+
+  #edu-toolbar .edu-sep {
+    display: none;     /* разделители убираем — места нет */
+  }
+
+  .edu-tool-btn {
+    font-size: 10px;
+    padding: 5px 8px;
+    white-space: normal;
+  }
 }
 </style>
 /* SOLARIS EDU v3 */
@@ -2001,6 +2028,7 @@ const pm = {
       const moonGeo = new THREE.SphereGeometry(1.2, 32, 32);
       const moonMat = new THREE.MeshPhongMaterial({ color: 0xAAAAAA, shininess: 1 });
       const moonMesh = new THREE.Mesh(moonGeo, moonMat);
+      moonMesh.userData = { type: 'moon', name: 'Луна', parentId: 'earth' };
       orbitGroup.add(moonMesh);
       pm.moon = moonMesh;
     }
@@ -2330,6 +2358,26 @@ canvas.addEventListener('click', () => {
     }
   }
 
+  // Moon click → fly to Earth
+{
+  const moonList2 = [];
+  const moonIdxMap2 = new Map();
+  planetMeshes.forEach((pm, i) => {
+    if (pm.moon) { moonList2.push(pm.moon); moonIdxMap2.set(pm.moon, i); }
+  });
+  if (moonList2.length) {
+    raycaster.setFromCamera(mouse, camera);
+    const mHits = raycaster.intersectObjects(moonList2);
+    if (mHits.length > 0) {
+      const parentIdx = moonIdxMap2.get(mHits[0].object);
+      if (parentIdx !== undefined && parentIdx !== focusedIdx) {
+        focusPlanet(parentIdx); // летим к Земле
+      }
+      return;
+    }
+  }
+}
+  
   // --- Обычные планеты: клик ---
   if (isOverview) {
     if (hoveredIndex >= 0) focusPlanet(hoveredIndex);
@@ -2392,37 +2440,27 @@ function focusPlanet(idx) {
   );
 
   // Mid point: arc high above ecliptic
-  const midX = (camera.position.x + planetPos.x) / 2;
-  const midZ = (camera.position.z + planetPos.z) / 2;
-  const highY = Math.max(camera.position.y, 180);
+  const pmref = pm;
 
-  // Lock lookAt continuously during flight
-  // Use live reference to planet mesh position for tracking
-  const pm_ref = pm;
-
-  currentTween = gsap.timeline({
-    onComplete: () => {
-      const livePos = pm_ref.mesh.position;
-      controls.target.copy(livePos);
-      controls.minDistance = planet.size * 1.4;
-      controls.maxDistance = planet.size * 12;
-      controls.enabled = true;
-      orbitActive = true;
-      currentTween = null;
-    }
-  })
-  .to(camera.position, {
-    x: midX, y: highY, z: midZ,
-    duration: 1.5,
-    ease: 'power1.in',
-    onUpdate: () => camera.lookAt(pm_ref.mesh.position),
-  })
-  .to(camera.position, {
-    x: finalPos.x, y: finalPos.y, z: finalPos.z,
-    duration: 2.2,
-    ease: 'expo.out',
-    onUpdate: () => camera.lookAt(pm_ref.mesh.position),
-  });
+currentTween = gsap.to(camera.position, {
+  x: finalPos.x,
+  y: finalPos.y,
+  z: finalPos.z,
+  duration: 3.2,
+  ease: 'power2.inOut',
+  onUpdate: () => {
+    camera.lookAt(pmref.mesh.position);
+    controls.target.lerp(pmref.mesh.position, 0.04);
+  },
+  onComplete: () => {
+    controls.target.copy(pmref.mesh.position);
+    controls.minDistance = planet.size * 1.4;
+    controls.maxDistance = planet.size * 12;
+    controls.enabled = true;
+    orbitActive = true;
+    currentTween = null;
+  }
+});
 
   // Update UI
   showDetailPanel(idx);
@@ -4091,6 +4129,25 @@ function tickRaycast(now) {
   }
   if (satPopup) satPopup.style.opacity = '0';
 
+  // Moon hover
+const moonList = [];
+const moonIdxMap = new Map();
+planetMeshes.forEach((pm, i) => {
+  if (pm.moon) { moonList.push(pm.moon); moonIdxMap.set(pm.moon, i); }
+});
+if (moonList.length) {
+  const mHits = raycaster.intersectObjects(moonList);
+  if (mHits.length > 0) {
+    const mObj = mHits[0].object;
+    if (hoverLabel) {
+      hoverLabel.textContent = mObj.userData.name || 'Луна';
+      hoverLabel.classList.add('show');
+    }
+    canvas.style.cursor = 'pointer';
+    return;
+  }
+}
+  
   // Planet hit test
   const meshes = planetMeshes.map(pm => pm.mesh);
   const hits = raycaster.intersectObjects(meshes);
