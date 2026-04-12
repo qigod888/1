@@ -1451,12 +1451,14 @@ html, body {
   </div>
 
   <!-- Speed Controls -->
-  <div id="speed-ctrl" class="hidden">
-    <span>Скорость</span>
-    <button class="speed-btn" id="speed-down">−</button>
+<div id="speed-ctrl" class="hidden">
+  <span>СКОРОСТЬ</span>
+  <button class="speed-btn" id="speed-down">−</button>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:1px">
     <span id="speed-val">1×</span>
-    <button class="speed-btn" id="speed-up">+</button>
+    <span id="speed-days" style="font-size:9px;color:var(--c-muted);letter-spacing:0.05em;white-space:nowrap">≈ 10 сут/сек</span>
   </div>
+  <button class="speed-btn" id="speed-up">+</button>
 </div>
 
 <!-- Audio Status -->
@@ -1672,6 +1674,7 @@ const PLANETS = [
     descLong:'Меркурий — наименьшая планета Солнечной системы. Отсутствие атмосферы означает экстремальные перепады температур: от +430°C днём до −180°C ночью. Кратеры хранят историю миллиардов лет.',
     facts:{diameter:'4 879 км',temp:'+430 / −180°C',day:'58 земных суток',gravity:'3.7 м/с²',mass:'3.3×10²³ кг',density:'5 427 кг/м³',axialTilt:'0.03°',moons:'0'},
     orbitR:50, size:1.8, speed:0.00047, rotSpeed:0.003, glowColor:[0.7,0.63,0.47],
+    orbitPeriodDays:87.97, dayLengthHours:1407.6,
     video:'Меркурий: Опалённый мир'
   },
   {
@@ -1680,6 +1683,7 @@ const PLANETS = [
     descLong:'Венера — самая горячая планета из-за плотной атмосферы CO₂. Давление у поверхности в 90 раз выше земного. Вращается в обратную сторону.',
     facts:{diameter:'12 104 км',temp:'+465°C',day:'243 земных суток',gravity:'8.87 м/с²',mass:'4.87×10²⁴ кг',density:'5 243 кг/м³',axialTilt:'177.4°',moons:'0'},
     orbitR:75, size:4.2, speed:0.00035, rotSpeed:0.002, glowColor:[0.91,0.78,0.48],
+    orbitPeriodDays:224.70, dayLengthHours:-5832.5,
     video:'Венера: Скрытая поверхность'
   },
   {
@@ -1688,6 +1692,7 @@ const PLANETS = [
     descLong:'Третья планета от Солнца — единственное место во Вселенной, где подтверждена жизнь. Жидкая вода, кислородная атмосфера и магнитное поле создали условия для биоразнообразия.',
     facts:{diameter:'12 742 км',temp:'+15°C',day:'24 часа',gravity:'9.8 м/с²',mass:'5.97×10²⁴ кг',density:'5 514 кг/м³',axialTilt:'23.4°',moons:'1 (Луна)'},
     orbitR:100, size:4.5, speed:0.0003, rotSpeed:0.005, glowColor:[0.29,0.56,0.85],
+    orbitPeriodDays:365.25, dayLengthHours:23.93,
     video:'Земля: Голубая точка'
   },
   {
@@ -1696,6 +1701,7 @@ const PLANETS = [
     descLong:'Марс хранит следы древних рек. Олимп — высочайший вулкан Солнечной системы (27 км). Сегодня здесь холодная пустыня с тонкой атмосферой.',
     facts:{diameter:'6 779 км',temp:'−65°C',day:'24.6 часа',gravity:'3.71 м/с²',mass:'6.39×10²³ кг',density:'3 933 кг/м³',axialTilt:'25.2°',moons:'2 (Фобос, Деймос)'},
     orbitR:135, size:2.9, speed:0.00024, rotSpeed:0.005, glowColor:[0.76,0.38,0.23],
+    orbitPeriodDays:686.97, dayLengthHours:24.62,
     video:'Марс: Новые горизонты'
   },
   {
@@ -1704,6 +1710,7 @@ const PLANETS = [
     descLong:'Юпитер — крупнейшая планета. Большое Красное Пятно — шторм длиной 350 лет. Магнитное поле в 20 000 раз сильнее земного.',
     facts:{diameter:'139 820 км',temp:'−110°C',day:'9.9 часа',gravity:'24.79 м/с²',mass:'1.9×10²⁷ кг',density:'1 326 кг/м³',axialTilt:'3.1°',moons:'95'},
     orbitR:195, size:14, speed:0.00013, rotSpeed:0.012, glowColor:[0.78,0.63,0.44],
+    orbitPeriodDays:4332.59, dayLengthHours:9.93,
     video:'Юпитер: Властелин штормов'
   },
   {
@@ -1712,6 +1719,7 @@ const PLANETS = [
     descLong:'Кольца простираются на 282 000 км. Сатурн настолько лёгок по плотности, что мог бы плавать на воде. Ветры достигают 1 800 км/ч.',
     facts:{diameter:'116 460 км',temp:'−140°C',day:'10.7 часа',gravity:'10.44 м/с²',mass:'5.68×10²⁶ кг',density:'687 кг/м³',axialTilt:'26.7°',moons:'146'},
     orbitR:255, size:12, speed:0.0001, rotSpeed:0.011, glowColor:[0.83,0.72,0.46],
+    orbitPeriodDays:10759.2, dayLengthHours:10.66,
     video:'Сатурн: Кольца вечности'
   },
   {
@@ -1720,6 +1728,7 @@ const PLANETS = [
     descLong:'Уран — ледяной гигант с −224°C. Магнитная ось смещена на 59°. Вращается почти «лёжа» из-за столкновения с крупным телом в прошлом.',
     facts:{diameter:'50 724 км',temp:'−195°C',day:'17.2 часа',gravity:'8.69 м/с²',mass:'8.68×10²⁵ кг',density:'1 271 кг/м³',axialTilt:'97.8°',moons:'28'},
     orbitR:310, size:6.5, speed:0.00007, rotSpeed:0.007, glowColor:[0.50,0.83,0.83],
+    orbitPeriodDays:30688.5, dayLengthHours:-17.24,
     video:'Уран: Ледяная бездна'
   },
   {
@@ -1728,10 +1737,28 @@ const PLANETS = [
     descLong:'Нептун в 4.5 млрд км от Земли. Ветры до 2 100 км/ч — сильнейшие в системе. Спутник Тритон вращается в обратном направлении.',
     facts:{diameter:'49 244 км',temp:'−201°C',day:'16.1 часа',gravity:'11.15 м/с²',mass:'1.02×10²⁶ кг',density:'1 638 кг/м³',axialTilt:'28.3°',moons:'16'},
     orbitR:360, size:6.0, speed:0.00005, rotSpeed:0.006, glowColor:[0.23,0.37,0.81],
+    orbitPeriodDays:60182.0, dayLengthHours:16.11,
     video:'Нептун: Синий странник'
   },
 ];
 
+const MOON_DATA = {
+  name: 'Луна',
+  tagline: 'Естественный спутник Земли',
+  descShort: 'Единственный естественный спутник Земли. Оказывает влияние на приливы и отливы. Расстояние до Земли — около 384 400 км.',
+  descLong: 'Луна — пятый по величине спутник в Солнечной системе. Её возраст около 4,5 млрд лет. Поверхность покрыта кратерами, морями застывшей лавы и горными хребтами. Луна всегда повёрнута к Земле одной стороной — это называется приливным захватом. Именно на Луну высадились первые люди в 1969 году в рамках миссии «Аполлон-11».',
+  facts: {
+    diameter: '3 474 км',
+    temp: '−173 / +127 °C',
+    day: '27,3 сут',
+    gravity: '1,62 м/с²',
+    mass: '7,34×10²² кг',
+    density: '3 346 кг/м³',
+    axialTilt: '6,68°',
+    moons: '0'
+  }
+};
+  
 // ============================================================
 // THREE.JS SCENE SETUP
 // ============================================================
@@ -2358,7 +2385,7 @@ canvas.addEventListener('click', () => {
     }
   }
 
-  // Moon click → fly to Earth
+// Moon click → fly to Earth + show Moon panel
 {
   const moonList2 = [];
   const moonIdxMap2 = new Map();
@@ -2370,8 +2397,15 @@ canvas.addEventListener('click', () => {
     const mHits = raycaster.intersectObjects(moonList2);
     if (mHits.length > 0) {
       const parentIdx = moonIdxMap2.get(mHits[0].object);
-      if (parentIdx !== undefined && parentIdx !== focusedIdx) {
-        focusPlanet(parentIdx); // летим к Земле
+      if (parentIdx !== undefined) {
+        if (parentIdx !== focusedIdx) {
+          // Ещё не у Земли — летим, после приземления показываем панель Луны
+          focusPlanet(parentIdx);
+          setTimeout(showMoonPanel, 3800);
+        } else {
+          // Уже у Земли — сразу показываем панель
+          showMoonPanel();
+        }
       }
       return;
     }
@@ -2403,7 +2437,8 @@ let focusedIdx = -1;
 let currentTween = null;
 let orbitActive = false;
 let speedMultiplier = 1;
-
+  
+const SIM_DAYS_PER_SEC = 10;
 // ============================================================
 // FOCUS PLANET (CINEMATIC FLY-IN)
 // ============================================================
@@ -2440,17 +2475,28 @@ function focusPlanet(idx) {
   );
 
   // Mid point: arc high above ecliptic
-  const pmref = pm;
+   const pmref = pm;
 
-currentTween = gsap.to(camera.position, {
-  x: finalPos.x,
-  y: finalPos.y,
-  z: finalPos.z,
-  duration: 3.2,
+// Плавная дуга: средняя точка слегка приподнята пропорционально расстоянию
+const startPos = camera.position.clone();
+const dist = startPos.distanceTo(finalPos);
+const midPos = new THREE.Vector3(
+  (startPos.x + finalPos.x) / 2,
+  Math.max(startPos.y, finalPos.y) + dist * 0.12,  // мягкий подъём ~12% от расстояния
+  (startPos.z + finalPos.z) / 2
+);
+const curve = new THREE.CatmullRomCurve3([startPos, midPos, finalPos]);
+
+const progress = { t: 0 };
+currentTween = gsap.to(progress, {
+  t: 1,
+  duration: 3.5,
   ease: 'power2.inOut',
   onUpdate: () => {
+    const p = curve.getPoint(progress.t);
+    camera.position.copy(p);
     camera.lookAt(pmref.mesh.position);
-    controls.target.lerp(pmref.mesh.position, 0.04);
+    controls.target.lerp(pmref.mesh.position, 0.05);
   },
   onComplete: () => {
     controls.target.copy(pmref.mesh.position);
@@ -2500,6 +2546,9 @@ function returnToOverview() {
 // ============================================================
 // UI HELPERS
 // ============================================================
+// ============================================================
+// UI HELPERS
+// ============================================================
 function showDetailPanel(idx) {
   const p = PLANETS[idx];
   document.getElementById('dp-tagline').textContent = p.tagline;
@@ -2519,29 +2568,51 @@ function showDetailPanel(idx) {
   document.getElementById('f-axialTilt').textContent = f.axialTilt;
   document.getElementById('f-moons').textContent = f.moons;
 
-const majorMoonEl = document.getElementById('dp-major-moons');
-const majorMoons = (NATURAL_SATELLITES[p.id] || []).map(m => m.name);
+  const majorMoonEl = document.getElementById('dp-major-moons');
+  const majorMoons = (NATURAL_SATELLITES[p.id] || []).map(m => m.name);
 
-if (p.id === 'earth') {
-  majorMoons.push('ISS', 'GPS', 'геостационарные спутники');
+  if (p.id === 'earth') {
+    majorMoons.push('ISS', 'GPS', 'геостационарные спутники');
+  }
+
+  if (majorMoons.length) {
+    majorMoonEl.style.display = 'block';
+    majorMoonEl.textContent = 'Ключевые спутники: ' + majorMoons.join(', ');
+  } else {
+    majorMoonEl.style.display = 'none';
+    majorMoonEl.textContent = '';
+  }
+
+  document.getElementById('detail-panel').classList.add('visible');
 }
 
-if (majorMoons.length) {
-  majorMoonEl.style.display = 'block';
-  majorMoonEl.textContent = 'Ключевые спутники: ' + majorMoons.join(', ');
-} else {
-  majorMoonEl.style.display = 'none';
-  majorMoonEl.textContent = '';
-}
-
+function showMoonPanel() {
+  const m = MOON_DATA;
+  document.getElementById('dp-tagline').textContent    = m.tagline;
+  document.getElementById('dp-name').textContent       = m.name;
+  document.getElementById('dp-desc-short').textContent = m.descShort;
+  document.getElementById('dp-desc-long').textContent  = m.descLong;
+  document.getElementById('dp-desc-long').classList.remove('show');
+  document.getElementById('dp-read-more').textContent  = 'Подробнее →';
+  const f = m.facts;
+  document.getElementById('f-diameter').textContent  = f.diameter;
+  document.getElementById('f-temp').textContent      = f.temp;
+  document.getElementById('f-day').textContent       = f.day;
+  document.getElementById('f-gravity').textContent   = f.gravity;
+  document.getElementById('f-mass').textContent      = f.mass;
+  document.getElementById('f-density').textContent   = f.density;
+  document.getElementById('f-axialTilt').textContent = f.axialTilt;
+  document.getElementById('f-moons').textContent     = f.moons;
+  const majorMoonEl = document.getElementById('dp-major-moons');
+  if (majorMoonEl) { majorMoonEl.style.display = 'none'; majorMoonEl.textContent = ''; }
   document.getElementById('detail-panel').classList.add('visible');
 }
 
 function hideDetailPanel() {
   document.getElementById('detail-panel').classList.remove('visible');
 }
-  
-  const dpCloseBtn = document.getElementById('dp-close-btn');
+
+const dpCloseBtn = document.getElementById('dp-close-btn');
 if (dpCloseBtn) {
   dpCloseBtn.addEventListener('click', () => {
     const panel = document.getElementById('detail-panel');
@@ -2554,7 +2625,6 @@ function showFocusUI(idx) {
   document.getElementById('arrow-nav').classList.add('visible');
   document.getElementById('planet-ticker').textContent = String(idx + 1).padStart(2, '0') + '/08';
   document.getElementById('ui-header').classList.add('hidden');
-  // Navigator stays ALWAYS visible after Start — do NOT hide it
   document.getElementById('speed-ctrl').classList.add('hidden');
 }
 
@@ -2562,7 +2632,6 @@ function hideFocusUI() {
   document.getElementById('back-btn').classList.remove('visible');
   document.getElementById('arrow-nav').classList.remove('visible');
   document.getElementById('ui-header').classList.remove('hidden');
-  // Navigator is always visible — no need to show/hide it here
   document.getElementById('speed-ctrl').classList.remove('hidden');
 }
 
@@ -2574,11 +2643,9 @@ function updateNavActive(idx) {
 
 function hideLoader() {
   document.getElementById('loader').classList.add('hidden');
-  // apply all textures
   applySkyTexture();
   applySunTexture();
   applyPlanetTextures();
-  // show hero
   setTimeout(() => {
     document.getElementById('hero').classList.remove('hidden');
   }, 300);
@@ -2662,6 +2729,13 @@ let speedIdx = 3;
 function updateSpeed() {
   speedMultiplier = SPEED_STEPS[speedIdx];
   document.getElementById('speed-val').textContent = speedMultiplier + '×';
+  const dps = SIM_DAYS_PER_SEC * speedMultiplier;
+  const label = dps < 1
+    ? `≈ ${(dps * 24).toFixed(0)} ч/сек`
+    : dps >= 365
+    ? `≈ ${(dps / 365).toFixed(1)} лет/сек`
+    : `≈ ${Number.isInteger(dps) ? dps : dps.toFixed(1)} сут/сек`;
+  document.getElementById('speed-days').textContent = label;
 }
 
 document.getElementById('speed-up').addEventListener('click', () => {
@@ -2672,7 +2746,7 @@ document.getElementById('speed-down').addEventListener('click', () => {
   speedIdx = Math.max(speedIdx - 1, 0);
   updateSpeed();
 });
-
+  
 // ============================================================
 // AUTOTOUR
 // ============================================================
@@ -2937,23 +3011,34 @@ function animate() {
   planetMeshes.forEach((pm, i) => {
     const p = PLANETS[i];
 
-    // Self-rotation
-    pm.mesh.rotation.y += p.rotSpeed * speedMultiplier * delta * 50;
+// Симуляционное время в сутках за этот кадр
+const simDays = delta * SIM_DAYS_PER_SEC * speedMultiplier;
+
+// Self-rotation — через реальный dayLengthHours (знак = направление)
+if (p.dayLengthHours) {
+  pm.mesh.rotation.y += (2 * Math.PI / (Math.abs(p.dayLengthHours) / 24)) * simDays * Math.sign(p.dayLengthHours);
+} else {
+  pm.mesh.rotation.y += p.rotSpeed * speedMultiplier * delta * 50;
+}
 if (pm.nightMesh) pm.nightMesh.rotation.y = pm.mesh.rotation.y;
 if (pm.clouds) {
-  pm.clouds.rotation.y += p.rotSpeed * speedMultiplier * delta * 1.12 * 50;
+  pm.clouds.rotation.y += (2 * Math.PI / (Math.abs(p.dayLengthHours || 24) / 24)) * simDays * Math.sign(p.dayLengthHours || 1) * 1.012;
 }
 
-    // Moon
-    if (pm.moon) {
-      pm.moonAngle += 0.35 * delta;
-      const moonR = p.size * 2.2;
-      const moonX = moonR * Math.cos(pm.moonAngle);
-      const moonZ = moonR * Math.sin(pm.moonAngle);
-      const moonY = 0.2 * moonR * Math.sin(pm.moonAngle * 0.3);
-      pm.moon.position.set(moonX + pm.mesh.position.x, pm.mesh.position.y + moonY, moonZ + pm.mesh.position.z);
-    }
-
+// Moon — реальный орбитальный период 27.32 сут
+if (pm.moon) {
+  pm.moonAngle += (2 * Math.PI / 27.32) * simDays;
+  const moonR = p.size * 2.2;
+  const moonX = moonR * Math.cos(pm.moonAngle);
+  const moonZ = moonR * Math.sin(pm.moonAngle);
+  const moonY = 0.2 * moonR * Math.sin(pm.moonAngle * 0.3);
+  pm.moon.position.set(
+    moonX + pm.mesh.position.x,
+    pm.mesh.position.y + moonY,
+    moonZ + pm.mesh.position.z
+  );
+}
+    
 // Natural satellites
 if (pm.naturalSatellites && pm.naturalSatellites.length) {
   pm.naturalSatellites.forEach((sat) => {
