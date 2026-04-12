@@ -1081,10 +1081,16 @@ html, body {
 .dp-section-btn:hover { color: var(--c-text); }
 .dp-section-btn .dp-arrow { margin-left: auto; font-size: 9px; transition: transform 0.25s; color: var(--c-muted); }
 .dp-section-btn.open .dp-arrow { transform: rotate(180deg); }
-.dp-collapsible { overflow: hidden; max-height: 0; transition: max-height 0.4s cubic-bezier(0.16,1,0.3,1); }
-.dp-collapsible.open { max-height: 600px; }
-.dp-coll { overflow: hidden; max-height: 0; transition: max-height 0.4s cubic-bezier(0.16,1,0.3,1); }
-.dp-coll.open { max-height: 600px; }
+.dp-collapsible,
+.dp-coll {
+  display: none;
+  margin-top: 8px;
+}
+
+.dp-collapsible.open,
+.dp-coll.open {
+  display: block;
+}
 
 /* Weight Calc */
 .dp-weight-input {
@@ -4064,16 +4070,24 @@ function eduToggle(id) {
   const sec = document.getElementById('edu-' + id);
   const btn = document.querySelector('[onclick="eduToggle(\'' + id + '\')"]');
   if (!sec || !btn) return;
-  const open = sec.classList.toggle('open');
-  btn.classList.toggle('open', open);
-  if (open) {
+
+  const wasOpen = sec.classList.contains('open');
+
+  document.querySelectorAll('#detail-panel .dp-coll, #detail-panel .dp-collapsible').forEach(el => {
+    el.classList.remove('open');
+  });
+
+  document.querySelectorAll('#detail-panel .dp-sec-btn, #detail-panel .dp-section-btn').forEach(el => {
+    el.classList.remove('open');
+  });
+
+  if (!wasOpen) {
+    sec.classList.add('open');
+    btn.classList.add('open');
     eduRefresh(id);
-    setTimeout(() => {
-      sec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, 420);
   }
 }
-
+  
 function _eduRefresh(id) {
   if (!_curPid) return;
   if (id==='weight') _eduWeight(_curPid);
