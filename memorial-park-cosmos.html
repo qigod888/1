@@ -3154,25 +3154,36 @@ window.addEventListener('keydown', (e) => {
 // ============================================================
 // MOUSE WHEEL — zoom on planet, navigate between planets in overview
 // ============================================================
-let _wheelDebounce = null;
-window.addEventListener('wheel', (e) => {
-  // Don't intercept scrolling inside UI panels
-  if (e.target && e.target.closest('#detail-panel, #navigator, #tour-bar, #speed-ctrl')) return;
+let wheelDebounce = null;
+
+window.addEventListener('wheel', e => {
+  const t = e.target;
+  const active = document.activeElement;
+
+  const isFormTarget =
+    t.closest('input, textarea, select, [contenteditable="true"]') ||
+    active?.matches?.('input, textarea, select, [contenteditable="true"]');
+
+  const isUiZone =
+    t.closest('#detail-panel, #navigator, #tour-bar, #speed-ctrl, #edu-toolbar, #teacher-panel, #compare-panel, #quiz-overlay, #hotkeys-overlay');
+
+  const isEduZone =
+    t.closest('#edu-sections-wrap, .dp-coll, .dp-sec-btn');
+
+  if (isFormTarget || isUiZone || isEduZone) return;
 
   if (!isOverview && orbitActive && controls.enabled) {
-    // On planet: check if cursor is over the planet mesh vs empty space
     const meshes = planetMeshes.map(pm => pm.mesh);
     raycaster.setFromCamera(mouse, camera);
     const hits = raycaster.intersectObjects(meshes);
+
     if (hits.length > 0) {
-      // Cursor over planet — let OrbitControls handle zoom natively
-      // OrbitControls already processes wheel for zoom; nothing needed here
       return;
     } else {
-      // Cursor on empty space — navigate to prev/next planet
       e.preventDefault();
-      if (_wheelDebounce) return;
-      _wheelDebounce = setTimeout(() => { _wheelDebounce = null; }, 600);
+      if (wheelDebounce) return;
+      wheelDebounce = setTimeout(() => wheelDebounce = null, 600);
+
       if (e.deltaY > 0) {
         const next = (focusedIdx + 1) % PLANETS.length;
         focusPlanet(next);
@@ -3180,20 +3191,22 @@ window.addEventListener('wheel', (e) => {
         const prev = (focusedIdx - 1 + PLANETS.length) % PLANETS.length;
         focusPlanet(prev);
       }
+      return;
     }
-  } else if (isOverview) {
-    // In overview: scroll navigates between planets sequentially
+  }
+
+  if (isOverview) {
     e.preventDefault();
-    if (_wheelDebounce) return;
-    _wheelDebounce = setTimeout(() => { _wheelDebounce = null; }, 700);
-    if (Math.abs(e.deltaY) > 15) {
-      if (e.deltaY > 0) {
-        const next = (focusedIdx < 0 ? 0 : (focusedIdx + 1) % PLANETS.length);
-        focusPlanet(next);
-      } else {
-        const prev = (focusedIdx < 0 ? PLANETS.length - 1 : (focusedIdx - 1 + PLANETS.length) % PLANETS.length);
-        focusPlanet(prev);
-      }
+    if (wheelDebounce) return;
+    wheelDebounce = setTimeout(() => wheelDebounce = null, 700);
+    if (Math.abs(e.deltaY) < 15) return;
+
+    if (e.deltaY > 0) {
+      const next = focusedIdx < 0 ? 0 : (focusedIdx + 1) % PLANETS.length;
+      focusPlanet(next);
+    } else {
+      const prev = focusedIdx < 0 ? PLANETS.length - 1 : (focusedIdx - 1 + PLANETS.length) % PLANETS.length;
+      focusPlanet(prev);
     }
   }
 }, { passive: false });
@@ -4117,6 +4130,12 @@ function _eduWeight(pid) {
 }
 document.addEventListener('input',e=>{if(e.target.id==='edu-weight-inp'&&_curPid)_eduWeight(_curPid);});
 
+document.addEventListener('wheel', e => {
+  if (e.target && e.target.closest('#detail-panel input, #detail-panel textarea, #detail-panel select')) {
+    e.stopPropagation();
+  }
+}, { passive: true });
+  
 function _eduLight(pid) {
   const au=EDU_AU[pid]; if(!au) return;
   const km=au*149597870.7, sec=km/299792;
