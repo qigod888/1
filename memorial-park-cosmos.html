@@ -317,23 +317,26 @@ html, body {
 #detail-panel {
   position: absolute;
   right: 22px;
-  top: 20px;
-  bottom: 20px;
-  transform: translateX(30px);
+  top: 50%;
+  transform: translateY(-50%);
   width: 320px;
-  max-height: none;
-  height: calc(100vh - 40px);
+  background: rgba(5,12,25,0.82);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--c-border);
+  border-radius: 14px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-50%) translateX(30px);
+  transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  pointer-events: none;
+  max-height: calc(100vh - 120px);
   overflow-y: auto;
-  /* все остальные стили без изменений */
 }
 
-#detail-panel.visible {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(0);
-  pointer-events: auto;
-}
-  
   #dp-close-btn {
   position: absolute;
   top: 10px;
@@ -1257,8 +1260,6 @@ html, body {
     left: 10px;
     right: 10px;
     top: 118px;
-    bottom: 10px;
-    height: auto;
     width: auto;
     max-width: none;
     max-height: calc(100vh - 150px);
