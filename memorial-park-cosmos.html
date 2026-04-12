@@ -4103,8 +4103,9 @@ function eduToggle(id) {
   if (open) {
     eduRefresh(id);
     setTimeout(() => {
-      sec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, 420);
+      const panel = document.getElementById('detail-panel');
+      panel.scrollTo({ top: btn.offsetTop - 8, behavior: 'smooth' });
+    }, 450);
   }
 }
 
