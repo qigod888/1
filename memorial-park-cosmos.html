@@ -3025,7 +3025,7 @@ function animate() {
 
     // Moon — реальный орбитальный период 27.32 сут
     if (pm.moon) {
-      pm.moonAngle += (2 * Math.PI / 27.32) * simDays;
+      pm.moonAngle += 0.35 * delta;
       const moonR = p.size * 2.2;
       const moonX = moonR * Math.cos(pm.moonAngle);
       const moonZ = moonR * Math.sin(pm.moonAngle);
@@ -4077,11 +4077,20 @@ let _curPid = null;
 
 function eduToggle(id) {
   const sec = document.getElementById('edu-' + id);
-  const btn = document.querySelector(`[onclick="eduToggle('${id}')"]`);
+  const btn = document.querySelector('[onclick="eduToggle(\'' + id + '\')"]');
   if (!sec || !btn) return;
   const open = sec.classList.toggle('open');
   btn.classList.toggle('open', open);
-  if (open) _eduRefresh(id);
+  if (open) {
+    eduRefresh(id);
+    // Скроллим панель чтобы секция была видна
+    setTimeout(() => {
+      const panel = document.getElementById('detail-panel');
+      const btnTop = btn.getBoundingClientRect().top;
+      const panelTop = panel.getBoundingClientRect().top;
+      panel.scrollTop += (btnTop - panelTop) - 12;
+    }, 50);
+  }
 }
 
 function _eduRefresh(id) {
