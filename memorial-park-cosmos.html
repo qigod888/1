@@ -332,7 +332,8 @@ html, body {
   transform: translateY(-50%) translateX(30px);
   transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1);
   pointer-events: none;
-  max-height: calc(100vh - 80px);
+  height: calc(100vh - 120px);
+  max-height: calc(100vh - 120px);
   overflow-y: auto;
 }
 
@@ -4103,9 +4104,8 @@ function eduToggle(id) {
   if (open) {
     eduRefresh(id);
     setTimeout(() => {
-      const panel = document.getElementById('detail-panel');
-      panel.scrollTo({ top: btn.offsetTop - 8, behavior: 'smooth' });
-    }, 450);
+      sec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 420);
   }
 }
 
