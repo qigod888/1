@@ -2736,7 +2736,101 @@ const TERMS = [
       <li><b>«Цифровое исполнительное производство»</b> — онлайн-работа с приставами.</li>
     </ul>` }
 ];
+// ── Карта секций: id термина → id контейнера в HTML ──
+const SECTION_MAP = {
+  'basics' : 'cards-basics',
+  'equip'  : 'cards-equip',
+  'win'    : 'cards-win',
+  'files'  : 'cards-files',
+  'inet'   : 'cards-inet',
+  'mail'   : 'cards-mail',
+  'chat'   : 'cards-chat',
+  'gov'    : 'cards-gov',
+  'bank'   : 'cards-bank',
+  'sec'    : 'cards-sec',
+  'media'  : 'cards-media',
+  'tech'   : 'cards-tech'
+};
 
+function highlight(text, query){
+  if(!query) return text;
+  const re = new RegExp('('+query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+  return text.replace(re,'<mark class="hl">$1</mark>');
+}
+
+function renderCard(t, query){
+  const termHL   = highlight(t.term, query);
+  const defClean = t.def.replace(/<[^>]+>/g,' ');
+  return `
+    <div class="gl-card"
+         data-cat="${t.cat}"
+         data-term="${t.term.toLowerCase()}"
+         data-def="${defClean.toLowerCase().replace(/"/g,'&quot;')}">
+      <div class="flex items-start justify-between gap-2 flex-wrap">
+        <div class="gl-term">${termHL}</div>
+        <span class="gl-chip ${t.chip}">${t.cat}</span>
+      </div>
+      <div class="gl-def">${t.def}</div>
+    </div>`;
+}
+
+function renderAll(filterCat='', query=''){
+  const q = query.toLowerCase();
+
+  const filtered = TERMS.filter(t => {
+    const matchCat   = !filterCat || filterCat==='all'
+                       || t.cat === filterCat || t.id === filterCat;
+    const matchQuery = !q
+                       || t.term.toLowerCase().includes(q)
+                       || t.def.replace(/<[^>]+>/g,' ').toLowerCase().includes(q);
+    return matchCat && matchQuery;
+  });
+
+  // Группируем по секциям
+  const groups = {};
+  filtered.forEach(t => {
+    if(!groups[t.id]) groups[t.id]=[];
+    groups[t.id].push(t);
+  });
+
+  // Рендерим каждую секцию
+  Object.entries(SECTION_MAP).forEach(([secId, containerId]) => {
+    const container = document.getElementById(containerId);
+    if(!container) return;
+    const section = container.closest('section');
+    const cards   = groups[secId] || [];
+
+    if(cards.length === 0){
+      if(section) section.style.display='none';
+      container.innerHTML='';
+      return;
+    }
+    if(section) section.style.display='';
+    container.innerHTML = cards.map(t => renderCard(t, query)).join('');
+  });
+
+  // Счётчик результатов
+  const resultCount = document.getElementById('result-count');
+  if(resultCount){
+    resultCount.textContent = filtered.length > 0
+      ? `Найдено: ${filtered.length} термин${plural(filtered.length)}`
+      : '';
+  }
+
+  // Общий счётчик «all»
+  const cntAll = document.getElementById('cnt-all');
+  if(cntAll) cntAll.textContent = filtered.length;
+
+  // Пустой стейт
+  const empty = document.getElementById('gl-empty');
+  if(empty) empty.classList.toggle('hidden', filtered.length > 0);
+}
+
+function plural(n){
+  if(n%10===1 && n%100!==11) return '';
+  if(n%10>=2 && n%10<=4 && (n%100<10||n%100>=20)) return 'а';
+  return 'ов';
+}
 // ═══════════════════════════════════════════════════════════════
 // РЕНДЕР КАРТОЧЕК
 // ═══════════════════════════════════════════════════════════════
@@ -2845,509 +2939,113 @@ function renderAll(filter='', query=''){
 // ───── Инициализация после загрузки DOM ─────
 document.addEventListener('DOMContentLoaded', () => {
 
-  // первичный рендер всех карточек
+  // Первичный рендер
   renderAll();
 
   // ── Поиск ──
-  const searchInput = document.getElementById('search-input');
-  const clearBtn    = document.getElementById('search-clear');
-  let   activeFilter = '';
+  const searchInput = document.getElementById('gl-search');
+  let activeFilter  = 'all';
 
-  function doSearch(){
+  function doFilter(){
     const q = searchInput ? searchInput.value.trim() : '';
-    if(clearBtn) clearBtn.style.display = q ? 'flex' : 'none';
     renderAll(activeFilter, q);
-    // сбросить к началу сетки
-    const grid = document.getElementById('glossary-grid');
-    if(grid) grid.scrollIntoView({behavior:'smooth', block:'start'});
   }
 
   if(searchInput){
-    searchInput.addEventListener('input', doSearch);
+    searchInput.addEventListener('input', doFilter);
     searchInput.addEventListener('keydown', e => {
-      if(e.key === 'Escape'){ searchInput.value=''; doSearch(); }
-    });
-  }
-  if(clearBtn){
-    clearBtn.addEventListener('click', () => {
-      searchInput.value='';
-      doSearch();
-      searchInput.focus();
+      if(e.key==='Escape'){ searchInput.value=''; doFilter(); }
     });
   }
 
-  // ── Фильтр-теги (пилюли) ──
-  document.querySelectorAll('.tag-pill').forEach(pill => {
+  // ── Фильтр-пилюли ──
+  document.querySelectorAll('#filter-tags .tag-pill').forEach(pill => {
     pill.addEventListener('click', () => {
-      const val = pill.dataset.filter || '';
-      activeFilter = activeFilter === val ? '' : val;
-      document.querySelectorAll('.tag-pill').forEach(p => p.classList.remove('active'));
-      if(activeFilter) pill.classList.add('active');
-      renderAll(activeFilter, searchInput ? searchInput.value.trim() : '');
+      document.querySelectorAll('#filter-tags .tag-pill').forEach(p=>p.classList.remove('active'));
+      pill.classList.add('active');
+      activeFilter = pill.dataset.cat || 'all';
+      doFilter();
     });
   });
 
-  // ── Переключатель размера шрифта ──
+  // ── Переключатель шрифта ──
   const fsButtons = document.querySelectorAll('.fs-btn');
   fsButtons.forEach(btn => {
     btn.addEventListener('click', () => {
-      fsButtons.forEach(b => b.classList.remove('active'));
+      fsButtons.forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
-      const size = btn.dataset.size;
+      const zoom = btn.dataset.zoom;
       document.body.classList.remove('zoom-sm','zoom-lg');
-      if(size === 'sm') document.body.classList.add('zoom-sm');
-      if(size === 'lg') document.body.classList.add('zoom-lg');
-      localStorage.setItem('gl-fontsize', size);
+      if(zoom==='sm') document.body.classList.add('zoom-sm');
+      if(zoom==='lg') document.body.classList.add('zoom-lg');
+      localStorage.setItem('gl-fontsize', zoom);
     });
   });
-  // восстановить из localStorage
-  const savedSize = localStorage.getItem('gl-fontsize');
-  if(savedSize){
+  const savedZoom = localStorage.getItem('gl-fontsize');
+  if(savedZoom){
     document.body.classList.remove('zoom-sm','zoom-lg');
-    if(savedSize==='sm') document.body.classList.add('zoom-sm');
-    if(savedSize==='lg') document.body.classList.add('zoom-lg');
-    fsButtons.forEach(b => {
-      b.classList.toggle('active', b.dataset.size === savedSize);
-    });
+    if(savedZoom==='sm') document.body.classList.add('zoom-sm');
+    if(savedZoom==='lg') document.body.classList.add('zoom-lg');
+    fsButtons.forEach(b=>b.classList.toggle('active', b.dataset.zoom===savedZoom));
   }
 
-  // ── Тема: светлая / тёмная ──
-  const themeBtn = document.getElementById('theme-toggle');
-  function applyTheme(dark){
-    document.documentElement.classList.toggle('dark', dark);
-    if(themeBtn){
-      themeBtn.querySelector('.material-symbols-outlined').textContent =
-        dark ? 'light_mode' : 'dark_mode';
-    }
-    localStorage.setItem('gl-theme', dark ? 'dark' : 'light');
+  // ── Кнопка «Наверх» ──
+  const backTop = document.getElementById('back-to-top');
+  window.addEventListener('scroll', ()=>{
+    if(!backTop) return;
+    backTop.classList.toggle('hidden', window.scrollY < 400);
+  },{passive:true});
+  if(backTop){
+    backTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
   }
-  const savedTheme = localStorage.getItem('gl-theme');
-  applyTheme(savedTheme === 'dark');
-  if(themeBtn){
-    themeBtn.addEventListener('click', () => {
-      applyTheme(!document.documentElement.classList.contains('dark'));
+
+  // ── Анимация секций ──
+  const observer = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('v'); observer.unobserve(e.target); } });
+  },{threshold:0.07});
+  document.querySelectorAll('.aon').forEach(el=>observer.observe(el));
+
+  // ── QR-виджет: свернуть/развернуть ──
+  const qrCard   = document.getElementById('qr-card');
+  const qrToggle = document.getElementById('qr-toggle');
+  if(qrToggle && qrCard){
+    qrToggle.addEventListener('click',()=>{
+      qrCard.classList.toggle('collapsed');
     });
   }
 
   // ── Кастомный курсор ──
   const dot  = document.getElementById('cursor-dot');
   const ring = document.getElementById('cursor-ring');
-  let raf;
-  let rx=0, ry=0, tx=0, ty=0;
-  document.addEventListener('mousemove', e => {
-    tx = e.clientX; ty = e.clientY;
+  let raf, rx=0,ry=0,tx=0,ty=0;
+  document.addEventListener('mousemove', e=>{
+    tx=e.clientX; ty=e.clientY;
     if(dot){ dot.style.left=tx+'px'; dot.style.top=ty+'px'; }
-    if(!raf) raf = requestAnimationFrame(animRing);
+    if(!raf) raf=requestAnimationFrame(animRing);
   });
   function animRing(){
-    rx += (tx-rx)*0.12;
-    ry += (ty-ry)*0.12;
+    rx+=(tx-rx)*.12; ry+=(ty-ry)*.12;
     if(ring){ ring.style.left=rx+'px'; ring.style.top=ry+'px'; }
-    raf = null;
-    if(Math.abs(tx-rx)>0.5||Math.abs(ty-ry)>0.5)
-      raf = requestAnimationFrame(animRing);
+    raf=null;
+    if(Math.abs(tx-rx)>.5||Math.abs(ty-ry)>.5) raf=requestAnimationFrame(animRing);
   }
-  document.querySelectorAll('a,button,[role="button"],input,.gl-card,.tag-pill').forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('ch'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('ch'));
+  document.querySelectorAll('a,button,[role="button"],input,.gl-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
   });
 
-  // ── Плавный скролл по якорям навигации ──
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const target = document.getElementById(a.getAttribute('href').slice(1));
-      if(target){
-        e.preventDefault();
-        target.scrollIntoView({behavior:'smooth', block:'start'});
-      }
-    });
-  });
-
-  // ── Кнопка «Наверх» ──
-  const toTopBtn = document.getElementById('to-top');
-  window.addEventListener('scroll', () => {
-    if(toTopBtn) toTopBtn.style.opacity = window.scrollY > 400 ? '1' : '0';
-  }, {passive:true});
-  if(toTopBtn){
-    toTopBtn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
-  }
-
-  // ── Анимация появления секций (Intersection Observer) ──
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if(e.isIntersecting){
-        e.target.classList.add('visible');
-        observer.unobserve(e.target);
-      }
-    });
-  }, {threshold:0.08});
-  document.querySelectorAll('.gl-section').forEach(s => observer.observe(s));
-
-  // ── Счётчик терминов в hero (анимация цифр) ──
-  const heroTotal = document.getElementById('hero-total');
-  if(heroTotal){
-    const target = parseInt(heroTotal.textContent)||0;
-    let current  = 0;
-    const step   = Math.ceil(target/60);
-    const timer  = setInterval(()=>{
-      current = Math.min(current+step, target);
-      heroTotal.textContent = current;
-      if(current>=target) clearInterval(timer);
-    }, 20);
-  }
-
-  // ── Прогресс-бар скролла страницы ──
-  const progressBar = document.getElementById('scroll-progress');
-  window.addEventListener('scroll', () => {
-    if(!progressBar) return;
-    const scrollTop  = document.documentElement.scrollTop;
-    const docHeight  = document.documentElement.scrollHeight - window.innerHeight;
-    progressBar.style.width = (scrollTop/docHeight*100)+'%';
-  }, {passive:true});
+  // ── Прогресс-бар скролла ──
+  const bar = document.getElementById('scroll-progress');
+  window.addEventListener('scroll',()=>{
+    if(!bar) return;
+    const st = document.documentElement.scrollTop;
+    const dh = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width=(st/dh*100)+'%';
+  },{passive:true});
 
 });
 // ═══════════════════════════════════════════════════════════════
 </script>
-
-<!-- ══════════════════════════ ПРОГРЕСС СКРОЛЛА ════════════════ -->
-<div id="scroll-progress"
-  style="position:fixed;top:0;left:0;z-index:9999;height:3px;width:0%;
-         background:linear-gradient(90deg,#006398,#5bb8fe);transition:width .1s;"></div>
-
-<!-- ══════════════════════════ КУРСОР ══════════════════════════ -->
-<div id="cursor-dot"></div>
-<div id="cursor-ring"></div>
-
-<!-- ══════════════════════════ ШАПКА ═══════════════════════════ -->
-<header style="position:sticky;top:0;z-index:100;background:rgba(247,249,251,.88);
-  backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,.07);padding:0 24px;">
-  <div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;
-    justify-content:space-between;height:62px;gap:12px;">
-
-    <!-- Логотип -->
-    <a href="#hero" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
-      <div style="width:36px;height:36px;border-radius:12px;
-        background:linear-gradient(135deg,#131b2e,#006398);
-        display:flex;align-items:center;justify-content:center;">
-        <span class="material-symbols-outlined" style="color:#fff;font-size:20px;">menu_book</span>
-      </div>
-      <span style="font-weight:800;font-size:16px;color:#131b2e;">PC&nbsp;Master</span>
-    </a>
-
-    <!-- Навигация по разделам (скрыта на мобильном) -->
-    <nav style="display:flex;align-items:center;gap:2px;flex-wrap:wrap;"
-         class="hidden md:flex">
-      <a href="#sec-basics"  class="nav-link">💻 Основы</a>
-      <a href="#sec-win"     class="nav-link">🪟 Windows</a>
-      <a href="#sec-files"   class="nav-link">📂 Файлы</a>
-      <a href="#sec-inet"    class="nav-link">🌐 Интернет</a>
-      <a href="#sec-mail"    class="nav-link">✉️ Почта</a>
-      <a href="#sec-chat"    class="nav-link">💬 Общение</a>
-      <a href="#sec-gov"     class="nav-link">🏛️ Госуслуги</a>
-      <a href="#sec-bank"    class="nav-link">🏦 Банк</a>
-      <a href="#sec-sec"     class="nav-link">🔒 Безопасность</a>
-      <a href="#sec-tech"    class="nav-link">🛠️ Технологии</a>
-    </nav>
-
-    <!-- Правый блок -->
-    <div style="display:flex;align-items:center;gap:8px;">
-      <button id="theme-toggle"
-        style="width:38px;height:38px;border-radius:12px;border:1px solid rgba(0,0,0,.1);
-               background:transparent;display:flex;align-items:center;justify-content:center;
-               transition:background .2s;"
-        title="Сменить тему">
-        <span class="material-symbols-outlined" style="font-size:20px;color:#45464d;">dark_mode</span>
-      </button>
-    </div>
-  </div>
-</header>
-
-<!-- ══════════════════════════ HERO ════════════════════════════ -->
-<section id="hero"
-  style="padding:72px 24px 56px;text-align:center;position:relative;overflow:hidden;"
-  class="hero-grid-bg">
-
-  <!-- Декоративные пятна -->
-  <div style="position:absolute;top:-80px;left:-80px;width:320px;height:320px;
-    border-radius:50%;background:radial-gradient(circle,rgba(0,99,152,.12),transparent 70%);
-    pointer-events:none;"></div>
-  <div style="position:absolute;bottom:-60px;right:-60px;width:260px;height:260px;
-    border-radius:50%;background:radial-gradient(circle,rgba(91,184,254,.1),transparent 70%);
-    pointer-events:none;"></div>
-
-  <div style="max-width:760px;margin:0 auto;position:relative;">
-    <div class="hero-accent-line"></div>
-    <h1 style="font-size:clamp(2rem,5vw,3.2rem);font-weight:800;line-height:1.15;
-               letter-spacing:-.03em;color:#131b2e;margin-bottom:16px;">
-      Глоссарий цифровых<br>
-      <span class="gradient-text">терминов для новичков</span>
-    </h1>
-    <p style="font-size:16px;color:#45464d;line-height:1.7;margin-bottom:32px;">
-      <b><span id="hero-total">0</span> понятных объяснений</b> —
-      от «мышки» до «Госуслуг». Без сложных слов, с примерами из жизни.
-    </p>
-
-    <!-- Поисковая строка -->
-    <div style="position:relative;max-width:520px;margin:0 auto 32px;">
-      <span class="material-symbols-outlined"
-        style="position:absolute;left:16px;top:50%;transform:translateY(-50%);
-               color:#76777d;font-size:20px;pointer-events:none;">search</span>
-      <input id="search-input" type="text" placeholder="Найти термин… (например: Wi-Fi, пароль, вирус)"
-        style="width:100%;padding:14px 48px 14px 48px;border-radius:16px;
-               border:1.5px solid rgba(0,0,0,.1);background:#fff;
-               font-family:Manrope,sans-serif;font-size:14px;color:#191c1e;
-               box-shadow:0 4px 20px rgba(0,0,0,.07);outline:none;transition:border .2s;"
-        onfocus="this.style.borderColor='#006398'"
-        onblur="this.style.borderColor='rgba(0,0,0,.1)'" />
-      <button id="search-clear"
-        style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
-               display:none;align-items:center;justify-content:center;
-               width:28px;height:28px;border-radius:9999px;border:none;
-               background:rgba(0,0,0,.07);cursor:none;">
-        <span class="material-symbols-outlined" style="font-size:16px;color:#45464d;">close</span>
-      </button>
-    </div>
-
-    <!-- Фильтр-пилюли -->
-    <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;">
-      <button class="tag-pill" data-filter="">🔍 Все термины</button>
-      <button class="tag-pill" data-filter="basics">💻 Основы</button>
-      <button class="tag-pill" data-filter="equip">🖥️ Оборудование</button>
-      <button class="tag-pill" data-filter="win">🪟 Windows</button>
-      <button class="tag-pill" data-filter="files">📂 Файлы</button>
-      <button class="tag-pill" data-filter="inet">🌐 Интернет</button>
-      <button class="tag-pill" data-filter="mail">✉️ Почта</button>
-      <button class="tag-pill" data-filter="chat">💬 Общение</button>
-      <button class="tag-pill" data-filter="gov">🏛️ Госуслуги</button>
-      <button class="tag-pill" data-filter="bank">🏦 Банк</button>
-      <button class="tag-pill" data-filter="sec">🔒 Безопасность</button>
-      <button class="tag-pill" data-filter="media">🎬 Медиа</button>
-      <button class="tag-pill" data-filter="tech">🛠️ Технологии</button>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════ ОСНОВНАЯ СЕТКА ══════════════════ -->
-<main id="glossary-grid" style="max-width:1280px;margin:0 auto;padding:0 24px 80px;">
-
-  <!-- Заглушка «ничего не найдено» -->
-  <div id="no-results" style="display:none;flex-direction:column;align-items:center;
-    justify-content:center;padding:80px 24px;gap:16px;text-align:center;">
-    <span class="material-symbols-outlined" style="font-size:64px;color:#76777d;">search_off</span>
-    <p style="font-size:18px;font-weight:700;color:#45464d;">Ничего не найдено</p>
-    <p style="font-size:14px;color:#76777d;">Попробуйте другое слово или сбросьте фильтр</p>
-  </div>
-
-  <!-- ───── РАЗДЕЛ: ОСНОВЫ ───── -->
-  <section id="sec-basics" class="gl-section" style="margin-bottom:48px;opacity:0;
-    transform:translateY(24px);transition:opacity .5s,transform .5s;">
-    <div class="gl-section-header">
-      <span class="material-symbols-outlined gl-section-icon">laptop</span>
-      <span class="gl-section-title">💻 Основы компьютера</span>
-      <span class="gl-section-count" id="count-basics">0 терминов</span>
-    </div>
-    <div id="cards-basics"
-      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
-  </section>
-
-  <!-- ───── РАЗДЕЛ: ОБОРУДОВАНИЕ ───── -->
-  <section id="sec-equip" class="gl-section" style="margin-bottom:48px;opacity:0;
-    transform:translateY(24px);transition:opacity .5s .05s,transform .5s .05s;">
-    <div class="gl-section-header">
-      <span class="material-symbols-outlined gl-section-icon">devices</span>
-      <span class="gl-section-title">🖥️ Оборудование</span>
-      <span class="gl-section-count" id="count-equip">0 терминов</span>
-    </div>
-    <div id="cards-equip"
-      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
-  </section>
-
-  <!-- ───── РАЗДЕЛ: WINDOWS ───── -->
-  <section id="sec-win" class="gl-section" style="margin-bottom:48px;opacity:0;
-    transform:translateY(24px);transition:opacity .5s .1s,transform .5s .1s;">
-    <div class="gl-section-header">
-      <span class="material-symbols-outlined gl-section-icon">window</span>
-      <span class="gl-section-title">🪟 Windows</span>
-      <span class="gl-section-count" id="count-win">0 терминов</span>
-    </div>
-    <div id="cards-win"
-      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
-  </section>
-
-  <!-- ───── РАЗДЕЛ: ФАЙЛЫ ───── -->
-  <section id="sec-files" class="gl-section" style="margin-bottom:48px;opacity:0;
-    transform:translateY(24px);transition:opacity .5s .15s,transform .5s .15s;">
-    <div class="gl-section-header">
-      <span class="material-symbols-outlined gl-section-icon">folder_open</span>
-      <span class="gl-section-title">📂 Файлы и папки</span>
-      <span class="gl-section-count" id="count-files">0 терминов</span>
-    </div>
-    <div id="cards-files"
-      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
-  </section>
-
-  <!-- ───── РАЗДЕЛ: ИНТЕРНЕТ ───── -->
-  <section id="sec-inet" class="gl-section" style="margin-bottom:48px;opacity:0;
-    transform:translateY(24px);transition:opacity .5s .2s,transform .5s .2s;">
-    <div class="gl-section-header">
-      <span class="material-symbols-outlined gl-section-icon">public</span>
-      <span class="gl-section-title">🌐 Интернет и браузер</span>
-      <span class="gl-section-count" id="count-inet">0 терминов</span>
-    </div>
-    <div id="cards-inet"
-      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
-  </section>
-
-  <!-- ───── РАЗДЕЛ: ПОЧТА ───── -->
-  <section id="sec-mail" class="gl-section" style="margin-bottom:48px;opacity:0;
-    transform:translateY(24px);transition:opacity .5s .25s,transform .5s .25s;">
-    <div class="gl-section-header">
-      <span class="material-symbols-outlined gl-section-icon">mail</span>
-      <span class="gl-section-title">✉️ Электронная почта</span>
-      <span class="gl-section-count" id="count-mail">0 терминов</span>
-    </div>
-    <div id="cards-mail"
-      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
-  </section>
-
-  <!-- ───── РАЗДЕЛ: ОБЩЕНИЕ ───── -->
-  <section id="sec-chat" class="gl-section" style="margin-bottom:48px;opacity:0;
-    transform:translateY(24px);transition:opacity .5s .3s,transform .5s .3s;">
-    <div class="gl-section-header">
-      <span class="material-symbols-outlined gl-section-icon">forum</span>
-      <span class="gl-section-title">💬 Общение и мессенджеры</span>
-      <span class="gl-section-count" id="count-chat">0 терминов</span>
-    </div>
-    <div id="cards-chat"
-      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
-  </section>
-
-  <!-- ───── РАЗДЕЛ: ГОСУСЛУГИ ───── -->
-  <section id="sec-gov" class="gl-section" style="margin-bottom:48px;opacity:0;
-    transform:translateY(24px);transition:opacity .5s .35s,transform .5s .35s;">
-    <div class="gl-section-header">
-      <span class="material-symbols-outlined gl-section-icon">account_balance</span>
-      <span class="gl-section-title">🏛️ Госуслуги и государство</span>
-      <span class="gl-section-count" id="count-gov">0 терминов</span>
-    </div>
-    <div id="cards-gov"
-      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
-  </section>
-
-  <!-- ───── РАЗДЕЛ: БАНК ───── -->
-  <section id="sec-bank" class="gl-section" style="margin-bottom:48px;opacity:0;
-    transform:translateY(24px);transition:opacity .5s .4s,transform .5s .4s;">
-    <div class="gl-section-header">
-      <span class="material-symbols-outlined gl-section-icon">credit_card</span>
-      <span class="gl-section-title">🏦 Банк и платежи</span>
-      <span class="gl-section-count" id="count-bank">0 терминов</span>
-    </div>
-    <div id="cards-bank"
-      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
-  </section>
-
-  <!-- ───── РАЗДЕЛ: БЕЗОПАСНОСТЬ ───── -->
-  <section id="sec-sec" class="gl-section" style="margin-bottom:48px;opacity:0;
-    transform:translateY(24px);transition:opacity .5s .45s,transform .5s .45s;">
-    <div class="gl-section-header">
-      <span class="material-symbols-outlined gl-section-icon">shield</span>
-      <span class="gl-section-title">🔒 Безопасность в интернете</span>
-      <span class="gl-section-count" id="count-sec">0 терминов</span>
-    </div>
-    <div id="cards-sec"
-      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
-  </section>
-
-  <!-- ───── РАЗДЕЛ: МЕДИА ───── -->
-  <section id="sec-media" class="gl-section" style="margin-bottom:48px;opacity:0;
-    transform:translateY(24px);transition:opacity .5s .5s,transform .5s .5s;">
-    <div class="gl-section-header">
-      <span class="material-symbols-outlined gl-section-icon">play_circle</span>
-      <span class="gl-section-title">🎬 Фото, видео и медиа</span>
-      <span class="gl-section-count" id="count-media">0 терминов</span>
-    </div>
-    <div id="cards-media"
-      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
-  </section>
-
-  <!-- ───── РАЗДЕЛ: ТЕХНОЛОГИИ ───── -->
-  <section id="sec-tech" class="gl-section" style="margin-bottom:48px;opacity:0;
-    transform:translateY(24px);transition:opacity .5s .55s,transform .5s .55s;">
-    <div class="gl-section-header">
-      <span class="material-symbols-outlined gl-section-icon">settings_suggest</span>
-      <span class="gl-section-title">🛠️ Современные технологии</span>
-      <span class="gl-section-count" id="count-tech">0 терминов</span>
-    </div>
-    <div id="cards-tech"
-      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
-  </section>
-
-</main>
-
-<!-- ══════════════════════════ ФУТЕР ═══════════════════════════ -->
-<footer style="background:#131b2e;color:rgba(255,255,255,.6);
-  padding:32px 24px;text-align:center;">
-  <div style="max-width:760px;margin:0 auto;display:flex;flex-direction:column;
-    align-items:center;gap:12px;">
-    <div style="display:flex;align-items:center;gap:10px;">
-      <div style="width:32px;height:32px;border-radius:10px;
-        background:linear-gradient(135deg,#006398,#5bb8fe);
-        display:flex;align-items:center;justify-content:center;">
-        <span class="material-symbols-outlined" style="color:#fff;font-size:18px;">menu_book</span>
-      </div>
-      <span style="color:#fff;font-weight:700;font-size:15px;">PC Master — Глоссарий</span>
-    </div>
-    <p style="font-size:13px;line-height:1.6;max-width:500px;">
-      Бесплатный образовательный ресурс для людей старшего возраста.<br>
-      Все материалы можно свободно использовать в некоммерческих целях.
-    </p>
-    <p style="font-size:12px;opacity:.5;">© 2026 PC Master · Цифровая грамотность</p>
-  </div>
-</footer>
-
-<!-- ══════════════════════════ КНОПКА «НАВЕРХ» ════════════════ -->
-<button id="to-top"
-  style="position:fixed;bottom:90px;right:24px;z-index:200;
-         width:44px;height:44px;border-radius:50%;
-         background:linear-gradient(135deg,#131b2e,#006398);
-         border:none;display:flex;align-items:center;justify-content:center;
-         box-shadow:0 4px 16px rgba(0,0,0,.2);opacity:0;transition:opacity .3s;"
-  title="Наверх">
-  <span class="material-symbols-outlined" style="color:#fff;font-size:22px;">arrow_upward</span>
-</button>
-
-<!-- ══════════════════════════ ПЕРЕКЛЮЧАТЕЛЬ ШРИФТА ═══════════ -->
-<div id="font-switcher">
-  <span style="font-size:11px;color:#76777d;margin-right:4px;">Шрифт:</span>
-  <button class="fs-btn" data-size="sm">А-</button>
-  <div class="fs-divider"></div>
-  <button class="fs-btn active" data-size="md">А</button>
-  <div class="fs-divider"></div>
-  <button class="fs-btn" data-size="lg">А+</button>
-</div>
-
-<!-- ══════════════════════════ СТИЛИ АНИМАЦИИ (visible) ═══════ -->
-<style>
-  .gl-section.visible{opacity:1!important;transform:translateY(0)!important;}
-  .hl{background:#fde68a;border-radius:3px;padding:0 2px;color:#131b2e;}
-  .dark body,.dark{background:#0f172a;color:#e2e8f0;}
-  .dark .gl-card{background:#1e293b;border-color:rgba(255,255,255,.07);color:#e2e8f0;}
-  .dark .gl-term{color:#93c5fd;}
-  .dark .gl-def{color:#94a3b8;}
-  .dark header{background:rgba(15,23,42,.9)!important;border-color:rgba(255,255,255,.07)!important;}
-  .dark .tag-pill{background:#1e293b;color:#94a3b8;border-color:rgba(255,255,255,.1);}
-  .dark .tag-pill.active{background:#006398;color:#fff;}
-  .dark #font-switcher{background:rgba(30,41,59,.9);border-color:rgba(255,255,255,.1);}
-  .dark .fs-btn{color:#94a3b8;}
-  .dark input{background:#1e293b!important;color:#e2e8f0!important;border-color:rgba(255,255,255,.1)!important;}
-  .dark .nav-link{color:#94a3b8;}
-  .dark .nav-link:hover{color:#e2e8f0;background:rgba(255,255,255,.07);}
-  @media(max-width:768px){
-    .hidden.md\\:flex{display:none!important;}
-    #font-switcher{bottom:16px;right:12px;}
-    #to-top{bottom:76px;right:12px;}
-  }
-</style>
 
 </body>
 </html>
