@@ -278,10 +278,6 @@
 <script>
 // ======= ЗДЕСЬ 1 ТЕРМИН (для проверки) =======
 const TERMS = [
-// ═══════════════════════════════════════════════════════════════
-// ДАННЫЕ: 200 ТЕРМИНОВ
-// ═══════════════════════════════════════════════════════════════
-const TERMS = [
 
   // ──────── ОСНОВЫ ПК ────────
   { id:'basics', cat:'основы', chip:'c-equip',
@@ -2496,51 +2492,66 @@ const TERMS = [
     </ul>` }
 ];
 
+<script>
 const SECTION_MAP = {
-  'basics' : 'cards-basics'
+  basics : 'cards-basics',
+  equip  : 'cards-equip',
+  win    : 'cards-win',
+  files  : 'cards-files',
+  inet   : 'cards-inet',
+  mail   : 'cards-mail',
+  chat   : 'cards-chat',
+  gov    : 'cards-gov',
+  bank   : 'cards-bank',
+  sec    : 'cards-sec',
+  media  : 'cards-media',
+  tech   : 'cards-tech'
 };
 
 function highlight(text, query){
   if(!query) return text;
-  const re = new RegExp('('+query.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\$&')+')','gi');
-  return text.replace(re,'<mark class="hl">$1</mark>');
+  const safeQ = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return text.replace(new RegExp('(' + safeQ + ')','gi'), '<mark class="hl">$1</mark>');
 }
 
 function renderCard(t, query){
   const termHL   = highlight(t.term, query);
   const defClean = t.def.replace(/<[^>]+>/g,' ');
   return `
-    <div class="gl-card"
-         data-cat="${t.cat}"
-         data-term="${t.term.toLowerCase()}"
-         data-def="${defClean.toLowerCase().replace(/"/g,'&quot;')}">
-      <div class="flex items-start justify-between gap-2 flex-wrap">
+    <article class="gl-card"
+             data-cat="${t.cat}"
+             data-term="${t.term.toLowerCase()}"
+             data-def="${defClean.toLowerCase().replace(/"/g,'&quot;')}">
+      <div class="flex items-start justify-between gap-2 flex-wrap mb-1">
         <div class="gl-term">${termHL}</div>
         <span class="gl-chip ${t.chip}">${t.cat}</span>
       </div>
       <div class="gl-def">${t.def}</div>
-    </div>`;
+    </article>`;
 }
 
-function plural(n){
-  if(n%10===1 && n%100!==11) return '';
-  if(n%10>=2 && n%10<=4 && (n%100<10||n%100>=20)) return 'а';
-  return 'ов';
+function pluralRu(n){
+  if(n%10===1 && n%100!==11) return 'термин';
+  if(n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20)) return 'термина';
+  return 'терминов';
 }
 
-function renderAll(filterCat='', query=''){
-  const q = (query||'').toLowerCase();
+function renderAll(activeCat='all', query=''){
+  const q = (query||'').toLowerCase().trim();
 
   const filtered = TERMS.filter(t => {
-    const matchCat   = !filterCat || filterCat==='all' || t.cat === filterCat || t.id === filterCat;
-    const plainDef   = t.def.replace(/<[^>]+>/g,' ').toLowerCase();
-    const matchQuery = !q || t.term.toLowerCase().includes(q) || plainDef.includes(q);
-    return matchCat && matchQuery;
+    const matchCat = activeCat === 'all' || t.cat === activeCat || t.id === activeCat;
+    if(!q) return matchCat;
+    const plainDef = t.def.replace(/<[^>]+>/g,' ').toLowerCase();
+    return matchCat && (
+      t.term.toLowerCase().includes(q) ||
+      plainDef.includes(q)
+    );
   });
 
   const groups = {};
   filtered.forEach(t => {
-    if(!groups[t.id]) groups[t.id]=[];
+    if(!groups[t.id]) groups[t.id] = [];
     groups[t.id].push(t);
   });
 
@@ -2551,33 +2562,52 @@ function renderAll(filterCat='', query=''){
     const cards   = groups[secId] || [];
 
     if(cards.length === 0){
-      if(section) section.style.display='none';
-      container.innerHTML='';
+      if(section) section.classList.add('hidden');
+      container.innerHTML = '';
       return;
     }
-    if(section) section.style.display='';
+
+    if(section) section.classList.remove('hidden');
     container.innerHTML = cards.map(t => renderCard(t, query)).join('');
+
+    const cntEl = section ? section.querySelector('.gl-section-count') : null;
+    if(cntEl){
+      const n = cards.length;
+      cntEl.textContent = n + ' ' + pluralRu(n);
+    }
   });
 
   const resultCount = document.getElementById('result-count');
   if(resultCount){
-    resultCount.textContent = filtered.length > 0
-      ? `Найдено: ${filtered.length} термин${plural(filtered.length)}`
-      : '';
+    const n = filtered.length;
+    if(!query && (activeCat === 'all' || !activeCat)){
+      resultCount.textContent = 'Показаны все ' + n + ' ' + pluralRu(n) + '.';
+    } else {
+      resultCount.textContent = 'Найдено: ' + n + ' ' + pluralRu(n) + '.';
+    }
   }
 
   const cntAll = document.getElementById('cnt-all');
   if(cntAll) cntAll.textContent = filtered.length;
 
   const empty = document.getElementById('gl-empty');
-  if(empty) empty.classList.toggle('hidden', filtered.length > 0);
+  const glSec = document.getElementById('gl-sections');
+  if(empty && glSec){
+    if(filtered.length === 0){
+      empty.classList.remove('hidden');
+      glSec.classList.add('hidden');
+    } else {
+      empty.classList.add('hidden');
+      glSec.classList.remove('hidden');
+    }
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  renderAll();
-
+  let activeFilter = 'all';
   const searchInput = document.getElementById('gl-search');
-  let activeFilter  = 'all';
+
+  renderAll(activeFilter,'');
 
   function doFilter(){
     const q = searchInput ? searchInput.value.trim() : '';
@@ -2588,7 +2618,7 @@ document.addEventListener('DOMContentLoaded', () => {
     searchInput.addEventListener('input', doFilter);
     searchInput.addEventListener('keydown', e => {
       if(e.key === 'Escape'){
-        searchInput.value='';
+        searchInput.value = '';
         doFilter();
       }
     });
@@ -2601,10 +2631,14 @@ document.addEventListener('DOMContentLoaded', () => {
       pill.classList.add('active');
       activeFilter = pill.dataset.cat || 'all';
       doFilter();
+
+      const firstSection = document.getElementById('sec-basics');
+      if(firstSection){
+        firstSection.scrollIntoView({behavior:'smooth', block:'start'});
+      }
     });
   });
 });
 </script>
-
 </body>
 </html>
