@@ -33,6 +33,7 @@
     .hero-grid-bg{background-image:linear-gradient(rgba(0,99,152,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,99,152,.04) 1px,transparent 1px);background-size:48px 48px;}
     .hero-accent-line{display:inline-block;width:48px;height:3px;background:linear-gradient(90deg,#006398,#5bb8fe);border-radius:9999px;margin-bottom:24px;}
     .gradient-text{background:linear-gradient(135deg,#006398 0%,#5bb8fe 45%,#006398 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:grad-shift 4s linear infinite;}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
     @keyframes grad-shift{to{background-position:200% center;}}
 
     .tag-pill{border-radius:9999px;padding:5px 11px;font-size:12px;font-weight:600;border:1px solid rgba(0,0,0,.06);background:#fff;color:#45464d;display:inline-flex;align-items:center;gap:6px;cursor:none;transition:all .2s;}
@@ -105,8 +106,6 @@
   <div class="absolute top-1/4 -left-32 w-96 h-96 rounded-full filter blur-3xl opacity-30" style="background:#dae2fd;animation:float 8s ease-in-out infinite;"></div>
   <div class="absolute bottom-1/4 -right-32 w-[28rem] h-[28rem] rounded-full filter blur-3xl opacity-30" style="background:#cce5ff;animation:float 6s ease-in-out infinite reverse;"></div>
 </div>
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
-
 <div id="qr-widget" role="complementary" aria-label="QR-код для телефона">
   <div class="qr-card" id="qr-card">
     <button class="qr-toggle-btn" id="qr-toggle" aria-label="Свернуть / развернуть QR" title="Свернуть">
