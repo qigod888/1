@@ -26,46 +26,25 @@
     body.zoom-sm{zoom:.88}
     body.zoom-lg{zoom:1.13}
 
-    /* nav */
     .nav-link{text-decoration:none;padding:.25rem .5rem;border-radius:.5rem;font-weight:500;color:#475569;display:inline-flex;align-items:center;gap:4px;transition:all .2s;font-size:14px;}
     .nav-link:hover{color:#020617;background:rgba(148,163,184,.15);}
     .nav-link-active{color:#2563eb!important;border-bottom:2px solid #2563eb;}
 
-    /* hero */
     .hero-grid-bg{background-image:linear-gradient(rgba(0,99,152,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,99,152,.04) 1px,transparent 1px);background-size:48px 48px;}
     .hero-accent-line{display:inline-block;width:48px;height:3px;background:linear-gradient(90deg,#006398,#5bb8fe);border-radius:9999px;margin-bottom:24px;}
     .gradient-text{background:linear-gradient(135deg,#006398 0%,#5bb8fe 45%,#006398 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:grad-shift 4s linear infinite;}
     @keyframes grad-shift{to{background-position:200% center;}}
 
-    /* tags */
     .tag-pill{border-radius:9999px;padding:5px 11px;font-size:12px;font-weight:600;border:1px solid rgba(0,0,0,.06);background:#fff;color:#45464d;display:inline-flex;align-items:center;gap:6px;cursor:none;transition:all .2s;}
     .tag-pill.active{background:#006398;color:#fff;border-color:#006398;}
 
-    /* section anchors */
-    .gl-section-header{
-      display:flex;align-items:center;gap:10px;
-      padding:14px 20px;
-      background:linear-gradient(135deg,#131b2e 0%,#006398 100%);
-      border-radius:18px;
-      color:#fff;
-      margin-bottom:18px;
-      position:relative;
-      overflow:hidden;
-    }
+    .gl-section-header{display:flex;align-items:center;gap:10px;padding:14px 20px;background:linear-gradient(135deg,#131b2e 0%,#006398 100%);border-radius:18px;color:#fff;margin-bottom:18px;position:relative;overflow:hidden;}
     .gl-section-header::after{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;background:rgba(255,255,255,.06);border-radius:50%;}
     .gl-section-icon{font-size:26px;flex-shrink:0;}
     .gl-section-title{font-size:18px;font-weight:800;letter-spacing:-.01em;}
     .gl-section-count{margin-left:auto;font-size:11px;font-weight:700;background:rgba(255,255,255,.15);padding:3px 10px;border-radius:9999px;}
 
-    /* cards */
-    .gl-card{
-      border-radius:22px;border:1px solid rgba(0,0,0,.06);background:#fff;
-      padding:18px 18px 16px;
-      box-shadow:0 8px 24px rgba(0,0,0,.03);
-      transition:all .3s cubic-bezier(.16,1,.3,1);
-      display:flex;flex-direction:column;gap:8px;
-      position:relative;overflow:hidden;
-    }
+    .gl-card{border-radius:22px;border:1px solid rgba(0,0,0,.06);background:#fff;padding:18px 18px 16px;box-shadow:0 8px 24px rgba(0,0,0,.03);transition:all .3s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden;}
     .gl-card::before{content:'';position:absolute;inset:-40%;background:radial-gradient(circle at top left,rgba(0,99,152,.04),transparent 55%);opacity:0;transition:opacity .3s;}
     .gl-card:hover{transform:translateY(-4px);box-shadow:0 16px 32px rgba(0,0,0,.09);}
     .gl-card:hover::before{opacity:1;}
@@ -86,14 +65,12 @@
     .gl-chip.c-media{background:#fdf2f8;color:#7b1490;}
     .gl-chip.c-tech{background:#ecfdf5;color:#065f46;}
 
-    /* font switcher */
     #font-switcher{position:fixed;bottom:28px;right:24px;z-index:200;display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border:1px solid rgba(0,0,0,.1);border-radius:9999px;padding:5px 10px;box-shadow:0 4px 16px rgba(0,0,0,.1);}
     .fs-btn{padding:4px 10px;border-radius:9999px;font-weight:700;color:#45464d;font-size:13px;transition:background .2s,color .2s;border:none;background:none;}
     .fs-btn:hover{background:rgba(0,99,152,.08);color:#006398;}
     .fs-btn.active{background:#006398;color:#fff;}
     .fs-divider{width:1px;height:16px;background:rgba(0,0,0,.1);margin:0 2px;}
 
-    /* qr widget */
     #qr-widget{position:fixed;left:20px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;align-items:center;transition:all .4s cubic-bezier(.16,1,.3,1);}
     .qr-card{background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border:1px solid rgba(0,0,0,.09);border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,.1);padding:16px;width:148px;display:flex;flex-direction:column;align-items:center;gap:10px;transition:all .4s cubic-bezier(.16,1,.3,1);overflow:hidden;}
     .qr-card.collapsed{width:44px;padding:10px 8px;gap:6px;}
@@ -106,20 +83,16 @@
     .qr-sublabel{font-size:10px;color:#76777d;text-align:center;line-height:1.3;}
     @media(max-width:1100px){#qr-widget{display:none;}}
 
-    /* toc */
     .toc-link{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;text-decoration:none;color:#45464d;font-size:13px;font-weight:600;transition:all .2s;border:1px solid rgba(0,0,0,.05);background:#fff;}
     .toc-link:hover{background:#e8f0fe;color:#006398;border-color:rgba(0,99,152,.2);}
 
-    /* animate */
     .aon{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
     .aon.v{opacity:1;transform:translateY(0);}
 
     #back-to-top{transition:all .3s ease;}
 
-    /* search highlight */
     mark.hl{background:#fef08a;color:#191c1e;border-radius:2px;padding:0 2px;}
 
-    /* no-print mobile nav */
     @media(max-width:767px){.md-hidden{display:none;}}
   </style>
 </head>
@@ -128,14 +101,12 @@
 <div id="cursor-dot"></div>
 <div id="cursor-ring"></div>
 
-<!-- Bg blobs -->
 <div class="fixed inset-0 pointer-events-none z-[-2] overflow-hidden">
   <div class="absolute top-1/4 -left-32 w-96 h-96 rounded-full filter blur-3xl opacity-30" style="background:#dae2fd;animation:float 8s ease-in-out infinite;"></div>
   <div class="absolute bottom-1/4 -right-32 w-[28rem] h-[28rem] rounded-full filter blur-3xl opacity-30" style="background:#cce5ff;animation:float 6s ease-in-out infinite reverse;"></div>
 </div>
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
 
-<!-- QR widget -->
 <div id="qr-widget" role="complementary" aria-label="QR-код для телефона">
   <div class="qr-card" id="qr-card">
     <button class="qr-toggle-btn" id="qr-toggle" aria-label="Свернуть / развернуть QR" title="Свернуть">
@@ -148,7 +119,6 @@
   </div>
 </div>
 
-<!-- Font switcher -->
 <div id="font-switcher" role="toolbar" aria-label="Размер шрифта">
   <button class="fs-btn" data-zoom="sm" title="Меньше">A−</button>
   <div class="fs-divider"></div>
@@ -157,17 +127,14 @@
   <button class="fs-btn" data-zoom="lg" title="Больше">A+</button>
 </div>
 
-<!-- Back to top -->
 <button id="back-to-top" aria-label="Наверх" class="hidden fixed right-4 bottom-24 z-40 w-10 h-10 rounded-full text-white shadow-lg flex items-center justify-center" style="background:#006398;">
   <span class="material-symbols-outlined" style="font-size:20px;">arrow_upward</span>
 </button>
 
-<!-- Ribbon -->
 <div style="background:#131b2e;color:#cce5ff;text-align:center;font-size:12px;font-weight:700;letter-spacing:.04em;padding:8px 16px;position:relative;z-index:50;">
   Платформа создана в рамках проекта «Наследие Кубани: мост поколений и цифровых горизонтов» · Грант Губернатора Кубани
 </div>
 
-<!-- Nav -->
 <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-slate-200/50 shadow-sm">
   <div class="flex justify-between items-center h-16 px-6 lg:px-8 max-w-7xl mx-auto">
     <a href="index.html" class="flex items-center gap-2 group">
@@ -196,7 +163,6 @@
 
 <main class="pt-8 pb-20 px-4 sm:px-6 lg:px-8" style="max-width:1280px;margin:0 auto;">
 
-  <!-- HERO -->
   <section class="aon mb-10">
     <div class="flex flex-wrap items-center gap-3 text-sm mb-6" style="color:#45464d;">
       <a href="index.html" class="inline-flex items-center gap-1.5 hover:text-blue-600 transition-colors">
@@ -222,17 +188,8 @@
           <p style="font-size:16px;color:#45464d;max-width:520px;line-height:1.65;margin-bottom:20px;">
             Полный справочник самых важных слов и понятий из мира компьютеров и интернета. Для каждого термина — развёрнутое объяснение, виды, подвиды и практические примеры. Понятным языком, без лишних технических деталей.
           </p>
-          <div class="flex flex-wrap gap-3">
-            <a href="glossary-print.html" target="_blank" class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold border transition-all hover:shadow-md" style="background:#006398;color:#fff;border-color:#006398;">
-              <span class="material-symbols-outlined" style="font-size:16px;">print</span>Версия для печати
-            </a>
-            <a href="#toc" class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold border transition-all hover:bg-slate-50" style="color:#45464d;border-color:#e0e3e5;">
-              <span class="material-symbols-outlined" style="font-size:16px;">list</span>Содержание
-            </a>
-          </div>
         </div>
         <div class="hidden lg:flex flex-col justify-center px-10 py-10 border-l" style="border-color:rgba(224,227,229,.7);">
-          <!-- How to use -->
           <p class="text-xs font-bold uppercase tracking-widest mb-5" style="color:#76777d;">Как пользоваться глоссарием</p>
           <div class="flex flex-col gap-4">
             <div class="flex items-start gap-4">
@@ -262,7 +219,6 @@
     </div>
   </section>
 
-  <!-- SEARCH + TAGS -->
   <section class="aon mb-8">
     <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between mb-4">
       <div>
@@ -276,48 +232,21 @@
     </div>
     <div id="filter-tags" class="flex flex-wrap gap-2 text-xs mb-2">
       <button class="tag-pill active" data-cat="all"><span class="material-symbols-outlined" style="font-size:14px;">select_all</span>Все темы <span id="cnt-all" class="ml-1 font-bold"></span></button>
-      <button class="tag-pill" data-cat="оборудование"><span class="material-symbols-outlined" style="font-size:14px;">devices</span>Оборудование</button>
-      <button class="tag-pill" data-cat="Windows"><span class="material-symbols-outlined" style="font-size:14px;">window</span>Windows и программы</button>
-      <button class="tag-pill" data-cat="файлы"><span class="material-symbols-outlined" style="font-size:14px;">folder</span>Файлы и папки</button>
-      <button class="tag-pill" data-cat="интернет"><span class="material-symbols-outlined" style="font-size:14px;">wifi</span>Интернет и сети</button>
-      <button class="tag-pill" data-cat="почта"><span class="material-symbols-outlined" style="font-size:14px;">mail</span>Эл. почта</button>
-      <button class="tag-pill" data-cat="общение"><span class="material-symbols-outlined" style="font-size:14px;">chat</span>Мессенджеры</button>
-      <button class="tag-pill" data-cat="госуслуги"><span class="material-symbols-outlined" style="font-size:14px;">account_balance</span>Госуслуги</button>
-      <button class="tag-pill" data-cat="банк"><span class="material-symbols-outlined" style="font-size:14px;">credit_card</span>Банкинг</button>
-      <button class="tag-pill" data-cat="безопасность"><span class="material-symbols-outlined" style="font-size:14px;">security</span>Безопасность</button>
-      <button class="tag-pill" data-cat="медиа"><span class="material-symbols-outlined" style="font-size:14px;">photo_camera</span>Медиа</button>
-      <button class="tag-pill" data-cat="технологии"><span class="material-symbols-outlined" style="font-size:14px;">memory</span>Технологии</button>
+      <button class="tag-pill" data-cat="основы"><span class="material-symbols-outlined" style="font-size:14px;">computer</span>Основы ПК</button>
     </div>
     <div id="result-count" class="text-xs font-semibold mb-4" style="color:#76777d;"></div>
   </section>
 
-  <!-- TOC -->
   <section id="toc" class="aon mb-10">
     <div class="rounded-2xl border p-5" style="background:#fff;border-color:#e0e3e5;">
       <p class="text-xs font-bold uppercase tracking-widest mb-4" style="color:#76777d;">Быстрое содержание</p>
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
         <a class="toc-link" href="#sec-basics"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">computer</span>Основы ПК</a>
-        <a class="toc-link" href="#sec-equip"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">devices</span>Оборудование</a>
-        <a class="toc-link" href="#sec-win"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">window</span>Windows и ПО</a>
-        <a class="toc-link" href="#sec-files"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">folder</span>Файлы и папки</a>
-        <a class="toc-link" href="#sec-inet"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">wifi</span>Интернет и сети</a>
-        <a class="toc-link" href="#sec-mail"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">mail</span>Эл. почта</a>
-        <a class="toc-link" href="#sec-chat"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">chat</span>Мессенджеры</a>
-        <a class="toc-link" href="#sec-gov"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">account_balance</span>Госуслуги</a>
-        <a class="toc-link" href="#sec-bank"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">credit_card</span>Банкинг</a>
-        <a class="toc-link" href="#sec-sec"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">security</span>Безопасность</a>
-        <a class="toc-link" href="#sec-media"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">photo_camera</span>Медиа</a>
-        <a class="toc-link" href="#sec-tech"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">memory</span>Технологии</a>
       </div>
     </div>
   </section>
 
-  <!-- ALL SECTIONS -->
   <div id="gl-sections">
-
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- ОСНОВЫ ПК -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
     <section id="sec-basics" class="aon mb-12" data-section="основы">
       <div class="gl-section-header">
         <span class="material-symbols-outlined gl-section-icon">computer</span>
@@ -325,181 +254,12 @@
           <div class="gl-section-title">Основы ПК</div>
           <div style="font-size:12px;opacity:.75;">Базовые устройства и понятия</div>
         </div>
-        <span class="gl-section-count">10 терминов</span>
+        <span class="gl-section-count">1 термин</span>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-basics">
-        <!-- JS вставит карточки -->
-      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-basics"></div>
     </section>
+  </div>
 
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- ОБОРУДОВАНИЕ -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <section id="sec-equip" class="aon mb-12" data-section="оборудование">
-      <div class="gl-section-header">
-        <span class="material-symbols-outlined gl-section-icon">devices</span>
-        <div>
-          <div class="gl-section-title">Оборудование</div>
-          <div style="font-size:12px;opacity:.75;">Устройства, типы, характеристики</div>
-        </div>
-        <span class="gl-section-count">25 терминов</span>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-equip"></div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- WINDOWS и ПО -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <section id="sec-win" class="aon mb-12" data-section="Windows">
-      <div class="gl-section-header">
-        <span class="material-symbols-outlined gl-section-icon">window</span>
-        <div>
-          <div class="gl-section-title">Windows и программы</div>
-          <div style="font-size:12px;opacity:.75;">Интерфейс, настройки, типы ПО</div>
-        </div>
-        <span class="gl-section-count">20 терминов</span>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-win"></div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- ФАЙЛЫ -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <section id="sec-files" class="aon mb-12" data-section="файлы">
-      <div class="gl-section-header">
-        <span class="material-symbols-outlined gl-section-icon">folder</span>
-        <div>
-          <div class="gl-section-title">Файлы и папки</div>
-          <div style="font-size:12px;opacity:.75;">Форматы, операции, хранение</div>
-        </div>
-        <span class="gl-section-count">18 терминов</span>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-files"></div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- ИНТЕРНЕТ -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <section id="sec-inet" class="aon mb-12" data-section="интернет">
-      <div class="gl-section-header">
-        <span class="material-symbols-outlined gl-section-icon">wifi</span>
-        <div>
-          <div class="gl-section-title">Интернет и сети</div>
-          <div style="font-size:12px;opacity:.75;">Виды подключений, скорости, браузер</div>
-        </div>
-        <span class="gl-section-count">28 терминов</span>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-inet"></div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- ПОЧТА -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <section id="sec-mail" class="aon mb-12" data-section="почта">
-      <div class="gl-section-header">
-        <span class="material-symbols-outlined gl-section-icon">mail</span>
-        <div>
-          <div class="gl-section-title">Электронная почта</div>
-          <div style="font-size:12px;opacity:.75;">Сервисы, структура письма, безопасность</div>
-        </div>
-        <span class="gl-section-count">10 терминов</span>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-mail"></div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- МЕССЕНДЖЕРЫ -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <section id="sec-chat" class="aon mb-12" data-section="общение">
-      <div class="gl-section-header">
-        <span class="material-symbols-outlined gl-section-icon">chat</span>
-        <div>
-          <div class="gl-section-title">Мессенджеры и общение</div>
-          <div style="font-size:12px;opacity:.75;">Форматы общения, виды сообщений</div>
-        </div>
-        <span class="gl-section-count">10 терминов</span>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-chat"></div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- ГОСУСЛУГИ -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <section id="sec-gov" class="aon mb-12" data-section="госуслуги">
-      <div class="gl-section-header">
-        <span class="material-symbols-outlined gl-section-icon">account_balance</span>
-        <div>
-          <div class="gl-section-title">Госуслуги и цифровые сервисы</div>
-          <div style="font-size:12px;opacity:.75;">Порталы, идентификация, виды услуг</div>
-        </div>
-        <span class="gl-section-count">12 терминов</span>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-gov"></div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- БАНК -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <section id="sec-bank" class="aon mb-12" data-section="банк">
-      <div class="gl-section-header">
-        <span class="material-symbols-outlined gl-section-icon">credit_card</span>
-        <div>
-          <div class="gl-section-title">Банковские сервисы</div>
-          <div style="font-size:12px;opacity:.75;">Карты, переводы, онлайн-банкинг</div>
-        </div>
-        <span class="gl-section-count">15 терминов</span>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-bank"></div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- БЕЗОПАСНОСТЬ -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <section id="sec-sec" class="aon mb-12" data-section="безопасность">
-      <div class="gl-section-header">
-        <span class="material-symbols-outlined gl-section-icon">security</span>
-        <div>
-          <div class="gl-section-title">Безопасность в сети</div>
-          <div style="font-size:12px;opacity:.75;">Угрозы, защита, мошенничество</div>
-        </div>
-        <span class="gl-section-count">22 термина</span>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-sec"></div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- МЕДИА -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <section id="sec-media" class="aon mb-12" data-section="медиа">
-      <div class="gl-section-header">
-        <span class="material-symbols-outlined gl-section-icon">photo_camera</span>
-        <div>
-          <div class="gl-section-title">Медиа и контент</div>
-          <div style="font-size:12px;opacity:.75;">Фото, видео, звук, форматы</div>
-        </div>
-        <span class="gl-section-count">12 терминов</span>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-media"></div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- ТЕХНОЛОГИИ -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <section id="sec-tech" class="aon mb-12" data-section="технологии">
-      <div class="gl-section-header">
-        <span class="material-symbols-outlined gl-section-icon">memory</span>
-        <div>
-          <div class="gl-section-title">Современные технологии</div>
-          <div style="font-size:12px;opacity:.75;">Приложения, облака, умные устройства</div>
-        </div>
-        <span class="gl-section-count">18 терминов</span>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-tech"></div>
-    </section>
-
-  </div><!-- /gl-sections -->
-
-  <!-- EMPTY STATE -->
   <div id="gl-empty" class="hidden rounded-2xl border p-8 text-center" style="background:#fff;border-color:#e0e3e5;">
     <span class="material-symbols-outlined" style="font-size:48px;color:#76777d;">search_off</span>
     <p class="mt-3 text-base font-semibold" style="color:#191c1e;">Ничего не найдено</p>
@@ -511,14 +271,13 @@
 <footer class="border-t py-6 mt-4" style="background:#f2f4f6;border-color:#e0e3e5;">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
     <div class="text-xs" style="color:#76777d;">© 2026 PC Master · Образовательная платформа цифровой грамотности</div>
-    <div class="text-xs font-semibold" style="color:#45464d;">200 терминов · 12 тематических разделов</div>
-    <a href="https://vk.com/kubandigital" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-semibold hover:underline" style="color:#006398;">
-      <span class="material-symbols-outlined" style="font-size:16px;">share</span>Группа проекта ВКонтакте
-    </a>
+    <div class="text-xs font-semibold" style="color:#45464d;">1 термин · 1 раздел</div>
   </div>
 </footer>
 
 <script>
+// ======= ЗДЕСЬ 1 ТЕРМИН (для проверки) =======
+const TERMS = [
 // ═══════════════════════════════════════════════════════════════
 // ДАННЫЕ: 200 ТЕРМИНОВ
 // ═══════════════════════════════════════════════════════════════
@@ -2736,25 +2495,14 @@ const TERMS = [
       <li><b>«Цифровое исполнительное производство»</b> — онлайн-работа с приставами.</li>
     </ul>` }
 ];
-// ── Карта секций: id термина → id контейнера в HTML ──
+
 const SECTION_MAP = {
-  'basics' : 'cards-basics',
-  'equip'  : 'cards-equip',
-  'win'    : 'cards-win',
-  'files'  : 'cards-files',
-  'inet'   : 'cards-inet',
-  'mail'   : 'cards-mail',
-  'chat'   : 'cards-chat',
-  'gov'    : 'cards-gov',
-  'bank'   : 'cards-bank',
-  'sec'    : 'cards-sec',
-  'media'  : 'cards-media',
-  'tech'   : 'cards-tech'
+  'basics' : 'cards-basics'
 };
 
 function highlight(text, query){
   if(!query) return text;
-  const re = new RegExp('('+query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+  const re = new RegExp('('+query.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\$&')+')','gi');
   return text.replace(re,'<mark class="hl">$1</mark>');
 }
 
@@ -2774,26 +2522,28 @@ function renderCard(t, query){
     </div>`;
 }
 
+function plural(n){
+  if(n%10===1 && n%100!==11) return '';
+  if(n%10>=2 && n%10<=4 && (n%100<10||n%100>=20)) return 'а';
+  return 'ов';
+}
+
 function renderAll(filterCat='', query=''){
-  const q = query.toLowerCase();
+  const q = (query||'').toLowerCase();
 
   const filtered = TERMS.filter(t => {
-    const matchCat   = !filterCat || filterCat==='all'
-                       || t.cat === filterCat || t.id === filterCat;
-    const matchQuery = !q
-                       || t.term.toLowerCase().includes(q)
-                       || t.def.replace(/<[^>]+>/g,' ').toLowerCase().includes(q);
+    const matchCat   = !filterCat || filterCat==='all' || t.cat === filterCat || t.id === filterCat;
+    const plainDef   = t.def.replace(/<[^>]+>/g,' ').toLowerCase();
+    const matchQuery = !q || t.term.toLowerCase().includes(q) || plainDef.includes(q);
     return matchCat && matchQuery;
   });
 
-  // Группируем по секциям
   const groups = {};
   filtered.forEach(t => {
     if(!groups[t.id]) groups[t.id]=[];
     groups[t.id].push(t);
   });
 
-  // Рендерим каждую секцию
   Object.entries(SECTION_MAP).forEach(([secId, containerId]) => {
     const container = document.getElementById(containerId);
     if(!container) return;
@@ -2809,7 +2559,6 @@ function renderAll(filterCat='', query=''){
     container.innerHTML = cards.map(t => renderCard(t, query)).join('');
   });
 
-  // Счётчик результатов
   const resultCount = document.getElementById('result-count');
   if(resultCount){
     resultCount.textContent = filtered.length > 0
@@ -2817,20 +2566,44 @@ function renderAll(filterCat='', query=''){
       : '';
   }
 
-  // Общий счётчик «all»
   const cntAll = document.getElementById('cnt-all');
   if(cntAll) cntAll.textContent = filtered.length;
 
-  // Пустой стейт
   const empty = document.getElementById('gl-empty');
   if(empty) empty.classList.toggle('hidden', filtered.length > 0);
 }
 
-function plural(n){
-  if(n%10===1 && n%100!==11) return '';
-  if(n%10>=2 && n%10<=4 && (n%100<10||n%100>=20)) return 'а';
-  return 'ов';
-}
+document.addEventListener('DOMContentLoaded', () => {
+  renderAll();
+
+  const searchInput = document.getElementById('gl-search');
+  let activeFilter  = 'all';
+
+  function doFilter(){
+    const q = searchInput ? searchInput.value.trim() : '';
+    renderAll(activeFilter, q);
+  }
+
+  if(searchInput){
+    searchInput.addEventListener('input', doFilter);
+    searchInput.addEventListener('keydown', e => {
+      if(e.key === 'Escape'){
+        searchInput.value='';
+        doFilter();
+      }
+    });
+  }
+
+  document.querySelectorAll('#filter-tags .tag-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('#filter-tags .tag-pill')
+        .forEach(p=>p.classList.remove('active'));
+      pill.classList.add('active');
+      activeFilter = pill.dataset.cat || 'all';
+      doFilter();
+    });
+  });
+});
 </script>
 
 </body>
