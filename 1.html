@@ -1,0 +1,3353 @@
+<!DOCTYPE html>
+<html class="light" lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
+  <title>Глоссарий — 200 цифровых терминов | PC Master</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config={darkMode:"class",theme:{extend:{colors:{"secondary":"#006398","primary-container":"#131b2e","primary-fixed":"#dae2fd","secondary-fixed":"#cce5ff","on-primary-fixed":"#131b2e","background":"#f7f9fb","on-background":"#191c1e","surface":"#f7f9fb","on-surface":"#191c1e","surface-container-low":"#f2f4f6","surface-container":"#eceef0","surface-container-high":"#e6e8ea","surface-container-highest":"#e0e3e5","surface-variant":"#e0e3e5","on-surface-variant":"#45464d","outline":"#76777d","error":"#ba1a1a"},fontFamily:{body:["Manrope"]}}}}
+  </script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Manrope',sans-serif;background:#f7f9fb;color:#191c1e;cursor:none;overflow-x:hidden;}
+    a,button,[role="button"],input{cursor:none;}
+    #cursor-dot{position:fixed;z-index:99999;pointer-events:none;width:7px;height:7px;border-radius:50%;background:#006398;transform:translate(-50%,-50%);transition:width .15s,height .15s,background .2s;will-change:transform;}
+    #cursor-ring{position:fixed;z-index:99998;pointer-events:none;width:38px;height:38px;border-radius:50%;border:1.5px solid rgba(0,99,152,.45);transform:translate(-50%,-50%);transition:width .35s cubic-bezier(.16,1,.3,1),height .35s,border-color .3s;will-change:transform;}
+    body.ch #cursor-dot{width:10px;height:10px;background:#5bb8fe;}
+    body.ch #cursor-ring{width:60px;height:60px;border-color:rgba(0,99,152,.2);}
+    @media(hover:none){body,a,button{cursor:auto;}#cursor-dot,#cursor-ring{display:none!important;}}
+
+    .material-symbols-outlined{font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;}
+
+    body.zoom-sm{zoom:.88}
+    body.zoom-lg{zoom:1.13}
+
+    /* nav */
+    .nav-link{text-decoration:none;padding:.25rem .5rem;border-radius:.5rem;font-weight:500;color:#475569;display:inline-flex;align-items:center;gap:4px;transition:all .2s;font-size:14px;}
+    .nav-link:hover{color:#020617;background:rgba(148,163,184,.15);}
+    .nav-link-active{color:#2563eb!important;border-bottom:2px solid #2563eb;}
+
+    /* hero */
+    .hero-grid-bg{background-image:linear-gradient(rgba(0,99,152,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,99,152,.04) 1px,transparent 1px);background-size:48px 48px;}
+    .hero-accent-line{display:inline-block;width:48px;height:3px;background:linear-gradient(90deg,#006398,#5bb8fe);border-radius:9999px;margin-bottom:24px;}
+    .gradient-text{background:linear-gradient(135deg,#006398 0%,#5bb8fe 45%,#006398 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:grad-shift 4s linear infinite;}
+    @keyframes grad-shift{to{background-position:200% center;}}
+
+    /* tags */
+    .tag-pill{border-radius:9999px;padding:5px 11px;font-size:12px;font-weight:600;border:1px solid rgba(0,0,0,.06);background:#fff;color:#45464d;display:inline-flex;align-items:center;gap:6px;cursor:none;transition:all .2s;}
+    .tag-pill.active{background:#006398;color:#fff;border-color:#006398;}
+
+    /* section anchors */
+    .gl-section-header{
+      display:flex;align-items:center;gap:10px;
+      padding:14px 20px;
+      background:linear-gradient(135deg,#131b2e 0%,#006398 100%);
+      border-radius:18px;
+      color:#fff;
+      margin-bottom:18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .gl-section-header::after{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;background:rgba(255,255,255,.06);border-radius:50%;}
+    .gl-section-icon{font-size:26px;flex-shrink:0;}
+    .gl-section-title{font-size:18px;font-weight:800;letter-spacing:-.01em;}
+    .gl-section-count{margin-left:auto;font-size:11px;font-weight:700;background:rgba(255,255,255,.15);padding:3px 10px;border-radius:9999px;}
+
+    /* cards */
+    .gl-card{
+      border-radius:22px;border:1px solid rgba(0,0,0,.06);background:#fff;
+      padding:18px 18px 16px;
+      box-shadow:0 8px 24px rgba(0,0,0,.03);
+      transition:all .3s cubic-bezier(.16,1,.3,1);
+      display:flex;flex-direction:column;gap:8px;
+      position:relative;overflow:hidden;
+    }
+    .gl-card::before{content:'';position:absolute;inset:-40%;background:radial-gradient(circle at top left,rgba(0,99,152,.04),transparent 55%);opacity:0;transition:opacity .3s;}
+    .gl-card:hover{transform:translateY(-4px);box-shadow:0 16px 32px rgba(0,0,0,.09);}
+    .gl-card:hover::before{opacity:1;}
+    .gl-term{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#131b2e;}
+    .gl-def{font-size:13.5px;line-height:1.6;color:#45464d;}
+    .gl-def ul{margin-top:6px;padding-left:16px;list-style:disc;display:flex;flex-direction:column;gap:3px;}
+    .gl-def li{font-size:13px;line-height:1.5;color:#45464d;}
+    .gl-chip{font-size:11px;font-weight:600;padding:2px 9px;border-radius:9999px;background:#eef1fb;color:#3f465c;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;}
+    .gl-chip.c-equip{background:#e3f0fc;color:#003d57;}
+    .gl-chip.c-win{background:#f0effe;color:#3a1b90;}
+    .gl-chip.c-files{background:#fff8e1;color:#663c00;}
+    .gl-chip.c-net{background:#e6f4ea;color:#1a5c2a;}
+    .gl-chip.c-mail{background:#fce8f3;color:#7b1450;}
+    .gl-chip.c-chat{background:#fef6e0;color:#6e4c00;}
+    .gl-chip.c-gov{background:#e8f0fe;color:#1a37a0;}
+    .gl-chip.c-bank{background:#fff3cd;color:#7c4f00;}
+    .gl-chip.c-sec{background:#fce8e8;color:#7f1d1d;}
+    .gl-chip.c-media{background:#fdf2f8;color:#7b1490;}
+    .gl-chip.c-tech{background:#ecfdf5;color:#065f46;}
+
+    /* font switcher */
+    #font-switcher{position:fixed;bottom:28px;right:24px;z-index:200;display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border:1px solid rgba(0,0,0,.1);border-radius:9999px;padding:5px 10px;box-shadow:0 4px 16px rgba(0,0,0,.1);}
+    .fs-btn{padding:4px 10px;border-radius:9999px;font-weight:700;color:#45464d;font-size:13px;transition:background .2s,color .2s;border:none;background:none;}
+    .fs-btn:hover{background:rgba(0,99,152,.08);color:#006398;}
+    .fs-btn.active{background:#006398;color:#fff;}
+    .fs-divider{width:1px;height:16px;background:rgba(0,0,0,.1);margin:0 2px;}
+
+    /* qr widget */
+    #qr-widget{position:fixed;left:20px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;align-items:center;transition:all .4s cubic-bezier(.16,1,.3,1);}
+    .qr-card{background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border:1px solid rgba(0,0,0,.09);border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,.1);padding:16px;width:148px;display:flex;flex-direction:column;align-items:center;gap:10px;transition:all .4s cubic-bezier(.16,1,.3,1);overflow:hidden;}
+    .qr-card.collapsed{width:44px;padding:10px 8px;gap:6px;}
+    .qr-card.collapsed .qr-body{max-height:0;opacity:0;pointer-events:none;}
+    .qr-body{max-height:200px;opacity:1;transition:max-height .4s cubic-bezier(.16,1,.3,1),opacity .3s ease;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;}
+    .qr-toggle-btn{width:28px;height:28px;border-radius:50%;background:rgba(0,99,152,.1);color:#006398;display:flex;align-items:center;justify-content:center;border:none;flex-shrink:0;transition:background .25s,transform .3s;}
+    .qr-toggle-btn:hover{background:rgba(0,99,152,.18);}
+    .qr-card.collapsed .qr-toggle-btn{transform:rotate(180deg);}
+    .qr-label{font-size:11px;font-weight:600;color:#45464d;text-align:center;line-height:1.35;}
+    .qr-sublabel{font-size:10px;color:#76777d;text-align:center;line-height:1.3;}
+    @media(max-width:1100px){#qr-widget{display:none;}}
+
+    /* toc */
+    .toc-link{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;text-decoration:none;color:#45464d;font-size:13px;font-weight:600;transition:all .2s;border:1px solid rgba(0,0,0,.05);background:#fff;}
+    .toc-link:hover{background:#e8f0fe;color:#006398;border-color:rgba(0,99,152,.2);}
+
+    /* animate */
+    .aon{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
+    .aon.v{opacity:1;transform:translateY(0);}
+
+    #back-to-top{transition:all .3s ease;}
+
+    /* search highlight */
+    mark.hl{background:#fef08a;color:#191c1e;border-radius:2px;padding:0 2px;}
+
+    /* no-print mobile nav */
+    @media(max-width:767px){.md-hidden{display:none;}}
+  </style>
+</head>
+<body class="min-h-screen antialiased overflow-x-hidden">
+
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- Bg blobs -->
+<div class="fixed inset-0 pointer-events-none z-[-2] overflow-hidden">
+  <div class="absolute top-1/4 -left-32 w-96 h-96 rounded-full filter blur-3xl opacity-30" style="background:#dae2fd;animation:float 8s ease-in-out infinite;"></div>
+  <div class="absolute bottom-1/4 -right-32 w-[28rem] h-[28rem] rounded-full filter blur-3xl opacity-30" style="background:#cce5ff;animation:float 6s ease-in-out infinite reverse;"></div>
+</div>
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+
+<!-- QR widget -->
+<div id="qr-widget" role="complementary" aria-label="QR-код для телефона">
+  <div class="qr-card" id="qr-card">
+    <button class="qr-toggle-btn" id="qr-toggle" aria-label="Свернуть / развернуть QR" title="Свернуть">
+      <span class="material-symbols-outlined" style="font-size:16px;font-variation-settings:'FILL' 0;">chevron_left</span>
+    </button>
+    <div class="qr-body" id="qr-body">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=112x112&data=https%3A%2F%2F%D1%82%D0%B5%D1%85%D0%BD%D0%BE%D0%B3%D1%80%D0%B0%D0%BC.%D1%80%D1%84&bgcolor=ffffff&color=131b2e&margin=2" alt="QR-код платформы" width="112" height="112" style="border-radius:10px;border:1px solid rgba(0,0,0,.07);" loading="lazy"/>
+      <div><div class="qr-label">Открыть с телефона</div><div class="qr-sublabel">Наведите камеру<br>на код</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Font switcher -->
+<div id="font-switcher" role="toolbar" aria-label="Размер шрифта">
+  <button class="fs-btn" data-zoom="sm" title="Меньше">A−</button>
+  <div class="fs-divider"></div>
+  <button class="fs-btn active" data-zoom="md" title="Обычный">A</button>
+  <div class="fs-divider"></div>
+  <button class="fs-btn" data-zoom="lg" title="Больше">A+</button>
+</div>
+
+<!-- Back to top -->
+<button id="back-to-top" aria-label="Наверх" class="hidden fixed right-4 bottom-24 z-40 w-10 h-10 rounded-full text-white shadow-lg flex items-center justify-center" style="background:#006398;">
+  <span class="material-symbols-outlined" style="font-size:20px;">arrow_upward</span>
+</button>
+
+<!-- Ribbon -->
+<div style="background:#131b2e;color:#cce5ff;text-align:center;font-size:12px;font-weight:700;letter-spacing:.04em;padding:8px 16px;position:relative;z-index:50;">
+  Платформа создана в рамках проекта «Наследие Кубани: мост поколений и цифровых горизонтов» · Грант Губернатора Кубани
+</div>
+
+<!-- Nav -->
+<nav class="bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-slate-200/50 shadow-sm">
+  <div class="flex justify-between items-center h-16 px-6 lg:px-8 max-w-7xl mx-auto">
+    <a href="index.html" class="flex items-center gap-2 group">
+      <span class="material-symbols-outlined text-3xl group-hover:rotate-12 transition-transform duration-300" style="color:#006398;">computer</span>
+      <span class="text-xl font-bold tracking-tight text-slate-900">PC Master</span>
+    </a>
+    <div class="hidden md:flex items-center gap-5">
+      <a class="nav-link" href="index.html#modules-section">Уроки</a>
+      <a class="nav-link" href="lesson1.html">Урок 1</a>
+      <a class="nav-link" href="lesson2.html">Урок 2</a>
+      <a class="nav-link" href="lesson3.html">Урок 3</a>
+      <a class="nav-link" href="lesson4.html">Урок 4</a>
+      <a class="nav-link" href="lesson5.html">Урок 5</a>
+      <a class="nav-link" href="lesson6.html">Урок 6</a>
+      <a class="nav-link nav-link-active" href="glossary.html" aria-current="page">Глоссарий</a>
+      <a class="flex items-center gap-2 text-slate-600 font-medium hover:text-slate-900 transition-all hover:bg-slate-100/50 rounded-lg px-2 py-1 text-sm" href="index.html#security">
+        Безопасность
+        <span class="relative flex h-2.5 w-2.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span></span>
+      </a>
+    </div>
+    <a href="index.html" class="md:hidden text-slate-600 p-2 hover:bg-slate-100/50 rounded-lg transition-colors inline-flex">
+      <span class="material-symbols-outlined">arrow_back</span>
+    </a>
+  </div>
+</nav>
+
+<main class="pt-8 pb-20 px-4 sm:px-6 lg:px-8" style="max-width:1280px;margin:0 auto;">
+
+  <!-- HERO -->
+  <section class="aon mb-10">
+    <div class="flex flex-wrap items-center gap-3 text-sm mb-6" style="color:#45464d;">
+      <a href="index.html" class="inline-flex items-center gap-1.5 hover:text-blue-600 transition-colors">
+        <span class="material-symbols-outlined" style="font-size:18px;">arrow_back</span>На главную
+      </a>
+      <span style="opacity:.4;">/</span>
+      <span style="font-weight:700;color:#191c1e;">Глоссарий цифровых терминов</span>
+    </div>
+
+    <div class="relative rounded-3xl overflow-hidden border hero-grid-bg" style="background:#fff;border-color:#e0e3e5;box-shadow:0 12px 40px rgba(0,0,0,.05);">
+      <div class="absolute -top-20 -left-12 w-64 h-64 rounded-full blur-3xl opacity-40" style="background:#dae2fd;"></div>
+      <div class="absolute -bottom-24 right-0 w-72 h-72 rounded-full blur-3xl opacity-40" style="background:#cce5ff;"></div>
+      <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-0">
+        <div class="px-8 sm:px-10 py-12 flex flex-col justify-center">
+          <div class="hero-accent-line"></div>
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold border mb-4" style="background:rgba(218,226,253,.3);color:#131b2e;border-color:rgba(218,226,253,.6);">
+            <span class="material-symbols-outlined" style="font-size:15px;">menu_book</span>
+            Расширенный справочник · 200 терминов
+          </div>
+          <h1 class="font-extrabold leading-tight tracking-tight mb-4" style="font-size:clamp(30px,4.5vw,48px);color:#191c1e;">
+            Глоссарий<br><span class="gradient-text">цифровых терминов</span>
+          </h1>
+          <p style="font-size:16px;color:#45464d;max-width:520px;line-height:1.65;margin-bottom:20px;">
+            Полный справочник самых важных слов и понятий из мира компьютеров и интернета. Для каждого термина — развёрнутое объяснение, виды, подвиды и практические примеры. Понятным языком, без лишних технических деталей.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <a href="glossary-print.html" target="_blank" class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold border transition-all hover:shadow-md" style="background:#006398;color:#fff;border-color:#006398;">
+              <span class="material-symbols-outlined" style="font-size:16px;">print</span>Версия для печати
+            </a>
+            <a href="#toc" class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold border transition-all hover:bg-slate-50" style="color:#45464d;border-color:#e0e3e5;">
+              <span class="material-symbols-outlined" style="font-size:16px;">list</span>Содержание
+            </a>
+          </div>
+        </div>
+        <div class="hidden lg:flex flex-col justify-center px-10 py-10 border-l" style="border-color:rgba(224,227,229,.7);">
+          <!-- How to use -->
+          <p class="text-xs font-bold uppercase tracking-widest mb-5" style="color:#76777d;">Как пользоваться глоссарием</p>
+          <div class="flex flex-col gap-4">
+            <div class="flex items-start gap-4">
+              <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-extrabold flex-shrink-0" style="background:#dae2fd;color:#131b2e;">1</div>
+              <div>
+                <div class="font-semibold mb-0.5" style="font-size:14px;">Найдите по поиску или теме</div>
+                <p style="font-size:13px;color:#45464d;line-height:1.55;">Введите слово в строку поиска ниже, или нажмите на кнопку нужной темы — оборудование, интернет, безопасность и другие.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-extrabold flex-shrink-0" style="background:#cce5ff;color:#003d57;">2</div>
+              <div>
+                <div class="font-semibold mb-0.5" style="font-size:14px;">Прочитайте объяснение и виды</div>
+                <p style="font-size:13px;color:#45464d;line-height:1.55;">Каждая карточка содержит краткое определение, перечень видов и подвидов, а также практический пример из жизни.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-extrabold flex-shrink-0" style="background:#ffddb8;color:#2a1700;">3</div>
+              <div>
+                <div class="font-semibold mb-0.5" style="font-size:14px;">Закрепите на практике</div>
+                <p style="font-size:13px;color:#45464d;line-height:1.55;">Вернитесь к уроку или откройте нужный сервис и попробуйте найти изученный элемент интерфейса самостоятельно.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEARCH + TAGS -->
+  <section class="aon mb-8">
+    <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between mb-4">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-widest mb-1" style="color:#76777d;">Поиск и фильтрация</p>
+        <h2 class="text-2xl font-extrabold" style="color:#191c1e;">Найдите нужный термин</h2>
+      </div>
+      <div class="relative w-full sm:w-96">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2" style="font-size:18px;color:#76777d;">search</span>
+        <input type="text" id="gl-search" placeholder="Начните вводить термин или слово из описания..." class="w-full rounded-full border py-2.5 pl-9 pr-4 text-sm outline-none focus:ring-2" style="border-color:#e0e3e5;background:#fff;font-family:Manrope;focus:ring-color:#006398;"/>
+      </div>
+    </div>
+    <div id="filter-tags" class="flex flex-wrap gap-2 text-xs mb-2">
+      <button class="tag-pill active" data-cat="all"><span class="material-symbols-outlined" style="font-size:14px;">select_all</span>Все темы <span id="cnt-all" class="ml-1 font-bold"></span></button>
+      <button class="tag-pill" data-cat="оборудование"><span class="material-symbols-outlined" style="font-size:14px;">devices</span>Оборудование</button>
+      <button class="tag-pill" data-cat="Windows"><span class="material-symbols-outlined" style="font-size:14px;">window</span>Windows и программы</button>
+      <button class="tag-pill" data-cat="файлы"><span class="material-symbols-outlined" style="font-size:14px;">folder</span>Файлы и папки</button>
+      <button class="tag-pill" data-cat="интернет"><span class="material-symbols-outlined" style="font-size:14px;">wifi</span>Интернет и сети</button>
+      <button class="tag-pill" data-cat="почта"><span class="material-symbols-outlined" style="font-size:14px;">mail</span>Эл. почта</button>
+      <button class="tag-pill" data-cat="общение"><span class="material-symbols-outlined" style="font-size:14px;">chat</span>Мессенджеры</button>
+      <button class="tag-pill" data-cat="госуслуги"><span class="material-symbols-outlined" style="font-size:14px;">account_balance</span>Госуслуги</button>
+      <button class="tag-pill" data-cat="банк"><span class="material-symbols-outlined" style="font-size:14px;">credit_card</span>Банкинг</button>
+      <button class="tag-pill" data-cat="безопасность"><span class="material-symbols-outlined" style="font-size:14px;">security</span>Безопасность</button>
+      <button class="tag-pill" data-cat="медиа"><span class="material-symbols-outlined" style="font-size:14px;">photo_camera</span>Медиа</button>
+      <button class="tag-pill" data-cat="технологии"><span class="material-symbols-outlined" style="font-size:14px;">memory</span>Технологии</button>
+    </div>
+    <div id="result-count" class="text-xs font-semibold mb-4" style="color:#76777d;"></div>
+  </section>
+
+  <!-- TOC -->
+  <section id="toc" class="aon mb-10">
+    <div class="rounded-2xl border p-5" style="background:#fff;border-color:#e0e3e5;">
+      <p class="text-xs font-bold uppercase tracking-widest mb-4" style="color:#76777d;">Быстрое содержание</p>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+        <a class="toc-link" href="#sec-basics"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">computer</span>Основы ПК</a>
+        <a class="toc-link" href="#sec-equip"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">devices</span>Оборудование</a>
+        <a class="toc-link" href="#sec-win"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">window</span>Windows и ПО</a>
+        <a class="toc-link" href="#sec-files"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">folder</span>Файлы и папки</a>
+        <a class="toc-link" href="#sec-inet"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">wifi</span>Интернет и сети</a>
+        <a class="toc-link" href="#sec-mail"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">mail</span>Эл. почта</a>
+        <a class="toc-link" href="#sec-chat"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">chat</span>Мессенджеры</a>
+        <a class="toc-link" href="#sec-gov"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">account_balance</span>Госуслуги</a>
+        <a class="toc-link" href="#sec-bank"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">credit_card</span>Банкинг</a>
+        <a class="toc-link" href="#sec-sec"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">security</span>Безопасность</a>
+        <a class="toc-link" href="#sec-media"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">photo_camera</span>Медиа</a>
+        <a class="toc-link" href="#sec-tech"><span class="material-symbols-outlined" style="font-size:18px;color:#006398;">memory</span>Технологии</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ALL SECTIONS -->
+  <div id="gl-sections">
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- ОСНОВЫ ПК -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section id="sec-basics" class="aon mb-12" data-section="основы">
+      <div class="gl-section-header">
+        <span class="material-symbols-outlined gl-section-icon">computer</span>
+        <div>
+          <div class="gl-section-title">Основы ПК</div>
+          <div style="font-size:12px;opacity:.75;">Базовые устройства и понятия</div>
+        </div>
+        <span class="gl-section-count">10 терминов</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-basics">
+        <!-- JS вставит карточки -->
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- ОБОРУДОВАНИЕ -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section id="sec-equip" class="aon mb-12" data-section="оборудование">
+      <div class="gl-section-header">
+        <span class="material-symbols-outlined gl-section-icon">devices</span>
+        <div>
+          <div class="gl-section-title">Оборудование</div>
+          <div style="font-size:12px;opacity:.75;">Устройства, типы, характеристики</div>
+        </div>
+        <span class="gl-section-count">25 терминов</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-equip"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- WINDOWS и ПО -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section id="sec-win" class="aon mb-12" data-section="Windows">
+      <div class="gl-section-header">
+        <span class="material-symbols-outlined gl-section-icon">window</span>
+        <div>
+          <div class="gl-section-title">Windows и программы</div>
+          <div style="font-size:12px;opacity:.75;">Интерфейс, настройки, типы ПО</div>
+        </div>
+        <span class="gl-section-count">20 терминов</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-win"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- ФАЙЛЫ -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section id="sec-files" class="aon mb-12" data-section="файлы">
+      <div class="gl-section-header">
+        <span class="material-symbols-outlined gl-section-icon">folder</span>
+        <div>
+          <div class="gl-section-title">Файлы и папки</div>
+          <div style="font-size:12px;opacity:.75;">Форматы, операции, хранение</div>
+        </div>
+        <span class="gl-section-count">18 терминов</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-files"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- ИНТЕРНЕТ -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section id="sec-inet" class="aon mb-12" data-section="интернет">
+      <div class="gl-section-header">
+        <span class="material-symbols-outlined gl-section-icon">wifi</span>
+        <div>
+          <div class="gl-section-title">Интернет и сети</div>
+          <div style="font-size:12px;opacity:.75;">Виды подключений, скорости, браузер</div>
+        </div>
+        <span class="gl-section-count">28 терминов</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-inet"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- ПОЧТА -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section id="sec-mail" class="aon mb-12" data-section="почта">
+      <div class="gl-section-header">
+        <span class="material-symbols-outlined gl-section-icon">mail</span>
+        <div>
+          <div class="gl-section-title">Электронная почта</div>
+          <div style="font-size:12px;opacity:.75;">Сервисы, структура письма, безопасность</div>
+        </div>
+        <span class="gl-section-count">10 терминов</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-mail"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- МЕССЕНДЖЕРЫ -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section id="sec-chat" class="aon mb-12" data-section="общение">
+      <div class="gl-section-header">
+        <span class="material-symbols-outlined gl-section-icon">chat</span>
+        <div>
+          <div class="gl-section-title">Мессенджеры и общение</div>
+          <div style="font-size:12px;opacity:.75;">Форматы общения, виды сообщений</div>
+        </div>
+        <span class="gl-section-count">10 терминов</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-chat"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- ГОСУСЛУГИ -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section id="sec-gov" class="aon mb-12" data-section="госуслуги">
+      <div class="gl-section-header">
+        <span class="material-symbols-outlined gl-section-icon">account_balance</span>
+        <div>
+          <div class="gl-section-title">Госуслуги и цифровые сервисы</div>
+          <div style="font-size:12px;opacity:.75;">Порталы, идентификация, виды услуг</div>
+        </div>
+        <span class="gl-section-count">12 терминов</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-gov"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- БАНК -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section id="sec-bank" class="aon mb-12" data-section="банк">
+      <div class="gl-section-header">
+        <span class="material-symbols-outlined gl-section-icon">credit_card</span>
+        <div>
+          <div class="gl-section-title">Банковские сервисы</div>
+          <div style="font-size:12px;opacity:.75;">Карты, переводы, онлайн-банкинг</div>
+        </div>
+        <span class="gl-section-count">15 терминов</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-bank"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- БЕЗОПАСНОСТЬ -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section id="sec-sec" class="aon mb-12" data-section="безопасность">
+      <div class="gl-section-header">
+        <span class="material-symbols-outlined gl-section-icon">security</span>
+        <div>
+          <div class="gl-section-title">Безопасность в сети</div>
+          <div style="font-size:12px;opacity:.75;">Угрозы, защита, мошенничество</div>
+        </div>
+        <span class="gl-section-count">22 термина</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-sec"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- МЕДИА -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section id="sec-media" class="aon mb-12" data-section="медиа">
+      <div class="gl-section-header">
+        <span class="material-symbols-outlined gl-section-icon">photo_camera</span>
+        <div>
+          <div class="gl-section-title">Медиа и контент</div>
+          <div style="font-size:12px;opacity:.75;">Фото, видео, звук, форматы</div>
+        </div>
+        <span class="gl-section-count">12 терминов</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-media"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- ТЕХНОЛОГИИ -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section id="sec-tech" class="aon mb-12" data-section="технологии">
+      <div class="gl-section-header">
+        <span class="material-symbols-outlined gl-section-icon">memory</span>
+        <div>
+          <div class="gl-section-title">Современные технологии</div>
+          <div style="font-size:12px;opacity:.75;">Приложения, облака, умные устройства</div>
+        </div>
+        <span class="gl-section-count">18 терминов</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-tech"></div>
+    </section>
+
+  </div><!-- /gl-sections -->
+
+  <!-- EMPTY STATE -->
+  <div id="gl-empty" class="hidden rounded-2xl border p-8 text-center" style="background:#fff;border-color:#e0e3e5;">
+    <span class="material-symbols-outlined" style="font-size:48px;color:#76777d;">search_off</span>
+    <p class="mt-3 text-base font-semibold" style="color:#191c1e;">Ничего не найдено</p>
+    <p class="mt-1 text-sm" style="color:#45464d;">Попробуйте упростить запрос или выбрать другую тему.</p>
+  </div>
+
+</main>
+
+<footer class="border-t py-6 mt-4" style="background:#f2f4f6;border-color:#e0e3e5;">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="text-xs" style="color:#76777d;">© 2026 PC Master · Образовательная платформа цифровой грамотности</div>
+    <div class="text-xs font-semibold" style="color:#45464d;">200 терминов · 12 тематических разделов</div>
+    <a href="https://vk.com/kubandigital" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-xs font-semibold hover:underline" style="color:#006398;">
+      <span class="material-symbols-outlined" style="font-size:16px;">share</span>Группа проекта ВКонтакте
+    </a>
+  </div>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// ДАННЫЕ: 200 ТЕРМИНОВ
+// ═══════════════════════════════════════════════════════════════
+const TERMS = [
+
+  // ──────── ОСНОВЫ ПК ────────
+  { id:'basics', cat:'основы', chip:'c-equip',
+    term:'Компьютер',
+    def:`Электронное устройство, предназначенное для автоматической обработки, хранения и отображения информации. Позволяет создавать документы, смотреть фото и видео, общаться и выходить в интернет.
+    <ul>
+      <li><b>Настольный компьютер (Desktop)</b> — стационарный ПК, состоит из системного блока, монитора, клавиатуры и мыши. Мощный, удобен для дома и офиса.</li>
+      <li><b>Ноутбук (Laptop)</b> — переносной компьютер с экраном и клавиатурой в одном корпусе, работает от аккумулятора.</li>
+      <li><b>Нетбук</b> — облегчённый небольшой ноутбук для простых задач: почта, интернет, документы.</li>
+      <li><b>Моноблок (All-in-One)</b> — монитор и системный блок объединены в один корпус, удобен и компактен.</li>
+    </ul>
+    <b>Пример:</b> дома обычно используют ноутбук или настольный компьютер.` },
+
+  { id:'basics', cat:'основы', chip:'c-equip',
+    term:'Ноутбук',
+    def:`Переносной персональный компьютер с откидным экраном, встроенной клавиатурой и аккумулятором. Весит обычно 1–3 кг.
+    <ul>
+      <li><b>Классический ноутбук</b> — экран 15,6 дюйма, до 8–10 часов работы от батареи.</li>
+      <li><b>Ультрабук</b> — тонкий и лёгкий, до 1,3 кг, для работы в дороге.</li>
+      <li><b>Ноутбук-трансформер</b> — экран разворачивается на 360°, можно использовать как планшет.</li>
+      <li><b>Игровой ноутбук</b> — мощный, с отдельной видеокартой, тяжелее обычного.</li>
+    </ul>
+    <b>Пример:</b> большинство уроков платформы удобно проходить именно на ноутбуке.` },
+
+  { id:'basics', cat:'основы', chip:'c-equip',
+    term:'Планшет',
+    def:`Плоское мобильное устройство с сенсорным экраном без встроенной физической клавиатуры. Управляется пальцами. Весит 300–700 г.
+    <ul>
+      <li><b>Планшет на Android</b> — наиболее распространённый тип (Samsung, Lenovo и другие).</li>
+      <li><b>iPad (Apple)</b> — планшет производства Apple, работает под управлением iPadOS.</li>
+      <li><b>Планшет с Windows</b> — подходит для тех, кто хочет стандартные программы Windows.</li>
+    </ul>
+    <b>Пример:</b> удобен для чтения, просмотра видео и общения в мессенджерах.` },
+
+  { id:'basics', cat:'основы', chip:'c-equip',
+    term:'Смартфон',
+    def:`Мобильный телефон с возможностями мини-компьютера: выход в интернет, установка приложений, камера, мессенджеры, навигация.
+    <ul>
+      <li><b>Android-смартфон</b> — самая популярная платформа (Samsung, Xiaomi, Honor и другие).</li>
+      <li><b>iPhone (Apple iOS)</b> — смартфоны компании Apple.</li>
+      <li><b>Кнопочный телефон</b> — не смартфон, только звонки и SMS.</li>
+    </ul>
+    <b>Диагональ экрана:</b> 4–7 дюймов. Чем больше — тем удобнее читать и смотреть видео.
+    <br><b>Пример:</b> большинство банковских приложений и «Госуслуги» удобно использовать со смартфона.` },
+
+  { id:'basics', cat:'основы', chip:'c-equip',
+    term:'Процессор (CPU)',
+    def:`«Мозг» компьютера — электронный чип, который выполняет все вычисления и команды. Чем он мощнее, тем быстрее работает компьютер.
+    <ul>
+      <li><b>Популярные производители:</b> Intel (Core i3, i5, i7) и AMD (Ryzen 3, 5, 7).</li>
+      <li><b>Частота</b> — измеряется в гигагерцах (ГГц). Чем выше — тем быстрее.</li>
+      <li><b>Количество ядер</b> — современный ПК имеет 4–16 ядер, каждое ядро — это отдельный «мозг».</li>
+    </ul>
+    <b>Пример:</b> процессор Intel Core i5 — хороший выбор для домашнего ПК.` },
+
+  { id:'basics', cat:'основы', chip:'c-equip',
+    term:'Оперативная память (ОЗУ / RAM)',
+    def:`Временное хранилище данных, которое компьютер использует прямо во время работы. Чем её больше — тем больше программ можно открыть одновременно без «зависания».
+    <ul>
+      <li><b>4 ГБ</b> — минимум для базовых задач.</li>
+      <li><b>8 ГБ</b> — комфортная работа с несколькими программами.</li>
+      <li><b>16 ГБ и более</b> — для активного использования, монтажа видео.</li>
+    </ul>
+    <b>Важно:</b> оперативная память «обнуляется» при выключении компьютера. Сохраняйте документы на диск!` },
+
+  { id:'basics', cat:'основы', chip:'c-equip',
+    term:'Диск (хранилище)',
+    def:`Устройство для постоянного хранения файлов, программ и операционной системы. В отличие от оперативной памяти, данные сохраняются после выключения.
+    <ul>
+      <li><b>HDD (жёсткий диск)</b> — классический диск с вращающимися пластинами. Объёмный и дешевле, но медленнее.</li>
+      <li><b>SSD (твердотельный накопитель)</b> — работает без движущихся частей. Быстрее загружает систему, тише, надёжнее, но дороже.</li>
+      <li><b>Внешний диск</b> — переносной накопитель для резервных копий.</li>
+    </ul>
+    <b>Объём:</b> для домашнего ПК достаточно 256 ГБ – 1 ТБ.` },
+
+  { id:'basics', cat:'основы', chip:'c-equip',
+    term:'Видеокарта (GPU)',
+    def:`Компонент компьютера, отвечающий за формирование изображения на экране. Обрабатывает графику и выводит картинку на монитор.
+    <ul>
+      <li><b>Встроенная (интегрированная)</b> — встроена в процессор, достаточна для офисных задач, почты и видео.</li>
+      <li><b>Дискретная (отдельная)</b> — самостоятельная карта, необходима для игр и монтажа видео.</li>
+    </ul>
+    <b>Пример:</b> для просмотра видео на Госуслугах встроенной видеокарты более чем достаточно.` },
+
+  { id:'basics', cat:'основы', chip:'c-equip',
+    term:'Аккумулятор (батарея ноутбука)',
+    def:`Встроенный элемент питания ноутбука или планшета, позволяющий работать без подключения к розетке.
+    <ul>
+      <li><b>Ёмкость</b> — измеряется в мАч (миллиампер-час) или Вт·ч. Чем выше — тем дольше работает.</li>
+      <li><b>Среднее время работы</b> — 4–12 часов в зависимости от задач и настроек.</li>
+    </ul>
+    <b>Совет:</b> не разряжайте батарею «в ноль» — это продлевает её жизнь. Заряжайте при 20–80%.` },
+
+  { id:'basics', cat:'основы', chip:'c-equip',
+    term:'Операционная система (ОС)',
+    def:`Главная программа, которая управляет компьютером, его ресурсами и всеми установленными приложениями. Без ОС компьютер не запустится.
+    <ul>
+      <li><b>Windows</b> — самая распространённая в России. Версии: Windows 10, Windows 11.</li>
+      <li><b>macOS</b> — система компании Apple для компьютеров Mac.</li>
+      <li><b>Linux</b> — бесплатная открытая система, используется реже.</li>
+      <li><b>Android</b> — операционная система для смартфонов и планшетов.</li>
+      <li><b>iOS / iPadOS</b> — система Apple для iPhone и iPad.</li>
+    </ul>
+    <b>Пример:</b> большинство государственных порталов России лучше всего работают в браузерах на Windows.` },
+
+  // ──────── ОБОРУДОВАНИЕ ────────
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'Монитор',
+    def:`Экран, на котором отображается вся работа компьютера: окна, текст, видео и изображения. Подключается к системному блоку кабелем.
+    <ul>
+      <li><b>Типы матриц:</b>
+        <ul>
+          <li><b>IPS</b> — широкий угол обзора, точные цвета. Лучший выбор для работы с документами и фото.</li>
+          <li><b>VA</b> — глубокий чёрный цвет, хорош для кино.</li>
+          <li><b>TN</b> — дешевле, но цвета менее точные.</li>
+        </ul>
+      </li>
+      <li><b>Разрешение:</b> Full HD (1920×1080) — стандарт; 4K (3840×2160) — очень детальное изображение.</li>
+      <li><b>Размер:</b> 21–27 дюймов — самый комфортный диапазон для домашней работы.</li>
+      <li><b>Частота обновления:</b> 60 Гц — стандарт; 144 Гц — для игр.</li>
+      <li><b>Разъёмы:</b> HDMI, DisplayPort, VGA (старый стандарт).</li>
+    </ul>
+    <b>Совет:</b> для пожилых глаз подойдёт IPS-монитор 24 дюйма с FullHD и антибликовым покрытием.` },
+
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'Клавиатура',
+    def:`Устройство для ввода текста и команд. Содержит буквенные, цифровые и специальные клавиши.
+    <ul>
+      <li><b>По подключению:</b>
+        <ul>
+          <li><b>Проводная (USB)</b> — надёжна, не требует батареек.</li>
+          <li><b>Беспроводная (Bluetooth или USB-приёмник)</b> — без провода, удобна на расстоянии.</li>
+        </ul>
+      </li>
+      <li><b>По конструкции клавиш:</b>
+        <ul>
+          <li><b>Мембранная</b> — тихая, мягкий нажим, самая распространённая.</li>
+          <li><b>Механическая</b> — громкая, чёткий щелчок, долговечная.</li>
+          <li><b>Ножничная</b> — плоская, используется в ноутбуках.</li>
+        </ul>
+      </li>
+      <li><b>По размеру:</b> полноразмерная (с цифровым блоком), компактная (без цифрового блока), мини (60%).</li>
+      <li><b>По языку:</b> русская раскладка + латиница на одних клавишах.</li>
+    </ul>
+    <b>Совет:</b> для начинающих лучше проводная мембранная клавиатура с крупными буквами.` },
+
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'Мышь',
+    def:`Устройство для управления указателем на экране. Движение мыши по поверхности двигает стрелку на мониторе.
+    <ul>
+      <li><b>По подключению:</b>
+        <ul>
+          <li><b>Проводная (USB)</b> — не нуждается в батарейках, надёжна.</li>
+          <li><b>Беспроводная (Bluetooth)</b> — без провода, удобна, требует батареек или аккумулятора.</li>
+          <li><b>Беспроводная (USB-ресивер)</b> — небольшой USB-передатчик вставляется в компьютер.</li>
+        </ul>
+      </li>
+      <li><b>По технологии слежения:</b>
+        <ul>
+          <li><b>Оптическая</b> — светодиод снизу, работает на любой ровной поверхности.</li>
+          <li><b>Лазерная</b> — более точная, работает даже на стекле.</li>
+          <li><b>Трекбол</b> — шар сверху, передвигается пальцем — для тех, кому трудно двигать руку.</li>
+        </ul>
+      </li>
+      <li><b>По форме:</b> стандартная, вертикальная (эргономичная), компактная дорожная.</li>
+      <li><b>Кнопки:</b> левая (выбор), правая (контекстное меню), колёсико прокрутки.</li>
+    </ul>
+    <b>Совет:</b> вертикальная мышь уменьшает нагрузку на запястье при долгой работе.` },
+
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'Роутер (маршрутизатор)',
+    def:`Сетевое устройство, которое принимает интернет от провайдера и раздаёт его внутри дома по Wi-Fi и проводам.
+    <ul>
+      <li><b>По диапазону Wi-Fi:</b>
+        <ul>
+          <li><b>Однодиапазонный (2,4 ГГц)</b> — хорошо проходит через стены, но медленнее.</li>
+          <li><b>Двухдиапазонный (2,4 + 5 ГГц)</b> — диапазон 5 ГГц быстрее, но хуже проходит сквозь стены.</li>
+          <li><b>Трёхдиапазонный</b> — три радиоканала, для большой квартиры.</li>
+        </ul>
+      </li>
+      <li><b>По стандарту Wi-Fi:</b>
+        <ul>
+          <li><b>Wi-Fi 4 (802.11n)</b> — до 300 Мбит/с.</li>
+          <li><b>Wi-Fi 5 (802.11ac)</b> — до 1 Гбит/с.</li>
+          <li><b>Wi-Fi 6 (802.11ax)</b> — самый современный, до 9,6 Гбит/с.</li>
+        </ul>
+      </li>
+      <li><b>Mesh-система</b> — несколько роутеров, работающих как единая сеть для покрытия большой площади.</li>
+      <li><b>Мобильный роутер</b> — работает от SIM-карты, не требует проводного интернета.</li>
+    </ul>
+    <b>Совет:</b> для квартиры достаточно двухдиапазонного роутера с поддержкой Wi-Fi 5.` },
+
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'Принтер',
+    def:`Устройство для печати документов, фотографий и других материалов на бумаге.
+    <ul>
+      <li><b>Струйный</b> — печать жидкими чернилами. Хорош для фотографий, дешевле. Минус: чернила засыхают, если редко печатать.</li>
+      <li><b>Лазерный</b> — печать тонером (порошком). Быстрее, экономичнее для текста, выдерживает долгое хранение без использования.</li>
+      <li><b>МФУ (многофункциональное устройство)</b> — принтер + сканер + иногда копир и факс в одном корпусе.</li>
+      <li><b>Фотопринтер</b> — маленький принтер только для фотографий.</li>
+    </ul>
+    <b>Подключение:</b> USB-кабелем или по Wi-Fi.
+    <br><b>Совет:</b> для домашнего использования МФУ лазерное — лучший выбор «на долгие годы».` },
+
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'Сканер',
+    def:`Устройство для оцифровки бумажных документов, фотографий и рисунков в электронный вид.
+    <ul>
+      <li><b>Планшетный сканер</b> — стекло, под которое кладут документ. Точная развёртка, хорош для документов.</li>
+      <li><b>Протяжный (роликовый)</b> — документ пропускается через механизм, быстрее для многостраничных документов.</li>
+      <li><b>3D-сканер</b> — сканирует трёхмерные объекты.</li>
+      <li><b>Мобильный (приложение на телефоне)</b> — камера смартфона «снимает» документ и автоматически выравнивает его.</li>
+    </ul>
+    <b>Форматы сохранения:</b> PDF, JPG, PNG.` },
+
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'Веб-камера',
+    def:`Камера, подключённая к компьютеру, для видеозвонков, видеоконференций и онлайн-общения.
+    <ul>
+      <li><b>Встроенная</b> — расположена над экраном ноутбука, удобна, обычно HD-качество.</li>
+      <li><b>Внешняя (USB)</b> — отдельное устройство для настольного компьютера, можно выбрать позицию.</li>
+    </ul>
+    <b>Разрешение:</b> HD (720p), Full HD (1080p), 4K.
+    <br><b>Пример:</b> веб-камера нужна для видеозвонка с врачом, родственниками или на занятиях онлайн.` },
+
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'Микрофон и гарнитура',
+    def:`Устройства для ввода звука при голосовом или видеообщении.
+    <ul>
+      <li><b>Встроенный микрофон</b> — есть в большинстве ноутбуков, достаточен для разговора.</li>
+      <li><b>Наушники с микрофоном (гарнитура)</b> — лучше слышно, меньше шумов.</li>
+      <li><b>Настольный микрофон</b> — для качественных звонков и записи.</li>
+    </ul>
+    <b>Пример:</b> при видеозвонке через WhatsApp гарнитура улучшает качество связи.` },
+
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'USB-накопитель (флешка)',
+    def:`Компактное устройство для хранения и переноса файлов. Подключается к USB-порту компьютера или телефона.
+    <ul>
+      <li><b>Обычная флешка</b> — USB Type-A, подключается к стандартному USB-порту.</li>
+      <li><b>Флешка Type-C</b> — для современных ноутбуков и смартфонов.</li>
+      <li><b>Двусторонняя (OTG)</b> — один конец USB-A, другой Type-C — подходит и к компьютеру, и к телефону.</li>
+    </ul>
+    <b>Объём:</b> 8 ГБ, 16 ГБ, 32 ГБ, 64 ГБ, 128 ГБ и более.
+    <br><b>Скорость:</b> USB 2.0 (медленнее), USB 3.0 (синий разъём, в 10 раз быстрее).
+    <br><b>Совет:</b> выбирайте USB 3.0 на 32 ГБ — быстро и достаточно для документов и фото.` },
+
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'Источник бесперебойного питания (ИБП)',
+    def:`Устройство-батарея между розеткой и компьютером. При отключении электричества даёт несколько минут работы — хватает, чтобы сохранить документы и выключить ПК правильно.
+    <ul>
+      <li><b>Офлайн-ИБП</b> — простой, переключается при пропадании питания.</li>
+      <li><b>Онлайн-ИБП</b> — всегда работает через батарею, мгновенная защита.</li>
+    </ul>
+    <b>Важно для:</b> настольного компьютера. Ноутбук и так имеет аккумулятор.` },
+
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'Тачпад',
+    def:`Сенсорная площадка на ноутбуке под клавиатурой. Реагирует на движения пальцев и заменяет мышь.
+    <ul>
+      <li><b>Одиночное касание</b> — клик левой кнопкой мыши.</li>
+      <li><b>Двойное касание</b> — двойной клик (открыть).</li>
+      <li><b>Нажатие двумя пальцами</b> — правая кнопка мыши.</li>
+      <li><b>Прокрутка двумя пальцами</b> — листать страницу вверх/вниз.</li>
+    </ul>
+    <b>Совет:</b> для удобства работы на столе лучше подключить внешнюю мышь.` },
+
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'Принт-скрин (кнопка PrtSc)',
+    def:`Специальная клавиша на клавиатуре для создания снимка экрана (скриншота). После нажатия изображение копируется в буфер обмена.
+    <ul>
+      <li><b>PrtSc</b> — копирует весь экран.</li>
+      <li><b>Alt + PrtSc</b> — копирует только активное окно.</li>
+      <li><b>Win + Shift + S</b> — выбор произвольной области экрана (Windows 10/11).</li>
+    </ul>
+    <b>Пример:</b> сделали скриншот квитанции на Госуслугах — вставьте в документ Word (Ctrl+V) и сохраните.` },
+
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'Разъёмы и порты компьютера',
+    def:`Отверстия и разъёмы на корпусе компьютера для подключения внешних устройств.
+    <ul>
+      <li><b>USB-A</b> — прямоугольный разъём для флешек, мышей, клавиатур.</li>
+      <li><b>USB-C</b> — овальный современный разъём: заряд, данные, видео — всё в одном.</li>
+      <li><b>HDMI</b> — для подключения монитора или телевизора.</li>
+      <li><b>3,5 мм аудио-джек</b> — для наушников и микрофона.</li>
+      <li><b>SD-карта</b> — слот для карт памяти фотоаппарата.</li>
+      <li><b>Ethernet (RJ-45)</b> — разъём для проводного интернета.</li>
+    </ul>` },
+
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'Карта памяти (SD-карта)',
+    def:`Небольшой чип для хранения информации. Используется в фотоаппаратах, смартфонах, видеокамерах и планшетах.
+    <ul>
+      <li><b>SD</b> — стандартный размер (для фотоаппаратов).</li>
+      <li><b>MicroSD</b> — самый маленький, для смартфонов.</li>
+      <li><b>miniSD</b> — промежуточный (редко используется).</li>
+    </ul>
+    <b>Скоростные классы:</b> Class 10, UHS-I, UHS-II — чем выше, тем быстрее запись видео.
+    <br><b>Объём:</b> 8 ГБ – 1 ТБ.` },
+
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'Наушники',
+    def:`Устройства для прослушивания звука с компьютера, телефона или планшета.
+    <ul>
+      <li><b>Вкладыши (earphones)</b> — небольшие, вставляются в ушную раковину.</li>
+      <li><b>Полноразмерные (Over-ear)</b> — чашки накрывают ухо полностью, лучшее качество звука.</li>
+      <li><b>Накладные (On-ear)</b> — накладываются на ухо.</li>
+    </ul>
+    <b>По подключению:</b> проводные (3,5 мм или USB), беспроводные Bluetooth.
+    <br><b>Шумоподавление:</b> активное (ANC) — подавляет посторонние звуки электронным способом.` },
+
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'МФУ',
+    def:`Многофункциональное устройство — принтер, сканер и копировальный аппарат в одном корпусе. Экономит место и деньги по сравнению с покупкой отдельных устройств.
+    <ul>
+      <li><b>Струйное МФУ</b> — идеально для цветных фотографий.</li>
+      <li><b>Лазерное МФУ</b> — экономично для печати большого количества текстовых документов.</li>
+      <li><b>С ADF (автоподатчик документов)</b> — сканирует и копирует многостраничные документы автоматически.</li>
+      <li><b>С Wi-Fi / облачной печатью</b> — можно печатать с телефона.</li>
+    </ul>` },
+
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'Колонки',
+    def:`Акустические устройства для воспроизведения звука от компьютера, телефона или планшета.
+    <ul>
+      <li><b>Встроенные (ноутбук)</b> — достаточны для видеозвонков и музыки.</li>
+      <li><b>Настольные (2.0)</b> — два динамика, чистый стереозвук.</li>
+      <li><b>С сабвуфером (2.1)</b> — два динамика + низкочастотный, насыщенный бас.</li>
+      <li><b>Bluetooth-колонка</b> — беспроводная, подключается к любому устройству.</li>
+    </ul>` },
+
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'Аккумуляторный блок (Powerbank)',
+    def:`Портативный внешний аккумулятор для зарядки смартфона или планшета, когда нет доступа к розетке.
+    <ul>
+      <li><b>Ёмкость:</b> 5 000 мАч — 1 зарядка телефона; 20 000 мАч — 4–5 зарядок.</li>
+      <li><b>Быстрая зарядка (PD, Quick Charge)</b> — заряжает за 1–1,5 часа вместо 3.</li>
+    </ul>
+    <b>Пример:</b> в поездке powerbank — обязательная вещь для смартфона.` },
+
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'Умная колонка',
+    def:`Беспроводная колонка со встроенным голосовым ассистентом. Можно разговаривать с ней голосом: задавать вопросы, включать музыку, управлять «умным домом».
+    <ul>
+      <li><b>Яндекс Станция</b> — работает с Алисой, популярна в России.</li>
+      <li><b>Amazon Echo</b> — работает с Alexa.</li>
+      <li><b>Google Nest</b> — работает с Google Ассистентом.</li>
+    </ul>
+    <b>Пример:</b> «Алиса, напомни мне в 10 утра принять таблетку».` },
+
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'Зарядное устройство',
+    def:`Устройство для восполнения заряда аккумулятора смартфона, планшета или ноутбука.
+    <ul>
+      <li><b>USB-A адаптер</b> — стандартный блок с USB-портом и кабелем Micro-USB или USB-C.</li>
+      <li><b>USB-C PD адаптер</b> — современный, быстро заряжает ноутбуки и смартфоны.</li>
+      <li><b>Беспроводное зарядное устройство (Qi)</b> — кладёте телефон на площадку без кабеля.</li>
+    </ul>
+    <b>Мощность:</b> 5–10 Вт (обычная), 18–65 Вт (быстрая зарядка).` },
+
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'Сетевой фильтр (удлинитель)',
+    def:`Удлинитель с дополнительными розетками и фильтром, защищающим технику от перепадов напряжения.
+    <ul>
+      <li><b>Без защиты</b> — просто удлинитель для дополнительных розеток.</li>
+      <li><b>Со встроенной защитой</b> — содержит варистор, который поглощает скачки напряжения.</li>
+      <li><b>С USB-портами</b> — позволяет заряжать телефон прямо от сетевого фильтра.</li>
+    </ul>
+    <b>Совет:</b> никогда не включайте компьютер напрямую в розетку — используйте сетевой фильтр.` },
+
+  { id:'equip', cat:'оборудование', chip:'c-equip',
+    term:'Кабель и провод передачи данных',
+    def:`Провод для передачи данных между устройствами или для зарядки.
+    <ul>
+      <li><b>USB-A → Micro-USB</b> — старый стандарт, зарядка смартфонов до 2018 г.</li>
+      <li><b>USB-A → USB-C</b> — современный стандарт, большинство телефонов 2019–2026 г.</li>
+      <li><b>Lightning</b> — кабель для iPhone и iPad (производство Apple).</li>
+      <li><b>HDMI → HDMI</b> — для подключения монитора или телевизора.</li>
+      <li><b>Ethernet (LAN)</b> — провод для проводного интернета.</li>
+    </ul>` },
+
+  // ──────── WINDOWS и ПО ────────
+  { id:'win', cat:'Windows', chip:'c-win',
+    term:'Рабочий стол Windows',
+    def:`Первый экран, который вы видите после входа в Windows. На нём расположены значки программ, папки и панель задач.
+    <ul>
+      <li><b>Значки (иконки)</b> — небольшие рисунки, обозначающие программы или файлы.</li>
+      <li><b>Обои рабочего стола</b> — фоновое изображение, которое можно изменить.</li>
+      <li><b>Виджеты</b> — мини-инструменты (часы, погода) прямо на рабочем столе.</li>
+    </ul>
+    <b>Пример:</b> двойной щелчок по значку браузера на рабочем столе открывает интернет.` },
+
+  { id:'win', cat:'Windows', chip:'c-win',
+    term:'Панель задач',
+    def:`Горизонтальная полоса в нижней части экрана Windows. На ней всегда видны кнопка «Пуск», закреплённые программы, открытые окна и часы.
+    <ul>
+      <li><b>Кнопка «Пуск»</b> — левый нижний угол, открывает меню программ.</li>
+      <li><b>Поиск</b> — значок лупы, для быстрого поиска файлов и программ.</li>
+      <li><b>Область уведомлений</b> — правый угол: часы, значки Wi-Fi, звука, антивируса.</li>
+      <li><b>Закреплённые программы</b> — иконки программ для быстрого запуска.</li>
+    </ul>` },
+
+  { id:'win', cat:'Windows', chip:'c-win',
+    term:'Проводник Windows',
+    def:`Встроенная программа для просмотра файлов и папок на компьютере. Открывается значком папки на панели задач или клавишами Win+E.
+    <ul>
+      <li><b>Боковое меню</b> — «Этот компьютер», «Документы», «Загрузки», «Рабочий стол», диски.</li>
+      <li><b>Адресная строка</b> — показывает текущую папку и позволяет перейти в другое место.</li>
+      <li><b>Виды отображения:</b> значки, список, таблица, плитка.</li>
+    </ul>
+    <b>Пример:</b> чтобы найти скачанный файл, откройте Проводник → Загрузки.` },
+
+  { id:'win', cat:'Windows', chip:'c-win',
+    term:'Ярлык',
+    def:`Небольшой значок на рабочем столе или в папке, являющийся «ссылкой» на программу или файл. Ярлык — это не сам файл, а лишь указатель на него.
+    <ul>
+      <li><b>Распознать ярлык:</b> маленькая стрелка в нижнем левом углу значка.</li>
+      <li><b>Создать ярлык:</b> ПКМ (правая кнопка мыши) на файле → «Создать ярлык».</li>
+    </ul>
+    <b>Важно:</b> удаление ярлыка не удаляет сам файл или программу.` },
+
+  { id:'win', cat:'Windows', chip:'c-win',
+    term:'Диспетчер задач',
+    def:`Системный инструмент Windows для просмотра запущенных программ и управления ими. Помогает «закрыть» зависшую программу.
+    <ul>
+      <li><b>Открыть:</b> Ctrl + Alt + Delete → «Диспетчер задач», или ПКМ на панели задач → «Диспетчер задач».</li>
+      <li><b>Вкладка «Процессы»</b> — список всех программ и нагрузка на процессор/память.</li>
+      <li><b>«Снять задачу»</b> — принудительно закрыть зависшую программу.</li>
+    </ul>
+    <b>Пример:</b> если браузер завис и не реагирует — откройте Диспетчер задач и снимите задачу браузера.` },
+
+  { id:'win', cat:'Windows', chip:'c-win',
+    term:'Обновление Windows',
+    def:`Автоматически загружаемые «заплатки» для системы, улучшающие работу и устраняющие уязвимости.
+    <ul>
+      <li><b>Обновление безопасности</b> — устраняет дыры, через которые вирусы могут проникнуть в ПК.</li>
+      <li><b>Функциональное обновление</b> — добавляет новые возможности.</li>
+    </ul>
+    <b>Как включить:</b> Параметры → Обновление и безопасность → Центр обновления Windows.
+    <br><b>Совет:</b> не отключайте обновления — они защищают вас от мошенников.` },
+
+  { id:'win', cat:'Windows', chip:'c-win',
+    term:'Программа / Приложение',
+    def:`Набор команд, выполняемых компьютером для решения определённых задач.
+    <ul>
+      <li><b>Системные программы</b> — Проводник, Блокнот, Калькулятор — установлены вместе с Windows.</li>
+      <li><b>Офисные программы</b> — Microsoft Word (текст), Excel (таблицы), PowerPoint (презентации).</li>
+      <li><b>Интернет-браузеры</b> — Chrome, Edge, Яндекс.Браузер.</li>
+      <li><b>Мессенджеры</b> — WhatsApp, Telegram для ПК.</li>
+      <li><b>Медиаплееры</b> — VLC, Windows Media Player — воспроизведение видео и музыки.</li>
+      <li><b>Утилиты</b> — вспомогательные программы (архиватор, антивирус, очистка диска).</li>
+    </ul>` },
+
+  { id:'win', cat:'Windows', chip:'c-win',
+    term:'Установка программы',
+    def:`Процесс добавления новой программы в компьютер. Разные способы установки:
+    <ul>
+      <li><b>Из установочного файла (.exe / .msi)</b> — скачали файл из интернета, запустили, следовали инструкциям мастера.</li>
+      <li><b>Из Microsoft Store</b> — официальный магазин Windows, самый безопасный способ.</li>
+      <li><b>С диска</b> — редко используется сегодня.</li>
+    </ul>
+    <b>Важно:</b> скачивайте программы только с официальных сайтов — это защита от вирусов!` },
+
+  { id:'win', cat:'Windows', chip:'c-win',
+    term:'Удаление программы',
+    def:`Полное удаление ненужной программы с компьютера. Это освобождает место на диске.
+    <ul>
+      <li><b>Способ 1:</b> Параметры (Win+I) → Приложения → найдите программу → Удалить.</li>
+      <li><b>Способ 2:</b> Панель управления → Программы → Удалить программу.</li>
+    </ul>
+    <b>Важно:</b> просто удалить значок с рабочего стола — это не удаление программы!` },
+
+  { id:'win', cat:'Windows', chip:'c-win',
+    term:'Экранная клавиатура',
+    def:`Виртуальная клавиатура, которая отображается прямо на экране. Полезна, если физическая клавиатура сломалась или при работе на планшете.
+    <ul>
+      <li><b>Открыть:</b> Пуск → поиск «Экранная клавиатура».</li>
+      <li><b>Или:</b> Win + Ctrl + O.</li>
+    </ul>
+    <b>Пример:</b> при вводе пароля в банке можно использовать экранную клавиатуру для защиты от «перехвата нажатий».` },
+
+    { id:'win', cat:'Windows', chip:'c-win',
+    term:'Специальные возможности (Accessibility)',
+    def:`Встроенные инструменты Windows для удобства людей с ограниченным зрением, слухом или подвижностью.
+    <ul>
+      <li><b>Экранная лупа</b> — увеличивает часть экрана. Win + «+» включает, Win + «–» уменьшает.</li>
+      <li><b>Экранный диктор</b> — читает вслух текст на экране.</li>
+      <li><b>Высокий контраст</b> — усиливает различие между цветами для людей с плохим зрением.</li>
+      <li><b>Залипание клавиш</b> — позволяет нажимать Ctrl+Alt+Del по одной клавише поочерёдно.</li>
+      <li><b>Размер текста</b> — Параметры → Специальные возможности → Текст: от 100% до 225%.</li>
+    </ul>
+    <b>Открыть:</b> Win + U или Параметры → Специальные возможности.` },
+
+  { id:'win', cat:'Windows', chip:'c-win',
+    term:'Параметры Windows (Settings)',
+    def:`Центр управления всеми настройками системы. Заменяет старую «Панель управления» в Windows 10/11.
+    <ul>
+      <li><b>Система</b> — яркость, звук, уведомления, питание.</li>
+      <li><b>Устройства</b> — принтер, мышь, клавиатура, Bluetooth.</li>
+      <li><b>Сеть и Интернет</b> — Wi-Fi, VPN, настройки прокси.</li>
+      <li><b>Учётные записи</b> — ваш профиль, пароль входа.</li>
+      <li><b>Обновление и безопасность</b> — Центр обновлений, резервное копирование.</li>
+    </ul>
+    <b>Открыть:</b> Win + I или Пуск → шестерёнка.` },
+
+  { id:'win', cat:'Windows', chip:'c-win',
+    term:'Учётная запись Windows',
+    def:`Профиль пользователя на компьютере: имя, пароль, персональные настройки и файлы.
+    <ul>
+      <li><b>Локальная учётная запись</b> — существует только на данном компьютере.</li>
+      <li><b>Учётная запись Microsoft</b> — связана с email @outlook.com или @hotmail.com, синхронизирует настройки между устройствами.</li>
+      <li><b>Администратор</b> — может устанавливать программы и менять системные настройки.</li>
+      <li><b>Стандартный пользователь</b> — ограниченные права, безопаснее для повседневной работы.</li>
+    </ul>
+    <b>Совет:</b> установите пароль на учётную запись, чтобы защитить данные.` },
+
+  { id:'win', cat:'Windows', chip:'c-win',
+    term:'Буфер обмена',
+    def:`Временная область памяти, куда попадает скопированный или вырезанный текст, файл или изображение. Оттуда можно вставить в другое место.
+    <ul>
+      <li><b>Ctrl + C</b> — копировать (оригинал остаётся).</li>
+      <li><b>Ctrl + X</b> — вырезать (оригинал удаляется).</li>
+      <li><b>Ctrl + V</b> — вставить.</li>
+      <li><b>Win + V</b> — история буфера обмена (Windows 10/11): видны последние скопированные элементы.</li>
+    </ul>
+    <b>Пример:</b> скопировали номер телефона с сайта Ctrl+C, вставили в мессенджер Ctrl+V.` },
+
+  { id:'win', cat:'Windows', chip:'c-win',
+    term:'Горячие клавиши (сочетания клавиш)',
+    def:`Комбинации клавиш для быстрого выполнения команд без мыши.
+    <ul>
+      <li><b>Ctrl + Z</b> — отменить последнее действие.</li>
+      <li><b>Ctrl + S</b> — сохранить документ.</li>
+      <li><b>Ctrl + A</b> — выделить всё.</li>
+      <li><b>Ctrl + F</b> — поиск на странице или в документе.</li>
+      <li><b>Alt + F4</b> — закрыть текущую программу.</li>
+      <li><b>Win + D</b> — свернуть все окна, показать рабочий стол.</li>
+      <li><b>Win + L</b> — заблокировать компьютер.</li>
+      <li><b>F5</b> — обновить страницу в браузере.</li>
+    </ul>` },
+
+  { id:'win', cat:'Windows', chip:'c-win',
+    term:'Уведомления Windows',
+    def:`Всплывающие сообщения в правом нижнем углу экрана от программ, системы или сайтов.
+    <ul>
+      <li><b>Системные</b> — обновление установлено, батарея разряжена.</li>
+      <li><b>От браузера</b> — новости, напоминания сайтов.</li>
+      <li><b>От мессенджеров</b> — новые сообщения в Telegram или WhatsApp.</li>
+    </ul>
+    <b>Управление:</b> Параметры → Система → Уведомления — можно отключить уведомления от отдельных программ.
+    <br><b>Центр уведомлений:</b> значок речевого пузыря в правом нижнем углу.` },
+
+  { id:'win', cat:'Windows', chip:'c-win',
+    term:'Режим сна и гибернация',
+    def:`Режимы экономии энергии, при которых компьютер снижает потребление электричества.
+    <ul>
+      <li><b>Режим сна (Sleep)</b> — компьютер почти не потребляет энергию, но помнит открытые программы. Выход — любая клавиша или движение мышью. Подходит для короткого перерыва.</li>
+      <li><b>Гибернация (Hibernate)</b> — данные записываются на диск, компьютер полностью выключается. Выход дольше, но не расходует питание. Подходит для длительного перерыва.</li>
+      <li><b>Выключение</b> — полное завершение работы, все данные сохраняются на диске.</li>
+    </ul>
+    <b>Совет:</b> на ночь лучше выключать или ставить в гибернацию.` },
+
+  { id:'win', cat:'Windows', chip:'c-win',
+    term:'Антивирус Windows Defender',
+    def:`Встроенная бесплатная защитная программа Windows 10/11. Защищает от вирусов, шпионского ПО и других угроз в реальном времени.
+    <ul>
+      <li><b>Защита в реальном времени</b> — постоянно следит за файлами и программами.</li>
+      <li><b>Быстрая проверка</b> — сканирует самые важные места.</li>
+      <li><b>Полная проверка</b> — сканирует весь компьютер (занимает несколько часов).</li>
+      <li><b>Брандмауэр</b> — контролирует сетевой трафик.</li>
+    </ul>
+    <b>Открыть:</b> Пуск → «Безопасность Windows».
+    <br><b>Совет:</b> не отключайте Defender — он надёжен и не замедляет систему.` },
+
+  { id:'win', cat:'Windows', chip:'c-win',
+    term:'Резервное копирование (Backup)',
+    def:`Создание запасных копий важных файлов на случай поломки компьютера, вируса или случайного удаления.
+    <ul>
+      <li><b>Журнал файлов Windows</b> — автоматически сохраняет версии файлов на внешний диск.</li>
+      <li><b>OneDrive</b> — облачное хранилище Microsoft, автоматически синхронизирует «Документы» и «Рабочий стол».</li>
+      <li><b>Ручное копирование</b> — скопировать важные папки на флешку или внешний диск.</li>
+    </ul>
+    <b>Правило 3-2-1:</b> 3 копии данных, на 2 разных носителях, 1 из которых хранится отдельно (или в облаке).` },
+
+  { id:'win', cat:'Windows', chip:'c-win',
+    term:'Диспетчер устройств',
+    def:`Системный инструмент Windows для просмотра и управления подключённым оборудованием — принтерами, клавиатурами, мышами, камерами и другими устройствами.
+    <ul>
+      <li><b>Открыть:</b> ПКМ по кнопке «Пуск» → «Диспетчер устройств».</li>
+      <li><b>Жёлтый восклицательный знак</b> — устройство работает с ошибкой или не установлен драйвер.</li>
+      <li><b>Обновить драйвер</b> — ПКМ на устройстве → «Обновить драйвер».</li>
+    </ul>
+    <b>Пример:</b> если принтер не виден системе — проверьте Диспетчер устройств.` },
+
+  { id:'win', cat:'Windows', chip:'c-win',
+    term:'Драйвер',
+    def:`Специальная программа-посредник, которая «объясняет» Windows, как работать с конкретным устройством: принтером, мышью, видеокартой, звуковой картой.
+    <ul>
+      <li><b>Установка:</b> автоматически через Центр обновлений Windows или вручную с сайта производителя.</li>
+      <li><b>Устаревший драйвер</b> — может вызывать ошибки, зависания и некорректную работу устройства.</li>
+    </ul>
+    <b>Пример:</b> после подключения нового принтера Windows автоматически ищет и устанавливает нужный драйвер.` },
+
+  // ──────── ФАЙЛЫ И ПАПКИ ────────
+  { id:'files', cat:'файлы', chip:'c-files',
+    term:'Файл',
+    def:`Базовая единица хранения информации на компьютере. Каждый файл имеет имя и расширение, показывающее тип.
+    <ul>
+      <li><b>Текстовые:</b> .docx (Word), .txt (блокнот), .pdf (для печати).</li>
+      <li><b>Таблицы:</b> .xlsx (Excel).</li>
+      <li><b>Изображения:</b> .jpg, .png, .bmp, .gif.</li>
+      <li><b>Видео:</b> .mp4, .avi, .mkv.</li>
+      <li><b>Аудио:</b> .mp3, .wav, .flac.</li>
+      <li><b>Архивы:</b> .zip, .rar, .7z.</li>
+      <li><b>Программы:</b> .exe, .msi.</li>
+    </ul>
+    <b>Размер файла</b> измеряется в байтах: KB (килобайт) → MB (мегабайт) → GB (гигабайт).` },
+
+  { id:'files', cat:'файлы', chip:'c-files',
+    term:'Папка (каталог)',
+    def:`Контейнер для хранения файлов и других папок. Помогает организовать информацию по темам, датам или проектам.
+    <ul>
+      <li><b>Системные папки:</b> «Документы», «Изображения», «Загрузки», «Музыка», «Видео» — созданы Windows автоматически.</li>
+      <li><b>Пользовательские</b> — создаёте сами. Правая кнопка мыши → «Создать» → «Папку».</li>
+      <li><b>Вложенные папки</b> — папка внутри папки (например: Документы → 2026 → Январь).</li>
+    </ul>
+    <b>Совет:</b> создайте папку «Важные документы» и храните там сканы паспорта, справок, договоров.` },
+
+  { id:'files', cat:'файлы', chip:'c-files',
+    term:'Расширение файла',
+    def:`Набор букв после точки в имени файла, определяющий его тип и то, какой программой его открывать.
+    <ul>
+      <li><b>.docx</b> — документ Microsoft Word.</li>
+      <li><b>.pdf</b> — документ для чтения и печати (Adobe Reader, браузер).</li>
+      <li><b>.jpg / .jpeg</b> — сжатое изображение (фото).</li>
+      <li><b>.png</b> — изображение с прозрачным фоном.</li>
+      <li><b>.mp4</b> — видеофайл.</li>
+      <li><b>.mp3</b> — аудиофайл.</li>
+      <li><b>.zip</b> — архив с упакованными файлами.</li>
+      <li><b>.exe</b> — исполняемый файл программы.</li>
+    </ul>
+    <b>Совет:</b> если расширение скрыто — включите его отображение: Проводник → Вид → «Расширения имён файлов».` },
+
+  { id:'files', cat:'файлы', chip:'c-files',
+    term:'PDF-документ',
+    def:`Формат файла, в котором документ выглядит одинаково на любом устройстве и в любой системе. Идеален для официальных справок, договоров и форм.
+    <ul>
+      <li><b>Просмотр:</b> любой браузер (Chrome, Edge), Adobe Acrobat Reader.</li>
+      <li><b>Создание:</b> любая программа → «Печать» → «Сохранить как PDF».</li>
+      <li><b>Редактирование:</b> Adobe Acrobat (платный) или онлайн-сервисы (ilovepdf.com, smallpdf.com).</li>
+      <li><b>Защита паролем:</b> документ можно зашифровать паролем для безопасности.</li>
+    </ul>
+    <b>Пример:</b> справки с Госуслуг приходят именно в формате PDF.` },
+
+  { id:'files', cat:'файлы', chip:'c-files',
+    term:'Архив (ZIP, RAR)',
+    def:`Сжатый контейнер, внутри которого хранятся один или несколько файлов и папок. Уменьшает размер для хранения или пересылки.
+    <ul>
+      <li><b>ZIP</b> — стандартный формат, поддерживается Windows без дополнительных программ.</li>
+      <li><b>RAR</b> — более сильное сжатие, требует программу WinRAR.</li>
+      <li><b>7Z</b> — ещё лучшее сжатие, бесплатная программа 7-Zip.</li>
+    </ul>
+    <b>Распаковать ZIP:</b> дважды щёлкните по архиву → «Извлечь всё».
+    <br><b>Осторожно:</b> не открывайте .exe-файлы из архивов, полученных от незнакомцев!` },
+
+  { id:'files', cat:'файлы', chip:'c-files',
+    term:'Корзина',
+    def:`Специальная папка на рабочем столе, куда попадают удалённые файлы. Это «страховка» от случайного удаления.
+    <ul>
+      <li><b>Удалить файл</b> — выделите файл, нажмите Delete. Файл перейдёт в корзину.</li>
+      <li><b>Восстановить</b> — откройте корзину, ПКМ на файле → «Восстановить».</li>
+      <li><b>Удалить навсегда</b> — «Очистить корзину» (место освобождается).</li>
+      <li><b>Удалить без корзины</b> — Shift + Delete (осторожно: восстановить будет сложнее).</li>
+    </ul>
+    <b>Совет:</b> не спешите чистить корзину — подержите файлы там несколько дней.` },
+
+  { id:'files', cat:'файлы', chip:'c-files',
+    term:'Диск C: и другие диски',
+    def:`Компьютерный диск разделён на логические разделы, обозначаемые буквами латинского алфавита.
+    <ul>
+      <li><b>Диск C:</b> — основной, здесь установлены Windows и программы. Не храните здесь личные файлы!</li>
+      <li><b>Диск D:</b> — часто используется для хранения личных файлов, фото, видео.</li>
+      <li><b>Диск E:, F:...</b> — флешки, внешние диски, DVD-приводы.</li>
+    </ul>
+    <b>Совет:</b> храните личные файлы на диске D: — при переустановке Windows диск C: может очиститься.` },
+
+  { id:'files', cat:'файлы', chip:'c-files',
+    term:'Сканирование документа',
+    def:`Процесс создания электронной копии бумажного документа с помощью сканера или камеры смартфона.
+    <ul>
+      <li><b>Через сканер / МФУ</b> — самое высокое качество, сохраняет в PDF или JPG.</li>
+      <li><b>Через приложение на телефоне</b> — «Adobe Scan», «CamScanner», «Microsoft Lens» — фотографируют документ и выравнивают его автоматически.</li>
+    </ul>
+    <b>Пример:</b> для загрузки документов на Госуслуги нужно отсканировать паспорт или справку.` },
+
+  { id:'files', cat:'файлы', chip:'c-files',
+    term:'Облачное хранилище',
+    def:`Интернет-сервис для хранения файлов на серверах в интернете. Доступ — с любого устройства из любой точки мира.
+    <ul>
+      <li><b>Яндекс.Диск</b> — российский сервис, 10 ГБ бесплатно.</li>
+      <li><b>Google Диск</b> — 15 ГБ бесплатно.</li>
+      <li><b>OneDrive</b> — от Microsoft, 5 ГБ бесплатно, встроен в Windows.</li>
+      <li><b>Облако Mail.ru</b> — российский сервис.</li>
+    </ul>
+    <b>Преимущества:</b> файлы не потеряются при поломке компьютера, доступны с телефона.
+    <br><b>Совет:</b> храните сканы важных документов в облаке.` },
+
+  { id:'files', cat:'файлы', chip:'c-files',
+    term:'Копирование и вставка файлов',
+    def:`Базовые операции для создания копий файлов и их перемещения между папками.
+    <ul>
+      <li><b>Ctrl + C</b> — скопировать (оригинал остаётся на месте).</li>
+      <li><b>Ctrl + X</b> — вырезать (оригинал будет удалён после вставки).</li>
+      <li><b>Ctrl + V</b> — вставить в выбранное место.</li>
+      <li><b>Перетащить</b> — зажать ЛКМ и переместить файл мышью.</li>
+      <li><b>Перетащить с Ctrl</b> — создать копию при перетаскивании.</li>
+    </ul>` },
+
+  { id:'files', cat:'файлы', chip:'c-files',
+    term:'Переименование файла',
+    def:`Изменение названия файла или папки без изменения содержимого.
+    <ul>
+      <li><b>ПКМ на файле</b> → «Переименовать».</li>
+      <li><b>Или:</b> щёлкните один раз на уже выбранном файле — название станет редактируемым.</li>
+      <li><b>Или:</b> выделите файл → нажмите клавишу F2.</li>
+    </ul>
+    <b>Важно:</b> не меняйте расширение файла (.docx, .jpg) — иначе файл может не открыться!` },
+
+  { id:'files', cat:'файлы', chip:'c-files',
+    term:'Поиск файлов',
+    def:`Встроенные инструменты Windows для быстрого нахождения нужного файла или папки.
+    <ul>
+      <li><b>Поиск в Проводнике</b> — поле в правом верхнем углу окна Проводника.</li>
+      <li><b>Поиск через Пуск</b> — нажмите Win, начните вводить имя файла.</li>
+      <li><b>Расширенный поиск</b> — Проводник → «Параметры поиска» — фильтр по дате, типу и размеру.</li>
+    </ul>
+    <b>Пример:</b> забыли, куда сохранили документ — нажмите Win и начните вводить его название.` },
+
+  { id:'files', cat:'файлы', chip:'c-files',
+    term:'Общий доступ к файлам',
+    def:`Возможность открыть доступ к файлу или папке другим пользователям — в домашней сети или через интернет.
+    <ul>
+      <li><b>Через облако</b> — в Яндекс.Диске или Google Диске: «Поделиться» → скопировать ссылку и отправить.</li>
+      <li><b>По локальной сети</b> — ПКМ на папке → «Свойства» → «Общий доступ».</li>
+      <li><b>Через мессенджер</b> — прикрепить файл к сообщению и отправить.</li>
+    </ul>
+    <b>Пример:</b> поделитесь фото с внуками через ссылку в Яндекс.Диске.` },
+
+  { id:'files', cat:'файлы', chip:'c-files',
+    term:'Свойства файла',
+    def:`Информация о файле: размер, дата создания, тип, автор и другие данные.
+    <ul>
+      <li><b>Открыть:</b> ПКМ на файле → «Свойства».</li>
+      <li><b>Общие</b> — тип, расположение, размер, дата создания и изменения.</li>
+      <li><b>Атрибут «Только для чтения»</b> — защищает файл от случайного изменения.</li>
+      <li><b>Атрибут «Скрытый»</b> — файл не отображается в обычном режиме просмотра.</li>
+    </ul>` },
+
+  { id:'files', cat:'файлы', chip:'c-files',
+    term:'Скриншот экрана',
+    def:`Снимок того, что отображается на вашем экране в данный момент. Сохраняется как изображение.
+    <ul>
+      <li><b>PrtSc</b> — копирует весь экран в буфер обмена.</li>
+      <li><b>Win + PrtSc</b> — сохраняет скриншот автоматически в папку «Изображения → Снимки экрана».</li>
+      <li><b>Win + Shift + S</b> — выделить произвольную область и скопировать.</li>
+      <li><b>Ножницы (Snipping Tool)</b> — встроенная программа с дополнительными возможностями.</li>
+      <li><b>На телефоне (Android):</b> кнопка питания + кнопка громкости вниз.</li>
+    </ul>
+    <b>Пример:</b> сделайте скриншот подтверждения оплаты и сохраните как документ.` },
+
+  { id:'files', cat:'файлы', chip:'c-files',
+    term:'Формат изображений (JPG, PNG и другие)',
+    def:`Различные способы хранения изображений, каждый из которых подходит для определённых задач.
+    <ul>
+      <li><b>JPG / JPEG</b> — сжатое изображение, уменьшает размер файла, незначительно снижает качество. Идеален для фото.</li>
+      <li><b>PNG</b> — сохраняет качество без потерь, поддерживает прозрачный фон. Для скриншотов и графики.</li>
+      <li><b>GIF</b> — поддерживает анимацию (движущиеся картинки). Маленький размер.</li>
+      <li><b>BMP</b> — несжатый, высокое качество, но большой размер.</li>
+      <li><b>HEIC</b> — современный формат iPhone, очень компактный.</li>
+    </ul>` },
+
+  { id:'files', cat:'файлы', chip:'c-files',
+    term:'Загрузки (папка «Downloads»)',
+    def:`Папка, в которую браузер и другие программы автоматически сохраняют скачанные из интернета файлы.
+    <ul>
+      <li><b>Расположение:</b> C:\\Пользователи\\Ваше имя\\Загрузки.</li>
+      <li><b>Открыть быстро:</b> Win + E → «Загрузки» в боковом меню Проводника.</li>
+    </ul>
+    <b>Совет:</b> регулярно очищайте папку «Загрузки» — там скапливаются ненужные файлы и освобождается место.` },
+
+  // ──────── ИНТЕРНЕТ ────────
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Интернет',
+    def:`Глобальная компьютерная сеть, соединяющая миллиарды устройств по всему миру. Позволяет обмениваться информацией, общаться, учиться и получать услуги.
+    <ul>
+      <li><b>World Wide Web (WWW)</b> — система сайтов и страниц, доступная через браузер. Это часть интернета.</li>
+      <li><b>Электронная почта</b> — передача сообщений.</li>
+      <li><b>Мессенджеры</b> — мгновенная переписка.</li>
+      <li><b>Видеозвонки</b> — голосовые и видеоконференции.</li>
+      <li><b>Стриминг</b> — потоковое видео (YouTube, онлайн-кинотеатры).</li>
+    </ul>
+    <b>История:</b> интернет в России массово появился в конце 1990-х, сейчас им пользуются более 100 млн россиян.` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Виды подключения к интернету',
+    def:`Существуют различные способы подключить компьютер или телефон к интернету.
+    <ul>
+      <li><b>Оптоволокно (FTTH / FTTB)</b> — самое быстрое и надёжное проводное подключение. Скорость: 100 Мбит/с – 1 Гбит/с. Сейчас стандарт в городах России.</li>
+      <li><b>Кабельный интернет (ADSL)</b> — через телефонный провод. Старее и медленнее оптоволокна (до 20 Мбит/с). Постепенно уходит в прошлое.</li>
+      <li><b>Wi-Fi (от роутера)</b> — беспроводное подключение внутри дома через роутер.</li>
+      <li><b>Мобильный интернет (4G/LTE)</b> — через SIM-карту телефона. Скорость 10–100 Мбит/с.</li>
+      <li><b>Мобильный интернет (5G)</b> — новый стандарт, до 1 Гбит/с, пока не везде доступен.</li>
+      <li><b>Спутниковый интернет</b> — Starlink и другие — для отдалённых мест без кабеля.</li>
+    </ul>
+    <b>Совет:</b> для дома лучше всего оптоволокно — стабильно и быстро.` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Скорость интернета',
+    def:`Количество данных, которое передаётся в секунду. Измеряется в мегабитах в секунду (Мбит/с или Mbps).
+    <ul>
+      <li><b>1–5 Мбит/с</b> — для просмотра почты, переписки и простых сайтов.</li>
+      <li><b>10–25 Мбит/с</b> — для видео в HD, звонков, Госуслуг.</li>
+      <li><b>50–100 Мбит/с</b> — комфортно для всей семьи одновременно.</li>
+      <li><b>300+ Мбит/с</b> — для частых загрузок больших файлов.</li>
+    </ul>
+    <b>Скорость входящая</b> (download) — скачивание; <b>исходящая</b> (upload) — отправка.
+    <br><b>Проверить скорость:</b> зайдите на speedtest.net и нажмите «Начать».` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Wi-Fi',
+    def:`Технология беспроводного подключения к интернету через радиосигнал роутера. Не требует проводов внутри квартиры.
+    <ul>
+      <li><b>Стандарты Wi-Fi:</b>
+        <ul>
+          <li><b>Wi-Fi 4 (802.11n)</b> — до 300 Мбит/с, диапазон 2,4 ГГц.</li>
+          <li><b>Wi-Fi 5 (802.11ac)</b> — до 1 Гбит/с, диапазон 5 ГГц.</li>
+          <li><b>Wi-Fi 6 (802.11ax)</b> — до 9,6 Гбит/с, работает в обоих диапазонах.</li>
+        </ul>
+      </li>
+      <li><b>Диапазон 2,4 ГГц</b> — хорошо проходит сквозь стены, но медленнее.</li>
+      <li><b>Диапазон 5 ГГц</b> — быстрее, но хуже проходит через стены.</li>
+      <li><b>Пароль Wi-Fi</b> — WPA2 или WPA3 — шифрует вашу сеть от посторонних.</li>
+    </ul>
+    <b>Совет:</b> установите сложный пароль на домашний Wi-Fi и не сообщайте его незнакомым.` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Мобильный интернет (3G/4G/5G)',
+    def:`Подключение к интернету через сотовую сеть оператора с помощью SIM-карты в телефоне.
+    <ul>
+      <li><b>3G (UMTS/HSPA)</b> — устаревший, скорость 1–10 Мбит/с. Для простых задач.</li>
+      <li><b>4G / LTE</b> — современный стандарт, скорость 20–150 Мбит/с. Хватает для всего.</li>
+      <li><b>5G</b> — новейший, скорость до 1–10 Гбит/с. Пока доступен только в крупных городах.</li>
+    </ul>
+    <b>Трафик (пакет данных)</b> — объём интернета в тарифе. При исчерпании скорость снижается.
+    <br><b>Роуминг</b> — использование мобильного интернета за рубежом (может быть дорого).` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'IP-адрес',
+    def:`Уникальный «номер» вашего устройства в интернете или домашней сети. Как почтовый адрес — только цифровой.
+    <ul>
+      <li><b>IPv4</b> — четыре числа от 0 до 255, например 192.168.1.1.</li>
+      <li><b>IPv6</b> — новый формат из шести групп: 2001:db8::1.</li>
+      <li><b>Внешний IP</b> — видят сайты в интернете. Выдаётся провайдером.</li>
+      <li><b>Внутренний (локальный) IP</b> — внутри домашней сети. Обычно 192.168.x.x.</li>
+      <li><b>Динамический IP</b> — меняется при каждом подключении.</li>
+      <li><b>Статический IP</b> — фиксированный, не меняется (за доплату у провайдера).</li>
+    </ul>` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Браузер',
+    def:`Программа для просмотра сайтов в интернете. Переводит программный код страниц в красивый визуальный вид.
+    <ul>
+      <li><b>Google Chrome</b> — самый популярный в мире, быстрый.</li>
+      <li><b>Яндекс.Браузер</b> — адаптирован для России, хороший перевод сайтов.</li>
+      <li><b>Microsoft Edge</b> — встроен в Windows 10/11, быстрый и безопасный.</li>
+      <li><b>Mozilla Firefox</b> — открытый и настраиваемый.</li>
+      <li><b>Safari</b> — браузер Apple для iPhone, iPad и Mac.</li>
+    </ul>
+    <b>Функции браузера:</b> вкладки, закладки, история посещений, пароли, автозаполнение форм.` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Адрес сайта (URL)',
+    def:`Уникальный адрес страницы в интернете, состоящий из нескольких частей.
+    <ul>
+      <li><b>Протокол:</b> https:// — защищённое соединение (замочек в адресной строке).</li>
+      <li><b>Домен:</b> gosuslugi.ru — имя сайта.</li>
+      <li><b>Путь:</b> /profile/info — конкретная страница внутри сайта.</li>
+    </ul>
+    <b>Доменные зоны:</b> .ru — Россия, .com — международный, .рф — кириллический домен России.
+    <br><b>Осторожно:</b> мошеннические сайты имитируют официальные адреса (gosusl1gi.ru вместо gosuslugi.ru).` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Поисковая система',
+    def:`Сервис, который индексирует миллиарды страниц интернета и по запросу показывает самые подходящие.
+    <ul>
+      <li><b>Яндекс (yandex.ru)</b> — лидер в России, хорошо понимает русский язык.</li>
+      <li><b>Google (google.ru)</b> — самая популярная в мире.</li>
+      <li><b>Mail.ru Поиск</b> — российский поисковик.</li>
+    </ul>
+    <b>Советы по поиску:</b>
+    <ul>
+      <li>Пишите конкретно: «госпошлина за паспорт 2026» вместо «паспорт».</li>
+      <li>Ставьте кавычки для точной фразы: «продление паспорта Краснодар».</li>
+    </ul>` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Вкладки браузера',
+    def:`Отдельные «окошки» для разных сайтов внутри одного браузера. Позволяют открывать несколько сайтов одновременно.
+    <ul>
+      <li><b>Открыть новую вкладку:</b> Ctrl + T или «+» рядом с вкладкой.</li>
+      <li><b>Закрыть вкладку:</b> Ctrl + W или крестик на вкладке.</li>
+      <li><b>Переключиться:</b> Ctrl + Tab (следующая), Ctrl + Shift + Tab (предыдущая).</li>
+      <li><b>Открыть ссылку в новой вкладке:</b> средняя кнопка мыши или Ctrl + ЛКМ на ссылке.</li>
+      <li><b>Восстановить закрытую вкладку:</b> Ctrl + Shift + T.</li>
+    </ul>` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Закладки браузера',
+    def:`Сохранённые ссылки на нужные сайты, чтобы быстро вернуться к ним позже.
+    <ul>
+      <li><b>Добавить закладку:</b> Ctrl + D или значок «Звёздочка» в адресной строке.</li>
+      <li><b>Открыть закладки:</b> Ctrl + Shift + B или меню браузера.</li>
+      <li><b>Папки закладок</b> — для удобной организации: «Госуслуги», «Банк», «Поликлиника».</li>
+    </ul>
+    <b>Пример:</b> добавьте сайт своей поликлиники в закладки, чтобы не искать его каждый раз.` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'История браузера',
+    def:`Список всех сайтов, которые вы посещали. Браузер сохраняет её автоматически.
+    <ul>
+      <li><b>Открыть историю:</b> Ctrl + H или меню браузера → «История».</li>
+      <li><b>Очистить историю:</b> Ctrl + Shift + Delete — выбрать период и нажать «Удалить».</li>
+      <li><b>Инкогнито-режим</b> — Ctrl + Shift + N — история, куки и пароли не сохраняются.</li>
+    </ul>
+    <b>Совет:</b> историю браузера на чужом компьютере всегда очищайте после работы.` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Cookie (куки)',
+    def:`Небольшие файлы, которые сайты сохраняют в браузере, чтобы «запомнить» вас при следующем визите.
+    <ul>
+      <li><b>Сессионные куки</b> — действуют только в текущий сеанс, исчезают при закрытии браузера.</li>
+      <li><b>Постоянные куки</b> — хранятся месяцами, запоминают настройки и логин.</li>
+      <li><b>Куки для рекламы</b> — собирают данные о вас для таргетированной рекламы.</li>
+    </ul>
+    <b>Пример:</b> благодаря кукам вам не нужно каждый раз вводить пароль на почте.
+    <br><b>Очистить:</b> Ctrl + Shift + Delete в браузере.` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'HTTPS и SSL',
+    def:`Протокол безопасной передачи данных между браузером и сайтом. Данные шифруются, перехватить их сложно.
+    <ul>
+      <li><b>Замочек в адресной строке</b> — означает, что соединение защищённое (HTTPS).</li>
+      <li><b>Красный крестик или предупреждение</b> — сертификат устарел или ненадёжен. Будьте осторожны!</li>
+      <li><b>SSL-сертификат</b> — «удостоверение личности» сайта, подтверждающее его подлинность.</li>
+    </ul>
+    <b>Правило:</b> никогда не вводите пароли или данные карты на сайтах без замочка (HTTP).` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Провайдер (интернет-провайдер)',
+    def:`Компания, которая предоставляет вам доступ в интернет за абонентскую плату.
+    <ul>
+      <li><b>Крупные провайдеры России:</b> Ростелеком, МТС, Билайн, МегаФон, ЭР-Телеком (Дом.ру), МГТС.</li>
+      <li><b>По типу подключения:</b> кабельные (оптоволокно) и мобильные (SIM-карта).</li>
+    </ul>
+    <b>При выборе провайдера</b> смотрите на скорость тарифа, стоимость, качество поддержки и надёжность в вашем доме.` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'DNS (Система доменных имён)',
+    def:`Служба, которая переводит понятные адреса сайтов (gosuslugi.ru) в числовые IP-адреса, которые понимают компьютеры.
+    <ul>
+      <li><b>Аналогия:</b> DNS — как телефонная книга: вы ищете «Сбербанк», она находит номер.</li>
+      <li><b>DNS от провайдера</b> — используется по умолчанию.</li>
+      <li><b>Публичный DNS Google:</b> 8.8.8.8 — быстрый и надёжный.</li>
+      <li><b>Публичный DNS Яндекса:</b> 77.88.8.8.</li>
+    </ul>
+    <b>Когда может пригодиться:</b> если некоторые сайты не открываются — смена DNS иногда помогает.` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Кэш браузера',
+    def:`Временное хранилище копий посещённых страниц, изображений и файлов. Ускоряет загрузку уже посещённых сайтов.
+    <ul>
+      <li><b>Плюс:</b> страницы загружаются быстрее повторно.</li>
+      <li><b>Минус:</b> иногда показывает старую версию сайта.</li>
+      <li><b>Принудительное обновление без кэша:</b> Ctrl + Shift + R или Ctrl + F5.</li>
+      <li><b>Очистить:</b> Ctrl + Shift + Delete → «Кэшированные изображения и файлы».</li>
+    </ul>
+    <b>Пример:</b> если сайт ведёт себя странно — очистите кэш, это часто решает проблему.` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Загрузка и выгрузка файлов',
+    def:`Передача файлов между вашим компьютером и интернетом.
+    <ul>
+      <li><b>Скачивание (Download)</b> — получение файла из интернета на компьютер (документ, фото, программа).</li>
+      <li><b>Загрузка на сайт (Upload)</b> — отправка файла с компьютера на сайт (прикрепление документа к заявлению).</li>
+    </ul>
+    <b>Прогресс загрузки:</b> в браузере внизу или в строке загрузок (Ctrl+J).
+    <br><b>Пример:</b> загрузка скана паспорта при подаче заявления на Госуслугах — это Upload.` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Онлайн-видео и стриминг',
+    def:`Просмотр видео через интернет без предварительного скачивания файла.
+    <ul>
+      <li><b>YouTube</b> — крупнейший видеохостинг мира.</li>
+      <li><b>ВКонтакте Видео</b> — российская платформа.</li>
+      <li><b>Rutube</b> — российский аналог YouTube.</li>
+      <li><b>Кинопоиск / Okko / Иви</b> — онлайн-кинотеатры (фильмы, сериалы).</li>
+    </ul>
+    <b>Качество видео:</b> 360p (маленький экран), 720p HD (обычный), 1080p Full HD (хорошее), 4K (отличное).
+    <br><b>Совет:</b> при медленном интернете выставьте качество 480p — видео не будет прерываться.` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Социальные сети',
+    def:`Интернет-платформы для общения, обмена фото и видео, чтения новостей.
+    <ul>
+      <li><b>ВКонтакте (VK)</b> — крупнейшая сеть России.</li>
+      <li><b>Одноклассники</b> — популярна у старшего поколения.</li>
+      <li><b>Telegram</b> — мессенджер с каналами и группами, де-факто социальная сеть.</li>
+      <li><b>YouTube</b> — видеоплатформа с элементами соцсети.</li>
+    </ul>
+    <b>Советы безопасности:</b>
+    <ul>
+      <li>Не принимайте заявки от незнакомых людей.</li>
+      <li>Не публикуйте паспортные данные и адрес.</li>
+    </ul>` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Онлайн-карты и навигация',
+    def:`Сервисы для просмотра карт, прокладки маршрутов и поиска мест.
+    <ul>
+      <li><b>Яндекс.Карты</b> — подробные карты России, пробки, маршруты на транспорте.</li>
+      <li><b>2ГИС</b> — детальные карты городов России, работает офлайн.</li>
+      <li><b>Google Maps</b> — мировые карты.</li>
+    </ul>
+    <b>Функции:</b> поиск адреса, маршрут на авто/пешком/транспорте, просмотр панорам улиц, время работы организаций.` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Онлайн-запись к врачу',
+    def:`Запись на приём к врачу через интернет — без очередей и звонков.
+    <ul>
+      <li><b>Госуслуги</b> — запись через портал к врачам государственных поликлиник.</li>
+      <li><b>Региональный портал здравоохранения</b> — например, «Здоровье.ру» для Москвы.</li>
+      <li><b>Сайт поликлиники</b> — часто есть собственная форма записи.</li>
+    </ul>
+    <b>Что нужно:</b> подтверждённая учётная запись на Госуслугах, номер полиса ОМС.` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Онлайн-магазин',
+    def:`Сайт, где можно купить товары через интернет с доставкой на дом.
+    <ul>
+      <li><b>Wildberries</b> — крупнейший маркетплейс России.</li>
+      <li><b>Ozon</b> — широкий ассортимент, быстрая доставка.</li>
+      <li><b>Яндекс Маркет</b> — сравнение цен и доставка.</li>
+      <li><b>Авито</b> — объявления о продаже: новые и бывшие в употреблении товары.</li>
+    </ul>
+    <b>Безопасность:</b> оплачивайте только на официальных сайтах, проверяйте наличие HTTPS.` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Трафик (интернет-трафик)',
+    def:`Объём данных, переданных через интернет. Измеряется в мегабайтах (МБ) или гигабайтах (ГБ).
+    <ul>
+      <li><b>Потребление трафика:</b>
+        <ul>
+          <li>Текстовая страница сайта — 0,1–1 МБ.</li>
+          <li>Видеозвонок 1 час — 250–700 МБ.</li>
+          <li>Видео HD 1 час на YouTube — 1–3 ГБ.</li>
+          <li>Скачать фильм FullHD — 3–10 ГБ.</li>
+        </ul>
+      </li>
+      <li><b>Лимит трафика</b> — в мобильных тарифах часто ограничен (5, 10, 30 ГБ в месяц).</li>
+    </ul>
+    <b>Совет:</b> при просмотре видео дома используйте Wi-Fi — это не расходует мобильный трафик.` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'VPN (виртуальная частная сеть)',
+    def:`Технология, создающая зашифрованный «тоннель» между вашим устройством и интернетом. Скрывает ваш реальный IP-адрес и шифрует трафик.
+    <ul>
+      <li><b>Зачем нужен:</b>
+        <ul>
+          <li>Защита данных в публичном Wi-Fi (кафе, гостиница).</li>
+          <li>Доступ к заблокированным ресурсам.</li>
+        </ul>
+      </li>
+      <li><b>Надёжные VPN-сервисы:</b> Outline, ProtonVPN, Windscribe (бесплатный тариф).</li>
+    </ul>
+    <b>Осторожно:</b> бесплатные малоизвестные VPN могут собирать ваши данные!` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Публичный Wi-Fi',
+    def:`Бесплатная беспроводная сеть в кафе, торговых центрах, транспорте и других общественных местах.
+    <ul>
+      <li><b>Удобно:</b> подключиться без SIM-карты и не тратить мобильный трафик.</li>
+      <li><b>Опасно:</b> трафик может перехватить злоумышленник в той же сети.</li>
+    </ul>
+    <b>Правила безопасности:</b>
+    <ul>
+      <li>Не входите в банк или Госуслуги через публичный Wi-Fi.</li>
+      <li>Используйте VPN при подключении к незнакомым сетям.</li>
+    </ul>` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Интернет-вещей (IoT)',
+    def:`«Умные» устройства, подключённые к интернету: телевизоры, камеры, термостаты, холодильники и другая бытовая техника с доступом в сеть.
+    <ul>
+      <li><b>Умный телевизор (Smart TV)</b> — встроенные приложения YouTube, онлайн-кинотеатры.</li>
+      <li><b>Умная колонка</b> — голосовой ассистент с интернетом.</li>
+      <li><b>IP-камера</b> — видеонаблюдение через интернет.</li>
+    </ul>
+    <b>Совет:</b> меняйте заводские пароли на всех умных устройствах!` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Электронная подпись (ЭП)',
+    def:`Цифровой аналог собственноручной подписи для подписания документов через интернет.
+    <ul>
+      <li><b>Простая ЭП</b> — код из SMS или логин/пароль. Для повседневных операций.</li>
+      <li><b>Усиленная неквалифицированная ЭП (НЭП)</b> — более защищённая, применяется для документооборота.</li>
+      <li><b>Усиленная квалифицированная ЭП (КЭП)</b> — самая надёжная, юридически равнозначна обычной подписи. Выдаётся в удостоверяющих центрах.</li>
+    </ul>
+    <b>Пример:</b> подать заявление в суд или подписать договор с работодателем онлайн.` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'Push-уведомления',
+    def:`Короткие всплывающие сообщения от сайтов или приложений, появляющиеся на экране устройства без открытия программы.
+    <ul>
+      <li><b>На телефоне</b> — в шторке уведомлений сверху.</li>
+      <li><b>На компьютере</b> — в правом нижнем углу экрана.</li>
+    </ul>
+    <b>Примеры:</b> «Ваше заявление принято», «Новое сообщение от Ивана», «Скидка 30% до конца дня».
+    <br><b>Управление:</b> в настройках браузера или телефона можно разрешить или запретить уведомления от конкретных сайтов.` },
+
+  { id:'inet', cat:'интернет', chip:'c-net',
+    term:'QR-код',
+    def:`Квадратный штрих-код с закодированной информацией — ссылкой, текстом, номером телефона, банковскими реквизитами.
+    <ul>
+      <li><b>Как сканировать:</b> наведите камеру смартфона → всплывёт уведомление → нажмите на ссылку.</li>
+      <li><b>Применение:</b> оплата через СБП, переход на сайт, проверка сертификатов, меню ресторана.</li>
+    </ul>
+    <b>Осторожно:</b> QR-коды от незнакомых источников (наклейки поверх оригинала) могут вести на мошеннические сайты.` },
+
+  // ──────── ПОЧТА ────────
+  { id:'mail', cat:'почта', chip:'c-mail',
+    term:'Электронная почта (E-mail)',
+    def:`Система отправки и получения электронных писем через интернет. Работает как обычная почта, только мгновенно.
+    <ul>
+      <li><b>Почтовые сервисы России:</b> Mail.ru, Яндекс.Почта, Rambler.ru.</li>
+      <li><b>Международные:</b> Gmail (Google), Outlook (Microsoft).</li>
+      <li><b>Корпоративная почта</b> — на домене организации (имя@организация.ру).</li>
+    </ul>
+    <b>Пример адреса:</b> ivanova.nina@yandex.ru — имя, символ @, домен почтового сервиса.` },
+
+  { id:'mail', cat:'почта', chip:'c-mail',
+    term:'Структура письма',
+    def:`Электронное письмо состоит из нескольких обязательных частей.
+    <ul>
+      <li><b>Кому (To)</b> — адрес получателя.</li>
+      <li><b>Копия (CC)</b> — получатель копии, все видят, кому она отправлена.</li>
+      <li><b>Скрытая копия (BCC)</b> — получатель не виден другим адресатам.</li>
+      <li><b>Тема (Subject)</b> — краткое описание письма. Всегда заполняйте!</li>
+      <li><b>Тело письма</b> — основной текст.</li>
+      <li><b>Вложение</b> — прикреплённые файлы.</li>
+      <li><b>Подпись</b> — ваши контактные данные внизу письма.</li>
+    </ul>` },
+
+  { id:'mail', cat:'почта', chip:'c-mail',
+    term:'Папки почты',
+    def:`В любом почтовом сервисе письма автоматически сортируются по папкам.
+    <ul>
+      <li><b>Входящие</b> — полученные письма.</li>
+      <li><b>Отправленные</b> — отправленные вами письма.</li>
+      <li><b>Черновики</b> — незаконченные письма.</li>
+      <li><b>Спам</b> — нежелательные письма (автоматически фильтруются).</li>
+      <li><b>Корзина</b> — удалённые письма (можно восстановить).</li>
+    </ul>
+    <b>Совет:</b> создайте свои папки для сортировки: «Госуслуги», «Банк», «Поликлиника».` },
+
+  { id:'mail', cat:'почта', chip:'c-mail',
+    term:'Вложение к письму',
+    def:`Файл, прикреплённый к электронному письму. Можно отправить документы, фото, сканы и другие файлы.
+    <ul>
+      <li><b>Как прикрепить:</b> значок скрепки или «Прикрепить файл» → выбрать файл.</li>
+      <li><b>Ограничение размера:</b> обычно до 25 МБ. Крупные файлы лучше отправлять ссылкой на облако.</li>
+      <li><b>Как скачать:</b> нажмите на вложение в письме → «Скачать» или «Сохранить».</li>
+    </ul>
+    <b>Осторожно:</b> не открывайте вложения (.exe, .zip) от незнакомых отправителей — это может быть вирус!` },
+
+  { id:'mail', cat:'почта', chip:'c-mail',
+    term:'Спам',
+    def:`Нежелательные письма, которые вы не просили получать. Бывают рекламными или мошенническими.
+    <ul>
+      <li><b>Рекламный спам</b> — предложения товаров и услуг.</li>
+      <li><b>Фишинговый спам</b> — поддельные письма от «банка» или «Госуслуг» для кражи данных.</li>
+      <li><b>Вирусный спам</b> — письма с вредоносными вложениями или ссылками.</li>
+    </ul>
+    <b>Как защититься:</b>
+    <ul>
+      <li>Не открывайте подозрительные письма.</li>
+      <li>Не переходите по ссылкам из незнакомых писем.</li>
+      <li>Отмечайте нежелательные письма как «Спам».</li>
+    </ul>` },
+
+  { id:'mail', cat:'почта', chip:'c-mail',
+    term:'Ответ и пересылка письма',
+    def:`Базовые действия при работе с полученными письмами.
+    <ul>
+      <li><b>Ответить (Reply)</b> — отправить ответ отправителю, тема сохраняется.</li>
+      <li><b>Ответить всем (Reply All)</b> — ответ всем получателям письма.</li>
+      <li><b>Переслать (Forward)</b> — отправить полученное письмо другому адресату.</li>
+    </ul>
+    <b>Совет:</b> при ответе сохраняйте «цепочку» переписки — получатель увидит контекст.` },
+
+  { id:'mail', cat:'почта', chip:'c-mail',
+    term:'Восстановление пароля от почты',
+    def:`Процедура получения доступа к почте при забытом пароле.
+    <ul>
+      <li><b>Через телефон</b> — код в SMS на привязанный номер.</li>
+      <li><b>Через резервный email</b> — письмо на запасной адрес.</li>
+      <li><b>Через контрольный вопрос</b> — ответ на вопрос, заданный при регистрации.</li>
+    </ul>
+    <b>Важно:</b> при создании почты обязательно привяжите номер телефона — без него восстановить доступ трудно.` },
+
+  { id:'mail', cat:'почта', chip:'c-mail',
+    term:'Почтовый клиент',
+    def:`Программа на компьютере или телефоне для работы с несколькими почтовыми ящиками сразу, без открытия сайта.
+    <ul>
+      <li><b>Microsoft Outlook</b> — самый популярный в Windows.</li>
+      <li><b>Mozilla Thunderbird</b> — бесплатный и функциональный.</li>
+      <li><b>Приложение «Почта» в Windows</b> — встроенный простой клиент.</li>
+    </ul>
+    <b>Преимущество:</b> все ящики в одном месте, работает быстрее сайта, есть оффлайн-режим.` },
+
+  { id:'mail', cat:'почта', chip:'c-mail',
+    term:'Двухфакторная авторизация почты',
+    def:`Дополнительная ступень защиты почтового ящика: при входе требуется не только пароль, но и код из SMS.
+    <ul>
+      <li><b>Как включить в Яндекс.Почте:</b> Настройки → Безопасность → Двухфакторная аутентификация.</li>
+      <li><b>Как включить в Gmail:</b> myaccount.google.com → Безопасность → Двухэтапная аутентификация.</li>
+    </ul>
+    <b>Совет:</b> включите обязательно — без кода злоумышленник не войдёт в вашу почту, даже зная пароль.` },
+
+  { id:'mail', cat:'почта', chip:'c-mail',
+    term:'Уведомление о прочтении',
+    def:`Функция, при включении которой отправитель получает уведомление, когда получатель открыл письмо.
+    <ul>
+      <li>Не все почтовые сервисы поддерживают эту функцию.</li>
+      <li>Получатель может отклонить запрос на уведомление.</li>
+    </ul>
+    <b>Пример:</b> отправили документы в организацию — хотите убедиться, что их получили и прочли.` },
+
+  { id:'mail', cat:'почта', chip:'c-mail',
+    term:'Подпись в письме',
+    def:`Блок текста, автоматически добавляемый в конец каждого письма. Содержит ваши контактные данные.
+    <ul>
+      <li><b>Что включить:</b> имя, телефон, адрес, должность (для деловой переписки).</li>
+      <li><b>Как настроить:</b> в настройках почты → «Подпись».</li>
+    </ul>
+    <b>Пример подписи:</b> «С уважением, Нина Петровна Иванова. Тел.: 8-928-XXX-XX-XX».` },
+
+  // ──────── МЕССЕНДЖЕРЫ ────────
+  { id:'chat', cat:'общение', chip:'c-chat',
+    term:'Мессенджер',
+    def:`Приложение для мгновенного обмена текстовыми сообщениями, фото, видео, голосовыми сообщениями и документами через интернет.
+    <ul>
+      <li><b>WhatsApp</b> — самый популярный в мире, удобен для семейного общения.</li>
+      <li><b>Telegram</b> — быстрый, есть каналы, боты, файлы до 2 ГБ.</li>
+      <li><b>Viber</b> — популярен в России и СНГ.</li>
+      <li><b>ВКонтакте (VK)</b> — встроенный мессенджер соцсети.</li>
+    </ul>
+    <b>Преимущество перед SMS:</b> бесплатны, работают через интернет, поддерживают групповые чаты.` },
+
+  { id:'chat', cat:'общение', chip:'c-chat',
+    term:'Групповой чат',
+    def:`Переписка с несколькими участниками одновременно в одном окне.
+    <ul>
+      <li><b>Создать группу:</b> в любом мессенджере → «Новая группа» → добавить участников.</li>
+      <li><b>Администратор группы</b> — управляет участниками и настройками.</li>
+      <li><b>Публичный канал</b> — как группа, но участники только читают, не пишут. Например, канал поликлиники.</li>
+    </ul>
+    <b>Пример:</b> создайте семейный чат — удобно делиться фото и договариваться о встречах.` },
+
+  { id:'chat', cat:'общение', chip:'c-chat',
+    term:'Голосовое и видеосообщение',
+    def:`Альтернатива тексту: можно записать короткое аудио или видеосообщение и отправить его.
+    <ul>
+      <li><b>Голосовое сообщение:</b> зажмите иконку микрофона → говорите → отпустите для отправки.</li>
+      <li><b>Видеосообщение (кружок) в Telegram:</b> зажмите иконку камеры рядом с микрофоном.</li>
+    </ul>
+    <b>Совет:</b> удобно использовать вместо набора длинного текста.` },
+
+  { id:'chat', cat:'общение', chip:'c-chat',
+    term:'Видеозвонок',
+    def:`Звонок через интернет с передачей видеоизображения. Вы видите и слышите собеседника в реальном времени.
+    <ul>
+      <li><b>WhatsApp</b> — видеозвонок до 8 человек, просто и удобно.</li>
+      <li><b>Telegram</b> — видеозвонки и групповые видеоконференции.</li>
+      <li><b>Zoom</b> — для занятий, конференций и совещаний до 100 человек.</li>
+      <li><b>Звонки ВКонтакте</b> — через браузер или приложение.</li>
+    </ul>
+    <b>Что нужно:</b> камера, микрофон, интернет. На ноутбуке всё уже встроено.` },
+
+  { id:'chat', cat:'общение', chip:'c-chat',
+    term:'Статус и «последний раз в сети»',
+    def:`Информация о активности пользователя в мессенджере.
+    <ul>
+      <li><b>«В сети» / «Online»</b> — человек сейчас открыл приложение.</li>
+      <li><b>«Был(а) недавно»</b> — был в сети несколько минут назад.</li>
+      <li><b>Двойная галочка (WhatsApp)</b> — сообщение прочитано.</li>
+      <li><b>Синяя галочка</b> — прочитано.</li>
+    </ul>
+    <b>Настройка приватности:</b> в настройках мессенджера можно скрыть дату входа от посторонних.` },
+
+  { id:'chat', cat:'общение', chip:'c-chat',
+    term:'Переписка: форматирование текста',
+    def:`В современных мессенджерах (Telegram, WhatsApp) можно выделять текст.
+    <ul>
+      <li><b>Жирный:</b> *текст* или **текст**</li>
+      <li><b>Курсив:</b> _текст_</li>
+      <li><b>Зачёркнутый:</b> ~текст~</li>
+      <li><b>Моноширинный:</b> \`текст\`</li>
+    </ul>
+    <b>Пример:</b> чтобы выделить важную информацию, оберните её в *звёздочки*.` },
+
+  { id:'chat', cat:'общение', chip:'c-chat',
+    term:'Эмодзи и стикеры',
+    def:`Маленькие картинки и анимации, добавляющие эмоциональную окраску к сообщениям.
+    <ul>
+      <li><b>Эмодзи</b> — стандартные символы (😊 👍 ❤️), есть на всех устройствах.</li>
+      <li><b>Стикеры</b> — большие картинки, уникальные для каждого мессенджера.</li>
+      <li><b>GIF-анимации</b> — короткие зацикленные видео-реакции.</li>
+    </ul>
+    <b>Как найти:</b> иконка смайлика рядом с полем ввода текста.` },
+
+  { id:'chat', cat:'общение', chip:'c-chat',
+    term:'Передача файлов в мессенджере',
+    def:`В мессенджерах можно отправлять не только текст, но и файлы любых типов.
+    <ul>
+      <li><b>Фото и видео</b> — иконка скрепки или «+» → «Галерея».</li>
+      <li><b>Документ</b> — иконка скрепки → «Файл» (для PDF, Word и т.д.).</li>
+      <li><b>Местоположение</b> — «Поделиться локацией» — отправить геопозицию.</li>
+      <li><b>Контакт</b> — поделиться номером телефона из телефонной книги.</li>
+    </ul>
+    <b>Пример:</b> отправьте скан рецепта в аптечный чат для уточнения наличия лекарства.` },
+
+  { id:'chat', cat:'общение', chip:'c-chat',
+    term:'Безопасность в мессенджерах',
+    def:`Правила защиты от мошенников и нежелательных контактов в мессенджерах.
+    <ul>
+      <li><b>Не отвечайте незнакомым</b> — если пишут с неизвестных номеров о деньгах, помощи или срочно.</li>
+      <li><b>Сквозное шифрование</b> — в WhatsApp и Telegram (секретные чаты) переписка зашифрована, никто кроме вас двоих её не прочтёт.</li>
+      <li><b>Двухшаговая проверка</b> — установите PIN в мессенджере для дополнительной защиты.</li>
+      <li><b>Не пересылайте коды из SMS</b> — ни при каком условии.</li>
+    </ul>` },
+
+  { id:'chat', cat:'общение', chip:'c-chat',
+    term:'Боты в Telegram',
+    def:`Автоматические программы в Telegram, которые отвечают на запросы без участия человека.
+    <ul>
+      <li><b>Информационные боты</b> — расписание транспорта, погода, курсы валют.</li>
+      <li><b>Боты госорганов</b> — информация от МФЦ, налоговой, Пенсионного фонда.</li>
+      <li><b>Боты поликлиник</b> — запись к врачу через Telegram.</li>
+    </ul>
+    <b>Найти бота:</b> в поиске Telegram введите @имябота.` },
+
+  { id:'chat', cat:'общение', chip:'c-chat',
+    term:'Звонок по интернету (VoIP)',
+    def:`Голосовой звонок, который идёт не через сотовую сеть, а через интернет. Дешевле или бесплатно.
+    <ul>
+      <li><b>В мессенджерах</b> — WhatsApp, Viber, Telegram — звонки бесплатны при наличии интернета.</li>
+      <li><b>Международные звонки</b> — через интернет дешевле обычных звонков за рубеж.</li>
+    </ul>
+    <b>Качество зависит от скорости интернета:</b> при слабом сигнале возможны перебои.` },
+
+  // ──────── ГОСУСЛУГИ ────────
+  { id:'gov', cat:'госуслуги', chip:'c-gov',
+    term:'Портал Госуслуги (gosuslugi.ru)',
+    def:`Официальный государственный портал России для получения государственных и муниципальных услуг в электронном виде. Работает круглосуточно, 365 дней в году.
+    <ul>
+      <li><b>Что можно сделать:</b> заменить паспорт, записаться к врачу, подать налоговую декларацию, оплатить штрафы, зарегистрировать автомобиль и многое другое.</li>
+      <li><b>Приложение</b> — «Госуслуги» — скачать в Google Play или App Store.</li>
+    </ul>
+    <b>Главное преимущество:</b> не нужно стоять в очередях — всё из дома.` },
+
+  { id:'gov', cat:'госуслуги', chip:'c-gov',
+    term:'Уровни подтверждения учётной записи',
+    def:`На Госуслугах есть три уровня аккаунта с разными возможностями.
+    <ul>
+      <li><b>Упрощённая</b> — только email или телефон. Доступны базовые услуги.</li>
+      <li><b>Стандартная</b> — ввели СНИЛС и данные паспорта. Доступно больше услуг.</li>
+      <li><b>Подтверждённая</b> — личность проверена в МФЦ, банке или Почте России. Доступны все услуги, в том числе оформление пенсии и получение пособий.</li>
+    </ul>
+    <b>Как подтвердить:</b> прийти с паспортом в МФЦ — это бесплатно и занимает 5 минут.` },
+
+   { id:'gov', cat:'госуслуги', chip:'c-gov',
+    term:'Личный кабинет на Госуслугах',
+    def:`Персональный раздел портала, доступный после входа. Здесь хранятся все ваши данные, документы и история обращений.
+    <ul>
+      <li><b>Мои документы</b> — паспорт, СНИЛС, полис ОМС, водительское удостоверение.</li>
+      <li><b>Мои заявления</b> — история всех поданных заявлений и их статусы.</li>
+      <li><b>Уведомления</b> — оповещения о ходе рассмотрения заявлений.</li>
+      <li><b>Профиль</b> — имя, телефон, email, адрес — данные, которые автоматически подставляются в формы.</li>
+      <li><b>Семья</b> — добавить данные детей и других членов семьи для получения услуг.</li>
+    </ul>
+    <b>Совет:</b> заполните профиль полностью — тогда большинство форм заявлений заполнятся автоматически.` },
+
+  { id:'gov', cat:'госуслуги', chip:'c-gov',
+    term:'СНИЛС',
+    def:`Страховой номер индивидуального лицевого счёта — уникальный номер гражданина России в системе пенсионного страхования. Состоит из 11 цифр.
+    <ul>
+      <li><b>Зачем нужен:</b> для регистрации на Госуслугах, получения медицинских услуг, оформления пособий, трудоустройства.</li>
+      <li><b>Где получить:</b> в МФЦ или отделении СФР (Социального фонда России) — бесплатно.</li>
+      <li><b>Для ребёнка</b> — оформляется при рождении автоматически.</li>
+    </ul>
+    <b>Важно:</b> номер СНИЛС — конфиденциальный. Не сообщайте его незнакомым людям.` },
+
+  { id:'gov', cat:'госуслуги', chip:'c-gov',
+    term:'МФЦ (Мои документы)',
+    def:`Многофункциональный центр предоставления государственных и муниципальных услуг. Физическое «окно» для тех, кто предпочитает личное обращение или не может сделать всё онлайн.
+    <ul>
+      <li><b>Услуги МФЦ:</b> оформление паспорта, регистрация по месту жительства, пенсионные вопросы, земельные документы.</li>
+      <li><b>Предварительная запись:</b> через Госуслуги или по телефону — без очереди.</li>
+      <li><b>Также в МФЦ:</b> подтвердить учётную запись Госуслуг, получить электронную подпись.</li>
+    </ul>
+    <b>Режим работы:</b> обычно пн–пт 8:00–20:00, суббота 9:00–17:00.` },
+
+  { id:'gov', cat:'госуслуги', chip:'c-gov',
+    term:'Электронная запись к врачу через Госуслуги',
+    def:`Возможность записаться на приём к врачу государственной поликлиники без звонка и очереди.
+    <ul>
+      <li><b>Как записаться:</b> Госуслуги → «Запись к врачу» → выбрать поликлинику → врача → дату и время.</li>
+      <li><b>Что потребуется:</b> подтверждённая учётная запись, номер полиса ОМС.</li>
+      <li><b>Напоминание:</b> за день до приёма придёт уведомление на телефон.</li>
+      <li><b>Отмена записи:</b> в личном кабинете → «Мои записи» → «Отменить».</li>
+    </ul>
+    <b>Совет:</b> записывайтесь за 1–2 недели к плановым специалистам — талоны разбирают быстро.` },
+
+  { id:'gov', cat:'госуслуги', chip:'c-gov',
+    term:'Оплата штрафов и задолженностей через Госуслуги',
+    def:`На портале можно проверить и оплатить любые штрафы и задолженности без поездки в банк.
+    <ul>
+      <li><b>Штрафы ГИБДД</b> — отображаются автоматически при привязанном ТС. Скидка 50% при оплате в первые 20 дней.</li>
+      <li><b>Налоговая задолженность</b> — налог на имущество, землю, транспорт.</li>
+      <li><b>Судебная задолженность</b> — алименты, исполнительные производства.</li>
+      <li><b>Оплата:</b> банковской картой, через СБП или из кошелька Госуслуг.</li>
+    </ul>
+    <b>Уведомления:</b> настройте автоматические оповещения о новых штрафах — Госуслуги → Уведомления.` },
+
+  { id:'gov', cat:'госуслуги', chip:'c-gov',
+    term:'Пенсионный фонд онлайн (СФР)',
+    def:`Социальный фонд России (бывший ПФР) — управляет пенсиями, пособиями и социальными выплатами. Большинство вопросов теперь решается онлайн.
+    <ul>
+      <li><b>Через Госуслуги:</b> сведения о пенсионных накоплениях, выписка из лицевого счёта, смена банка для зачисления пенсии.</li>
+      <li><b>Через сайт sfr.gov.ru</b> — личный кабинет СФР.</li>
+      <li><b>Основные услуги:</b> назначение пенсии, материнский капитал, пособие по уходу за ребёнком.</li>
+    </ul>
+    <b>Пример:</b> проверить будущую пенсию: Госуслуги → «Извещение о состоянии лицевого счёта».` },
+
+  { id:'gov', cat:'госуслуги', chip:'c-gov',
+    term:'Налоговая служба онлайн (ФНС)',
+    def:`Федеральная налоговая служба — онлайн-кабинет для налогоплательщиков.
+    <ul>
+      <li><b>Сайт:</b> nalog.gov.ru — раздел «Личный кабинет физического лица».</li>
+      <li><b>Через Госуслуги:</b> вход по учётной записи Госуслуг.</li>
+      <li><b>Возможности:</b> просмотр начисленных налогов, подача декларации 3-НДФЛ, налоговый вычет, оплата налогов.</li>
+      <li><b>Налоговый вычет</b> — возврат части уплаченного налога при покупке жилья, лечении, обучении.</li>
+    </ul>
+    <b>Совет:</b> подайте заявление на вычет за лечение онлайн — не нужно ехать в инспекцию.` },
+
+  { id:'gov', cat:'госуслуги', chip:'c-gov',
+    term:'Замена паспорта через Госуслуги',
+    def:`Подача заявления на замену или получение паспорта гражданина РФ через интернет.
+    <ul>
+      <li><b>Когда меняют:</b> в 20 и 45 лет, при изменении ФИО, смене пола, утере или порче.</li>
+      <li><b>Через Госуслуги:</b> заполнить анкету, загрузить фото, оплатить госпошлину онлайн (скидка 30%).</li>
+      <li><b>Срок изготовления:</b> 10 дней (по месту регистрации) или 30 дней (не по месту).</li>
+      <li><b>Получение:</b> лично в МВД или МФЦ.</li>
+    </ul>
+    <b>Скидка 30%</b> на госпошлину при оплате через Госуслуги — реальная экономия.` },
+
+  { id:'gov', cat:'госуслуги', chip:'c-gov',
+    term:'Регистрация по месту жительства (прописка)',
+    def:`Постановка на учёт по месту жительства или пребывания — теперь доступна онлайн.
+    <ul>
+      <li><b>Через Госуслуги:</b> подать заявление → приложить документы → явиться в УМВД для проставления штампа.</li>
+      <li><b>Постоянная регистрация</b> — по месту жительства (штамп в паспорте).</li>
+      <li><b>Временная регистрация</b> — по месту пребывания (отдельное свидетельство, нужно при съёме жилья).</li>
+    </ul>
+    <b>Срок:</b> уведомление от УМВД приходит в течение 3 рабочих дней.` },
+
+  { id:'gov', cat:'госуслуги', chip:'c-gov',
+    term:'Электронные документы на телефоне',
+    def:`Цифровые версии официальных документов, которые хранятся в приложении «Госуслуги» и имеют юридическую силу.
+    <ul>
+      <li><b>Цифровое водительское удостоверение</b> — можно предъявлять инспектору ГИБДД вместо пластиковой карточки.</li>
+      <li><b>Электронный полис ОМС</b> — предъявляется в поликлинике.</li>
+      <li><b>Справки и выписки</b> — из Госуслуг можно получить в электронном виде с QR-кодом для проверки.</li>
+    </ul>
+    <b>Где хранятся:</b> приложение «Госуслуги» → раздел «Документы».` },
+
+  { id:'gov', cat:'госуслуги', chip:'c-gov',
+    term:'Портал «Работа России» (trudvsem.ru)',
+    def:`Государственный портал занятости населения. Позволяет искать работу и встать на учёт как безработный онлайн.
+    <ul>
+      <li><b>Поиск вакансий</b> — база работодателей по всей стране.</li>
+      <li><b>Постановка на учёт по безработице</b> — через Госуслуги без похода в центр занятости.</li>
+      <li><b>Программы переобучения</b> — бесплатные курсы для безработных.</li>
+    </ul>
+    <b>Вход:</b> через учётную запись Госуслуг.` },
+
+  { id:'gov', cat:'госуслуги', chip:'c-gov',
+    term:'Единый портал ЖКХ (dom.gosuslugi.ru)',
+    def:`Государственная информационная система ЖКХ. Позволяет управлять вопросами жилья и коммунальных услуг онлайн.
+    <ul>
+      <li><b>Передача показаний счётчиков</b> — воды, газа, электричества.</li>
+      <li><b>Оплата ЖКУ</b> — без комиссии через Госуслуги или СБП.</li>
+      <li><b>Просмотр начислений</b> — долги, история оплат.</li>
+      <li><b>Обращения в управляющую компанию</b> — подача заявки онлайн.</li>
+    </ul>
+    <b>Совет:</b> передавайте показания счётчиков до 25-го числа каждого месяца.` },
+
+  // ──────── БАНКИНГ ────────
+  { id:'bank', cat:'банк', chip:'c-bank',
+    term:'Банковская карта',
+    def:`Пластиковая карта с чипом и магнитной полосой для безналичной оплаты и снятия наличных.
+    <ul>
+      <li><b>Дебетовая карта</b> — расходует только ваши собственные деньги на счёте.</li>
+      <li><b>Кредитная карта</b> — банк даёт в долг, нужно возвращать в срок (иначе начисляются проценты).</li>
+      <li><b>Виртуальная карта</b> — только цифры, без пластика. Для онлайн-оплат.</li>
+      <li><b>Платёжные системы:</b> Мир (российская), Visa, Mastercard.</li>
+    </ul>
+    <b>Данные карты:</b> 16-значный номер, срок действия, имя владельца, CVV (3 цифры на обороте).
+    <br><b>Правило безопасности:</b> никому не сообщайте CVV и PIN, даже «сотруднику банка».` },
+
+  { id:'bank', cat:'банк', chip:'c-bank',
+    term:'Онлайн-банк',
+    def:`Интернет-сервис банка для управления счётами, картами и финансами без посещения офиса.
+    <ul>
+      <li><b>Сбербанк Онлайн (СберБанк Онлайн)</b> — крупнейший в России.</li>
+      <li><b>ВТБ Онлайн</b></li>
+      <li><b>Тинькофф (Т-банк)</b> — полностью цифровой банк.</li>
+      <li><b>Альфа-Банк</b></li>
+    </ul>
+    <b>Что можно делать:</b>
+    <ul>
+      <li>Переводить деньги по номеру телефона.</li>
+      <li>Оплачивать ЖКУ, штрафы, налоги.</li>
+      <li>Пополнять вклады и накопительные счета.</li>
+      <li>Получать выписки и справки.</li>
+    </ul>` },
+
+  { id:'bank', cat:'банк', chip:'c-bank',
+    term:'Мобильное приложение банка',
+    def:`Банковское приложение на смартфоне. По возможностям равно интернет-банку, но удобнее в использовании на телефоне.
+    <ul>
+      <li><b>Вход:</b> PIN-код, отпечаток пальца или Face ID.</li>
+      <li><b>Push-уведомления</b> — мгновенные оповещения о каждой операции по карте.</li>
+      <li><b>Оплата смартфоном (NFC)</b> — приложите телефон к терминалу вместо карты.</li>
+    </ul>
+    <b>Совет:</b> включите уведомления обо всех операциях — сразу заметите подозрительное списание.` },
+
+  { id:'bank', cat:'банк', chip:'c-bank',
+    term:'СБП (Система быстрых платежей)',
+    def:`Российская государственная система мгновенных переводов по номеру телефона между счетами в разных банках.
+    <ul>
+      <li><b>Комиссия:</b> до 100 000 руб./мес. — бесплатно для физических лиц.</li>
+      <li><b>Скорость:</b> деньги приходят за несколько секунд.</li>
+      <li><b>Оплата по QR-коду</b> — сканируете QR в магазине, деньги списываются.</li>
+      <li><b>Не нужно знать реквизиты</b> — достаточно номера телефона получателя.</li>
+    </ul>
+    <b>Как использовать:</b> в любом банковском приложении → «Перевод по телефону» → СБП.` },
+
+  { id:'bank', cat:'банк', chip:'c-bank',
+    term:'NFC и бесконтактная оплата',
+    def:`Технология оплаты прикосновением смартфона или карты к платёжному терминалу.
+    <ul>
+      <li><b>Картой</b> — приложите карту к терминалу (значок волны). До 1000 руб. — без PIN, выше — с PIN.</li>
+      <li><b>Телефоном (Android)</b> — через приложение «Mir Pay», «СберПей» или «Тинькофф Pay».</li>
+      <li><b>iPhone (Apple Pay)</b> — работает через Face ID или Touch ID.</li>
+    </ul>
+    <b>Безопасность:</b> технология защищена шифрованием, мошенники не могут «считать» данные карты через NFC.` },
+
+  { id:'bank', cat:'банк', chip:'c-bank',
+    term:'Перевод денег',
+    def:`Отправка денег с вашего счёта на другой счёт или карту.
+    <ul>
+      <li><b>По номеру телефона (СБП)</b> — самый удобный способ внутри России.</li>
+      <li><b>По номеру карты</b> — 16 цифр карты получателя.</li>
+      <li><b>По реквизитам счёта</b> — БИК банка, расчётный счёт (для юридических лиц).</li>
+      <li><b>Между своими счетами</b> — внутри одного банка мгновенно и бесплатно.</li>
+    </ul>
+    <b>Лимиты:</b> у каждого банка свои суточные и месячные лимиты на переводы.
+    <br><b>Осторожно:</b> перевод незнакомым людям — невозможно отменить.` },
+
+  { id:'bank', cat:'банк', chip:'c-bank',
+    term:'PIN-код карты',
+    def:`Четырёхзначный секретный код для подтверждения операций при оплате и снятии наличных.
+    <ul>
+      <li><b>При оплате</b> — вводится на POS-терминале магазина.</li>
+      <li><b>В банкомате</b> — для снятия наличных и других операций.</li>
+      <li><b>3 неверных попытки</b> — карта блокируется. Разблокировка — в банке или через приложение.</li>
+    </ul>
+    <b>Правила:</b>
+    <ul>
+      <li>Никому не сообщайте PIN — даже сотрудникам банка.</li>
+      <li>Не пишите PIN на карте или рядом с ней.</li>
+      <li>При вводе в банкомате прикрывайте клавиатуру рукой.</li>
+    </ul>` },
+
+  { id:'bank', cat:'банк', chip:'c-bank',
+    term:'CVV/CVC-код',
+    def:`Три цифры на обороте банковской карты (реже — четыре на лицевой стороне у American Express). Используются для подтверждения онлайн-платежей.
+    <ul>
+      <li><b>Где находится:</b> на обороте карты, после последних 4 цифр номера.</li>
+      <li><b>Зачем нужен:</b> при оплате в интернет-магазине подтверждает, что карта у вас в руках.</li>
+    </ul>
+    <b>Главное правило:</b> CVV — строго секретный. Настоящий банк НИКОГДА не спрашивает его по телефону!` },
+
+  { id:'bank', cat:'банк', chip:'c-bank',
+    term:'SMS-код подтверждения (OTP)',
+    def:`Одноразовый пароль (OTP — One Time Password), который банк присылает в SMS для подтверждения операции.
+    <ul>
+      <li><b>Для чего используется:</b> вход в приложение, подтверждение перевода, оплата онлайн.</li>
+      <li><b>Срок действия:</b> обычно 3–5 минут.</li>
+    </ul>
+    <b>Главное правило безопасности:</b> SMS-код нельзя называть НИКОМУ. Ни «сотруднику банка», ни «службе безопасности» — это 100% мошенники.` },
+
+  { id:'bank', cat:'банк', chip:'c-bank',
+    term:'Выписка по счёту',
+    def:`Документ с историей всех операций по вашей карте или счёту за выбранный период.
+    <ul>
+      <li><b>В мобильном приложении:</b> раздел «История операций» или «Выписка».</li>
+      <li><b>В банкомате:</b> «Мини-выписка» — последние 5–10 операций.</li>
+      <li><b>В офисе банка:</b> бумажная выписка, заверенная печатью — для предоставления в организации.</li>
+    </ul>
+    <b>Совет:</b> просматривайте выписку раз в неделю — это поможет вовремя заметить подозрительные списания.` },
+
+  { id:'bank', cat:'банк', chip:'c-bank',
+    term:'Вклад и накопительный счёт',
+    def:`Финансовые инструменты для хранения и приумножения денег в банке с начислением процентов.
+    <ul>
+      <li><b>Вклад (депозит)</b> — деньги кладутся на фиксированный срок (3, 6, 12 месяцев). Процентная ставка выше, но снять досрочно — потерять проценты.</li>
+      <li><b>Накопительный счёт</b> — гибкий: пополняйте и снимайте в любое время. Ставка чуть ниже, зато деньги доступны.</li>
+    </ul>
+    <b>Страховка:</b> вклады до 1 400 000 руб. застрахованы государством (АСВ).` },
+
+  { id:'bank', cat:'банк', chip:'c-bank',
+    term:'Блокировка карты',
+    def:`Временное или постоянное прекращение возможности использования карты.
+    <ul>
+      <li><b>Самостоятельно (временно)</b> — через приложение банка, если потеряли карту, нашли — разблокировать.</li>
+      <li><b>Позвонить на горячую линию</b> — номер на обороте карты, работает круглосуточно.</li>
+      <li><b>Постоянная блокировка</b> — при потере, краже или компрометации данных. Выпускается новая карта.</li>
+    </ul>
+    <b>Совет:</b> сохраните номер горячей линии своего банка в телефоне заранее.` },
+
+  { id:'bank', cat:'банк', chip:'c-bank',
+    term:'Кредит и рассрочка',
+    def:`Финансовые услуги, позволяющие получить товар или деньги сейчас, а заплатить позже.
+    <ul>
+      <li><b>Потребительский кредит</b> — деньги на любые нужды с начислением процентов.</li>
+      <li><b>Ипотека</b> — кредит на покупку недвижимости на длительный срок.</li>
+      <li><b>Рассрочка</b> — разделение стоимости товара на равные части без процентов (часто оплачивает магазин).</li>
+      <li><b>Кредитная карта</b> — кредитный лимит с льготным периодом (до 50–100 дней без процентов).</li>
+    </ul>
+    <b>Осторожно:</b> микрозаймы («МФО») имеют очень высокие процентные ставки!` },
+
+  { id:'bank', cat:'банк', chip:'c-bank',
+    term:'Страхование банковской карты',
+    def:`Услуга защиты средств на карте от мошеннических операций, кражи и других рисков.
+    <ul>
+      <li><b>Что покрывает:</b> несанкционированное списание, кража карты, скимминг (копирование данных в банкомате).</li>
+      <li><b>Стоимость:</b> обычно 500–1500 руб./год.</li>
+      <li><b>Как оформить:</b> в мобильном приложении или офисе банка.</li>
+    </ul>
+    <b>Важно:</b> при мошенничестве немедленно заблокируйте карту и обратитесь в банк — у вас есть шанс вернуть деньги.` },
+
+  // ──────── БЕЗОПАСНОСТЬ ────────
+  { id:'sec', cat:'безопасность', chip:'c-sec',
+    term:'Пароль',
+    def:`Секретная комбинация символов для защиты доступа к аккаунту, устройству или файлу.
+    <ul>
+      <li><b>Слабый пароль:</b> «123456», «qwerty», «мамапапа» — взламывается за секунды.</li>
+      <li><b>Надёжный пароль:</b> минимум 10 символов, заглавные и строчные буквы, цифры, спецсимволы (!@#).</li>
+      <li><b>Пример надёжного пароля:</b> «Kub@n2026!» — узнаваемая вам фраза с заменой букв.</li>
+      <li><b>Уникальный для каждого сайта</b> — если взломают один, остальные будут в безопасности.</li>
+    </ul>
+    <b>Менеджер паролей</b> — программа для хранения всех паролей (Bitwarden, KeePass). Запоминать не нужно!` },
+
+  { id:'sec', cat:'безопасность', chip:'c-sec',
+    term:'Двухфакторная аутентификация (2FA)',
+    def:`Дополнительный уровень защиты: после ввода пароля требуется подтвердить вход вторым способом.
+    <ul>
+      <li><b>SMS-код</b> — самый популярный, код приходит в SMS.</li>
+      <li><b>Приложение-аутентификатор</b> — «Яндекс.Ключ», Google Authenticator — генерирует коды каждые 30 секунд.</li>
+      <li><b>Биометрия</b> — отпечаток пальца или распознавание лица.</li>
+      <li><b>Email-код</b> — код на резервный почтовый ящик.</li>
+    </ul>
+    <b>Правило:</b> включите 2FA на Госуслугах, почте и банках — это самая важная мера защиты.` },
+
+  { id:'sec', cat:'безопасность', chip:'c-sec',
+    term:'Вирусы и вредоносное ПО',
+    def:`Программы, созданные для причинения вреда: кражи данных, вымогательства или слежки.
+    <ul>
+      <li><b>Вирус</b> — самовоспроизводящаяся программа, заражает другие файлы.</li>
+      <li><b>Троян (Trojan)</b> — маскируется под полезную программу, а внутри — вредоносный код.</li>
+      <li><b>Шифровальщик (Ransomware)</b> — блокирует файлы и требует выкуп за расшифровку.</li>
+      <li><b>Шпионское ПО (Spyware)</b> — тайно следит за вами: перехватывает пароли, делает скриншоты.</li>
+      <li><b>Рекламное ПО (Adware)</b> — показывает навязчивую рекламу.</li>
+    </ul>
+    <b>Защита:</b> антивирус, не скачивайте файлы с непроверенных сайтов, обновляйте Windows.` },
+
+  { id:'sec', cat:'безопасность', chip:'c-sec',
+    term:'Антивирусная программа',
+    def:`Программа для обнаружения и удаления вирусов и другого вредоносного ПО.
+    <ul>
+      <li><b>Windows Defender (встроенный)</b> — бесплатный, надёжный, не нагружает систему.</li>
+      <li><b>Kaspersky</b> — российский антивирус, высокий уровень защиты.</li>
+      <li><b>Dr.Web</b> — популярный в России, есть бесплатная версия CureIt для разовой проверки.</li>
+      <li><b>ESET NOD32</b> — лёгкий и быстрый.</li>
+    </ul>
+    <b>Совет:</b> достаточно одного антивируса. Два антивируса одновременно конфликтуют между собой.
+    <br><b>Регулярно:</b> запускайте полную проверку раз в месяц.` },
+
+  { id:'sec', cat:'безопасность', chip:'c-sec',
+    term:'Фишинг',
+    def:`Вид мошенничества: злоумышленник создаёт поддельные сайты, письма или SMS, имитирующие официальные ресурсы, чтобы выманить ваши данные.
+    <ul>
+      <li><b>Фишинговый сайт</b> — выглядит как gosuslugi.ru, но адрес чуть изменён: gosusl1gi.ru или gosuslugi-online.com.</li>
+      <li><b>Фишинговое письмо</b> — «Ваш аккаунт заблокирован, перейдите по ссылке».</li>
+      <li><b>SMS-фишинг (Smishing)</b> — «Вам начислено 5000 руб., получить тут: ссылка».</li>
+    </ul>
+    <b>Как проверить:</b>
+    <ul>
+      <li>Смотрите точный адрес в адресной строке браузера.</li>
+      <li>Официальные органы никогда не просят пароли и CVV.</li>
+    </ul>` },
+
+  { id:'sec', cat:'безопасность', chip:'c-sec',
+    term:'Социальная инженерия',
+    def:`Манипуляция людьми с целью получить конфиденциальную информацию или деньги. Мошенник давит на страх, срочность или доверие.
+    <ul>
+      <li><b>«Сотрудник банка»</b> — звонит и говорит, что с вашей карты идёт подозрительное списание.</li>
+      <li><b>«Полицейский»</b> — угрожает уголовным делом, требует перевести деньги на «безопасный счёт».</li>
+      <li><b>«Родственник в беде»</b> — «Мама, попал в ДТП, срочно нужны деньги».</li>
+    </ul>
+    <b>Главное правило:</b> положите трубку и перезвоните самостоятельно по официальному номеру (на обороте карты, на сайте банка).` },
+
+  { id:'sec', cat:'безопасность', chip:'c-sec',
+    term:'Безопасный пароль и менеджер паролей',
+    def:`Инструменты для создания и хранения надёжных уникальных паролей без необходимости их запоминать.
+    <ul>
+      <li><b>Менеджер паролей</b> — программа хранит все пароли в зашифрованном виде.</li>
+      <li><b>Bitwarden</b> — бесплатный, открытый код, надёжный.</li>
+      <li><b>KeePass</b> — хранит пароли локально на компьютере, без облака.</li>
+      <li><b>Встроенный в браузер</b> — Chrome/Edge предлагают сохранить пароль. Удобно, но менее надёжно.</li>
+    </ul>
+    <b>Главный пароль менеджера</b> — единственный, который нужно запомнить наизусть. Все остальные — в менеджере.` },
+
+  { id:'sec', cat:'безопасность', chip:'c-sec',
+    term:'Брандмауэр (файрвол)',
+    def:`Программная или аппаратная «стена», фильтрующая сетевой трафик и блокирующая несанкционированные подключения к компьютеру.
+    <ul>
+      <li><b>Брандмауэр Windows</b> — встроен в систему, включён по умолчанию. Не отключайте!</li>
+      <li><b>Брандмауэр роутера</b> — защищает всю домашнюю сеть.</li>
+    </ul>
+    <b>Простой принцип:</b> брандмауэр — это охранник на входе, который пропускает только тех, кого вы пригласили.` },
+
+  { id:'sec', cat:'безопасность', chip:'c-sec',
+    term:'Резервная копия (Backup)',
+    def:`Дубликат важных файлов, хранящийся отдельно от оригинала. Защищает от потери данных при поломке, вирусе или случайном удалении.
+    <ul>
+      <li><b>Внешний диск</b> — подключается по USB, хранится дома.</li>
+      <li><b>Облачное хранилище</b> — Яндекс.Диск, OneDrive — автоматическая синхронизация.</li>
+      <li><b>Флешка</b> — для небольших важных документов.</li>
+    </ul>
+    <b>Правило 3-2-1:</b> 3 копии данных, 2 разных носителя, 1 хранится удалённо (в облаке).
+    <br><b>Совет:</b> сделайте резервную копию прямо сейчас — не откладывайте.` },
+
+  { id:'sec', cat:'безопасность', chip:'c-sec',
+    term:'Безопасный браузер и расширения',
+    def:`Настройки и дополнения браузера, повышающие безопасность при просмотре сайтов.
+    <ul>
+      <li><b>Блокировщик рекламы (uBlock Origin)</b> — блокирует рекламу и вредоносные баннеры.</li>
+      <li><b>HTTPS Everywhere</b> — принудительно переключает сайты на безопасное соединение.</li>
+      <li><b>Режим «Инкогнито»</b> — не сохраняет историю и куки.</li>
+    </ul>
+    <b>Совет:</b> проверяйте отзывы перед установкой расширений — поддельные расширения могут красть данные.` },
+
+  { id:'sec', cat:'безопасность', chip:'c-sec',
+    term:'Скимминг',
+    def:`Кража данных банковской карты с помощью специального устройства (скиммера), устанавливаемого мошенниками на банкоматы или терминалы.
+    <ul>
+      <li><b>Скиммер на банкомате</b> — накладка на картридер считывает данные карты.</li>
+      <li><b>Накладная клавиатура</b> — запоминает PIN.</li>
+    </ul>
+    <b>Как защититься:</b>
+    <ul>
+      <li>Пользуйтесь банкоматами внутри банков или торговых центров.</li>
+      <li>Прикрывайте клавиатуру рукой при вводе PIN.</li>
+      <li>Если картридер шатается — не вставляйте карту!</li>
+    </ul>` },
+
+  { id:'sec', cat:'безопасность', chip:'c-sec',
+    term:'Кибербуллинг',
+    def:`Травля, оскорбления или угрозы в интернете — через мессенджеры, соцсети или по электронной почте.
+    <ul>
+      <li><b>Как реагировать:</b>
+        <ul>
+          <li>Не отвечайте агрессору.</li>
+          <li>Заблокируйте отправителя.</li>
+          <li>Сохраните скриншоты как доказательства.</li>
+          <li>Обратитесь в полицию при угрозах.</li>
+        </ul>
+      </li>
+    </ul>
+    <b>Помните:</b> это не ваша вина. Жертва кибербуллинга всегда может обратиться за помощью.` },
+
+  { id:'sec', cat:'безопасность', chip:'c-sec',
+    term:'Утечка персональных данных',
+    def:`Несанкционированная публикация или передача ваших личных данных (ФИО, телефон, адрес, пароли) третьим лицам.
+    <ul>
+      <li><b>Причины:</b> взлом сайта, фишинг, вирус-шпион.</li>
+      <li><b>Как проверить, были ли ваши данные в утечке:</b> сайт haveibeenpwned.com — введите email.</li>
+    </ul>
+    <b>Что делать при утечке:</b>
+    <ul>
+      <li>Немедленно поменяйте пароль на поражённом ресурсе.</li>
+      <li>Проверьте другие сервисы с тем же паролем.</li>
+      <li>Включите 2FA.</li>
+    </ul>` },
+
+  { id:'sec', cat:'безопасность', chip:'c-sec',
+    term:'Публичный Wi-Fi: правила безопасности',
+    def:`Бесплатные Wi-Fi сети в кафе, торговых центрах и транспорте удобны, но несут риски.
+    <ul>
+      <li><b>Риск:</b> злоумышленник в той же сети может перехватить незашифрованный трафик.</li>
+      <li><b>Нельзя делать через публичный Wi-Fi:</b>
+        <ul>
+          <li>Входить в онлайн-банк.</li>
+          <li>Вводить пароли и данные карт.</li>
+          <li>Работать с Госуслугами.</li>
+        </ul>
+      </li>
+      <li><b>Можно делать:</b> читать новости, смотреть видео, общаться в мессенджерах.</li>
+    </ul>
+    <b>Защита:</b> используйте VPN при подключении к чужим сетям.` },
+
+  { id:'sec', cat:'безопасность', chip:'c-sec',
+    term:'«Безопасный счёт» — схема мошенников',
+    def:`Одна из самых распространённых схем телефонного мошенничества в России.
+    <ul>
+      <li><b>Схема:</b> звонят «из банка» или «из полиции», говорят, что мошенники пытаются украсть ваши деньги, и предлагают срочно перевести средства на «безопасный счёт» для сохранности.</li>
+      <li><b>Правда:</b> «безопасных счетов» не существует. Это счёт мошенника.</li>
+      <li><b>Никакой банк и никакая полиция НИКОГДА не просят переводить деньги по телефону.</b></li>
+    </ul>
+    <b>Действие:</b> немедленно положите трубку и позвоните в банк сами по номеру с карты.` },
+
+  { id:'sec', cat:'безопасность', chip:'c-sec',
+    term:'Настройки конфиденциальности',
+    def:`Параметры приложений и устройств, ограничивающие доступ к вашим личным данным.
+    <ul>
+      <li><b>Разрешения приложений</b> — камера, микрофон, геолокация, контакты. Давайте только нужные!</li>
+      <li><b>На Android:</b> Настройки → Приложения → выберите приложение → Разрешения.</li>
+      <li><b>В браузере:</b> Настройки → Конфиденциальность → отключить слежение.</li>
+      <li><b>В соцсетях:</b> настройте, кто видит ваши посты — «Только друзья» вместо «Все».</li>
+    </ul>
+    <b>Совет:</b> регулярно проверяйте, каким приложениям вы разрешили доступ к микрофону и камере.` },
+
+  { id:'sec', cat:'безопасность', chip:'c-sec',
+    term:'Блокировка экрана телефона',
+    def:`Защита, требующая ввода PIN, рисунка или биометрии для разблокировки смартфона.
+    <ul>
+      <li><b>PIN-код</b> — 4–6 цифр. Надёжнее, чем рисунок.</li>
+      <li><b>Отпечаток пальца (Touch ID)</b> — быстро и надёжно.</li>
+      <li><b>Распознавание лица (Face ID)</b> — смотрите на телефон — разблокирован.</li>
+      <li><b>Графический ключ</b> — рисунок по точкам. Оставляет следы на стекле — ненадёжен.</li>
+    </ul>
+    <b>Настройка:</b> Параметры телефона → Безопасность → Блокировка экрана.
+    <br><b>Совет:</b> установите автоблокировку через 1–2 минуты бездействия.` },
+
+  { id:'sec', cat:'безопасность', chip:'c-sec',
+    term:'Безопасность детей в интернете',
+    def:`Инструменты и правила для защиты детей и внуков от нежелательного контента и мошенников онлайн.
+    <ul>
+      <li><b>Родительский контроль Windows:</b> Параметры → Учётные записи → Семья — ограничение сайтов и времени.</li>
+      <li><b>Безопасный поиск</b> — в Яндексе: настройки поиска → «Семейный поиск».</li>
+      <li><b>Антивирус с родительским контролем</b> — Kaspersky Safe Kids и другие.</li>
+    </ul>
+    <b>Главное:</b> разговаривайте с детьми об интернет-безопасности — это важнее любых технических средств.` },
+
+  { id:'sec', cat:'безопасность', chip:'c-sec',
+    term:'Шифрование данных',
+    def:`Преобразование информации в нечитаемый вид, который можно расшифровать только с ключом.
+    <ul>
+      <li><b>HTTPS</b> — шифрует передачу данных между браузером и сайтом.</li>
+      <li><b>Сквозное шифрование (End-to-End)</b> — в WhatsApp и Telegram (секретные чаты): только отправитель и получатель читают сообщения.</li>
+      <li><b>BitLocker</b> — шифрование диска Windows Pro, защищает файлы при краже компьютера.</li>
+    </ul>
+    <b>Практический смысл:</b> зашифрованные данные — как письмо в запечатанном конверте, а не на открытке.` },
+
+  // ──────── МЕДИА ────────
+  { id:'media', cat:'медиа', chip:'c-media',
+    term:'Фото и форматы изображений',
+    def:`Цифровые фотографии хранятся в различных форматах с разным качеством и размером файла.
+    <ul>
+      <li><b>JPEG / JPG</b> — самый популярный для фото. Сжатие уменьшает файл, незначительно снижая качество.</li>
+      <li><b>PNG</b> — без потерь качества, поддерживает прозрачность. Для скриншотов и графики.</li>
+      <li><b>RAW</b> — «сырой» формат профессиональных фотоаппаратов. Максимальное качество, большой размер.</li>
+      <li><b>HEIC</b> — современный формат iPhone. Компактнее JPEG при том же качестве.</li>
+      <li><b>WebP</b> — современный формат для сайтов, меньше чем JPEG.</li>
+    </ul>
+    <b>Разрешение фото:</b> 12 Мп — достаточно для печати 20×30 см.` },
+
+  { id:'media', cat:'медиа', chip:'c-media',
+    term:'Видеозапись и форматы видео',
+    def:`Цифровое видео хранится в контейнерах с различными кодеками для сжатия изображения и звука.
+    <ul>
+      <li><b>MP4</b> — самый универсальный формат, воспроизводится везде.</li>
+      <li><b>MKV</b> — контейнер, вмещает несколько аудиодорожек и субтитры.</li>
+      <li><b>AVI</b> — старый формат, большой размер.</li>
+      <li><b>MOV</b> — формат Apple.</li>
+    </ul>
+    <b>Качество видео:</b>
+    <ul>
+      <li>360p — низкое (старые телефоны).</li>
+      <li>720p HD — хорошее.</li>
+      <li>1080p Full HD — отличное.</li>
+      <li>4K — профессиональное, очень большой файл.</li>
+    </ul>` },
+
+  { id:'media', cat:'медиа', chip:'c-media',
+    term:'Скриншот',
+    def:`Снимок экрана — изображение всего, что отображается на мониторе или телефоне в данный момент.
+    <ul>
+      <li><b>Windows (весь экран):</b> Win + PrtSc → автосохранение в «Изображения/Снимки экрана».</li>
+      <li><b>Windows (область):</b> Win + Shift + S → выделить нужную область.</li>
+      <li><b>Android:</b> Кнопка питания + кнопка уменьшения громкости.</li>
+      <li><b>iPhone:</b> Боковая кнопка + кнопка громкости вверх.</li>
+    </ul>
+    <b>Применение:</b> сохранить квитанцию, зафиксировать ошибку, поделиться информацией с экрана.` },
+
+  { id:'media', cat:'медиа', chip:'c-media',
+    term:'Редактирование фото',
+    def:`Изменение фотографий: яркость, контраст, кадрирование, наложение фильтров.
+    <ul>
+      <li><b>Встроенный редактор Windows</b> — «Фотографии» — базовые правки, поворот, обрезка.</li>
+      <li><b>Paint</b> — рисование и простые правки.</li>
+      <li><b>Яндекс.Фото / Google Фото</b> — онлайн-редактор на телефоне или в браузере.</li>
+      <li><b>Снимки (iPhone)</b> — встроенный редактор с богатыми возможностями.</li>
+      <li><b>Canva (online)</b> — удобный редактор для создания открыток и коллажей.</li>
+    </ul>` },
+
+  { id:'media', cat:'медиа', chip:'c-media',
+    term:'Аудио: форматы и воспроизведение',
+    def:`Цифровые аудиофайлы хранятся в различных форматах.
+    <ul>
+      <li><b>MP3</b> — самый популярный, сжатый, небольшой размер.</li>
+      <li><b>AAC</b> — используется Apple, лучше MP3 при том же размере.</li>
+      <li><b>FLAC</b> — без потерь, высокое качество, большой размер (для аудиофилов).</li>
+      <li><b>WAV</b> — несжатый, профессиональный формат.</li>
+    </ul>
+    <b>Плееры:</b> Windows Media Player, VLC (бесплатный, воспроизводит всё), Яндекс.Музыка.` },
+
+  { id:'media', cat:'медиа', chip:'c-media',
+    term:'Облачное хранилище фото',
+    def:`Автоматическое резервное копирование фотографий в интернет. Не потеряете снимки при поломке телефона.
+    <ul>
+      <li><b>Google Фото</b> — бесплатно (15 ГБ), автосинхронизация с Android.</li>
+      <li><b>Яндекс.Фото</b> — в составе Яндекс.Диска, бесплатно 10 ГБ.</li>
+      <li><b>iCloud Photos</b> — для iPhone, 5 ГБ бесплатно.</li>
+      <li><b>OneDrive</b> — автозагрузка с Android и iPhone.</li>
+    </ul>
+    <b>Как включить:</b> в приложении хранилища → «Автозагрузка» или «Резервное копирование» → включить.` },
+
+  { id:'media', cat:'медиа', chip:'c-media',
+    term:'Сжатие файлов для отправки',
+    def:`Уменьшение размера фото и видео перед отправкой по почте или в мессенджере.
+    <ul>
+      <li><b>Фото в мессенджерах</b> — при отправке как «Фото» WhatsApp/Telegram автоматически сжимают. Отправить без сжатия — выбрать «Файл».</li>
+      <li><b>Онлайн-сжатие:</b> squoosh.app, tinypng.com — уменьшают JPEG/PNG без видимой потери качества.</li>
+      <li><b>Видео:</b> HandBrake (бесплатно) — мощный конвертер и компрессор видео.</li>
+    </ul>
+    <b>Пример:</b> уменьшить 10 МБ фото до 1 МБ для отправки на электронную почту.` },
+
+  { id:'media', cat:'медиа', chip:'c-media',
+    term:'Стриминговые сервисы',
+    def:`Онлайн-платформы для просмотра фильмов, сериалов и прослушивания музыки по подписке.
+    <ul>
+      <li><b>Видео:</b> Кинопоиск, Okko, Иви, Rutube — российские; Netflix — международный.</li>
+      <li><b>Музыка:</b> Яндекс.Музыка, VK Музыка, Spotify.</li>
+    </ul>
+    <b>Офлайн-просмотр:</b> большинство сервисов позволяют скачать контент на телефон для просмотра без интернета.
+    <br><b>Совет:</b> при медленном интернете снизьте качество воспроизведения в настройках сервиса.` },
+
+  { id:'media', cat:'медиа', chip:'c-media',
+    term:'Телемедицина и видеоконсультация врача',
+    def:`Онлайн-консультация с врачом через видеосвязь или чат — не выходя из дома.
+    <ul>
+      <li><b>Сбер Здоровье</b> — консультация терапевтов и специалистов онлайн.</li>
+      <li><b>Яндекс.Здоровье</b> — мобильное приложение.</li>
+      <li><b>Видеосвязь с участковым врачом</b> — через региональные порталы здравоохранения.</li>
+    </ul>
+    <b>Что нужно:</b> смартфон или компьютер с камерой, интернет, учётная запись.
+    <br><b>Ограничение:</b> телемедицина не заменяет очный осмотр при серьёзных симптомах.` },
+
+  { id:'media', cat:'медиа', chip:'c-media',
+    term:'Онлайн-образование и курсы',
+    def:`Обучение через интернет — видеоуроки, тесты, вебинары — из дома в удобное время.
+    <ul>
+      <li><b>Платформы:</b> Coursera, Stepik, Яндекс.Практикум, Skillbox, Учи.ру (для детей).</li>
+      <li><b>Бесплатные ресурсы:</b> YouTube, Khan Academy, порталы госуслуг с обучающими курсами.</li>
+    </ul>
+    <b>Для пожилых:</b> программа «Активное долголетие» в Москве, региональные программы цифровой грамотности.` },
+
+  { id:'media', cat:'медиа', chip:'c-media',
+    term:'Голосовой ассистент',
+    def:`Программа, которая понимает голосовые команды и отвечает на вопросы разговорным языком.
+    <ul>
+      <li><b>Алиса (Яндекс)</b> — самый популярный в России. Есть на телефоне, колонке, Smart TV.</li>
+      <li><b>Google Ассистент</b> — на Android-телефонах.</li>
+      <li><b>Siri</b> — на iPhone.</li>
+    </ul>
+    <b>Что умеет:</b> ответить на вопрос, поставить будильник, позвонить, включить музыку, рассказать погоду.
+    <br><b>Пример:</b> «Алиса, позвони Вале» — телефон наберёт нужный контакт.` },
+
+  // ──────── ТЕХНОЛОГИИ ────────
+  { id:'tech', cat:'технологии', chip:'c-tech',
+    term:'Приложение (мобильное)',
+    def:`Программа для смартфона или планшета, загружаемая через официальный магазин.
+    <ul>
+      <li><b>Google Play</b> — магазин приложений для Android.</li>
+      <li><b>App Store</b> — магазин приложений для iPhone и iPad.</li>
+      <li><b>Типы приложений:</b>
+        <ul>
+          <li>Банковские (Сбербанк Онлайн, Тинькофф).</li>
+          <li>Государственные (Госуслуги, Налоги ФЛ).</li>
+          <li>Мессенджеры (WhatsApp, Telegram).</li>
+          <li>Карты (Яндекс.Карты, 2ГИС).</li>
+          <li>Здоровье (СберЗдоровье, Яндекс.Здоровье).</li>
+        </ul>
+      </li>
+    </ul>
+    <b>Совет:</b> скачивайте только из официальных магазинов — в них приложения проверены на безопасность.` },
+
+  { id:'tech', cat:'технологии', chip:'c-tech',
+    term:'Обновление приложений',
+    def:`Установка новой версии приложения с исправлениями ошибок, улучшениями и патчами безопасности.
+    <ul>
+      <li><b>Android:</b> Google Play → значок профиля → «Управление приложениями» → «Обновить все».</li>
+      <li><b>iPhone:</b> App Store → значок профиля → прокрутить вниз → «Обновить все».</li>
+      <li><b>Автообновление</b> — включите в настройках магазина, чтобы не следить вручную.</li>
+    </ul>
+    <b>Зачем обновлять:</b> новые версии закрывают уязвимости, которыми могут воспользоваться мошенники.` },
+
+  { id:'tech', cat:'технологии', chip:'c-tech',
+    term:'Облачные вычисления (Cloud)',
+    def:`Использование вычислительных ресурсов (хранилища, программ, вычислений) через интернет без установки на компьютер.
+    <ul>
+      <li><b>Облачное хранилище</b> — Яндекс.Диск, Google Диск, OneDrive.</li>
+      <li><b>Офис онлайн</b> — Google Docs, Яндекс.Документы — редактировать Word/Excel в браузере.</li>
+      <li><b>Почта в облаке</b> — Gmail, Яндекс.Почта — письма хранятся на серверах.</li>
+    </ul>
+    <b>Преимущества:</b> доступно с любого устройства, не нужно ставить программы, данные не потеряются при поломке ПК.` },
+
+  { id:'tech', cat:'технологии', chip:'c-tech',
+    term:'Искусственный интеллект (ИИ)',
+    def:`Технологии, позволяющие компьютерам выполнять задачи, требующие «человеческого» интеллекта: распознавать речь, текст, изображения, отвечать на вопросы.
+    <ul>
+      <li><b>Голосовые ассистенты</b> — Алиса, Siri, Google Assistant.</li>
+      <li><b>Чат-боты</b> — YandexGPT, ChatGPT — отвечают на вопросы текстом.</li>
+      <li><b>Распознавание лица</b> — разблокировка телефона, поиск фото по лицу.</li>
+      <li><b>Перевод</b> — Яндекс.Переводчик, DeepL — мгновенный перевод текста и речи.</li>
+    </ul>
+    <b>Практическое применение:</b> диктовка текста голосом, автоматический перевод зарубежных сайтов.` },
+
+  { id:'tech', cat:'технологии', chip:'c-tech',
+    term:'NFC (бесконтактная связь)',
+    def:`Технология беспроводной передачи данных на очень коротком расстоянии (до 5 см).
+    <ul>
+      <li><b>Оплата телефоном</b> — приложите смартфон к терминалу вместо карты.</li>
+      <li><b>NFC-метки</b> — небольшие наклейки, при касании которых телефон выполняет действие.</li>
+      <li><b>Обмен данными</b> — прикоснитесь телефонами — передаётся контакт или ссылка.</li>
+    </ul>
+    <b>Как проверить наличие NFC:</b> Настройки телефона → Подключения → NFC.` },
+
+  { id:'tech', cat:'технологии', chip:'c-tech',
+    term:'Bluetooth',
+    def:`Технология беспроводной связи на расстоянии до 10–100 метров для соединения устройств между собой.
+    <ul>
+      <li><b>Применение:</b> наушники, колонки, клавиатуры, мыши, гарнитуры, умные часы.</li>
+      <li><b>Сопряжение (Pairing)</b> — первичное подключение устройств друг к другу.</li>
+      <li><b>Версии:</b> Bluetooth 4.0, 5.0 — чем выше, тем быстрее и дальше.</li>
+    </ul>
+    <b>Совет:</b> отключайте Bluetooth, когда не используете — экономит батарею и повышает безопасность.` },
+
+  { id:'tech', cat:'технологии', chip:'c-tech',
+    term:'GPS и геолокация',
+    def:`Технология определения географического положения устройства с помощью спутников.
+    <ul>
+      <li><b>GPS</b> — американская спутниковая система.</li>
+      <li><b>ГЛОНАСС</b> — российская система. Современные смартфоны поддерживают обе.</li>
+      <li><b>Применение:</b> навигация в Яндекс.Картах, доставка еды, такси, геометки на фото.</li>
+    </ul>
+    <b>Приватность:</b> приложения, запрашивающие доступ к геолокации «всегда» — избыточное разрешение. Давайте доступ «только при использовании».` },
+
+  { id:'tech', cat:'технологии', chip:'c-tech',
+    term:'Smart TV (умный телевизор)',
+    def:`Телевизор с подключением к интернету и встроенными приложениями.
+    <ul>
+      <li><b>Встроенные приложения:</b> YouTube, Кинопоиск, Окко, Иви, СБЕР Звук.</li>
+      <li><b>Голосовой пульт</b> — управление голосом через Алису или Google.</li>
+      <li><b>Трансляция с телефона (Miracast/Chromecast)</b> — показать экран телефона на телевизоре.</li>
+      <li><b>Операционные системы Smart TV:</b> Android TV, Tizen (Samsung), WebOS (LG).</li>
+    </ul>
+    <b>Совет:</b> установите пароль на Smart TV, чтобы дети не могли совершать платные покупки.` },
+
+  { id:'tech', cat:'технологии', chip:'c-tech',
+    term:'Умные часы и фитнес-браслет',
+    def:`Носимые гаджеты, синхронизирующиеся со смартфоном и следящие за здоровьем и активностью.
+    <ul>
+      <li><b>Фитнес-браслет</b> — шаги, пульс, сон, калории. Дешевле, батарея 7–14 дней.</li>
+      <li><b>Умные часы</b> — уведомления со смартфона, звонки, приложения, GPS. Батарея 1–3 дня.</li>
+      <li><b>Популярные модели:</b> Xiaomi Band, Honor Band, Samsung Galaxy Watch, Apple Watch.</li>
+    </ul>
+    <b>Пример для здоровья:</b> мониторинг пульса, уровня кислорода в крови (SpO2), уведомление о высоком давлении.` },
+
+  { id:'tech', cat:'технологии', chip:'c-tech',
+    term:'Цифровое телевидение (DVB-T2)',
+    def:`Стандарт эфирного цифрового телевещания, пришедший на смену аналоговому.
+    <ul>
+      <li><b>20 бесплатных каналов</b> в двух мультиплексах (РТРС-1 и РТРС-2).</li>
+      <li><b>Что нужно:</b> антенна, телевизор с тюнером DVB-T2 или отдельная приставка.</li>
+      <li><b>Настройка:</b> Меню ТВ → Поиск каналов → Автопоиск.</li>
+    </ul>
+    <b>Дополнительно:</b> IPTV — телевидение через интернет (100+ каналов), у каждого провайдера своя подписка.` },
+
+  { id:'tech', cat:'технологии', chip:'c-tech',
+    term:'Электронная книга (e-reader)',
+    def:`Устройство для чтения электронных книг с экраном на основе «электронных чернил» (E-Ink).
+    <ul>
+      <li><b>E-Ink экран</b> — не устаёт глаза, читается при ярком солнце, батарея на несколько недель.</li>
+      <li><b>Форматы книг:</b> FB2, EPUB, MOBI, PDF.</li>
+      <li><b>Популярные модели:</b> PocketBook, Amazon Kindle, Яндекс.Книга.</li>
+    </ul>
+    <b>Где взять книги:</b> ЛитРес, ReadRate, Библиотека ЛитРес (бесплатно по библиотечному читательскому билету).` },
+
+  { id:'tech', cat:'технологии', chip:'c-tech',
+    term:'Биометрия',
+    def:`Технология идентификации человека по уникальным физическим характеристикам.
+    <ul>
+      <li><b>Отпечаток пальца (Touch ID)</b> — разблокировка телефона, подтверждение платежей.</li>
+      <li><b>Распознавание лица (Face ID)</b> — вход в телефон, банковское приложение.</li>
+      <li><b>Голосовая биометрия</b> — используется в колл-центрах банков для идентификации.</li>
+      <li><b>Единая биометрическая система (ЕБС)</b> — государственная база биометрических данных в России.</li>
+    </ul>
+    <b>Безопасность:</b> биометрические данные не передаются в интернет — хранятся на чипе устройства.` },
+
+  { id:'tech', cat:'технологии', chip:'c-tech',
+    term:'Телемедицинские устройства',
+    def:`Гаджеты для домашнего мониторинга здоровья с передачей данных врачу через интернет.
+    <ul>
+      <li><b>Тонометр с Bluetooth</b> — измеряет давление, записывает историю в приложение.</li>
+      <li><b>Глюкометр</b> — уровень сахара в крови с приложением на телефоне.</li>
+      <li><b>Пульсоксиметр</b> — уровень кислорода в крови (SpO2) и пульс.</li>
+      <li><b>ЭКГ-монитор</b> — портативный кардиограф для домашнего использования.</li>
+    </ul>
+    <b>Преимущество:</b> врач видит ваши показатели онлайн и может своевременно скорректировать лечение.` },
+
+  { id:'tech', cat:'технологии', chip:'c-tech',
+    term:'Госуслуги в цифровом рубле',
+    def:`Цифровой рубль — третья форма российской валюты наряду с наличными и безналичными деньгами.
+    <ul>
+      <li><b>Хранится в</b> «цифровом кошельке» на платформе Банка России.</li>
+      <li><b>Доступ</b> через банковские приложения, к которым подключён цифровой рубль.</li>
+      <li><b>Преимущество:</b> прозрачность расчётов, низкие комиссии при переводах.</li>
+    </ul>
+    <b>Статус:</b> пилотный проект, расширяется с 2024 года.` },
+
+  { id:'tech', cat:'технологии', chip:'c-tech',
+    term:'Интернет-провайдер и тарифы',
+    def:`Компания, предоставляющая доступ в интернет. Тариф определяет скорость и стоимость.
+    <ul>
+      <li><b>Домашний интернет:</b> тарифы от 300 до 1000 руб./мес. за 100–500 Мбит/с.</li>
+      <li><b>Мобильный интернет:</b> пакеты трафика 5–100 ГБ/мес.</li>
+      <li><b>Безлимитный тариф</b> — без ограничения по объёму (но скорость может снижаться при превышении «честного лимита»).</li>
+    </ul>
+    <b>Совет:</b> сравните тарифы на сайте провайдеров вашего района — разница в цене может быть значительной.` },
+
+  { id:'tech', cat:'технологии', chip:'c-tech',
+    term:'Электронная очередь (талон)',
+    def:`Система электронного управления очередью в МФЦ, поликлиниках, банках и госорганах.
+    <ul>
+      <li><b>Терминал самообслуживания</b> — берёте талон при входе, ждёте своего номера на экране.</li>
+      <li><b>Предварительная запись онлайн</b> — через Госуслуги или сайт организации — приходите к назначенному времени без ожидания.</li>
+    </ul>
+    <b>Совет:</b> записывайтесь онлайн заранее — это экономит время.` },
+
+  { id:'tech', cat:'технологии', chip:'c-tech',
+    term:'Электронная подпись (ЭЦП)',
+    def:`Цифровой аналог собственноручной подписи, имеющий юридическую силу при подписании документов онлайн.
+    <ul>
+      <li><b>Простая ЭП</b> — код из SMS или логин/пароль. Для Госуслуг и банков.</li>
+      <li><b>Квалифицированная ЭП (КЭП)</b> — физический носитель (токен) или облачная подпись. Для судов, налоговой, крупных сделок.</li>
+    </ul>
+    <b>Где получить КЭП:</b> аккредитованные удостоверяющие центры, МФЦ, налоговая инспекция (бесплатно для физических лиц).` },
+
+  { id:'tech', cat:'технологии', chip:'c-tech',
+    term:'Единый сервис «Суперсервисы» Госуслуг',
+    def:`Суперсервисы — крупные жизненные ситуации, для которых Госуслуги объединяют несколько услуг сразу в один удобный сценарий.
+    <ul>
+      <li><b>«Рождение ребёнка»</b> — одна заявка охватывает регистрацию, получение свидетельства, маткапитал, пособия.</li>
+      <li><b>«Выход на пенсию»</b> — проверка трудового стажа, подача заявления на пенсию.</li>
+      <li><b>«Утрата близкого человека»</b> — все необходимые документы в одном сценарии.</li>
+      <li><b>«Цифровое исполнительное производство»</b> — онлайн-работа с приставами.</li>
+    </ul>` }
+];
+
+// ═══════════════════════════════════════════════════════════════
+// РЕНДЕР КАРТОЧЕК
+// ═══════════════════════════════════════════════════════════════
+const SECTION_MAP = {
+  basics:'cards-basics',
+  equip:'cards-equip',
+  win:'cards-win',
+  files:'cards-files',
+  inet:'cards-inet',
+  mail:'cards-mail',
+  chat:'cards-chat',
+  gov:'cards-gov',
+  bank:'cards-bank',
+  sec:'cards-sec',
+  media:'cards-media',
+  tech:'cards-tech'
+};
+
+const CAT_MAP = {
+  'основы':'оборудование',
+  'оборудование':'оборудование',
+  'Windows':'Windows',
+  'файлы':'файлы',
+  'интернет':'интернет',
+  'почта':'почта',
+  'общение':'общение',
+  'госуслуги':'госуслуги',
+  'банк':'банк',
+  'безопасность':'безопасность',
+  'медиа':'медиа',
+  'технологии':'технологии'
+};
+
+function highlight(text, query){
+  if(!query) return text;
+  const safeQ = query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  return text.replace(new RegExp(`(${safeQ})`,'gi'),'<mark class="hl">$1</mark>');
+}
+
+function renderCard(t, query){
+  const termHL   = highlight(t.term, query);
+  const defClean = t.def.replace(/<[^>]+>/g,' ');
+  return `
+    <div class="gl-card" data-cat="${t.cat}" data-term="${t.term.toLowerCase()}" data-def="${defClean.toLowerCase()}">
+      <div class="flex items-start justify-between gap-2 flex-wrap">
+        <div class="gl-term">${termHL}</div>
+        <span class="gl-chip ${t.chip}">${t.cat}</span>
+      </div>
+      <div class="gl-def">${t.def}</div>
+    </div>`;
+}
+
+function renderAll(filter='', query=''){
+  // считаем количество по разделам
+  const counts = {};
+  TERMS.forEach(t => { counts[t.id] = (counts[t.id]||0)+1; });
+
+  // обновляем счётчики в заголовках секций
+  Object.keys(SECTION_MAP).forEach(id => {
+    const el = document.getElementById('count-'+id);
+    if(el) el.textContent = counts[id]||0;
+  });
+
+  // фильтрация
+  let filtered = TERMS.filter(t => {
+    const matchCat   = !filter || t.id === filter;
+    const matchQuery = !query  ||
+      t.term.toLowerCase().includes(query.toLowerCase()) ||
+      t.def.replace(/<[^>]+>/g,' ').toLowerCase().includes(query.toLowerCase());
+    return matchCat && matchQuery;
+  });
+
+  // группируем по id секции
+  const groups = {};
+  filtered.forEach(t => {
+    if(!groups[t.id]) groups[t.id] = [];
+    groups[t.id].push(t);
+  });
+
+  // рендерим каждую секцию
+  Object.keys(SECTION_MAP).forEach(id => {
+    const container = document.getElementById(SECTION_MAP[id]);
+    if(!container) return;
+    const section   = container.closest('.gl-section');
+    const cards     = groups[id] || [];
+    if(cards.length === 0){
+      if(section) section.style.display = 'none';
+      return;
+    }
+    if(section) section.style.display = '';
+    container.innerHTML = cards.map(t => renderCard(t, query)).join('');
+    // обновить счётчик в шапке секции
+    const cnt = section ? section.querySelector('.gl-section-count') : null;
+    if(cnt) cnt.textContent = cards.length + ' терминов';
+  });
+
+  // показать «ничего не найдено»
+  const empty = document.getElementById('no-results');
+  if(empty) empty.style.display = filtered.length === 0 ? 'flex' : 'none';
+
+  // обновить итоговый счётчик в hero
+  const totalEl = document.getElementById('hero-total');
+  if(totalEl) totalEl.textContent = filtered.length;
+}
+
+// ───── Инициализация после загрузки DOM ─────
+document.addEventListener('DOMContentLoaded', () => {
+
+  // первичный рендер всех карточек
+  renderAll();
+
+  // ── Поиск ──
+  const searchInput = document.getElementById('search-input');
+  const clearBtn    = document.getElementById('search-clear');
+  let   activeFilter = '';
+
+  function doSearch(){
+    const q = searchInput ? searchInput.value.trim() : '';
+    if(clearBtn) clearBtn.style.display = q ? 'flex' : 'none';
+    renderAll(activeFilter, q);
+    // сбросить к началу сетки
+    const grid = document.getElementById('glossary-grid');
+    if(grid) grid.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  if(searchInput){
+    searchInput.addEventListener('input', doSearch);
+    searchInput.addEventListener('keydown', e => {
+      if(e.key === 'Escape'){ searchInput.value=''; doSearch(); }
+    });
+  }
+  if(clearBtn){
+    clearBtn.addEventListener('click', () => {
+      searchInput.value='';
+      doSearch();
+      searchInput.focus();
+    });
+  }
+
+  // ── Фильтр-теги (пилюли) ──
+  document.querySelectorAll('.tag-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      const val = pill.dataset.filter || '';
+      activeFilter = activeFilter === val ? '' : val;
+      document.querySelectorAll('.tag-pill').forEach(p => p.classList.remove('active'));
+      if(activeFilter) pill.classList.add('active');
+      renderAll(activeFilter, searchInput ? searchInput.value.trim() : '');
+    });
+  });
+
+  // ── Переключатель размера шрифта ──
+  const fsButtons = document.querySelectorAll('.fs-btn');
+  fsButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      fsButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const size = btn.dataset.size;
+      document.body.classList.remove('zoom-sm','zoom-lg');
+      if(size === 'sm') document.body.classList.add('zoom-sm');
+      if(size === 'lg') document.body.classList.add('zoom-lg');
+      localStorage.setItem('gl-fontsize', size);
+    });
+  });
+  // восстановить из localStorage
+  const savedSize = localStorage.getItem('gl-fontsize');
+  if(savedSize){
+    document.body.classList.remove('zoom-sm','zoom-lg');
+    if(savedSize==='sm') document.body.classList.add('zoom-sm');
+    if(savedSize==='lg') document.body.classList.add('zoom-lg');
+    fsButtons.forEach(b => {
+      b.classList.toggle('active', b.dataset.size === savedSize);
+    });
+  }
+
+  // ── Тема: светлая / тёмная ──
+  const themeBtn = document.getElementById('theme-toggle');
+  function applyTheme(dark){
+    document.documentElement.classList.toggle('dark', dark);
+    if(themeBtn){
+      themeBtn.querySelector('.material-symbols-outlined').textContent =
+        dark ? 'light_mode' : 'dark_mode';
+    }
+    localStorage.setItem('gl-theme', dark ? 'dark' : 'light');
+  }
+  const savedTheme = localStorage.getItem('gl-theme');
+  applyTheme(savedTheme === 'dark');
+  if(themeBtn){
+    themeBtn.addEventListener('click', () => {
+      applyTheme(!document.documentElement.classList.contains('dark'));
+    });
+  }
+
+  // ── Кастомный курсор ──
+  const dot  = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  let raf;
+  let rx=0, ry=0, tx=0, ty=0;
+  document.addEventListener('mousemove', e => {
+    tx = e.clientX; ty = e.clientY;
+    if(dot){ dot.style.left=tx+'px'; dot.style.top=ty+'px'; }
+    if(!raf) raf = requestAnimationFrame(animRing);
+  });
+  function animRing(){
+    rx += (tx-rx)*0.12;
+    ry += (ty-ry)*0.12;
+    if(ring){ ring.style.left=rx+'px'; ring.style.top=ry+'px'; }
+    raf = null;
+    if(Math.abs(tx-rx)>0.5||Math.abs(ty-ry)>0.5)
+      raf = requestAnimationFrame(animRing);
+  }
+  document.querySelectorAll('a,button,[role="button"],input,.gl-card,.tag-pill').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('ch'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('ch'));
+  });
+
+  // ── Плавный скролл по якорям навигации ──
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.getElementById(a.getAttribute('href').slice(1));
+      if(target){
+        e.preventDefault();
+        target.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    });
+  });
+
+  // ── Кнопка «Наверх» ──
+  const toTopBtn = document.getElementById('to-top');
+  window.addEventListener('scroll', () => {
+    if(toTopBtn) toTopBtn.style.opacity = window.scrollY > 400 ? '1' : '0';
+  }, {passive:true});
+  if(toTopBtn){
+    toTopBtn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+  }
+
+  // ── Анимация появления секций (Intersection Observer) ──
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, {threshold:0.08});
+  document.querySelectorAll('.gl-section').forEach(s => observer.observe(s));
+
+  // ── Счётчик терминов в hero (анимация цифр) ──
+  const heroTotal = document.getElementById('hero-total');
+  if(heroTotal){
+    const target = parseInt(heroTotal.textContent)||0;
+    let current  = 0;
+    const step   = Math.ceil(target/60);
+    const timer  = setInterval(()=>{
+      current = Math.min(current+step, target);
+      heroTotal.textContent = current;
+      if(current>=target) clearInterval(timer);
+    }, 20);
+  }
+
+  // ── Прогресс-бар скролла страницы ──
+  const progressBar = document.getElementById('scroll-progress');
+  window.addEventListener('scroll', () => {
+    if(!progressBar) return;
+    const scrollTop  = document.documentElement.scrollTop;
+    const docHeight  = document.documentElement.scrollHeight - window.innerHeight;
+    progressBar.style.width = (scrollTop/docHeight*100)+'%';
+  }, {passive:true});
+
+});
+// ═══════════════════════════════════════════════════════════════
+</script>
+
+<!-- ══════════════════════════ ПРОГРЕСС СКРОЛЛА ════════════════ -->
+<div id="scroll-progress"
+  style="position:fixed;top:0;left:0;z-index:9999;height:3px;width:0%;
+         background:linear-gradient(90deg,#006398,#5bb8fe);transition:width .1s;"></div>
+
+<!-- ══════════════════════════ КУРСОР ══════════════════════════ -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- ══════════════════════════ ШАПКА ═══════════════════════════ -->
+<header style="position:sticky;top:0;z-index:100;background:rgba(247,249,251,.88);
+  backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,.07);padding:0 24px;">
+  <div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;
+    justify-content:space-between;height:62px;gap:12px;">
+
+    <!-- Логотип -->
+    <a href="#hero" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+      <div style="width:36px;height:36px;border-radius:12px;
+        background:linear-gradient(135deg,#131b2e,#006398);
+        display:flex;align-items:center;justify-content:center;">
+        <span class="material-symbols-outlined" style="color:#fff;font-size:20px;">menu_book</span>
+      </div>
+      <span style="font-weight:800;font-size:16px;color:#131b2e;">PC&nbsp;Master</span>
+    </a>
+
+    <!-- Навигация по разделам (скрыта на мобильном) -->
+    <nav style="display:flex;align-items:center;gap:2px;flex-wrap:wrap;"
+         class="hidden md:flex">
+      <a href="#sec-basics"  class="nav-link">💻 Основы</a>
+      <a href="#sec-win"     class="nav-link">🪟 Windows</a>
+      <a href="#sec-files"   class="nav-link">📂 Файлы</a>
+      <a href="#sec-inet"    class="nav-link">🌐 Интернет</a>
+      <a href="#sec-mail"    class="nav-link">✉️ Почта</a>
+      <a href="#sec-chat"    class="nav-link">💬 Общение</a>
+      <a href="#sec-gov"     class="nav-link">🏛️ Госуслуги</a>
+      <a href="#sec-bank"    class="nav-link">🏦 Банк</a>
+      <a href="#sec-sec"     class="nav-link">🔒 Безопасность</a>
+      <a href="#sec-tech"    class="nav-link">🛠️ Технологии</a>
+    </nav>
+
+    <!-- Правый блок -->
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button id="theme-toggle"
+        style="width:38px;height:38px;border-radius:12px;border:1px solid rgba(0,0,0,.1);
+               background:transparent;display:flex;align-items:center;justify-content:center;
+               transition:background .2s;"
+        title="Сменить тему">
+        <span class="material-symbols-outlined" style="font-size:20px;color:#45464d;">dark_mode</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════════════ HERO ════════════════════════════ -->
+<section id="hero"
+  style="padding:72px 24px 56px;text-align:center;position:relative;overflow:hidden;"
+  class="hero-grid-bg">
+
+  <!-- Декоративные пятна -->
+  <div style="position:absolute;top:-80px;left:-80px;width:320px;height:320px;
+    border-radius:50%;background:radial-gradient(circle,rgba(0,99,152,.12),transparent 70%);
+    pointer-events:none;"></div>
+  <div style="position:absolute;bottom:-60px;right:-60px;width:260px;height:260px;
+    border-radius:50%;background:radial-gradient(circle,rgba(91,184,254,.1),transparent 70%);
+    pointer-events:none;"></div>
+
+  <div style="max-width:760px;margin:0 auto;position:relative;">
+    <div class="hero-accent-line"></div>
+    <h1 style="font-size:clamp(2rem,5vw,3.2rem);font-weight:800;line-height:1.15;
+               letter-spacing:-.03em;color:#131b2e;margin-bottom:16px;">
+      Глоссарий цифровых<br>
+      <span class="gradient-text">терминов для новичков</span>
+    </h1>
+    <p style="font-size:16px;color:#45464d;line-height:1.7;margin-bottom:32px;">
+      <b><span id="hero-total">0</span> понятных объяснений</b> —
+      от «мышки» до «Госуслуг». Без сложных слов, с примерами из жизни.
+    </p>
+
+    <!-- Поисковая строка -->
+    <div style="position:relative;max-width:520px;margin:0 auto 32px;">
+      <span class="material-symbols-outlined"
+        style="position:absolute;left:16px;top:50%;transform:translateY(-50%);
+               color:#76777d;font-size:20px;pointer-events:none;">search</span>
+      <input id="search-input" type="text" placeholder="Найти термин… (например: Wi-Fi, пароль, вирус)"
+        style="width:100%;padding:14px 48px 14px 48px;border-radius:16px;
+               border:1.5px solid rgba(0,0,0,.1);background:#fff;
+               font-family:Manrope,sans-serif;font-size:14px;color:#191c1e;
+               box-shadow:0 4px 20px rgba(0,0,0,.07);outline:none;transition:border .2s;"
+        onfocus="this.style.borderColor='#006398'"
+        onblur="this.style.borderColor='rgba(0,0,0,.1)'" />
+      <button id="search-clear"
+        style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
+               display:none;align-items:center;justify-content:center;
+               width:28px;height:28px;border-radius:9999px;border:none;
+               background:rgba(0,0,0,.07);cursor:none;">
+        <span class="material-symbols-outlined" style="font-size:16px;color:#45464d;">close</span>
+      </button>
+    </div>
+
+    <!-- Фильтр-пилюли -->
+    <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;">
+      <button class="tag-pill" data-filter="">🔍 Все термины</button>
+      <button class="tag-pill" data-filter="basics">💻 Основы</button>
+      <button class="tag-pill" data-filter="equip">🖥️ Оборудование</button>
+      <button class="tag-pill" data-filter="win">🪟 Windows</button>
+      <button class="tag-pill" data-filter="files">📂 Файлы</button>
+      <button class="tag-pill" data-filter="inet">🌐 Интернет</button>
+      <button class="tag-pill" data-filter="mail">✉️ Почта</button>
+      <button class="tag-pill" data-filter="chat">💬 Общение</button>
+      <button class="tag-pill" data-filter="gov">🏛️ Госуслуги</button>
+      <button class="tag-pill" data-filter="bank">🏦 Банк</button>
+      <button class="tag-pill" data-filter="sec">🔒 Безопасность</button>
+      <button class="tag-pill" data-filter="media">🎬 Медиа</button>
+      <button class="tag-pill" data-filter="tech">🛠️ Технологии</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ ОСНОВНАЯ СЕТКА ══════════════════ -->
+<main id="glossary-grid" style="max-width:1280px;margin:0 auto;padding:0 24px 80px;">
+
+  <!-- Заглушка «ничего не найдено» -->
+  <div id="no-results" style="display:none;flex-direction:column;align-items:center;
+    justify-content:center;padding:80px 24px;gap:16px;text-align:center;">
+    <span class="material-symbols-outlined" style="font-size:64px;color:#76777d;">search_off</span>
+    <p style="font-size:18px;font-weight:700;color:#45464d;">Ничего не найдено</p>
+    <p style="font-size:14px;color:#76777d;">Попробуйте другое слово или сбросьте фильтр</p>
+  </div>
+
+  <!-- ───── РАЗДЕЛ: ОСНОВЫ ───── -->
+  <section id="sec-basics" class="gl-section" style="margin-bottom:48px;opacity:0;
+    transform:translateY(24px);transition:opacity .5s,transform .5s;">
+    <div class="gl-section-header">
+      <span class="material-symbols-outlined gl-section-icon">laptop</span>
+      <span class="gl-section-title">💻 Основы компьютера</span>
+      <span class="gl-section-count" id="count-basics">0 терминов</span>
+    </div>
+    <div id="cards-basics"
+      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
+  </section>
+
+  <!-- ───── РАЗДЕЛ: ОБОРУДОВАНИЕ ───── -->
+  <section id="sec-equip" class="gl-section" style="margin-bottom:48px;opacity:0;
+    transform:translateY(24px);transition:opacity .5s .05s,transform .5s .05s;">
+    <div class="gl-section-header">
+      <span class="material-symbols-outlined gl-section-icon">devices</span>
+      <span class="gl-section-title">🖥️ Оборудование</span>
+      <span class="gl-section-count" id="count-equip">0 терминов</span>
+    </div>
+    <div id="cards-equip"
+      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
+  </section>
+
+  <!-- ───── РАЗДЕЛ: WINDOWS ───── -->
+  <section id="sec-win" class="gl-section" style="margin-bottom:48px;opacity:0;
+    transform:translateY(24px);transition:opacity .5s .1s,transform .5s .1s;">
+    <div class="gl-section-header">
+      <span class="material-symbols-outlined gl-section-icon">window</span>
+      <span class="gl-section-title">🪟 Windows</span>
+      <span class="gl-section-count" id="count-win">0 терминов</span>
+    </div>
+    <div id="cards-win"
+      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
+  </section>
+
+  <!-- ───── РАЗДЕЛ: ФАЙЛЫ ───── -->
+  <section id="sec-files" class="gl-section" style="margin-bottom:48px;opacity:0;
+    transform:translateY(24px);transition:opacity .5s .15s,transform .5s .15s;">
+    <div class="gl-section-header">
+      <span class="material-symbols-outlined gl-section-icon">folder_open</span>
+      <span class="gl-section-title">📂 Файлы и папки</span>
+      <span class="gl-section-count" id="count-files">0 терминов</span>
+    </div>
+    <div id="cards-files"
+      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
+  </section>
+
+  <!-- ───── РАЗДЕЛ: ИНТЕРНЕТ ───── -->
+  <section id="sec-inet" class="gl-section" style="margin-bottom:48px;opacity:0;
+    transform:translateY(24px);transition:opacity .5s .2s,transform .5s .2s;">
+    <div class="gl-section-header">
+      <span class="material-symbols-outlined gl-section-icon">public</span>
+      <span class="gl-section-title">🌐 Интернет и браузер</span>
+      <span class="gl-section-count" id="count-inet">0 терминов</span>
+    </div>
+    <div id="cards-inet"
+      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
+  </section>
+
+  <!-- ───── РАЗДЕЛ: ПОЧТА ───── -->
+  <section id="sec-mail" class="gl-section" style="margin-bottom:48px;opacity:0;
+    transform:translateY(24px);transition:opacity .5s .25s,transform .5s .25s;">
+    <div class="gl-section-header">
+      <span class="material-symbols-outlined gl-section-icon">mail</span>
+      <span class="gl-section-title">✉️ Электронная почта</span>
+      <span class="gl-section-count" id="count-mail">0 терминов</span>
+    </div>
+    <div id="cards-mail"
+      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
+  </section>
+
+  <!-- ───── РАЗДЕЛ: ОБЩЕНИЕ ───── -->
+  <section id="sec-chat" class="gl-section" style="margin-bottom:48px;opacity:0;
+    transform:translateY(24px);transition:opacity .5s .3s,transform .5s .3s;">
+    <div class="gl-section-header">
+      <span class="material-symbols-outlined gl-section-icon">forum</span>
+      <span class="gl-section-title">💬 Общение и мессенджеры</span>
+      <span class="gl-section-count" id="count-chat">0 терминов</span>
+    </div>
+    <div id="cards-chat"
+      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
+  </section>
+
+  <!-- ───── РАЗДЕЛ: ГОСУСЛУГИ ───── -->
+  <section id="sec-gov" class="gl-section" style="margin-bottom:48px;opacity:0;
+    transform:translateY(24px);transition:opacity .5s .35s,transform .5s .35s;">
+    <div class="gl-section-header">
+      <span class="material-symbols-outlined gl-section-icon">account_balance</span>
+      <span class="gl-section-title">🏛️ Госуслуги и государство</span>
+      <span class="gl-section-count" id="count-gov">0 терминов</span>
+    </div>
+    <div id="cards-gov"
+      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
+  </section>
+
+  <!-- ───── РАЗДЕЛ: БАНК ───── -->
+  <section id="sec-bank" class="gl-section" style="margin-bottom:48px;opacity:0;
+    transform:translateY(24px);transition:opacity .5s .4s,transform .5s .4s;">
+    <div class="gl-section-header">
+      <span class="material-symbols-outlined gl-section-icon">credit_card</span>
+      <span class="gl-section-title">🏦 Банк и платежи</span>
+      <span class="gl-section-count" id="count-bank">0 терминов</span>
+    </div>
+    <div id="cards-bank"
+      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
+  </section>
+
+  <!-- ───── РАЗДЕЛ: БЕЗОПАСНОСТЬ ───── -->
+  <section id="sec-sec" class="gl-section" style="margin-bottom:48px;opacity:0;
+    transform:translateY(24px);transition:opacity .5s .45s,transform .5s .45s;">
+    <div class="gl-section-header">
+      <span class="material-symbols-outlined gl-section-icon">shield</span>
+      <span class="gl-section-title">🔒 Безопасность в интернете</span>
+      <span class="gl-section-count" id="count-sec">0 терминов</span>
+    </div>
+    <div id="cards-sec"
+      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
+  </section>
+
+  <!-- ───── РАЗДЕЛ: МЕДИА ───── -->
+  <section id="sec-media" class="gl-section" style="margin-bottom:48px;opacity:0;
+    transform:translateY(24px);transition:opacity .5s .5s,transform .5s .5s;">
+    <div class="gl-section-header">
+      <span class="material-symbols-outlined gl-section-icon">play_circle</span>
+      <span class="gl-section-title">🎬 Фото, видео и медиа</span>
+      <span class="gl-section-count" id="count-media">0 терминов</span>
+    </div>
+    <div id="cards-media"
+      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
+  </section>
+
+  <!-- ───── РАЗДЕЛ: ТЕХНОЛОГИИ ───── -->
+  <section id="sec-tech" class="gl-section" style="margin-bottom:48px;opacity:0;
+    transform:translateY(24px);transition:opacity .5s .55s,transform .5s .55s;">
+    <div class="gl-section-header">
+      <span class="material-symbols-outlined gl-section-icon">settings_suggest</span>
+      <span class="gl-section-title">🛠️ Современные технологии</span>
+      <span class="gl-section-count" id="count-tech">0 терминов</span>
+    </div>
+    <div id="cards-tech"
+      style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
+  </section>
+
+</main>
+
+<!-- ══════════════════════════ ФУТЕР ═══════════════════════════ -->
+<footer style="background:#131b2e;color:rgba(255,255,255,.6);
+  padding:32px 24px;text-align:center;">
+  <div style="max-width:760px;margin:0 auto;display:flex;flex-direction:column;
+    align-items:center;gap:12px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:32px;height:32px;border-radius:10px;
+        background:linear-gradient(135deg,#006398,#5bb8fe);
+        display:flex;align-items:center;justify-content:center;">
+        <span class="material-symbols-outlined" style="color:#fff;font-size:18px;">menu_book</span>
+      </div>
+      <span style="color:#fff;font-weight:700;font-size:15px;">PC Master — Глоссарий</span>
+    </div>
+    <p style="font-size:13px;line-height:1.6;max-width:500px;">
+      Бесплатный образовательный ресурс для людей старшего возраста.<br>
+      Все материалы можно свободно использовать в некоммерческих целях.
+    </p>
+    <p style="font-size:12px;opacity:.5;">© 2026 PC Master · Цифровая грамотность</p>
+  </div>
+</footer>
+
+<!-- ══════════════════════════ КНОПКА «НАВЕРХ» ════════════════ -->
+<button id="to-top"
+  style="position:fixed;bottom:90px;right:24px;z-index:200;
+         width:44px;height:44px;border-radius:50%;
+         background:linear-gradient(135deg,#131b2e,#006398);
+         border:none;display:flex;align-items:center;justify-content:center;
+         box-shadow:0 4px 16px rgba(0,0,0,.2);opacity:0;transition:opacity .3s;"
+  title="Наверх">
+  <span class="material-symbols-outlined" style="color:#fff;font-size:22px;">arrow_upward</span>
+</button>
+
+<!-- ══════════════════════════ ПЕРЕКЛЮЧАТЕЛЬ ШРИФТА ═══════════ -->
+<div id="font-switcher">
+  <span style="font-size:11px;color:#76777d;margin-right:4px;">Шрифт:</span>
+  <button class="fs-btn" data-size="sm">А-</button>
+  <div class="fs-divider"></div>
+  <button class="fs-btn active" data-size="md">А</button>
+  <div class="fs-divider"></div>
+  <button class="fs-btn" data-size="lg">А+</button>
+</div>
+
+<!-- ══════════════════════════ СТИЛИ АНИМАЦИИ (visible) ═══════ -->
+<style>
+  .gl-section.visible{opacity:1!important;transform:translateY(0)!important;}
+  .hl{background:#fde68a;border-radius:3px;padding:0 2px;color:#131b2e;}
+  .dark body,.dark{background:#0f172a;color:#e2e8f0;}
+  .dark .gl-card{background:#1e293b;border-color:rgba(255,255,255,.07);color:#e2e8f0;}
+  .dark .gl-term{color:#93c5fd;}
+  .dark .gl-def{color:#94a3b8;}
+  .dark header{background:rgba(15,23,42,.9)!important;border-color:rgba(255,255,255,.07)!important;}
+  .dark .tag-pill{background:#1e293b;color:#94a3b8;border-color:rgba(255,255,255,.1);}
+  .dark .tag-pill.active{background:#006398;color:#fff;}
+  .dark #font-switcher{background:rgba(30,41,59,.9);border-color:rgba(255,255,255,.1);}
+  .dark .fs-btn{color:#94a3b8;}
+  .dark input{background:#1e293b!important;color:#e2e8f0!important;border-color:rgba(255,255,255,.1)!important;}
+  .dark .nav-link{color:#94a3b8;}
+  .dark .nav-link:hover{color:#e2e8f0;background:rgba(255,255,255,.07);}
+  @media(max-width:768px){
+    .hidden.md\\:flex{display:none!important;}
+    #font-switcher{bottom:16px;right:12px;}
+    #to-top{bottom:76px;right:12px;}
+  }
+</style>
+
+</body>
+</html>
