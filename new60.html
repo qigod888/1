@@ -1837,7 +1837,7 @@
     <div class="print-overlay-hint" id="certificateOverlayHint">
                                     Формируется изображение сертификата… Пожалуйста, подождите несколько секунд.
                                 </div>
-                                <div class="certificate-layout" id="certificateLayout">
+<div class="certificate-layout" id="certificatePrintArea">
                                     <div class="certificate-top-row">
                                         <div class="certificate-logo">PC MASTER • EXAM</div>
                                         <div class="certificate-project">
@@ -3402,36 +3402,43 @@ nextBtn.addEventListener('click', () => {
   //   }
          // ---- ВЫГРУЗКА СЕРТИФИКАТА И ИТОГОВОГО ЛИСТА ЧЕРЕЗ html2canvas ----
 
+// КНОПКИ И ОБЛАСТИ ДЛЯ СКАЧИВАНИЯ
 const downloadCertificateBtn = document.getElementById('downloadCertificateBtn');
+const downloadReportBtn = document.getElementById('downloadReportBtn');
+
 const certificateArea = document.getElementById('certificateArea');
 const certificatePrintArea = document.getElementById('certificatePrintArea');
 const certificateOverlayHint = document.getElementById('certificateOverlayHint');
 
-   function downloadAreaAsPng(areaEl, fileName) {
-    if (!areaEl) return;
+const reportArea = document.getElementById('reportArea');
 
-    const scale = window.devicePixelRatio > 1 ? 2 : 1.5;
+// УНИВЕРСАЛЬНАЯ ФУНКЦИЯ PNG (ИСПОЛЬЗУЕМ ДЛЯ ЛИСТА РЕЗУЛЬТАТОВ)
+function downloadAreaAsPng(areaEl, fileName) {
+  if (!areaEl) return;
 
-    html2canvas(areaEl, {
-      scale,
-      useCORS: true,
-      backgroundColor: '#ffffff'
-    }).then(canvas => {
-      canvas.toBlob(blob => {
-        if (!blob) return;
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(link.href);
-      }, 'image/png');
-    }).catch(() => {
-      alert('Не удалось подготовить изображение. Попробуйте ещё раз или в другом браузере.');
-    });
-  }
+  const scale = window.devicePixelRatio > 1 ? 2 : 1.5;
 
+  html2canvas(areaEl, {
+    scale,
+    useCORS: true,
+    backgroundColor: '#ffffff'
+  }).then(canvas => {
+    canvas.toBlob(blob => {
+      if (!blob) return;
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    }, 'image/png');
+  }).catch(() => {
+    alert('Не удалось подготовить изображение. Попробуйте ещё раз или в другом браузере.');
+  });
+}
+
+// СКАЧИВАНИЕ СЕРТИФИКАТА (ТОЛЬКО САМА КАРТОЧКА)
 downloadCertificateBtn?.addEventListener('click', () => {
   if (!examFinished) {
     alert('Сначала завершите экзамен, чтобы сформировать сертификат.');
@@ -3440,14 +3447,13 @@ downloadCertificateBtn?.addEventListener('click', () => {
 
   const name = (studentNameInput?.value || 'Участник курса').trim() || 'Участник курса';
 
-  // включаем оверлей на родителе
+  // показываем оверлей на родителе
   certificateArea.classList.add('printing');
 
-  // небольшая пауза, чтобы оверлей отрисовался, но сам сертификат уже был на месте
   setTimeout(() => {
     html2canvas(certificatePrintArea, {
       scale: 2,
-      backgroundColor: null
+      backgroundColor: '#ffffff'
     }).then(canvas => {
       certificateArea.classList.remove('printing');
 
@@ -3461,8 +3467,9 @@ downloadCertificateBtn?.addEventListener('click', () => {
     });
   }, 200);
 });
-       
- downloadReportBtn?.addEventListener('click', () => {
+
+// СКАЧИВАНИЕ ЛИСТА РЕЗУЛЬТАТОВ
+downloadReportBtn?.addEventListener('click', () => {
   if (!examFinished) {
     alert('Сначала завершите экзамен, чтобы сформировать лист результатов.');
     return;
