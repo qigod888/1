@@ -2082,8 +2082,7 @@
       correct: 1,
       explanation: 'Лучший подход для новичка — спокойствие и поэтапность. На компьютере большинство действий можно выполнить постепенно: увидеть рабочий стол, открыть одну программу, прочитать подписи и не торопиться.'
     }
-    // дальше пойдут вопросы 10–59
-  ];
+,
     {
       lesson: 'Урок 2. Мышь и клавиатура',
       question: 'Что обычно происходит при одинарном щелчке левой кнопкой мыши по значку файла?',
@@ -2974,21 +2973,20 @@
       }
     });
 
-    const nextBtn = document.createElement('button');
-    nextBtn.type = 'button';
-    nextBtn.className = 'btn btn-primary btn-sm';
-    nextBtn.textContent = currentQuestionIndex === total - 1 ? 'К результатам' : 'Следующий вопрос';
-    nextBtn.addEventListener('click', () => {
-      if (currentQuestionIndex < total - 1) {
-        currentQuestionIndex++;
-        renderQuestion();
-        updateProgress();
-        scrollToTop();
-      } else {
-        // Здесь позже добавим переход к результатам
-        // finishExam();
-      }
-    });
+const nextBtn = document.createElement('button');
+nextBtn.type = 'button';
+nextBtn.className = 'btn btn-primary btn-sm';
+nextBtn.textContent = currentQuestionIndex === total - 1 ? 'К результатам' : 'Следующий вопрос';
+nextBtn.addEventListener('click', () => {
+  if (currentQuestionIndex < total - 1) {
+    currentQuestionIndex++;
+    renderQuestion();
+    updateProgress();
+    scrollToTop();
+  } else {
+    finishExam(); // здесь всё ок
+  }
+});
 
     footerRight.appendChild(prevBtn);
     footerRight.appendChild(nextBtn);
