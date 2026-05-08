@@ -3323,6 +3323,66 @@ nextBtn.addEventListener('click', () => {
   //   } else {
   //     finishExam();
   //   }
+         // ---- ВЫГРУЗКА СЕРТИФИКАТА И ИТОГОВОГО ЛИСТА ЧЕРЕЗ html2canvas ----
+
+  const downloadCertificateBtn = document.getElementById('downloadCertificateBtn');
+  const downloadResultsBtn = document.getElementById('downloadResultsBtn');
+  const certificateArea = document.getElementById('certificateArea');
+  const resultsArea = document.getElementById('resultsArea');
+
+  function downloadAreaAsPng(areaEl, fileName) {
+    if (!areaEl) return;
+
+    const printArea = areaEl.closest('.print-area');
+    if (printArea) {
+      printArea.classList.add('printing');
+    }
+
+    const scale = window.devicePixelRatio > 1 ? 2 : 1.5;
+
+    html2canvas(areaEl, {
+      scale,
+      useCORS: true,
+      backgroundColor: '#ffffff'
+    }).then(canvas => {
+      if (printArea) {
+        printArea.classList.remove('printing');
+      }
+      canvas.toBlob(blob => {
+        if (!blob) return;
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+      }, 'image/png');
+    }).catch(() => {
+      if (printArea) {
+        printArea.classList.remove('printing');
+      }
+      alert('Не удалось подготовить изображение. Попробуйте ещё раз или в другом браузере.');
+    });
+  }
+
+  downloadCertificateBtn?.addEventListener('click', () => {
+    if (!examFinished) {
+      alert('Сначала завершите экзамен, чтобы сформировать сертификат.');
+      return;
+    }
+    const name = (studentNameInput?.value || 'Участник курса').trim() || 'Участник курса';
+    downloadAreaAsPng(certificateArea, `certificate_${name}.png`);
+  });
+
+  downloadResultsBtn?.addEventListener('click', () => {
+    if (!examFinished) {
+      alert('Сначала завершите экзамен, чтобы сформировать лист результатов.');
+      return;
+    }
+    const name = (studentNameInput?.value || 'Участник курса').trim() || 'Участник курса';
+    downloadAreaAsPng(resultsArea, `results_${name}.png`);
+  });
 </script>
 </body>
 </html>
