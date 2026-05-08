@@ -2744,7 +2744,86 @@
   let answers = new Array(questions.length).fill(null); // {selectedIndex, isCorrect}
   let examStarted = false;
   let examFinished = false;
+  const START_TIME_MINUTES = 45;
+  const PASS_THRESHOLD = 42;
 
+  let currentQuestionIndex = 0;
+  let answers = new Array(questions.length).fill(null);
+  let examStarted = false;
+  let examFinished = false;
+
+  // ---- ТАЙМЕР ----
+
+  let timerInterval = null;
+  let timerSeconds = START_TIME_MINUTES * 60;
+  let timerPaused = false;
+
+  const timerValueEl = document.getElementById('timerValue');
+  const timerPillEl = document.getElementById('timerPill');
+  const timerToggleBtn = document.getElementById('timerToggleBtn');
+  const timerStatusEl = document.getElementById('timerStatus');
+
+  function formatTime(seconds) {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  }
+
+  function startTimer() {
+    timerSeconds = START_TIME_MINUTES * 60;
+    timerPaused = false;
+
+    if (timerValueEl) timerValueEl.textContent = formatTime(timerSeconds);
+    timerPillEl?.classList.remove('timer-warn', 'timer-danger');
+    if (timerStatusEl) {
+      timerStatusEl.textContent = 'При окончании времени тест автоматически завершится и покажет результат.';
+    }
+
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+      if (timerPaused) return;
+      timerSeconds--;
+
+      if (timerValueEl) timerValueEl.textContent = formatTime(timerSeconds);
+
+      if (timerSeconds <= 300 && timerSeconds > 60) {
+        timerPillEl?.classList.add('timer-warn');
+        timerPillEl?.classList.remove('timer-danger');
+        if (timerStatusEl) timerStatusEl.textContent = 'Осталось меньше 5 минут. Постарайтесь ответить на оставшиеся вопросы.';
+      }
+
+      if (timerSeconds <= 60) {
+        timerPillEl?.classList.remove('timer-warn');
+        timerPillEl?.classList.add('timer-danger');
+        if (timerStatusEl) timerStatusEl.textContent = 'Осталась 1 минута! Экзамен завершится автоматически.';
+      }
+
+      if (timerSeconds <= 0) {
+        clearInterval(timerInterval);
+        if (timerStatusEl) timerStatusEl.textContent = 'Время вышло. Результаты сохранены.';
+        finishExam();
+      }
+    }, 1000);
+  }
+
+  function stopTimer() {
+    clearInterval(timerInterval);
+  }
+
+  timerToggleBtn?.addEventListener('click', () => {
+    if (!examStarted || examFinished) return;
+    timerPaused = !timerPaused;
+    timerToggleBtn.textContent = timerPaused ? 'Продолжить' : 'Пауза';
+    if (timerStatusEl) {
+      timerStatusEl.textContent = timerPaused
+        ? 'Таймер на паузе. Нажмите «Продолжить», чтобы возобновить экзамен.'
+        : 'При окончании времени тест автоматически завершится и покажет результат.';
+    }
+  });
+
+  // DOM-элементы
+  const viewStart = document.getElementById('viewStart');
+  ...
   // DOM-элементы
   const viewStart = document.getElementById('viewStart');
   const viewQuestions = document.getElementById('viewQuestions');
@@ -2804,6 +2883,10 @@
 
     examStarted = true;
     examFinished = false;
+          examStarted = true;
+    examFinished = false;
+    startTimer(); // <-- вот сюда
+    currentQuestionIndex = 0;
     currentQuestionIndex = 0;
     answers = new Array(questions.length).fill(null);
 
@@ -3003,8 +3086,10 @@ nextBtn.addEventListener('click', () => {
 
   // Инициализация при загрузке
   document.addEventListener('DOMContentLoaded', () => {
-    // пока просто покажем стартовый экран
     showView(viewStart);
+    if (timerValueEl) {
+      timerValueEl.textContent = formatTime(START_TIME_MINUTES * 60);
+    }
   });
   // ---- РЕЗУЛЬТАТЫ, ЗВАНИЯ И ПЕРЕХОД К ЭКРАНУ ИТОГОВ ----
 
@@ -3262,6 +3347,7 @@ nextBtn.addEventListener('click', () => {
   function finishExam() {
     if (examFinished) return;
     examFinished = true;
+    stopTimer();
     updateResultView();
     showView(viewResult);
     scrollToTop();
@@ -3330,13 +3416,8 @@ nextBtn.addEventListener('click', () => {
   const certificateArea = document.getElementById('certificateArea');
   const resultsArea = document.getElementById('resultsArea');
 
-  function downloadAreaAsPng(areaEl, fileName) {
+   function downloadAreaAsPng(areaEl, fileName) {
     if (!areaEl) return;
-
-    const printArea = areaEl.closest('.print-area');
-    if (printArea) {
-      printArea.classList.add('printing');
-    }
 
     const scale = window.devicePixelRatio > 1 ? 2 : 1.5;
 
@@ -3345,9 +3426,6 @@ nextBtn.addEventListener('click', () => {
       useCORS: true,
       backgroundColor: '#ffffff'
     }).then(canvas => {
-      if (printArea) {
-        printArea.classList.remove('printing');
-      }
       canvas.toBlob(blob => {
         if (!blob) return;
         const link = document.createElement('a');
@@ -3359,9 +3437,6 @@ nextBtn.addEventListener('click', () => {
         URL.revokeObjectURL(link.href);
       }, 'image/png');
     }).catch(() => {
-      if (printArea) {
-        printArea.classList.remove('printing');
-      }
       alert('Не удалось подготовить изображение. Попробуйте ещё раз или в другом браузере.');
     });
   }
