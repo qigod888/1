@@ -3433,15 +3433,15 @@ const reportArea = document.getElementById('reportArea');
     });
   }
 
-  downloadCertificateBtn?.addEventListener('click', () => {
-    if (!examFinished) {
-      alert('Сначала завершите экзамен, чтобы сформировать сертификат.');
-      return;
-    }
-    const name = (studentNameInput?.value || 'Участник курса').trim() || 'Участник курса';
-    downloadAreaAsPng(certificateArea, `certificate_${name}.png`);
-  });
-
+downloadCertificateBtn?.addEventListener('click', () => {
+  if (!examFinished) {
+    alert('Сначала завершите экзамен, чтобы сформировать сертификат.');
+    return;
+  }
+  const name = (studentNameInput?.value || 'Участник курса').trim() || 'Участник курса';
+  downloadAreaAsPng(certificatePrintArea, `certificate_${name}.png`);
+});
+       
  downloadReportBtn?.addEventListener('click', () => {
   if (!examFinished) {
     alert('Сначала завершите экзамен, чтобы сформировать лист результатов.');
