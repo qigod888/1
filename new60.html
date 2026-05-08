@@ -1161,13 +1161,12 @@
         }
 
 .certificate-layout {
-    width: 900px;           /* жесткая ширина */
-    height: 500px;          /* жесткая высота — даёт горизонтальный формат */
+    width: 900px;
+    height: 500px;
     margin: 0 auto;
     background: radial-gradient(circle at top, #eef2ff, #ffffff 42%, #f9fafb 100%);
     border-radius: 14px;
     border: 1px solid rgba(148, 163, 184, 0.8);
-    box-shadow: 0 28px 60px rgba(15, 23, 42, 0.18);
     padding: 24px 32px 20px;
     display: flex;
     flex-direction: column;
@@ -1834,8 +1833,8 @@
                             <div class="print-card-preview-info">
                                 Ниже — макет сертификата. При сохранении будет использована та же разметка.
                             </div>
-                            <div class="print-area" id="certificateArea">
-                                <div class="print-overlay-hint" id="certificateOverlayHint">
+                           <div class="print-area" id="certificateArea">
+    <div class="certificate-layout" id="certificatePrintArea">
                                     Формируется изображение сертификата… Пожалуйста, подождите несколько секунд.
                                 </div>
                                 <div class="certificate-layout" id="certificateLayout">
@@ -3439,7 +3438,7 @@ downloadCertificateBtn?.addEventListener('click', () => {
     return;
   }
   const name = (studentNameInput?.value || 'Участник курса').trim() || 'Участник курса';
-  downloadAreaAsPng(certificatePrintArea, `certificate_${name}.png`);
+  downloadAreaAsPng(certificateArea, `certificate_${name}.png`);
 });
        
  downloadReportBtn?.addEventListener('click', () => {
