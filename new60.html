@@ -2872,7 +2872,7 @@
     studentNameInput.focus();
   });
 
-  startExamBtn?.addEventListener('click', () => {
+    startExamBtn?.addEventListener('click', () => {
     const name = studentNameInput.value.trim();
     if (!name) {
       studentNameInput.classList.add('shake');
@@ -2883,13 +2883,10 @@
 
     examStarted = true;
     examFinished = false;
-          examStarted = true;
-    examFinished = false;
-    startTimer(); // <-- вот сюда
-    currentQuestionIndex = 0;
     currentQuestionIndex = 0;
     answers = new Array(questions.length).fill(null);
 
+    startTimer();
     initQuestionMap();
     updateProgress();
     renderQuestion();
