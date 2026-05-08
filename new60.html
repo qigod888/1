@@ -1834,7 +1834,7 @@
                                 Ниже — макет сертификата. При сохранении будет использована та же разметка.
                             </div>
                            <div class="print-area" id="certificateArea">
-    <div class="certificate-layout" id="certificatePrintArea">
+    <div class="print-overlay-hint" id="certificateOverlayHint">
                                     Формируется изображение сертификата… Пожалуйста, подождите несколько секунд.
                                 </div>
                                 <div class="certificate-layout" id="certificateLayout">
@@ -3403,9 +3403,9 @@ nextBtn.addEventListener('click', () => {
          // ---- ВЫГРУЗКА СЕРТИФИКАТА И ИТОГОВОГО ЛИСТА ЧЕРЕЗ html2canvas ----
 
 const downloadCertificateBtn = document.getElementById('downloadCertificateBtn');
-const downloadReportBtn = document.getElementById('downloadReportBtn');
 const certificateArea = document.getElementById('certificateArea');
-const reportArea = document.getElementById('reportArea');
+const certificatePrintArea = document.getElementById('certificatePrintArea');
+const certificateOverlayHint = document.getElementById('certificateOverlayHint');
 
    function downloadAreaAsPng(areaEl, fileName) {
     if (!areaEl) return;
@@ -3437,8 +3437,29 @@ downloadCertificateBtn?.addEventListener('click', () => {
     alert('Сначала завершите экзамен, чтобы сформировать сертификат.');
     return;
   }
+
   const name = (studentNameInput?.value || 'Участник курса').trim() || 'Участник курса';
-  downloadAreaAsPng(certificateArea, `certificate_${name}.png`);
+
+  // включаем оверлей на родителе
+  certificateArea.classList.add('printing');
+
+  // небольшая пауза, чтобы оверлей отрисовался, но сам сертификат уже был на месте
+  setTimeout(() => {
+    html2canvas(certificatePrintArea, {
+      scale: 2,
+      backgroundColor: null
+    }).then(canvas => {
+      certificateArea.classList.remove('printing');
+
+      const link = document.createElement('a');
+      link.download = `certificate_${name}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }).catch(() => {
+      certificateArea.classList.remove('printing');
+      alert('Не удалось сформировать изображение сертификата. Попробуйте ещё раз.');
+    });
+  }, 200);
 });
        
  downloadReportBtn?.addEventListener('click', () => {
