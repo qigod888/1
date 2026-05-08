@@ -3397,10 +3397,10 @@ nextBtn.addEventListener('click', () => {
   //   }
          // ---- ВЫГРУЗКА СЕРТИФИКАТА И ИТОГОВОГО ЛИСТА ЧЕРЕЗ html2canvas ----
 
-  const downloadCertificateBtn = document.getElementById('downloadCertificateBtn');
-  const downloadResultsBtn = document.getElementById('downloadResultsBtn');
-  const certificateArea = document.getElementById('certificateArea');
-  const resultsArea = document.getElementById('resultsArea');
+const downloadCertificateBtn = document.getElementById('downloadCertificateBtn');
+const downloadReportBtn = document.getElementById('downloadReportBtn');
+const certificateArea = document.getElementById('certificateArea');
+const reportArea = document.getElementById('reportArea');
 
    function downloadAreaAsPng(areaEl, fileName) {
     if (!areaEl) return;
@@ -3436,14 +3436,14 @@ nextBtn.addEventListener('click', () => {
     downloadAreaAsPng(certificateArea, `certificate_${name}.png`);
   });
 
-  downloadResultsBtn?.addEventListener('click', () => {
-    if (!examFinished) {
-      alert('Сначала завершите экзамен, чтобы сформировать лист результатов.');
-      return;
-    }
-    const name = (studentNameInput?.value || 'Участник курса').trim() || 'Участник курса';
-    downloadAreaAsPng(resultsArea, `results_${name}.png`);
-  });
+ downloadReportBtn?.addEventListener('click', () => {
+  if (!examFinished) {
+    alert('Сначала завершите экзамен, чтобы сформировать лист результатов.');
+    return;
+  }
+  const name = (studentNameInput?.value || 'Участник курса').trim() || 'Участник курса';
+  downloadAreaAsPng(reportArea, `results_${name}.png`);
+});
 </script>
 </body>
 </html>
