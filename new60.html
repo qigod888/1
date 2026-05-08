@@ -1,0 +1,3330 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>PC Master — Финальный экзамен</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Финальный экзамен по платформе PC Master — 60 вопросов, обучение по ходу прохождения и персональный сертификат." />
+
+    <!-- Базовый шрифт / визуал в духе премиального минимализма -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Конфетти (простая библиотека) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <!-- html2canvas для сертификата и листа результатов -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #ffffff;
+            --bg-soft: #f5f5f7;
+            --bg-softer: #f9fafb;
+            --text-main: #111827;
+            --text-soft: #4b5563;
+            --text-softer: #6b7280;
+            --border-subtle: #e5e7eb;
+            --accent: #2563eb;
+            --accent-soft: #dbeafe;
+            --accent-strong: #1d4ed8;
+            --danger: #b91c1c;
+            --danger-soft: #fee2e2;
+            --success: #15803d;
+            --success-soft: #dcfce7;
+            --warning: #b45309;
+            --warning-soft: #fef3c7;
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.08);
+            --shadow-soft-sm: 0 8px 24px rgba(15, 23, 42, 0.06);
+            --transition-fast: 150ms ease-out;
+            --transition-mid: 220ms ease-out;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+            background: radial-gradient(circle at top left, #eef2ff 0, #ffffff 40%, #f9fafb 100%);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        body {
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 16px;
+            }
+        }
+
+        .exam-shell {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(18px);
+            border-radius: 28px;
+            box-shadow: var(--shadow-soft);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(148, 163, 184, 0.18);
+        }
+
+        @media (max-width: 768px) {
+            .exam-shell {
+                border-radius: 20px;
+            }
+        }
+
+        .exam-header {
+            padding: 20px 24px 16px 24px;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .exam-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        .exam-title-block {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .exam-badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .exam-badge {
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            color: var(--accent-strong);
+            background: linear-gradient(to right, rgba(219, 234, 254, 0.9), rgba(239, 246, 255, 0.9));
+        }
+
+        .exam-badge-secondary {
+            border-color: rgba(148, 163, 184, 0.4);
+            color: var(--text-softer);
+            background: rgba(249, 250, 251, 0.9);
+        }
+
+        .exam-title {
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            color: var(--text-main);
+        }
+
+        .exam-subtitle {
+            font-size: 13px;
+            color: var(--text-softer);
+        }
+
+        .exam-header-stats {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stat-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: var(--bg-softer);
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+
+        .stat-pill-strong {
+            background: rgba(219, 234, 254, 0.8);
+            border-color: rgba(37, 99, 235, 0.4);
+            color: var(--accent-strong);
+            font-weight: 500;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-softer);
+        }
+
+        .stat-value {
+            font-weight: 500;
+        }
+
+        .exam-main {
+            display: grid;
+            grid-template-columns: 320px minmax(0, 1fr);
+            border-top: 1px solid rgba(148, 163, 184, 0.18);
+            min-height: 540px;
+        }
+
+        @media (max-width: 960px) {
+            .exam-main {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        /* Боковая панель с прогрессом, таймером и суммарной информацией */
+        .exam-sidebar {
+            border-right: 1px solid rgba(148, 163, 184, 0.18);
+            padding: 18px 20px;
+            background: radial-gradient(circle at top, rgba(219, 234, 254, 0.7), #f9fafb 55%, #f3f4f6 100%);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        @media (max-width: 960px) {
+            .exam-sidebar {
+                border-right: none;
+                border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+            }
+        }
+
+        .sidebar-section {
+            padding: 12px 12px 10px;
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: var(--shadow-soft-sm);
+            border: 1px solid rgba(148, 163, 184, 0.28);
+        }
+
+        .sidebar-section + .sidebar-section {
+            margin-top: 4px;
+        }
+
+        .sidebar-title-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .sidebar-caption {
+            font-size: 11px;
+            color: var(--text-softer);
+        }
+
+        .progress-bar {
+            position: relative;
+            width: 100%;
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(229, 231, 235, 0.9);
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 0%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #2563eb, #4f46e5);
+            transition: width var(--transition-mid);
+        }
+
+        .progress-info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 6px;
+            font-size: 11px;
+            color: var(--text-soft);
+        }
+
+        .timer-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .timer-pill {
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.92);
+            color: #f9fafb;
+            font-size: 13px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timer-value {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-variant-numeric: tabular-nums;
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        .timer-status {
+            font-size: 11px;
+            color: var(--text-softer);
+            margin-top: 4px;
+        }
+
+        .legend-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--text-soft);
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: var(--bg-softer);
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+        }
+
+        .legend-dot-current {
+            background: var(--accent-strong);
+        }
+
+        .legend-dot-answered {
+            background: var(--success);
+        }
+
+        .legend-dot-unanswered {
+            background: #e5e7eb;
+        }
+
+        .question-map {
+            display: grid;
+            grid-template-columns: repeat(10, minmax(0, 1fr));
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 960px) {
+            .question-map {
+                grid-template-columns: repeat(8, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            .question-map {
+                grid-template-columns: repeat(6, minmax(0, 1fr));
+            }
+        }
+
+        .question-map-item {
+            height: 22px;
+            border-radius: 999px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 1px solid transparent;
+            color: var(--text-softer);
+            background: rgba(249, 250, 251, 0.9);
+            transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+        }
+
+        .question-map-item:hover {
+            transform: translateY(-1px);
+            border-color: rgba(148, 163, 184, 0.5);
+        }
+
+        .question-map-item.current {
+            background: rgba(219, 234, 254, 1);
+            color: var(--accent-strong);
+            border-color: rgba(37, 99, 235, 0.6);
+            font-weight: 500;
+        }
+
+        .question-map-item.answered {
+            background: rgba(220, 252, 231, 1);
+            color: var(--success);
+            border-color: rgba(22, 163, 74, 0.4);
+            font-weight: 500;
+        }
+
+        .question-map-item.flagged {
+            background: rgba(254, 249, 195, 1);
+            color: var(--warning);
+            border-color: rgba(180, 83, 9, 0.4);
+        }
+
+        .summary-block {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed rgba(148, 163, 184, 0.4);
+            font-size: 11px;
+            color: var(--text-softer);
+        }
+
+        .summary-block strong {
+            font-weight: 600;
+            color: var(--text-soft);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 4px;
+            font-size: 11px;
+            color: var(--text-softer);
+        }
+
+        .sidebar-footer small {
+            display: block;
+            margin-top: 4px;
+        }
+
+        /* Основная область: старт, вопросы, результат */
+        .exam-content {
+            padding: 20px 24px 22px;
+            background: radial-gradient(circle at top right, rgba(219, 234, 254, 0.7), #ffffff 40%, #f9fafb 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .exam-content {
+                padding: 16px 16px 18px;
+            }
+        }
+
+        .view {
+            display: none;
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity var(--transition-mid), transform var(--transition-mid);
+        }
+
+        .view.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Стартовый экран */
+        .start-card {
+            max-width: 620px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 24px;
+            box-shadow: var(--shadow-soft);
+            padding: 24px 22px 20px;
+            border: 1px solid rgba(148, 163, 184, 0.28);
+        }
+
+        @media (max-width: 768px) {
+            .start-card {
+                padding: 20px 18px 18px;
+                border-radius: 20px;
+            }
+        }
+
+        .start-header {
+            margin-bottom: 12px;
+        }
+
+        .start-title {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            margin-bottom: 4px;
+            color: var(--text-main);
+        }
+
+        .start-subtitle {
+            font-size: 13px;
+            color: var(--text-soft);
+        }
+
+        .start-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.8fr) minmax(0, 1.3fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .start-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .start-field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .field-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-soft);
+            margin-bottom: 2px;
+        }
+
+        .field-label span {
+            color: var(--accent-strong);
+        }
+
+        .input-text {
+            width: 100%;
+            padding: 9px 11px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            background: #f9fafb;
+            font-size: 13px;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+        }
+
+        .input-text:focus {
+            border-color: rgba(37, 99, 235, 0.8);
+            background: #ffffff;
+            box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.35);
+            transform: translateY(-0.5px);
+        }
+
+        .hint-text {
+            font-size: 11px;
+            color: var(--text-softer);
+        }
+
+        .start-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+
+        .start-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+
+        .start-list-bullet {
+            width: 16px;
+            height: 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: var(--accent-strong);
+            background: rgba(219, 234, 254, 0.4);
+            flex-shrink: 0;
+        }
+
+        .start-footer {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px dashed rgba(148, 163, 184, 0.4);
+        }
+
+        .stress-note {
+            font-size: 11px;
+            color: var(--text-softer);
+            max-width: 360px;
+        }
+
+        .start-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* Кнопки */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #f9fafb;
+            box-shadow: 0 12px 28px rgba(37, 99, 235, 0.32);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1d4ed8);
+            transform: translateY(-1px);
+            box-shadow: 0 16px 32px rgba(30, 64, 175, 0.36);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow: 0 8px 20px rgba(30, 64, 175, 0.28);
+        }
+
+        .btn-secondary {
+            background: rgba(249, 250, 251, 0.9);
+            color: var(--text-soft);
+            border-color: rgba(148, 163, 184, 0.7);
+        }
+
+        .btn-secondary:hover {
+            background: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 24px rgba(148, 163, 184, 0.35);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-softer);
+            border-color: transparent;
+            padding-inline: 8px;
+        }
+
+        .btn-ghost:hover {
+            color: var(--accent-strong);
+            background: rgba(219, 234, 254, 0.6);
+        }
+
+        .btn-sm {
+            padding: 6px 11px;
+            font-size: 12px;
+        }
+
+        .btn-danger {
+            background: var(--danger-soft);
+            color: var(--danger);
+            border-color: rgba(239, 68, 68, 0.6);
+        }
+
+        .btn-danger:hover {
+            background: #fee2e2;
+        }
+
+        /* Область вопроса */
+        .question-card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 22px;
+            box-shadow: var(--shadow-soft-sm);
+            border: 1px solid rgba(148, 163, 184, 0.28);
+            padding: 18px 18px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .question-card {
+                border-radius: 18px;
+                padding: 16px 14px 12px;
+            }
+        }
+
+        .question-header-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .question-index {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--text-softer);
+        }
+
+        .question-topic-tag {
+            font-size: 11px;
+            padding: 4px 9px;
+            border-radius: 999px;
+            background: var(--bg-softer);
+            color: var(--text-soft);
+            border: 1px solid rgba(148, 163, 184, 0.4);
+        }
+
+        .question-text {
+            font-size: 15px;
+            line-height: 1.5;
+            color: var(--text-main);
+            margin-top: 2px;
+        }
+
+        .question-extra {
+            font-size: 12px;
+            color: var(--text-softer);
+        }
+
+        .answers-list {
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .answer-option {
+            position: relative;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            background: #f9fafb;
+            padding: 8px 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-soft);
+            transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+        }
+
+        .answer-option:hover {
+            background: #ffffff;
+            border-color: rgba(37, 99, 235, 0.7);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 26px rgba(148, 163, 184, 0.35);
+        }
+
+        .answer-option.selected {
+            background: rgba(219, 234, 254, 0.8);
+            border-color: rgba(37, 99, 235, 0.8);
+            box-shadow: 0 10px 26px rgba(37, 99, 235, 0.35);
+            color: var(--text-main);
+        }
+
+        .answer-option.correct {
+            background: var(--success-soft);
+            border-color: rgba(22, 163, 74, 0.9);
+            color: var(--success);
+        }
+
+        .answer-option.incorrect {
+            background: var(--danger-soft);
+            border-color: rgba(239, 68, 68, 0.9);
+            color: var(--danger);
+        }
+
+        .answer-key {
+            width: 20px;
+            height: 20px;
+            border-radius: 999px;
+            border: 2px solid rgba(148, 163, 184, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            flex-shrink: 0;
+            background: #ffffff;
+            color: var(--text-softer);
+        }
+
+        .answer-option.selected .answer-key {
+            border-color: rgba(37, 99, 235, 0.9);
+            color: var(--accent-strong);
+            background: #eff6ff;
+        }
+
+        .answer-option.correct .answer-key {
+            border-color: rgba(22, 163, 74, 0.9);
+            color: var(--success);
+            background: #dcfce7;
+        }
+
+        .answer-option.incorrect .answer-key {
+            border-color: rgba(239, 68, 68, 0.9);
+            color: var(--danger);
+            background: #fee2e2;
+        }
+
+        .answer-text {
+            flex: 1;
+        }
+
+        .answer-meta {
+            font-size: 11px;
+            color: var(--text-softer);
+            margin-top: 2px;
+        }
+
+        /* Блок пояснения после ответа */
+        .explanation {
+            margin-top: 10px;
+            padding: 10px 11px;
+            border-radius: var(--radius-md);
+            background: #f9fafb;
+            border: 1px dashed rgba(148, 163, 184, 0.7);
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+
+        .explanation strong {
+            font-weight: 600;
+        }
+
+        .explanation-critical {
+            margin-top: 6px;
+            padding: 8px 9px;
+            border-radius: var(--radius-sm);
+            background: var(--warning-soft);
+            color: var(--warning);
+            font-size: 11px;
+        }
+
+        /* Навигация по вопросам */
+        .question-footer {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(148, 163, 184, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .question-footer-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 11px;
+            color: var(--text-softer);
+        }
+
+        .question-footer-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .flag-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            color: var(--text-softer);
+        }
+
+        .flag-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            background: #f9fafb;
+        }
+
+        .flag-toggle.active .flag-dot {
+            background: #fef3c7;
+            border-color: #f59e0b;
+        }
+
+        .flag-toggle.active {
+            color: var(--warning);
+        }
+
+        /* Экран результата */
+        .result-card {
+            max-width: 760px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 24px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            padding: 22px 22px 18px;
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
+            gap: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 880px) {
+            .result-card {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .result-card {
+                padding: 18px 16px 16px;
+                border-radius: 20px;
+            }
+        }
+
+        .result-main {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .result-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--text-softer);
+        }
+
+        .result-headline-row {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+        }
+
+        .result-percent {
+            font-size: 34px;
+            font-weight: 650;
+            letter-spacing: -0.06em;
+            color: var(--text-main);
+        }
+
+        .result-status {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .result-status-pass {
+            background: var(--success-soft);
+            color: var(--success);
+            border: 1px solid rgba(22, 163, 74, 0.4);
+        }
+
+        .result-status-fail {
+            background: var(--danger-soft);
+            color: var(--danger);
+            border: 1px solid rgba(220, 38, 38, 0.4);
+        }
+
+        .result-subline {
+            font-size: 13px;
+            color: var(--text-soft);
+        }
+
+        .result-subline strong {
+            font-weight: 600;
+        }
+
+        .result-bars {
+            margin-top: 10px;
+            padding: 10px 10px 8px;
+            border-radius: var(--radius-md);
+            background: var(--bg-softer);
+            border: 1px dashed rgba(148, 163, 184, 0.8);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .result-bars-row {
+            display: grid;
+            grid-template-columns: 1.1fr 1.1fr;
+            gap: 10px;
+        }
+
+        @media (max-width: 640px) {
+            .result-bars-row {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .result-bar-block {
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+
+        .result-bar-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .result-bar-label {
+            font-weight: 500;
+        }
+
+        .result-bar-value {
+            font-size: 11px;
+            color: var(--text-softer);
+        }
+
+        .result-bar {
+            margin-top: 5px;
+            position: relative;
+            width: 100%;
+            height: 6px;
+            border-radius: 999px;
+            background: rgba(229, 231, 235, 0.95);
+            overflow: hidden;
+        }
+
+        .result-bar-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 0%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+            transition: width var(--transition-mid);
+        }
+
+        .result-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .result-badge {
+            font-size: 11px;
+            padding: 4px 9px;
+            border-radius: 999px;
+            background: #f9fafb;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            color: var(--text-soft);
+        }
+
+        .result-badge-strong {
+            background: rgba(219, 234, 254, 0.9);
+            border-color: rgba(37, 99, 235, 0.6);
+            color: var(--accent-strong);
+        }
+
+        .result-actions {
+            margin-top: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .result-secondary-col {
+            padding: 10px 10px 8px;
+            border-radius: var(--radius-md);
+            background: #f9fafb;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .result-secondary-title {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .result-secondary-desc {
+            font-size: 11px;
+            color: var(--text-softer);
+        }
+
+        .result-recommendations {
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+
+        .result-recommendations ul {
+            padding-left: 16px;
+            margin: 6px 0 0;
+        }
+
+        .result-recommendations li {
+            margin-bottom: 4px;
+        }
+
+        .result-footer-note {
+            margin-top: 6px;
+            font-size: 10px;
+            color: var(--text-softer);
+        }
+
+        /* Сертификат и лист результатов (для html2canvas) */
+        .print-area-wrapper {
+            margin-top: 16px;
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+            gap: 12px;
+        }
+
+        @media (max-width: 880px) {
+            .print-area-wrapper {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .print-card {
+            background: #ffffff;
+            border-radius: 18px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            padding: 16px 14px 12px;
+            box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.12);
+        }
+
+        .print-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .print-card-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .print-card-caption {
+            font-size: 11px;
+            color: var(--text-softer);
+        }
+
+        .print-card-preview-info {
+            font-size: 11px;
+            color: var(--text-softer);
+            margin-top: 4px;
+        }
+
+        .print-area {
+            margin-top: 8px;
+            border-radius: 12px;
+            border: 1px dashed rgba(148, 163, 184, 0.7);
+            background: #f9fafb;
+            padding: 10px 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .certificate-layout {
+            max-width: 600px;
+            aspect-ratio: 1.414 / 1; /* примерно A4 */
+            margin: 0 auto;
+            background: radial-gradient(circle at top, #eef2ff, #ffffff 42%, #f9fafb 100%);
+            border-radius: 14px;
+            border: 1px solid rgba(148, 163, 184, 0.8);
+            padding: 16px 18px 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .certificate-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 10px;
+            color: var(--text-softer);
+        }
+
+        .certificate-logo {
+            font-weight: 600;
+            color: var(--accent-strong);
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            font-size: 9px;
+        }
+
+        .certificate-project {
+            font-size: 9px;
+            text-align: right;
+            max-width: 240px;
+        }
+
+        .certificate-main {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .certificate-label {
+            font-size: 11px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--text-softer);
+        }
+
+        .certificate-title {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.04em;
+            color: var(--text-main);
+            margin-top: 4px;
+        }
+
+        .certificate-name {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .certificate-text {
+            margin-top: 8px;
+            font-size: 11px;
+            color: var(--text-soft);
+            max-width: 420px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .certificate-highlight {
+            margin-top: 10px;
+            font-size: 12px;
+            color: var(--accent-strong);
+        }
+
+        .certificate-footer {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            font-size: 9px;
+            color: var(--text-softer);
+        }
+
+        .certificate-sign-block {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .certificate-sign-line {
+            width: 140px;
+            height: 1px;
+            background: rgba(148, 163, 184, 0.9);
+        }
+
+        .certificate-meta {
+            text-align: right;
+        }
+
+        .certificate-meta-line {
+            margin-bottom: 2px;
+        }
+
+        .certificate-serial {
+            font-size: 9px;
+            color: var(--text-softer);
+            margin-top: 4px;
+        }
+
+        .results-layout {
+            max-width: 600px;
+            aspect-ratio: 1.414 / 1;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 14px;
+            border: 1px solid rgba(148, 163, 184, 0.8);
+            padding: 16px 18px 14px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 10px;
+            color: var(--text-softer);
+            margin-bottom: 8px;
+        }
+
+        .results-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .results-main {
+            flex: 1;
+            margin-top: 4px;
+            font-size: 11px;
+            color: var(--text-soft);
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 6px;
+            font-size: 10px;
+        }
+
+        .results-table th,
+        .results-table td {
+            padding: 4px 4px;
+            border-bottom: 1px solid rgba(209, 213, 219, 0.8);
+        }
+
+        .results-table th {
+            font-weight: 600;
+            text-align: left;
+            color: var(--text-softer);
+        }
+
+        .results-table tfoot td {
+            border-top: 1px solid rgba(148, 163, 184, 0.8);
+            border-bottom: none;
+        }
+
+        .results-footer {
+            margin-top: 6px;
+            font-size: 9px;
+            color: var(--text-softer);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Оверлей для html2canvas (подсказка) */
+        .print-overlay-hint {
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(to bottom, rgba(15, 23, 42, 0.02), rgba(15, 23, 42, 0.08));
+            color: rgba(249, 250, 251, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .print-area.printing .print-overlay-hint {
+            display: flex;
+        }
+
+        /* Подсказка о социальной миссии */
+        .social-note {
+            margin-top: 10px;
+            font-size: 10px;
+            color: var(--text-softer);
+        }
+
+        /* Переключение режимов (ошибки / весь тест) */
+        .mode-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: var(--text-softer);
+        }
+
+        .mode-toggle-label {
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mode-toggle input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            border-radius: 6px;
+            border: 1px solid rgba(148, 163, 184, 0.8);
+            appearance: none;
+            background: #f9fafb;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .mode-toggle input[type="checkbox"]::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border-radius: 4px;
+            background: transparent;
+            transition: background var(--transition-fast);
+        }
+
+        .mode-toggle input[type="checkbox"]:checked::after {
+            background: rgba(37, 99, 235, 0.4);
+        }
+
+        /* Чекбокс согласия поделиться результатом */
+        .share-consent {
+            margin-top: 8px;
+            font-size: 11px;
+            color: var(--text-softer);
+        }
+
+        .share-consent label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .share-consent input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            border: 1px solid rgba(148, 163, 184, 0.8);
+            appearance: none;
+            background: #f9fafb;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .share-consent input[type="checkbox"]::after {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            border-radius: 2px;
+            background: transparent;
+            transition: background var(--transition-fast);
+        }
+
+        .share-consent input[type="checkbox"]:checked::after {
+            background: rgba(37, 99, 235, 0.6);
+        }
+
+        .share-textarea {
+            width: 100%;
+            margin-top: 6px;
+            border-radius: 10px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            background: #f9fafb;
+            font-size: 11px;
+            color: var(--text-soft);
+            padding: 6px 8px;
+            resize: vertical;
+            min-height: 60px;
+            outline: none;
+        }
+
+        .share-textarea:focus {
+            border-color: rgba(37, 99, 235, 0.9);
+            background: #ffffff;
+        }
+
+        /* Малые помощники */
+        .text-muted {
+            color: var(--text-softer);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 260ms ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .shake {
+            animation: shake 260ms ease-out;
+        }
+
+        @keyframes shake {
+            10%, 90% {
+                transform: translateX(-1px);
+            }
+            20%, 80% {
+                transform: translateX(2px);
+            }
+            30%, 50%, 70% {
+                transform: translateX(-4px);
+            }
+            40%, 60% {
+                transform: translateX(4px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="exam-shell">
+        <!-- Шапка экзамена -->
+        <header class="exam-header">
+            <div class="exam-title-block">
+                <div class="exam-badge-row">
+                    <span class="exam-badge">PC MASTER • финальный экзамен</span>
+                    <span class="exam-badge exam-badge-secondary">60 вопросов • 45 минут • сертификат</span>
+                </div>
+                <div class="exam-title">Финальный тест по курсу цифровой грамотности</div>
+                <div class="exam-subtitle">
+                    Экзамен по 6 модулям: компьютер, мышь и клавиатура, файлы и папки,
+                    интернет и браузер, полезные цифровые сервисы, безопасность и смешанный блок.
+                </div>
+            </div>
+
+            <div class="exam-header-stats">
+                <div class="stat-pill stat-pill-strong">
+                    <div>
+                        <div class="stat-label">Вопросов всего</div>
+                        <div class="stat-value">60</div>
+                    </div>
+                </div>
+                <div class="stat-pill">
+                    <div>
+                        <div class="stat-label">Порог сдачи</div>
+                        <div class="stat-value">42 правильных (70%)</div>
+                    </div>
+                </div>
+                <div class="stat-pill">
+                    <div>
+                        <div class="stat-label">Режим</div>
+                        <div class="stat-value">Обучающий экзамен с пояснениями</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="exam-main">
+            <!-- Боковая панель -->
+            <aside class="exam-sidebar">
+                <!-- Блок прогресса -->
+                <section class="sidebar-section">
+                    <div class="sidebar-title-row">
+                        <div class="sidebar-title">Прогресс по вопросам</div>
+                        <div class="sidebar-caption" id="sidebarTotalQuestions">0 / 60</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill" id="progressBar"></div>
+                    </div>
+                    <div class="progress-info-row">
+                        <span id="progressCurrentLabel">Вопрос 1 из 60</span>
+                        <span id="progressAnsweredLabel">Отвечено: 0</span>
+                    </div>
+                </section>
+
+                <!-- Блок таймера -->
+                <section class="sidebar-section">
+                    <div class="sidebar-title-row">
+                        <div class="sidebar-title">Оставшееся время</div>
+                        <div class="sidebar-caption">Рекомендуется ~45 минут</div>
+                    </div>
+                    <div class="timer-row">
+                        <div class="timer-pill" id="timerPill">
+                            <span>Таймер</span>
+                            <span class="timer-value" id="timerValue">45:00</span>
+                        </div>
+                        <button class="btn btn-sm btn-secondary" id="timerToggleBtn">Пауза</button>
+                    </div>
+                    <div class="timer-status" id="timerStatus">
+                        При окончании времени тест автоматически завершится и покажет результат.
+                    </div>
+                </section>
+
+                <!-- Карта вопросов -->
+                <section class="sidebar-section">
+                    <div class="sidebar-title-row">
+                        <div class="sidebar-title">Навигация по вопросам</div>
+                        <div class="sidebar-caption">Кликните, чтобы перейти</div>
+                    </div>
+
+                    <div class="legend-list">
+                        <div class="legend-item">
+                            <span class="legend-dot legend-dot-current"></span>
+                            <span>Текущий</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot legend-dot-answered"></span>
+                            <span>Отвечен</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot legend-dot-unanswered"></span>
+                            <span>Не отвечен</span>
+                        </div>
+                    </div>
+
+                    <div class="question-map" id="questionMap"></div>
+
+                    <div class="summary-block" id="sidebarSummary">
+                        <div>Всего вопросов: <strong>60</strong>.</div>
+                        <div>Вы можете возвращаться к любым вопросам до завершения экзамена.</div>
+                    </div>
+                </section>
+
+                <!-- Служебный блок -->
+                <section class="sidebar-section">
+                    <div class="sidebar-title-row">
+                        <div class="sidebar-title">Режим обучения</div>
+                        <div class="sidebar-caption">Дополнительные опции</div>
+                    </div>
+                    <div class="mode-toggle">
+                        <label class="mode-toggle-label">
+                            <input type="checkbox" id="errorsOnlyToggle" />
+                            <span>Повторять только ошибочные вопросы после экзамена</span>
+                        </label>
+                    </div>
+                    <div class="sidebar-footer">
+                        Этот экзамен создан для спокойного повторения материала, а не для поиска «двоечников».
+                        <small>Можно проходить его несколько раз и возвращаться к самым сложным темам.</small>
+                    </div>
+                </section>
+            </aside>
+
+            <!-- Основное содержимое: старт, вопросы, результат -->
+            <section class="exam-content">
+                <!-- Стартовый экран -->
+                <section class="view active fade-in-up" id="viewStart">
+                    <div class="start-card">
+                        <div class="start-header">
+                            <div class="start-title">Начнём с подготовки сертификата</div>
+                            <div class="start-subtitle">
+                                Введите имя и фамилию, которые вы хотите видеть на сертификате, и спокойно переходите к вопросам.
+                            </div>
+                        </div>
+
+                        <div class="start-grid">
+                            <div class="start-field-group">
+                                <div>
+                                    <label class="field-label" for="studentNameInput">
+                                        Имя и фамилия для сертификата <span>*</span>
+                                    </label>
+                                    <input
+                                        id="studentNameInput"
+                                        class="input-text"
+                                        type="text"
+                                        placeholder="Например: Иванова Мария Петровна"
+                                    />
+                                    <div class="hint-text">
+                                        Эти данные попадут на сертификат и в лист результатов, который можно распечатать или сохранить в PDF.
+                                    </div>
+                                </div>
+
+                                <div style="margin-top: 10px;">
+                                    <label class="field-label" for="groupNameInput">
+                                        Группа / организация (по желанию)
+                                    </label>
+                                    <input
+                                        id="groupNameInput"
+                                        class="input-text"
+                                        type="text"
+                                        placeholder="Например: группа «Silver Digital», АНО СЗУ «Долина ветров»"
+                                    />
+                                    <div class="hint-text">
+                                        Поле удобно для отчётности: на сертификате появится строка с названием группы или организации.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <ul class="start-list">
+                                    <li>
+                                        <span class="start-list-bullet">1</span>
+                                        <span>Всего 60 тщательно подобранных вопросов по всем 6 урокам PC Master.</span>
+                                    </li>
+                                    <li>
+                                        <span class="start-list-bullet">2</span>
+                                        <span>После каждого ответа появляется пояснение — можно учиться прямо по ходу экзамена.</span>
+                                    </li>
+                                    <li>
+                                        <span class="start-list-bullet">3</span>
+                                        <span>По итогам экзамена вы получите персональный сертификат и лист результатов.</span>
+                                    </li>
+                                    <li>
+                                        <span class="start-list-bullet">4</span>
+                                        <span>Экзамен можно проходить несколько раз, чтобы увидеть прогресс.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="start-footer">
+                            <p class="stress-note">
+                                Этот экзамен — не проверка на «двоечника», а способ ещё раз спокойно пройтись по материалу.
+                                Можно не торопиться, перечитывать пояснения и возвращаться к сложным вопросам.
+                            </p>
+
+                            <div class="start-actions">
+                                <button class="btn btn-secondary btn-sm" id="fillDemoBtn">
+                                    Заполнить пример имени
+                                </button>
+                                <button class="btn btn-primary" id="startExamBtn">
+                                    Начать экзамен
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Экран вопросов -->
+                <section class="view" id="viewQuestions">
+                    <div class="question-card" id="questionCard">
+                        <!-- Содержимое текущего вопроса будет подставляться скриптом -->
+                    </div>
+                </section>
+
+                <!-- Экран результата -->
+                <section class="view" id="viewResult">
+                    <div class="result-card">
+                        <div class="result-main">
+                            <div class="result-label">Результат экзамена</div>
+                            <div class="result-headline-row">
+                                <div class="result-percent" id="resultPercent">0%</div>
+                                <div class="result-status result-status-fail" id="resultStatusBadge">
+                                    Не сдано
+                                </div>
+                            </div>
+                            <div class="result-subline" id="resultSubline">
+                                Вы ответили правильно на 0 из 60 вопросов. Порог сдачи — 42 правильных ответа (70%).
+                            </div>
+
+                            <div class="result-bars">
+                                <div class="result-bars-row">
+                                    <div class="result-bar-block">
+                                        <div class="result-bar-title">
+                                            <span class="result-bar-label">Общий прогресс</span>
+                                            <span class="result-bar-value" id="resultOverallValue">0 / 60</span>
+                                        </div>
+                                        <div class="result-bar">
+                                            <div class="result-bar-fill" id="resultOverallBar"></div>
+                                        </div>
+                                    </div>
+                                    <div class="result-bar-block">
+                                        <div class="result-bar-title">
+                                            <span class="result-bar-label">Уровень владения</span>
+                                            <span class="result-bar-value" id="resultRankLabel">Осваиваю основы</span>
+                                        </div>
+                                        <div class="result-bar">
+                                            <div class="result-bar-fill" id="resultRankBar"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="result-badges" id="resultBadges">
+                                    <!-- Сюда JS добавит бейджи вроде «Уверенный пользователь ПК» -->
+                                </div>
+                            </div>
+
+                            <div class="result-actions">
+                                <button class="btn btn-primary" id="retryFullBtn">
+                                    Пройти экзамен заново
+                                </button>
+                                <button class="btn btn-secondary" id="retryErrorsBtn">
+                                    Повторить только ошибочные вопросы
+                                </button>
+                                <button class="btn btn-ghost btn-sm" id="backToStartBtn">
+                                    Вернуться на стартовый экран
+                                </button>
+                            </div>
+
+                            <div class="social-note">
+                                Платформа «PC Master» реализуется в рамках проекта «Наследие Кубани: мост поколений и цифровых горизонтов».
+                                Экзамен доступен бесплатно для всех участников программы.
+                            </div>
+                        </div>
+
+                        <div class="result-secondary-col">
+                            <div class="result-secondary-title">
+                                Рекомендации по урокам
+                            </div>
+                            <div class="result-secondary-desc">
+                                На основе ваших ответов мы отметили уроки, которые стоит повторить в первую очередь.
+                            </div>
+                            <div class="result-recommendations" id="resultRecommendations">
+                                <!-- JS подставит список уроков и краткие комментарии -->
+                            </div>
+
+                            <div class="result-footer-note">
+                                После повторения отдельных тем можно ещё раз пройти экзамен — это хороший способ увидеть рост уверенности и знаний.
+                            </div>
+
+                            <div class="share-consent">
+                                <label>
+                                    <input type="checkbox" id="shareConsentCheckbox" />
+                                    <span>Согласен(на) при необходимости поделиться результатом с организатором программы</span>
+                                </label>
+                                <textarea
+                                    id="shareText"
+                                    class="share-textarea hidden"
+                                    readonly
+                                ></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="print-area-wrapper">
+                        <!-- Сертификат -->
+                        <section class="print-card">
+                            <div class="print-card-header">
+                                <div>
+                                    <div class="print-card-title">Сертификат об окончании</div>
+                                    <div class="print-card-caption">
+                                        Для печати или сохранения в PDF используйте кнопки браузера.
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-secondary" id="downloadCertificateBtn">
+                                    Сохранить как изображение
+                                </button>
+                            </div>
+                            <div class="print-card-preview-info">
+                                Ниже — макет сертификата. При сохранении будет использована та же разметка.
+                            </div>
+                            <div class="print-area" id="certificateArea">
+                                <div class="print-overlay-hint" id="certificateOverlayHint">
+                                    Формируется изображение сертификата… Пожалуйста, подождите несколько секунд.
+                                </div>
+                                <div class="certificate-layout" id="certificateLayout">
+                                    <div class="certificate-top-row">
+                                        <div class="certificate-logo">PC MASTER • EXAM</div>
+                                        <div class="certificate-project">
+                                            Проект «Наследие Кубани: мост поколений и цифровых горизонтов»
+                                            АНО СЗУ «Долина ветров»
+                                        </div>
+                                    </div>
+                                    <div class="certificate-main">
+                                        <div class="certificate-label">Сертификат об успешном прохождении</div>
+                                        <div class="certificate-title">Курс «Основы работы на ПК и цифровой мир»</div>
+                                        <div class="certificate-name" id="certificateName">
+                                            Имя Фамилия
+                                        </div>
+                                        <div class="certificate-text">
+                                            Настоящий сертификат подтверждает, что участник успешно прошёл
+                                            итоговый экзамен по программе «PC Master», продемонстрировав уверенные
+                                            базовые навыки работы с компьютером, интернетом и цифровыми сервисами.
+                                        </div>
+                                        <div class="certificate-highlight" id="certificateResultLine">
+                                            Результат: 0 из 60 вопросов (0%), уровень: Осваиваю основы
+                                        </div>
+                                    </div>
+                                    <div class="certificate-footer">
+                                        <div class="certificate-sign-block">
+                                            <div class="certificate-sign-line"></div>
+                                            <div>Руководитель проекта</div>
+                                            <div>_________________________</div>
+                                        </div>
+                                        <div class="certificate-meta">
+                                            <div class="certificate-meta-line" id="certificateDate">
+                                                Дата: 01.01.2026
+                                            </div>
+                                            <div class="certificate-meta-line" id="certificateGroup">
+                                                Группа / организация: —
+                                            </div>
+                                            <div class="certificate-serial" id="certificateSerial">
+                                                Серийный номер: PC-2026-000000
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Лист результатов -->
+                        <section class="print-card">
+                            <div class="print-card-header">
+                                <div>
+                                    <div class="print-card-title">Лист результатов</div>
+                                    <div class="print-card-caption">
+                                        Для отчёта по группе или проекту можно сохранить этот лист отдельно.
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-secondary" id="downloadReportBtn">
+                                    Сохранить лист
+                                </button>
+                            </div>
+                            <div class="print-card-preview-info">
+                                В листе отображаются ФИО, результат и усвоение по 6 основным урокам.
+                            </div>
+                            <div class="print-area" id="reportArea">
+                                <div class="print-overlay-hint" id="reportOverlayHint">
+                                    Формируется лист результатов… Пожалуйста, подождите несколько секунд.
+                                </div>
+                                <div class="results-layout" id="resultsLayout">
+                                    <div class="results-header">
+                                        <div>
+                                            <div class="results-title">Итоговый экзамен «PC Master»</div>
+                                            <div>Участник: <span id="reportName">Имя Фамилия</span></div>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <div>Дата: <span id="reportDate">01.01.2026</span></div>
+                                            <div>Группа: <span id="reportGroup">—</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="results-main">
+                                        <table class="results-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Урок</th>
+                                                    <th>Тема</th>
+                                                    <th>Верно</th>
+                                                    <th>Всего</th>
+                                                    <th>%</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="resultsTableBody">
+                                                <!-- JS подставит 6 строк по урокам -->
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="2"><strong>ИТОГО</strong></td>
+                                                    <td id="resultsTotalCorrect">0</td>
+                                                    <td id="resultsTotalQuestions">60</td>
+                                                    <td id="resultsTotalPercent">0%</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="results-footer">
+                                        <div>
+                                            Подготовлено платформой «PC Master»
+                                        </div>
+                                        <div>
+                                            Серийный номер сертификата:
+                                            <span id="resultsSerial">PC-2026-000000</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </div>
+
+   <script>
+  const questions = [
+    {
+      lesson: 'Урок 1. Знакомство с компьютером',
+      question: 'Что правильнее всего сделать перед первым включением стационарного компьютера дома или в учебном классе?',
+      help: 'Подумайте не только о кнопке питания, но и о безопасной подготовке рабочего места.',
+      options: [
+        'Проверить, что компьютер и монитор подключены к электросети, провода не натянуты, а руки сухие и рабочее место подготовлено.',
+        'Сразу несколько раз быстро нажать кнопку включения на системном блоке, чтобы ускорить запуск.',
+        'Сначала открыть браузер, а потом уже подключать монитор и клавиатуру.',
+        'Накрыть системный блок тканью, чтобы в него не попадала пыль во время запуска.'
+      ],
+      correct: 0,
+      explanation: 'Безопасный старт начинается с проверки подключения питания, целостности проводов и нормальной организации места. Нажимать кнопку много раз не нужно: это не ускоряет запуск и может помешать нормальному включению.'
+    },
+    {
+      lesson: 'Урок 1. Знакомство с компьютером',
+      question: 'Для чего нужен монитор в составе персонального компьютера?',
+      help: 'Нужно определить основную функцию этого устройства.',
+      options: [
+        'Для хранения всех файлов пользователя внутри экрана.',
+        'Для вывода изображения: текста, окон программ, фотографий и другой визуальной информации.',
+        'Для печати документов на бумаге.',
+        'Для подключения интернета без роутера и кабеля.'
+      ],
+      correct: 1,
+      explanation: 'Монитор показывает пользователю всё, что происходит в системе: рабочий стол, программы, документы и сайты. Он не хранит файлы как диск и не выполняет функции принтера.'
+    },
+    {
+      lesson: 'Урок 1. Знакомство с компьютером',
+      question: 'Какой вариант лучше всего описывает роль клавиатуры?',
+      help: 'Вспомните, с помощью чего вводят текст, цифры и команды.',
+      options: [
+        'Клавиатура нужна только для игр и не требуется в обычной работе.',
+        'Клавиатура предназначена для ввода текста, цифр и некоторых команд в компьютер.',
+        'Клавиатура показывает изображение так же, как монитор.',
+        'Клавиатура заменяет флешку и может хранить документы.'
+      ],
+      correct: 1,
+      explanation: 'Клавиатура — это устройство ввода. С её помощью набирают текст, вводят цифры, выполняют сочетания клавиш и управляют многими действиями в системе.'
+    },
+    {
+      lesson: 'Урок 1. Знакомство с компьютером',
+      question: 'Что такое рабочий стол на компьютере?',
+      help: 'Речь идёт не о реальном столе, а о том, что видит пользователь после запуска системы.',
+      options: [
+        'Это внутренняя часть системного блока, где находятся детали.',
+        'Это начальный экран системы, где расположены значки, папки, панель задач и ярлыки программ.',
+        'Это только папка для сохранения фотографий.',
+        'Это экран, который появляется только при выключении компьютера.'
+      ],
+      correct: 1,
+      explanation: 'Рабочий стол — это основное пространство на экране после входа в систему. На нём могут находиться ярлыки программ, папки, файлы и элементы управления.'
+    },
+    {
+      lesson: 'Урок 1. Знакомство с компьютером',
+      question: 'Чем отличается ноутбук от стационарного компьютера в самом общем виде?',
+      help: 'Нужно выбрать наиболее точное и простое отличие.',
+      options: [
+        'Ноутбук — это переносной компьютер, в котором экран, клавиатура и аккумулятор объединены в одном корпусе.',
+        'Ноутбук нельзя подключать к интернету.',
+        'Стационарный компьютер всегда слабее любого ноутбука.',
+        'Ноутбук работает только от розетки и не имеет батареи.'
+      ],
+      correct: 0,
+      explanation: 'Главная особенность ноутбука — мобильность и объединение основных компонентов в одном устройстве. Он обычно имеет встроенный экран, клавиатуру, тачпад и аккумулятор.'
+    },
+    {
+      lesson: 'Урок 1. Знакомство с компьютером',
+      question: 'Как безопаснее завершить работу компьютера после занятия?',
+      help: 'Подумайте, почему резкое отключение питания считается плохой практикой.',
+      options: [
+        'Выдернуть шнур питания из розетки, пока система ещё работает.',
+        'Нажать кнопку выключения на сетевом фильтре без завершения работы системы.',
+        'Использовать команду завершения работы в системе и дождаться полного выключения устройства.',
+        'Закрыть глаза и подождать, пока компьютер сам когда-нибудь выключится.'
+      ],
+      correct: 2,
+      explanation: 'Правильное завершение работы позволяет системе закрыть программы, сохранить данные и выключиться без риска повреждения файлов. Резкое отключение питания может привести к ошибкам и потере информации.'
+    },
+    {
+      lesson: 'Урок 1. Знакомство с компьютером',
+      question: 'Что означает термин «персональный компьютер»?',
+      help: 'Выберите определение по смыслу.',
+      options: [
+        'Это компьютер, предназначенный для работы одного пользователя или небольшой группы по очереди.',
+        'Это обязательно огромный сервер в дата-центре.',
+        'Это устройство, которое умеет только печатать документы.',
+        'Это любой телевизор с пультом управления.'
+      ],
+      correct: 0,
+      explanation: 'Персональный компьютер создаётся для личной работы пользователя: дома, в офисе, в учебном центре. Это может быть как стационарный ПК, так и ноутбук.'
+    },
+    {
+      lesson: 'Урок 1. Знакомство с компьютером',
+      question: 'Почему важно поддерживать порядок на рабочем столе компьютера?',
+      help: 'Подумайте о том, как большое количество значков влияет на удобство.',
+      options: [
+        'Потому что беспорядок на рабочем столе всегда ломает монитор.',
+        'Потому что аккуратный рабочий стол помогает быстрее находить нужные ярлыки и файлы и уменьшает путаницу.',
+        'Потому что без этого не заработает интернет.',
+        'Потому что это единственный способ включить звук на компьютере.'
+      ],
+      correct: 1,
+      explanation: 'Когда на рабочем столе всё расположено понятно, человек быстрее ориентируется и реже ошибается. Это особенно важно для начинающих пользователей.'
+    },
+    {
+      lesson: 'Урок 1. Знакомство с компьютером',
+      question: 'Какой из перечисленных элементов обычно относится к устройствам ввода?',
+      help: 'Нужно выбрать то, чем пользователь передаёт данные компьютеру.',
+      options: [
+        'Клавиатура.',
+        'Монитор.',
+        'Колонки как основной пример вывода звука.',
+        'Экранная заставка.'
+      ],
+      correct: 0,
+      explanation: 'Устройства ввода — это то, с чем человек вводит информацию и команды. Клавиатура относится к вводу, а монитор и колонки — к выводу.'
+    },
+    {
+      lesson: 'Урок 1. Знакомство с компьютером',
+      question: 'Что разумнее сделать, если компьютер включился, но пользователь не понимает, что делать дальше?',
+      help: 'Вопрос не только про технику, но и про правильную модель поведения.',
+      options: [
+        'Начать случайно нажимать все кнопки подряд.',
+        'Спокойно осмотреть экран, найти знакомые элементы и действовать пошагово, не спеша.',
+        'Сразу выключить устройство и больше никогда им не пользоваться.',
+        'Несколько раз ударить по клавиатуре, чтобы «разбудить» систему.'
+      ],
+      correct: 1,
+      explanation: 'Лучший подход для новичка — спокойствие и поэтапность. На компьютере большинство действий можно выполнить постепенно: увидеть рабочий стол, открыть одну программу, прочитать подписи и не торопиться.'
+    }
+    // дальше пойдут вопросы 10–59
+  ];
+    {
+      lesson: 'Урок 2. Мышь и клавиатура',
+      question: 'Что обычно происходит при одинарном щелчке левой кнопкой мыши по значку файла?',
+      help: 'Вспомните разницу между выделением и открытием.',
+      options: [
+        'Файл обычно выделяется, то есть становится выбранным.',
+        'Компьютер немедленно удаляет файл.',
+        'Монитор выключается.',
+        'Открывается окно печати.'
+      ],
+      correct: 0,
+      explanation: 'Одинарный щелчок чаще всего выделяет объект. Для открытия файла или папки в классическом режиме обычно используют двойной щелчок левой кнопкой мыши.'
+    },
+    {
+      lesson: 'Урок 2. Мышь и клавиатура',
+      question: 'Для чего чаще всего используется двойной щелчок левой кнопкой мыши?',
+      help: 'Подумайте, как открыть папку или программу.',
+      options: [
+        'Чтобы открыть выбранный файл, папку или ярлык программы.',
+        'Чтобы выключить питание компьютера.',
+        'Чтобы заблокировать клавиатуру.',
+        'Чтобы увеличить громкость звука.'
+      ],
+      correct: 0,
+      explanation: 'Двойной щелчок — один из базовых способов открыть объект. Именно так многие пользователи запускают программы и переходят внутрь папок.'
+    },
+    {
+      lesson: 'Урок 2. Мышь и клавиатура',
+      question: 'Что обычно открывает щелчок правой кнопкой мыши?',
+      help: 'Речь о списке возможных действий с объектом.',
+      options: [
+        'Контекстное меню с командами, связанными с выбранным объектом.',
+        'Корзину с удалёнными файлами.',
+        'Только калькулятор.',
+        'Обязательное окно перезагрузки системы.'
+      ],
+      correct: 0,
+      explanation: 'Правая кнопка мыши обычно вызывает контекстное меню. В нём могут быть команды «Открыть», «Копировать», «Переименовать», «Удалить» и другие действия.'
+    },
+    {
+      lesson: 'Урок 2. Мышь и клавиатура',
+      question: 'Как работает колесо мыши в большинстве программ и страниц?',
+      help: 'Подумайте, что делает пользователь при чтении длинного текста.',
+      options: [
+        'Оно обычно помогает прокручивать страницу или документ вверх и вниз.',
+        'Оно стирает текст на экране.',
+        'Оно заменяет интернет-подключение.',
+        'Оно выключает звук на весь компьютер навсегда.'
+      ],
+      correct: 0,
+      explanation: 'Колесо мыши чаще всего служит для прокрутки. Это особенно удобно при чтении сайтов, документов и длинных списков.'
+    },
+    {
+      lesson: 'Урок 2. Мышь и клавиатура',
+      question: 'Какой из вариантов верно описывает клавишу Enter?',
+      help: 'Вспомните её основные роли при наборе текста и работе с формами.',
+      options: [
+        'Enter часто подтверждает действие, переводит строку и помогает отправить введённые данные.',
+        'Enter нужна только для включения монитора.',
+        'Enter стирает весь жёсткий диск.',
+        'Enter заменяет мышь во всех задачах без исключения.'
+      ],
+      correct: 0,
+      explanation: 'Enter — одна из важнейших клавиш: она может подтверждать выбор, переводить строку в тексте, запускать поиск или отправлять форму в зависимости от программы.'
+    },
+    {
+      lesson: 'Урок 2. Мышь и клавиатура',
+      question: 'Что делает клавиша Backspace при наборе текста?',
+      help: 'Сравните её с Delete.',
+      options: [
+        'Удаляет символ справа от курсора.',
+        'Удаляет символ слева от курсора.',
+        'Открывает браузер.',
+        'Создаёт новую папку.'
+      ],
+      correct: 1,
+      explanation: 'Backspace удаляет символ слева от текстового курсора. Это одна из основных клавиш для исправления опечаток при наборе текста.'
+    },
+    {
+      lesson: 'Урок 2. Мышь и клавиатура',
+      question: 'Какое сочетание клавиш чаще всего используют для копирования выделенного текста или файла?',
+      help: 'Нужно вспомнить одно из самых популярных сочетаний.',
+      options: [
+        'Ctrl + C',
+        'Ctrl + P',
+        'Ctrl + L',
+        'Ctrl + Q'
+      ],
+      correct: 0,
+      explanation: 'Ctrl + C — стандартная команда копирования. Сначала объект выделяют, затем копируют, а после вставляют в нужное место.'
+    },
+    {
+      lesson: 'Урок 2. Мышь и клавиатура',
+      question: 'Какое сочетание клавиш чаще всего используют для вставки ранее скопированного содержимого?',
+      help: 'Это вторая часть связки после копирования.',
+      options: [
+        'Ctrl + X',
+        'Ctrl + V',
+        'Ctrl + N',
+        'Ctrl + B'
+      ],
+      correct: 1,
+      explanation: 'Ctrl + V вставляет то, что ранее было скопировано или вырезано. Это может быть текст, файл, фрагмент изображения и другие объекты.'
+    },
+    {
+      lesson: 'Урок 2. Мышь и клавиатура',
+      question: 'Для чего обычно используют сочетание Ctrl + Z?',
+      help: 'Подумайте, что делают, если действие было выполнено по ошибке.',
+      options: [
+        'Для отмены последнего действия.',
+        'Для выключения компьютера.',
+        'Для открытия корзины.',
+        'Для увеличения яркости монитора.'
+      ],
+      correct: 0,
+      explanation: 'Ctrl + Z помогает отменить последнее действие во многих программах. Это очень полезно при случайном удалении текста, ошибочном перемещении или другом неудачном действии.'
+    },
+    {
+      lesson: 'Урок 2. Мышь и клавиатура',
+      question: 'Почему начинающему пользователю полезно осваивать сочетания клавиш?',
+      help: 'Нужно понять практическую пользу, а не просто назвать команды.',
+      options: [
+        'Потому что без них компьютер вообще не включается.',
+        'Потому что они ускоряют работу, уменьшают количество лишних действий и помогают увереннее управлять системой.',
+        'Потому что это нужно только программистам.',
+        'Потому что они заменяют необходимость читать текст на экране.'
+      ],
+      correct: 1,
+      explanation: 'Сочетания клавиш экономят время и делают работу более уверенной. Даже несколько команд вроде Ctrl + C, Ctrl + V и Ctrl + Z уже заметно повышают удобство.'
+    },
+    {
+      lesson: 'Урок 3. Файлы и папки',
+      question: 'Что такое файл в самом простом объяснении?',
+      help: 'Выберите определение, понятное начинающему пользователю.',
+      options: [
+        'Это единица хранения информации: документ, фото, музыка, видео или другой цифровой объект.',
+        'Это только бумажная папка в шкафу.',
+        'Это кнопка выключения компьютера.',
+        'Это название для всего интернета целиком.'
+      ],
+      correct: 0,
+      explanation: 'Файл — это конкретная цифровая единица информации. Им может быть текстовый документ, фотография, таблица, аудиозапись или любой другой сохранённый объект.'
+    },
+    {
+      lesson: 'Урок 3. Файлы и папки',
+      question: 'Для чего нужна папка на компьютере?',
+      help: 'Подумайте о порядке и группировке материалов.',
+      options: [
+        'Для организации и хранения файлов по темам, проектам или видам документов.',
+        'Только для изменения цвета экрана.',
+        'Для автоматического взлома забытых паролей.',
+        'Исключительно для прослушивания музыки.'
+      ],
+      correct: 0,
+      explanation: 'Папки помогают поддерживать порядок. Например, можно отдельно хранить документы, фотографии, учебные материалы и личные архивы.'
+    },
+    {
+      lesson: 'Урок 3. Файлы и папки',
+      question: 'Что означает действие «создать новую папку»?',
+      help: 'Это организационный шаг, а не удаление или перенос.',
+      options: [
+        'Создать новое место, куда можно будет складывать файлы и подпапки.',
+        'Стереть все старые файлы с компьютера.',
+        'Подключить интернет.',
+        'Напечатать список документов на принтере.'
+      ],
+      correct: 0,
+      explanation: 'Новая папка — это новый контейнер для хранения информации. Она нужна, чтобы пользователю было легче структурировать материалы.'
+    },
+    {
+      lesson: 'Урок 3. Файлы и папки',
+      question: 'Зачем полезно давать файлам понятные названия?',
+      help: 'Вспомните, насколько сложно искать «Документ1», «Документ2» и похожие имена.',
+      options: [
+        'Чтобы быстрее понимать, что находится внутри файла, и легче находить его позже.',
+        'Чтобы компьютер работал громче.',
+        'Чтобы удалить необходимость в папках.',
+        'Чтобы не использовать клавиатуру.'
+      ],
+      correct: 0,
+      explanation: 'Понятное имя файла экономит время. Названия вроде «Договор_май_2026» или «Фото_семья_июнь» намного удобнее, чем случайные или безликие варианты.'
+    },
+    {
+      lesson: 'Урок 3. Файлы и папки',
+      question: 'Что происходит, когда файл перемещают в корзину?',
+      help: 'Это ещё не всегда окончательное удаление.',
+      options: [
+        'Файл обычно удаляется временно и его ещё можно восстановить, пока корзина не очищена.',
+        'Файл мгновенно навсегда исчезает без возможности восстановления.',
+        'Файл автоматически отправляется по электронной почте.',
+        'Файл становится вирусом.'
+      ],
+      correct: 0,
+      explanation: 'Корзина служит промежуточным этапом удаления. Пока её не очистили, файл часто можно вернуть на прежнее место.'
+    },
+    {
+      lesson: 'Урок 3. Файлы и папки',
+      question: 'Чем копирование файла отличается от перемещения?',
+      help: 'Суть — в том, остаётся ли исходный объект на старом месте.',
+      options: [
+        'При копировании создаётся дополнительная копия, а при перемещении файл меняет место хранения.',
+        'Ничем: это всегда одно и то же действие.',
+        'Копировать можно только музыку, а перемещать только документы.',
+        'Перемещение используется только в интернете.'
+      ],
+      correct: 0,
+      explanation: 'Копирование оставляет исходный файл и создаёт ещё один экземпляр. Перемещение переносит объект из одной папки в другую без создания дополнительной копии.'
+    },
+    {
+      lesson: 'Урок 3. Файлы и папки',
+      question: 'Почему полезно сортировать файлы по папкам, а не хранить всё в одном месте?',
+      help: 'Нужно выбрать наиболее практическое объяснение.',
+      options: [
+        'Так легче находить нужные материалы, поддерживать порядок и не путать документы разного назначения.',
+        'Так компьютер начинает работать без электричества.',
+        'Так можно не читать названия файлов.',
+        'Это нужно только для фотографий, а для документов не важно.'
+      ],
+      correct: 0,
+      explanation: 'Система папок — основа цифрового порядка. Когда всё разложено по темам, пользователь быстрее находит нужный документ и реже теряет важную информацию.'
+    },
+    {
+      lesson: 'Урок 3. Файлы и папки',
+      question: 'Какое действие разумно перед удалением важного документа?',
+      help: 'Подумайте о риске случайной потери информации.',
+      options: [
+        'Сделать резервную копию или убедиться, что документ действительно больше не нужен.',
+        'Сразу удалить и не проверять, что это за файл.',
+        'Выключить монитор.',
+        'Обязательно переименовать файл в слово «удалить».'
+      ],
+      correct: 0,
+      explanation: 'Перед удалением важных файлов всегда полезно убедиться в необходимости этого шага. Для ценных данных лучше заранее иметь копию на другом носителе или в облаке.'
+    },
+    {
+      lesson: 'Урок 3. Файлы и папки',
+      question: 'Что такое расширение файла, например .docx, .jpg или .pdf?',
+      help: 'Это часть имени, которая помогает системе понять тип файла.',
+      options: [
+        'Это окончание имени файла, указывающее на его формат и часто на программу, которой он открывается.',
+        'Это пароль от файла.',
+        'Это только украшение в названии и ничего не означает.',
+        'Это особая кнопка на клавиатуре.'
+      ],
+      correct: 0,
+      explanation: 'Расширение помогает определить тип файла: документ, фотография, таблица, архив и так далее. Благодаря этому система предлагает подходящую программу для открытия.'
+    },
+    {
+      lesson: 'Урок 3. Файлы и папки',
+      question: 'Что лучше сделать, если пользователь не может найти сохранённый файл?',
+      help: 'Нужно выбрать самый практичный путь.',
+      options: [
+        'Проверить последние папки сохранения, использовать поиск по имени и вспомнить, куда документ сохранялся.',
+        'Сразу решить, что файл исчез навсегда.',
+        'Отключить интернет и ждать.',
+        'Менять дату на компьютере.'
+      ],
+      correct: 0,
+      explanation: 'Во многих случаях файл не потерян, а просто сохранён не в той папке. Помогают поиск, просмотр папок «Документы», «Загрузки», «Рабочий стол» и внимательная проверка имени.'
+    },
+    {
+      lesson: 'Урок 4. Интернет и браузер',
+      question: 'Что такое браузер?',
+      help: 'Речь идёт о программе, через которую обычно открывают сайты.',
+      options: [
+        'Это программа для просмотра сайтов и работы в интернете.',
+        'Это физический кабель интернета.',
+        'Это только антивирус.',
+        'Это устройство печати документов.'
+      ],
+      correct: 0,
+      explanation: 'Браузер — это приложение, через которое открывают веб-страницы, ищут информацию, заходят в почту и используют онлайн-сервисы.'
+    },
+    {
+      lesson: 'Урок 4. Интернет и браузер',
+      question: 'Что такое адресная строка браузера?',
+      help: 'Подумайте, куда вводят адрес сайта или поисковый запрос.',
+      options: [
+        'Это поле в браузере, куда вводят адрес сайта или поисковую фразу.',
+        'Это место, где хранятся все пароли пользователя на бумаге.',
+        'Это кнопка выключения интернета.',
+        'Это нижняя часть монитора, которую нельзя использовать.'
+      ],
+      correct: 0,
+      explanation: 'Адресная строка — важнейший элемент браузера. Через неё можно открыть конкретный сайт или сразу выполнить поиск информации.'
+    },
+    {
+      lesson: 'Урок 4. Интернет и браузер',
+      question: 'Зачем нужны вкладки в браузере?',
+      help: 'Вспомните, как открыть несколько сайтов одновременно.',
+      options: [
+        'Чтобы работать с несколькими страницами в одном окне и быстро переключаться между ними.',
+        'Чтобы каждый раз выключать компьютер после одного сайта.',
+        'Чтобы удалять все файлы из папки «Загрузки».',
+        'Чтобы заменить клавиатуру.'
+      ],
+      correct: 0,
+      explanation: 'Вкладки позволяют не открывать новое окно для каждого сайта. Это делает работу аккуратнее и помогает параллельно читать несколько страниц.'
+    },
+    {
+      lesson: 'Урок 4. Интернет и браузер',
+      question: 'Как безопаснее всего искать информацию в интернете?',
+      help: 'Нужно учитывать и внимательность, и проверку источников.',
+      options: [
+        'Вводить запрос в поиске, внимательно читать результаты и по возможности сверять информацию по нескольким надёжным источникам.',
+        'Открывать только первый попавшийся сайт и верить всему без проверки.',
+        'Переходить по любым всплывающим окнам с обещанием выигрыша.',
+        'Отключать антивирус перед каждым поиском.'
+      ],
+      correct: 0,
+      explanation: 'Безопасный поиск — это не только умение найти информацию, но и привычка проверять её качество. Надёжнее сравнивать данные из нескольких источников и не доверять сомнительным страницам.'
+    },
+    {
+      lesson: 'Урок 4. Интернет и браузер',
+      question: 'Что обычно означает кнопка «назад» в браузере?',
+      help: 'Подумайте о перемещении по истории просмотра.',
+      options: [
+        'Возврат на предыдущую открытую страницу в истории текущей вкладки.',
+        'Удаление всей истории браузера.',
+        'Выключение роутера.',
+        'Создание нового письма.'
+      ],
+      correct: 0,
+      explanation: 'Кнопка «назад» помогает вернуться на предыдущую страницу, если пользователь перешёл дальше по ссылкам и хочет сделать шаг назад.'
+    },
+    {
+      lesson: 'Урок 4. Интернет и браузер',
+      question: 'Что полезно проверить перед скачиванием файла с сайта?',
+      help: 'Речь о признаках надёжности и здравом смысле.',
+      options: [
+        'Надёжен ли сайт, нужен ли этот файл, понятен ли его тип и не выглядит ли ссылка подозрительно.',
+        'Только цвет страницы.',
+        'Только размер шрифта на сайте.',
+        'Только громкость колонок.'
+      ],
+      correct: 0,
+      explanation: 'Перед скачиванием важно убедиться, что ресурс вызывает доверие и пользователь понимает, что именно загружает. Не стоит скачивать неизвестные файлы с подозрительных страниц.'
+    },
+    {
+      lesson: 'Урок 4. Интернет и браузер',
+      question: 'Почему опасно вводить личные данные на неизвестных сайтах?',
+      help: 'Подумайте о риске мошенничества и утечки.',
+      options: [
+        'Потому что данные могут быть украдены, использованы мошенниками или попасть в ненадёжные базы.',
+        'Потому что сайт начнёт печатать документы сам по себе.',
+        'Потому что монитор перестанет показывать текст.',
+        'Потому что интернет после этого навсегда станет бесплатным.'
+      ],
+      correct: 0,
+      explanation: 'Фамилия, телефон, паспортные сведения, реквизиты карты и пароли — всё это ценные данные. На подозрительных сайтах их могут использовать в мошеннических целях.'
+    },
+    {
+      lesson: 'Урок 4. Интернет и браузер',
+      question: 'Что такое электронная почта в повседневном смысле?',
+      help: 'Выберите наиболее жизненное определение.',
+      options: [
+        'Сервис для отправки и получения электронных писем, файлов и уведомлений через интернет.',
+        'Только папка с фотографиями.',
+        'Способ физически доставить бумажное письмо без интернета.',
+        'Вид клавиатуры.'
+      ],
+      correct: 0,
+      explanation: 'Электронная почта нужна для переписки, регистрации на сайтах, получения документов, кодов подтверждения и официальных уведомлений.'
+    },
+    {
+      lesson: 'Урок 4. Интернет и браузер',
+      question: 'Зачем иногда очищают список открытых вкладок и упорядочивают браузер?',
+      help: 'Вопрос о цифровой гигиене и удобстве.',
+      options: [
+        'Чтобы не путаться в большом количестве страниц, быстрее находить нужное и уменьшать нагрузку на внимание.',
+        'Чтобы интернет пропал.',
+        'Чтобы мышь перестала работать.',
+        'Чтобы файл автоматически оказался на флешке.'
+      ],
+      correct: 0,
+      explanation: 'Когда вкладок слишком много, человек теряет ориентацию. Упорядоченный браузер снижает усталость и позволяет работать спокойнее.'
+    },
+    {
+      lesson: 'Урок 4. Интернет и браузер',
+      question: 'Если сайт открылся слишком мелко или текст трудно читать, что часто помогает?',
+      help: 'Подумайте о привычных инструментах браузера.',
+      options: [
+        'Изменить масштаб страницы в браузере или воспользоваться сочетанием увеличения.',
+        'Обязательно выключить компьютер.',
+        'Снять клавиши с клавиатуры.',
+        'Удалить браузер и больше не пользоваться интернетом.'
+      ],
+      correct: 0,
+      explanation: 'Масштабирование страницы — простой и полезный инструмент доступности. Оно особенно важно для людей, которым комфортнее читать более крупный текст.'
+    },
+    {
+      lesson: 'Урок 5. Полезные цифровые сервисы',
+      question: 'Почему государственные и социально значимые сервисы в интернете полезны для повседневной жизни?',
+      help: 'Подумайте, какие задачи они помогают решать без лишних поездок.',
+      options: [
+        'Они позволяют получать услуги, записи, справки и информацию дистанционно, экономя время и силы.',
+        'Они нужны только для развлечения и игр.',
+        'Они существуют исключительно для профессиональных программистов.',
+        'Они заменяют все живые очереди во всех учреждениях мира мгновенно.'
+      ],
+      correct: 0,
+      explanation: 'Онлайн‑сервисы помогают записываться к врачу, подавать заявления, оплачивать услуги и получать справки, не выходя из дома. Это особенно важно для людей с ограниченной мобильностью и занятых граждан.'
+    },
+    {
+      lesson: 'Урок 5. Полезные цифровые сервисы',
+      question: 'Зачем регистрироваться на портале государственных услуг (например, «Госуслуги»)?',
+      help: 'Вспомните, какие официальные действия можно выполнить через такие порталы.',
+      options: [
+        'Чтобы иметь доступ к государственным и муниципальным услугам в электронном виде.',
+        'Чтобы автоматически получать рекламу каждый день.',
+        'Чтобы обязательно тратить больше времени на любую процедуру.',
+        'Чтобы нельзя было больше пользоваться обычной почтой.'
+      ],
+      correct: 0,
+      explanation: 'Регистрация на госпорталах позволяет оформлять документы, записи, оплачивать услуги и получать уведомления официальным способом через интернет, без лишних поездок и очередей.'
+    },
+    {
+      lesson: 'Урок 5. Полезные цифровые сервисы',
+      question: 'Какой из примеров относится к использованию онлайн‑записи к врачу?',
+      help: 'Речь о реальной жизненной ситуации.',
+      options: [
+        'Выбираете поликлинику и специалиста на сайте или в приложении и записываетесь на удобное время.',
+        'Пишите номер врача на стене в подъезде.',
+        'Идёте в поликлинику без записи и надеетесь, что вас примут первым.',
+        'Звоните случайному номеру из интернета без указания поликлиники.'
+      ],
+      correct: 0,
+      explanation: 'Онлайн‑запись к врачу позволяет заранее выбрать время приёма и специалиста. Это снижает очереди и делает посещение более предсказуемым и комфортным.'
+    },
+    {
+      lesson: 'Урок 5. Полезные цифровые сервисы',
+      question: 'Что обычно можно оплатить через личный кабинет ЖКХ или банк‑онлайн?',
+      help: 'Подумайте о типичных обязательных платежах.',
+      options: [
+        'Коммунальные услуги, некоторые штрафы, мобильную связь и другие регулярные платежи.',
+        'Только покупку мебели в магазине.',
+        'Только бензин на заправке.',
+        'Только продукты питания на рынке.'
+      ],
+      correct: 0,
+      explanation: 'Онлайн‑кабинеты позволяют оплачивать коммунальные услуги, мобильную связь, интернет и некоторые госпошлины, не выходя из дома. Это экономит время и помогает не пропускать сроки платежей.'
+    },
+    {
+      lesson: 'Урок 5. Полезные цифровые сервисы',
+      question: 'Как понять, что сайт оплаты выглядит надёжно?',
+      help: 'Важно обратить внимание на несколько признаков.',
+      options: [
+        'Есть защищённое соединение (https), понятный адрес, официальная информация о компании и нет странных всплывающих окон.',
+        'На сайте очень много мигающих надписей и обещаний «100% выгоды».',
+        'Адрес сайта состоит только из случайных цифр и букв.',
+        'Сайт просит ввести пароль от вашей электронной почты без объяснения причин.'
+      ],
+      correct: 0,
+      explanation: 'Надёжные сайты используют защищённый протокол, имеют понятный адрес и не требуют лишних данных. Слишком агрессивная реклама и непонятные запросы — повод насторожиться.'
+    },
+    {
+      lesson: 'Урок 5. Полезные цифровые сервисы',
+      question: 'Какой плюс у онлайн‑покупки билетов на поезд или автобус?',
+      help: 'Сфокусируйтесь на удобстве для человека.',
+      options: [
+        'Можно заранее выбрать рейс и место, оплатить онлайн и получить электронный билет.',
+        'Билеты перестают действовать на бумаге.',
+        'Нужно ездить в кассу ещё чаще, чем раньше.',
+        'Нельзя узнать расписание заранее.'
+      ],
+      correct: 0,
+      explanation: 'Электронные билеты позволяют выбрать подходящий рейс, увидеть расписание и оплатить поездку заранее. Часто такой билет можно показать с телефона без распечатки.'
+    },
+    {
+      lesson: 'Урок 5. Полезные цифровые сервисы',
+      question: 'Почему важно не сообщать коды подтверждения (из SMS или приложений) посторонним, даже если они представляются «из банка»?',
+      help: 'Речь о типичной мошеннической схеме.',
+      options: [
+        'Потому что по этим кодам мошенники могут подтвердить операции и получить доступ к деньгам или личным данным.',
+        'Потому что без кодов телефон перестанет работать.',
+        'Потому что тогда нельзя будет пользоваться интернетом.',
+        'Потому что так требуют правила хорошего тона.'
+      ],
+      correct: 0,
+      explanation: 'Коды подтверждения — это ключ к операциям в банке и на сервисах. Банки предупреждают: настоящие сотрудники никогда не просят отправить коды по телефону или в мессенджерах.'
+    },
+    {
+      lesson: 'Урок 5. Полезные цифровые сервисы',
+      question: 'Какое действие считается осторожным при использовании интернет‑банка?',
+      help: 'Подумайте о базовой цифровой гигиене.',
+      options: [
+        'Выходить из личного кабинета после завершения операций и не сохранять пароли на чужих устройствах.',
+        'Передавать логин и пароль знакомым для «подстраховки».',
+        'Входить в банк только по ссылкам из случайных писем.',
+        'Сообщать коды подтверждения всем звонящим.'
+      ],
+      correct: 0,
+      explanation: 'Выход из личного кабинета и отказ от сохранения паролей на чужих устройствах снижают риск несанкционированного доступа к счёту.'
+    },
+    {
+      lesson: 'Урок 5. Полезные цифровые сервисы',
+      question: 'Какой пример относится к полезным образовательным онлайн‑сервисам?',
+      help: 'Вспомните, что помогает учиться дистанционно.',
+      options: [
+        'Платформы с курсами, вебинарами и обучающими материалами по различным темам.',
+        'Сайты, где показывают только рекламу и нет никакого содержания.',
+        'Только форумы, где запрещены любые вопросы.',
+        'Сервисы, которые работают исключительно ночью и не открываются днём.'
+      ],
+      correct: 0,
+      explanation: 'Образовательные сервисы позволяют изучать новые темы в удобном темпе. Это могут быть языки, цифровая грамотность, здоровье, профессии и многое другое.'
+    },
+    {
+      lesson: 'Урок 5. Полезные цифровые сервисы',
+      question: 'Что можно сделать, чтобы не запутаться в большом количестве разных цифровых сервисов и приложений?',
+      help: 'Речь о личной организации.',
+      options: [
+        'Сделать небольшой список самых важных сервисов, сохранить понятные ярлыки и записать логины в надёжное место.',
+        'Никогда не пользоваться интернетом.',
+        'Устанавливать все приложения подряд и не удалять их.',
+        'Пытаться запомнить все пароли без записей, даже если их десятки.'
+      ],
+      correct: 0,
+      explanation: 'Небольшой список ключевых сервисов и аккуратное хранение данных помогают не путаться и чувствовать себя увереннее в цифровой среде, особенно начинающим пользователям.'
+    },
+    {
+      lesson: 'Урок 6. Цифровая безопасность',
+      question: 'Почему важно регулярно обновлять операционную систему и программы?',
+      help: 'Подумайте о защите от новых угроз.',
+      options: [
+        'Обновления часто содержат исправления ошибок и защиту от новых уязвимостей.',
+        'Обновления нужны только для смены цвета рабочего стола.',
+        'Обновления всегда опасны и их нужно полностью отключать.',
+        'Обновления ничего не меняют и существуют лишь для галочки.'
+      ],
+      correct: 0,
+      explanation: 'Производители программ регулярно закрывают найденные уязвимости. Установка обновлений помогает защититься от вирусов и мошеннических атак.'
+    },
+    {
+      lesson: 'Урок 6. Цифровая безопасность',
+      question: 'Что считается надёжным паролем?',
+      help: 'Важны длина, сложность и уникальность.',
+      options: [
+        'Длинный пароль из букв разного регистра, цифр и символов, не связанный напрямую с личными данными.',
+        'Дата рождения, написанная без изменений.',
+        'Слово «пароль» или «123456».',
+        'Имя домашнего питомца без добавления других символов.'
+      ],
+      correct: 0,
+      explanation: 'Надёжный пароль сложно угадать: он длинный, включает разные типы символов и не повторяется на всех сайтах. Простые и одинаковые пароли повышают риск взлома.'
+    },
+    {
+      lesson: 'Урок 6. Цифровая безопасность',
+      question: 'Почему нельзя устанавливать программы из непроверенных источников?',
+      help: 'Речь о скрытых рисках.',
+      options: [
+        'Потому что в таких программах могут быть вирусы, шпионские модули и другие вредоносные элементы.',
+        'Потому что все программы из непроверенных источников обязательно платные.',
+        'Потому что они всегда работают быстрее.',
+        'Потому что их нельзя удалить.'
+      ],
+      correct: 0,
+      explanation: 'Непроверенные программы часто распространяют вредоносный код. Лучше использовать официальные магазины приложений и сайты разработчиков.'
+    },
+    {
+      lesson: 'Урок 6. Цифровая безопасность',
+      question: 'Как распознать подозрительное письмо, которое может быть фишингом?',
+      help: 'Обратите внимание на стиль и запросы.',
+      options: [
+        'В нём часто есть срочные угрозы, просьбы немедленно ввести пароли или данные карты и странные ссылки.',
+        'В письме всегда идеально грамотный текст и официальные печати.',
+        'Письмо никогда не содержит никаких ссылок.',
+        'Фишинг‑письма всегда приходят только ночью.'
+      ],
+      correct: 0,
+      explanation: 'Фишинговые письма пытаются запугать или торопить человека, чтобы он не успел подумать. Они требуют конфиденциальные данные и ведут на поддельные сайты.'
+    },
+    {
+      lesson: 'Урок 6. Цифровая безопасность',
+      question: 'Почему важно блокировать экран компьютера или телефона, отходя от него?',
+      help: 'Вспомните о доступе посторонних.',
+      options: [
+        'Чтобы посторонние не смогли увидеть или изменить личные данные и документы.',
+        'Чтобы устройство не разрядилось.',
+        'Чтобы удалить все программы.',
+        'Чтобы остановить работу интернета.'
+      ],
+      correct: 0,
+      explanation: 'Блокировка экрана защищает от любопытных взглядов и случайных действий. Особенно важно делать это на общих или рабочих устройствах.'
+    },
+    {
+      lesson: 'Урок 6. Цифровая безопасность',
+      question: 'Какое действие стоит предпринять, если позвонили «из банка» и просят назвать код из SMS?',
+      help: 'Это одна из самых распространённых схем.',
+      options: [
+        'Немедленно прекратить разговор и самостоятельно перезвонить в банк по официальному номеру.',
+        'Сразу назвать код, чтобы «помочь службе безопасности».',
+        'Продиктовать код нескольким людям на всякий случай.',
+        'Сфотографировать SMS и выложить в социальные сети.'
+      ],
+      correct: 0,
+      explanation: 'Настоящие сотрудники банка не спрашивают коды из SMS. В случае сомнений лучше самому позвонить в банк по номеру, указанному на карте или на официальном сайте.'
+    },
+    {
+      lesson: 'Урок 6. Цифровая безопасность',
+      question: 'Зачем использовать антивирус и проверять файлы перед открытием?',
+      help: 'Подумайте о защите устройства и данных.',
+      options: [
+        'Чтобы снизить риск заражения вирусами, шифровальщиками и другим вредоносным ПО.',
+        'Чтобы компьютер работал громче.',
+        'Чтобы обязательно замедлить работу любой программы.',
+        'Чтобы отключить интернет.'
+      ],
+      correct: 0,
+      explanation: 'Антивирус помогает обнаруживать и блокировать опасные файлы. Это один из элементов комплексной защиты, наряду с осторожностью пользователя и обновлениями системы.'
+    },
+    {
+      lesson: 'Урок 6. Цифровая безопасность',
+      question: 'Какой из примеров относится к безопасному поведению в социальных сетях?',
+      help: 'Сфокусируйтесь на сохранности личной информации.',
+      options: [
+        'Не публиковать лишние подробности о себе, ограничивать круг доступа и внимательно относиться к чужим запросам.',
+        'Публиковать все данные паспорта и банковских карт.',
+        'Добавлять в друзья всех подряд без разбора.',
+        'Переходить по всем ссылкам из личных сообщений.'
+      ],
+      correct: 0,
+      explanation: 'Чем меньше личной информации в открытом доступе, тем ниже риск мошенничества. Настройки приватности и осторожность помогают защититься от злоупотреблений.'
+    },
+    {
+      lesson: 'Смешанный блок. Применение навыков',
+      question: 'Вы получили на электронную почту счёт за коммунальные услуги. Что разумнее всего сделать?',
+      help: 'Подумайте и о безопасности, и о удобстве.',
+      options: [
+        'Проверить отправителя и реквизиты, сравнить с предыдущими квитанциями и оплатить через привычный надёжный сервис.',
+        'Сразу переслать счёт всем знакомым.',
+        'Оплатить счёт по первой попавшейся ссылке, не глядя.',
+        'Удалить все предыдущие квитанции.'
+      ],
+      correct: 0,
+      explanation: 'Сравнение реквизитов и отправителя помогает убедиться, что квитанция настоящая. Оплату лучше проводить через знакомый, проверенный сервис или официальный сайт.'
+    },
+    {
+      lesson: 'Смешанный блок. Применение навыков',
+      question: 'Вы хотите отправить знакомому фотографию документа. Как сделать это более безопасно?',
+      help: 'Речь о защите персональных данных.',
+      options: [
+        'По возможности скрыть лишние данные, использовать надёжный канал связи и не выкладывать документ в общий доступ.',
+        'Выложить документ в открытую группу социальной сети.',
+        'Отправить фотографию всем контактам сразу.',
+        'Опубликовать документ на неизвестном сайте.'
+      ],
+      correct: 0,
+      explanation: 'Документы часто содержат персональные данные. Стоит показывать их только тем, кому это действительно необходимо, и не размещать в открытом доступе.'
+    }
+  ];
+
+  // ---- БАЗОВАЯ ЛОГИКА ЭКЗАМЕНА: НАВИГАЦИЯ И ОТРИСОВКА ВОПРОСОВ ----
+
+  const START_TIME_MINUTES = 45;
+  const PASS_THRESHOLD = 42; // 42 из 60 = 70%
+
+  let currentQuestionIndex = 0;
+  let answers = new Array(questions.length).fill(null); // {selectedIndex, isCorrect}
+  let examStarted = false;
+  let examFinished = false;
+
+  // DOM-элементы
+  const viewStart = document.getElementById('viewStart');
+  const viewQuestions = document.getElementById('viewQuestions');
+  const viewResult = document.getElementById('viewResult');
+
+  const startExamBtn = document.getElementById('startExamBtn');
+  const fillDemoBtn = document.getElementById('fillDemoBtn');
+  const studentNameInput = document.getElementById('studentNameInput');
+  const groupNameInput = document.getElementById('groupNameInput');
+
+  const questionCard = document.getElementById('questionCard');
+  const questionMapEl = document.getElementById('questionMap');
+
+  const sidebarTotalQuestions = document.getElementById('sidebarTotalQuestions');
+  const progressBarEl = document.getElementById('progressBar');
+  const progressCurrentLabel = document.getElementById('progressCurrentLabel');
+  const progressAnsweredLabel = document.getElementById('progressAnsweredLabel');
+
+  // --- Вспомогательные функции показа экранов ---
+
+  function showView(view) {
+    [viewStart, viewQuestions, viewResult].forEach(v => {
+      if (!v) return;
+      if (v === view) {
+        v.classList.add('active', 'fade-in-up');
+      } else {
+        v.classList.remove('active', 'fade-in-up');
+      }
+    });
+  }
+
+  function scrollToTop() {
+    const shell = document.querySelector('.exam-shell');
+    if (shell) shell.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // --- Старт экзамена ---
+
+  fillDemoBtn?.addEventListener('click', () => {
+    if (!studentNameInput.value.trim()) {
+      studentNameInput.value = 'Иванова Мария Петровна';
+    }
+    if (!groupNameInput.value.trim()) {
+      groupNameInput.value = 'группа «Silver Digital»';
+    }
+    studentNameInput.focus();
+  });
+
+  startExamBtn?.addEventListener('click', () => {
+    const name = studentNameInput.value.trim();
+    if (!name) {
+      studentNameInput.classList.add('shake');
+      setTimeout(() => studentNameInput.classList.remove('shake'), 300);
+      studentNameInput.focus();
+      return;
+    }
+
+    examStarted = true;
+    examFinished = false;
+    currentQuestionIndex = 0;
+    answers = new Array(questions.length).fill(null);
+
+    initQuestionMap();
+    updateProgress();
+    renderQuestion();
+    showView(viewQuestions);
+    scrollToTop();
+  });
+
+  // --- Карта вопросов в боковой панели ---
+
+  function initQuestionMap() {
+    if (!questionMapEl) return;
+    questionMapEl.innerHTML = '';
+    sidebarTotalQuestions.textContent = `0 / ${questions.length}`;
+
+    questions.forEach((q, index) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'question-map-item';
+      btn.textContent = index + 1;
+
+      btn.addEventListener('click', () => {
+        if (!examStarted || examFinished) return;
+        currentQuestionIndex = index;
+        renderQuestion();
+        updateProgress();
+      });
+
+      questionMapEl.appendChild(btn);
+    });
+  }
+
+  function updateQuestionMap() {
+    if (!questionMapEl) return;
+    const items = questionMapEl.querySelectorAll('.question-map-item');
+    items.forEach((el, index) => {
+      el.classList.remove('current', 'answered');
+      const answer = answers[index];
+      if (index === currentQuestionIndex) {
+        el.classList.add('current');
+      }
+      if (answer && typeof answer.selectedIndex === 'number') {
+        el.classList.add('answered');
+      }
+    });
+  }
+
+  // --- Прогресс ---
+
+  function updateProgress() {
+    const total = questions.length;
+    const answeredCount = answers.filter(a => a && typeof a.selectedIndex === 'number').length;
+    const current = currentQuestionIndex + 1;
+
+    sidebarTotalQuestions.textContent = `${answeredCount} / ${total}`;
+    progressCurrentLabel.textContent = `Вопрос ${current} из ${total}`;
+    progressAnsweredLabel.textContent = `Отвечено: ${answeredCount}`;
+
+    const percent = total > 0 ? (answeredCount / total) * 100 : 0;
+    progressBarEl.style.width = `${percent}%`;
+
+    updateQuestionMap();
+  }
+
+  // --- Отрисовка одного вопроса ---
+
+  function renderQuestion() {
+    const q = questions[currentQuestionIndex];
+    if (!q || !questionCard) return;
+
+    const total = questions.length;
+    const indexLabel = `Вопрос ${currentQuestionIndex + 1} из ${total}`;
+    const topic = q.lesson || '';
+
+    const savedAnswer = answers[currentQuestionIndex];
+
+    questionCard.innerHTML = '';
+
+    const headerRow = document.createElement('div');
+    headerRow.className = 'question-header-row';
+
+    const indexEl = document.createElement('div');
+    indexEl.className = 'question-index';
+    indexEl.textContent = indexLabel;
+
+    const topicTag = document.createElement('div');
+    topicTag.className = 'question-topic-tag';
+    topicTag.textContent = topic;
+
+    headerRow.appendChild(indexEl);
+    headerRow.appendChild(topicTag);
+
+    const textEl = document.createElement('div');
+    textEl.className = 'question-text';
+    textEl.textContent = q.question;
+
+    const helpEl = document.createElement('div');
+    helpEl.className = 'question-extra';
+    helpEl.textContent = q.help || '';
+
+    const answersList = document.createElement('div');
+    answersList.className = 'answers-list';
+
+    q.options.forEach((opt, idx) => {
+      const optionEl = document.createElement('div');
+      optionEl.className = 'answer-option';
+
+      const keyEl = document.createElement('div');
+      keyEl.className = 'answer-key';
+      keyEl.textContent = String.fromCharCode(65 + idx); // A, B, C...
+
+      const textWrap = document.createElement('div');
+      textWrap.className = 'answer-text';
+      textWrap.textContent = opt;
+
+      optionEl.appendChild(keyEl);
+      optionEl.appendChild(textWrap);
+
+      if (savedAnswer && savedAnswer.selectedIndex === idx) {
+        optionEl.classList.add('selected');
+      }
+
+      optionEl.addEventListener('click', () => {
+        if (!examStarted || examFinished) return;
+
+        answers[currentQuestionIndex] = {
+          selectedIndex: idx,
+          isCorrect: idx === q.correct
+        };
+
+        // подсветка выбранного
+        const allOptions = questionCard.querySelectorAll('.answer-option');
+        allOptions.forEach(el => el.classList.remove('selected'));
+        optionEl.classList.add('selected');
+
+        // пока НЕ показываем правильность, только сохраняем ответ и обновляем прогресс
+        updateProgress();
+      });
+
+      answersList.appendChild(optionEl);
+    });
+
+    // футер навигации
+    const footer = document.createElement('div');
+    footer.className = 'question-footer';
+
+    const footerLeft = document.createElement('div');
+    footerLeft.className = 'question-footer-left';
+    footerLeft.textContent = 'Выберите один вариант ответа и переходите к следующему вопросу.';
+
+    const footerRight = document.createElement('div');
+    footerRight.className = 'question-footer-right';
+
+    const prevBtn = document.createElement('button');
+    prevBtn.type = 'button';
+    prevBtn.className = 'btn btn-secondary btn-sm';
+    prevBtn.textContent = 'Предыдущий';
+    prevBtn.disabled = currentQuestionIndex === 0;
+    prevBtn.addEventListener('click', () => {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        renderQuestion();
+        updateProgress();
+        scrollToTop();
+      }
+    });
+
+    const nextBtn = document.createElement('button');
+    nextBtn.type = 'button';
+    nextBtn.className = 'btn btn-primary btn-sm';
+    nextBtn.textContent = currentQuestionIndex === total - 1 ? 'К результатам' : 'Следующий вопрос';
+    nextBtn.addEventListener('click', () => {
+      if (currentQuestionIndex < total - 1) {
+        currentQuestionIndex++;
+        renderQuestion();
+        updateProgress();
+        scrollToTop();
+      } else {
+        // Здесь позже добавим переход к результатам
+        // finishExam();
+      }
+    });
+
+    footerRight.appendChild(prevBtn);
+    footerRight.appendChild(nextBtn);
+
+    footer.appendChild(footerLeft);
+    footer.appendChild(footerRight);
+
+    questionCard.appendChild(headerRow);
+    questionCard.appendChild(textEl);
+    questionCard.appendChild(helpEl);
+    questionCard.appendChild(answersList);
+    questionCard.appendChild(footer);
+  }
+
+  // Инициализация при загрузке
+  document.addEventListener('DOMContentLoaded', () => {
+    // пока просто покажем стартовый экран
+    showView(viewStart);
+  });
+  // ---- РЕЗУЛЬТАТЫ, ЗВАНИЯ И ПЕРЕХОД К ЭКРАНУ ИТОГОВ ----
+
+  const resultPercentEl = document.getElementById('resultPercent');
+  const resultStatusBadge = document.getElementById('resultStatusBadge');
+  const resultSubline = document.getElementById('resultSubline');
+  const resultOverallValue = document.getElementById('resultOverallValue');
+  const resultOverallBar = document.getElementById('resultOverallBar');
+  const resultRankLabel = document.getElementById('resultRankLabel');
+  const resultRankBar = document.getElementById('resultRankBar');
+  const resultBadges = document.getElementById('resultBadges');
+  const resultRecommendations = document.getElementById('resultRecommendations');
+
+  const retryFullBtn = document.getElementById('retryFullBtn');
+  const retryErrorsBtn = document.getElementById('retryErrorsBtn');
+  const backToStartBtn = document.getElementById('backToStartBtn');
+
+  const certificateNameEl = document.getElementById('certificateName');
+  const certificateResultLineEl = document.getElementById('certificateResultLine');
+  const certificateDateEl = document.getElementById('certificateDate');
+  const certificateGroupEl = document.getElementById('certificateGroup');
+  const certificateSerialEl = document.getElementById('certificateSerial');
+
+  const reportNameEl = document.getElementById('reportName');
+  const reportDateEl = document.getElementById('reportDate');
+  const reportGroupEl = document.getElementById('reportGroup');
+  const resultsSerialEl = document.getElementById('resultsSerial');
+  const resultsTableBody = document.getElementById('resultsTableBody');
+  const resultsTotalCorrectEl = document.getElementById('resultsTotalCorrect');
+  const resultsTotalQuestionsEl = document.getElementById('resultsTotalQuestions');
+  const resultsTotalPercentEl = document.getElementById('resultsTotalPercent');
+
+  // --- Подсчёт результата ---
+
+  function calculateStats() {
+    const total = questions.length;
+    let correct = 0;
+
+    answers.forEach(a => {
+      if (a && a.isCorrect) correct++;
+    });
+
+    const percent = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+    return {
+      total,
+      correct,
+      percent
+    };
+  }
+
+  function getRank(percent) {
+    if (percent >= 90) {
+      return {
+        label: 'Почти компьютерный мастер',
+        level: 'high',
+        description: 'Вы уверенно ориентируетесь в цифровой среде и можете помогать другим осваивать базовые навыки.'
+      };
+    }
+    if (percent >= 70) {
+      return {
+        label: 'Уверенный пользователь ПК',
+        level: 'medium',
+        description: 'Вы хорошо справляетесь с повседневными задачами и уверенно чувствуете себя за компьютером.'
+      };
+    }
+    return {
+      label: 'Осваиваю основы',
+      level: 'low',
+      description: 'Вы на правильном пути. Повторите сложные темы и попробуйте пройти экзамен ещё раз.'
+    };
+  }
+
+  function groupStatsByLesson() {
+    const lessonsMap = new Map();
+
+    questions.forEach((q, index) => {
+      const lesson = q.lesson || 'Без урока';
+      if (!lessonsMap.has(lesson)) {
+        lessonsMap.set(lesson, { lesson, total: 0, correct: 0 });
+      }
+      const entry = lessonsMap.get(lesson);
+      entry.total += 1;
+      const ans = answers[index];
+      if (ans && ans.isCorrect) {
+        entry.correct += 1;
+      }
+    });
+
+    return Array.from(lessonsMap.values());
+  }
+
+  function updateResultView() {
+    const stats = calculateStats();
+    const rank = getRank(stats.percent);
+
+    // процент и статус
+    if (resultPercentEl) {
+      resultPercentEl.textContent = `${stats.percent}%`;
+    }
+
+    if (resultStatusBadge) {
+      resultStatusBadge.textContent = stats.correct >= PASS_THRESHOLD ? 'Экзамен сдан' : 'Экзамен не сдан';
+      resultStatusBadge.classList.remove('result-status-fail', 'result-status-pass');
+      resultStatusBadge.classList.add(
+        stats.correct >= PASS_THRESHOLD ? 'result-status-pass' : 'result-status-fail'
+      );
+    }
+
+    if (resultSubline) {
+      resultSubline.textContent = `Вы ответили правильно на ${stats.correct} из ${stats.total} вопросов. Порог сдачи — ${PASS_THRESHOLD} правильных ответов (70%).`;
+    }
+
+    // общий прогресс
+    if (resultOverallValue) {
+      resultOverallValue.textContent = `${stats.correct} / ${stats.total}`;
+    }
+    if (resultOverallBar) {
+      const overallPercent = stats.total > 0 ? (stats.correct / stats.total) * 100 : 0;
+      resultOverallBar.style.width = `${overallPercent}%`;
+    }
+
+    // звание
+    if (resultRankLabel) {
+      resultRankLabel.textContent = rank.label;
+    }
+    if (resultRankBar) {
+      resultRankBar.style.width = `${stats.percent}%`;
+    }
+
+    // бейджи
+    if (resultBadges) {
+      resultBadges.innerHTML = '';
+
+      const rankBadge = document.createElement('div');
+      rankBadge.className = 'result-badge';
+      rankBadge.textContent = rank.description;
+      resultBadges.appendChild(rankBadge);
+
+      if (stats.correct >= PASS_THRESHOLD) {
+        const passBadge = document.createElement('div');
+        passBadge.className = 'result-badge result-badge-strong';
+        passBadge.textContent = 'Вы преодолели порог сдачи и можете получить сертификат.';
+        resultBadges.appendChild(passBadge);
+      } else {
+        const tipBadge = document.createElement('div');
+        tipBadge.className = 'result-badge';
+        tipBadge.textContent = 'Попробуйте ещё раз после повторения тех уроков, где было больше всего ошибок.';
+        resultBadges.appendChild(tipBadge);
+      }
+    }
+
+    // рекомендации по урокам
+    if (resultRecommendations) {
+      resultRecommendations.innerHTML = '';
+      const byLesson = groupStatsByLesson();
+
+      byLesson.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'result-rec-row';
+
+        const percent = item.total > 0 ? Math.round((item.correct / item.total) * 100) : 0;
+
+        const title = document.createElement('div');
+        title.className = 'result-rec-title';
+        title.textContent = item.lesson;
+
+        const desc = document.createElement('div');
+        desc.className = 'result-rec-desc';
+        if (percent >= 90) {
+          desc.textContent = 'Урок усвоен отлично. Можно использовать его как опору для помощи другим.';
+        } else if (percent >= 70) {
+          desc.textContent = 'Урок усвоен хорошо. При желании можно освежить отдельные моменты.';
+        } else {
+          desc.textContent = 'Рекомендуется повторить этот урок: пересмотреть материалы и ещё раз пройти упражнения.';
+        }
+
+        const meta = document.createElement('div');
+        meta.className = 'result-rec-meta';
+        meta.textContent = `${item.correct} из ${item.total} (${percent}%)`;
+
+        row.appendChild(title);
+        row.appendChild(desc);
+        row.appendChild(meta);
+
+        resultRecommendations.appendChild(row);
+      });
+    }
+
+    // сертификат + отчётный лист (без html2canvas, только текст)
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('ru-RU');
+    const serial = `PC-2026-${String(Math.floor(Math.random() * 1000000)).padStart(6, '0')}`;
+
+    const name = studentNameInput.value.trim() || 'Участник курса';
+    const group = groupNameInput.value.trim() || '—';
+
+    if (certificateNameEl) certificateNameEl.textContent = name;
+    if (certificateResultLineEl) {
+      certificateResultLineEl.textContent = `Результат: ${stats.correct} из ${stats.total} вопросов (${stats.percent}%), уровень: ${rank.label}`;
+    }
+    if (certificateDateEl) certificateDateEl.textContent = `Дата: ${dateStr}`;
+    if (certificateGroupEl) certificateGroupEl.textContent = `Группа / организация: ${group}`;
+    if (certificateSerialEl) certificateSerialEl.textContent = `Серийный номер: ${serial}`;
+
+    if (reportNameEl) reportNameEl.textContent = name;
+    if (reportDateEl) reportDateEl.textContent = dateStr;
+    if (reportGroupEl) reportGroupEl.textContent = group;
+    if (resultsSerialEl) resultsSerialEl.textContent = serial;
+
+    if (resultsTableBody) {
+      resultsTableBody.innerHTML = '';
+      const byLesson = groupStatsByLesson();
+      let totalCorrect = 0;
+      let totalQuestions = 0;
+
+      byLesson.forEach(item => {
+        const tr = document.createElement('tr');
+        const percent = item.total > 0 ? Math.round((item.correct / item.total) * 100) : 0;
+
+        const tdLesson = document.createElement('td');
+        tdLesson.textContent = item.lesson;
+
+        const tdTopic = document.createElement('td');
+        tdTopic.textContent = item.lesson.includes('Смешанный блок') ? 'Применение навыков' : 'Основной урок';
+
+        const tdCorrect = document.createElement('td');
+        tdCorrect.textContent = String(item.correct);
+
+        const tdTotal = document.createElement('td');
+        tdTotal.textContent = String(item.total);
+
+        const tdPercent = document.createElement('td');
+        tdPercent.textContent = `${percent}%`;
+
+        tr.appendChild(tdLesson);
+        tr.appendChild(tdTopic);
+        tr.appendChild(tdCorrect);
+        tr.appendChild(tdTotal);
+        tr.appendChild(tdPercent);
+
+        resultsTableBody.appendChild(tr);
+
+        totalCorrect += item.correct;
+        totalQuestions += item.total;
+      });
+
+      if (resultsTotalCorrectEl) resultsTotalCorrectEl.textContent = String(totalCorrect);
+      if (resultsTotalQuestionsEl) resultsTotalQuestionsEl.textContent = String(totalQuestions);
+      const totalPercent = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+      if (resultsTotalPercentEl) resultsTotalPercentEl.textContent = `${totalPercent}%`;
+    }
+  }
+
+  function finishExam() {
+    if (examFinished) return;
+    examFinished = true;
+    updateResultView();
+    showView(viewResult);
+    scrollToTop();
+  }
+
+  // привязываем кнопку "К результатам" на последнем вопросе
+  function overrideLastNextButtonToFinish() {
+    // уже реализовано в renderQuestion: там на последнем вопросе кнопка "К результатам"
+    // добавим вызов finishExam в обработчик
+  }
+
+  // Обновим обработчик в renderQuestion: дополни уже существующий nextBtn.addEventListener:
+  // (Это комментарий‑подсказка: в твоём renderQuestion сейчас уже есть ветка else для последнего вопроса.)
+  // Там вместо комментария:
+  //   // finishExam();
+  // просто поставь:
+  //   finishExam();
+
+  // Кнопки на экране результата
+  retryFullBtn?.addEventListener('click', () => {
+    examStarted = true;
+    examFinished = false;
+    currentQuestionIndex = 0;
+    answers = new Array(questions.length).fill(null);
+    initQuestionMap();
+    updateProgress();
+    renderQuestion();
+    showView(viewQuestions);
+    scrollToTop();
+  });
+
+  retryErrorsBtn?.addEventListener('click', () => {
+    // пока заготовка — позже добавим режим "только ошибочные вопросы"
+    examStarted = true;
+    examFinished = false;
+    currentQuestionIndex = 0;
+    answers = new Array(questions.length).fill(null);
+    initQuestionMap();
+    updateProgress();
+    renderQuestion();
+    showView(viewQuestions);
+    scrollToTop();
+  });
+
+  backToStartBtn?.addEventListener('click', () => {
+    examStarted = false;
+    examFinished = false;
+    showView(viewStart);
+    scrollToTop();
+  });
+
+  // ДОПОЛНИ renderQuestion: внутри обработчика nextBtn на последнем вопросе
+  // найди место:
+  //   } else {
+  //     // Здесь позже добавим переход к результатам
+  //     // finishExam();
+  //   }
+  // и замени на:
+  //   } else {
+  //     finishExam();
+  //   }
+</script>
+</body>
+</html>
