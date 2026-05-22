@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Наследие Кубани — Читать онлайн</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://unpkg.com/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --cream:#faf7f2;--cream2:#f3ede3;--cream3:#ede4d4;--cream4:#e0d5c3;
+  --ochre:#c8973a;--ochre2:#e8b45a;--terra:#b5533c;--brown:#6b4226;
+  --green:#4a7c59;
+  --text:#2a1f14;--text2:#5a4535;--text3:#8a7060;
+  --white:#ffffff;
+  --s1:0 2px 12px rgba(107,66,38,.10);
+  --s2:0 8px 32px rgba(107,66,38,.15);
+  --s3:0 20px 60px rgba(107,66,38,.22);
+  --r:16px;--rs:10px;--tr:.25s cubic-bezier(.4,0,.2,1);
+}
+[data-theme=dark]{
+  --cream:#1c1814;--cream2:#231e19;--cream3:#2c2520;--cream4:#352e28;
+  --text:#f0e8dc;--text2:#c8b89e;--text3:#8a7a6a;--white:#2c2520;
+}
+[data-theme=night]{
+  --cream:#0d0f1a;--cream2:#131520;--cream3:#1a1d2e;
+  --ochre:#7c9fd4;--ochre2:#a0bde8;--terra:#6a8fb5;
+  --text:#dce8f8;--text2:#8fa8c8;--text3:#556880;--white:#1a1d2e;
+}
+[data-theme=sepia]{
+  --cream:#f4e8d0;--cream2:#ede0c4;--cream3:#ddd0b0;
+  --text:#3d2b1f;--text2:#6b4c35;--text3:#9a7a5a;--white:#f9f0e0;
+}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Manrope',sans-serif;background:var(--cream);color:var(--text);
+  transition:background var(--tr),color var(--tr);display:flex;flex-direction:column;}
+
+/* MESH */
+#mesh{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.13;animation:ofl 14s ease-in-out infinite alternate;}
+.orb:nth-child(1){width:700px;height:700px;background:radial-gradient(circle,#c8973a,transparent);top:-150px;left:-150px;animation-duration:16s;}
+.orb:nth-child(2){width:450px;height:450px;background:radial-gradient(circle,#b5533c,transparent);bottom:-50px;right:5%;animation-duration:11s;animation-delay:-5s;}
+.orb:nth-child(3){width:350px;height:350px;background:radial-gradient(circle,#8a7060,transparent);top:35%;left:45%;animation-duration:18s;animation-delay:-9s;}
+@keyframes ofl{from{transform:translate(0,0) scale(1);}to{transform:translate(50px,35px) scale(1.12);}}
+
+/* LOADING */
+#ld{position:fixed;inset:0;z-index:600;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:20px;background:var(--cream);}
+.ld-bk{font-size:72px;animation:bk 1.3s ease-in-out infinite alternate;
+  filter:drop-shadow(0 8px 16px rgba(200,151,58,.4));}
+@keyframes bk{from{transform:translateY(0) rotate(-4deg);}to{transform:translateY(-18px) rotate(4deg);}}
+.ld-t{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--ochre);font-weight:700;}
+.ld-s{font-size:12px;color:var(--text3);}
+.ptrack{width:280px;height:5px;background:var(--cream3);border-radius:3px;overflow:hidden;}
+.pfill{height:100%;background:linear-gradient(90deg,var(--ochre),var(--terra));border-radius:3px;transition:width .3s;width:0;}
+
+/* APP */
+#app{display:none;flex-direction:column;height:100%;position:relative;z-index:1;}
+#app.sh{display:flex;}
+
+/* HEADER */
+#hdr{display:flex;align-items:center;gap:7px;padding:8px 14px;
+  background:var(--white);border-bottom:1px solid var(--cream3);
+  box-shadow:var(--s1);z-index:100;flex-shrink:0;overflow-x:auto;}
+.hbrand{display:flex;align-items:center;gap:7px;flex-shrink:0;}
+.hbrand .ico{font-size:20px;}
+.hbrand .nm{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--ochre);white-space:nowrap;}
+#htitle{flex:1;min-width:60px;font-size:12px;font-weight:600;color:var(--text2);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hsep{width:1px;height:20px;background:var(--cream3);flex-shrink:0;}
+.hbtn{display:flex;align-items:center;gap:4px;padding:5px 10px;border-radius:var(--rs);
+  border:1px solid var(--cream3);background:transparent;color:var(--text2);
+  font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;cursor:pointer;
+  transition:all var(--tr);white-space:nowrap;flex-shrink:0;}
+.hbtn:hover{border-color:var(--ochre);color:var(--ochre);background:rgba(200,151,58,.06);}
+.hbtn.on{background:var(--ochre);border-color:var(--ochre);color:#fff;}
+.hbtn.tts-on{background:var(--green);border-color:var(--green);color:#fff;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(74,124,89,.4);}50%{box-shadow:0 0 0 6px rgba(74,124,89,0);}}
+
+/* LAYOUT */
+#layout{flex:1;display:flex;overflow:hidden;}
+
+/* SIDEBAR */
+#sb{width:265px;flex-shrink:0;background:var(--white);border-right:1px solid var(--cream3);
+  display:flex;flex-direction:column;transition:width var(--tr),opacity var(--tr);overflow:hidden;}
+#sb.off{width:0;opacity:0;}
+.sbtabs{display:flex;border-bottom:1px solid var(--cream3);flex-shrink:0;}
+.sbtab{flex:1;padding:10px 4px;text-align:center;font-size:11px;font-weight:600;
+  color:var(--text3);cursor:pointer;transition:all var(--tr);border-bottom:2px solid transparent;}
+.sbtab.on{color:var(--ochre);border-bottom-color:var(--ochre);}
+.sbbody{flex:1;overflow-y:auto;}
+.sbp{display:none;flex-direction:column;padding:10px;gap:5px;}
+.sbp.on{display:flex;}
+#tgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;}
+.th{cursor:pointer;border-radius:7px;overflow:hidden;border:2px solid transparent;
+  transition:all var(--tr);background:var(--cream);box-shadow:var(--s1);}
+.th:hover{border-color:var(--ochre2);transform:translateY(-2px);box-shadow:var(--s2);}
+.th.cur{border-color:var(--ochre);box-shadow:0 0 0 3px rgba(200,151,58,.2);}
+.th canvas{width:100%;display:block;}.thn{text-align:center;font-size:10px;color:var(--text3);padding:3px 0;font-weight:500;}
+.bmit{display:flex;align-items:center;gap:7px;padding:9px 11px;border-radius:var(--rs);
+  background:var(--cream);cursor:pointer;transition:background var(--tr);font-size:12px;border:1px solid transparent;}
+.bmit:hover{background:rgba(200,151,58,.09);border-color:var(--cream3);}
+.bmico{color:var(--ochre);}.bmlb{flex:1;font-weight:500;color:var(--text);}
+.bmpg{font-size:10px;color:var(--text3);}.bmdl{padding:2px 5px;border-radius:4px;color:var(--text3);font-size:15px;transition:all var(--tr);}
+.bmdl:hover{color:var(--terra);}
+.tocit{display:flex;align-items:center;justify-content:space-between;padding:8px 11px;
+  border-radius:var(--rs);background:var(--cream);cursor:pointer;transition:background var(--tr);font-size:12px;border:1px solid transparent;}
+.tocit:hover{background:rgba(200,151,58,.09);}
+.toctit{flex:1;font-weight:500;color:var(--text);}.tocpg{font-size:10px;color:var(--text3);background:var(--cream2);padding:2px 5px;border-radius:4px;}
+.sbsin{width:100%;padding:8px 11px;border:1px solid var(--cream3);border-radius:var(--rs);
+  background:var(--cream);color:var(--text);font-family:'Manrope',sans-serif;font-size:12px;outline:none;transition:border-color var(--tr);}
+.sbsin:focus{border-color:var(--ochre);}.sbsin::placeholder{color:var(--text3);}
+.srit{padding:8px 11px;border-radius:var(--rs);background:var(--cream);cursor:pointer;transition:background var(--tr);border:1px solid transparent;}
+.srit:hover{background:rgba(200,151,58,.09);}
+.srpg{font-size:10px;font-weight:700;color:var(--ochre);margin-bottom:2px;}
+.srtx{font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+mark{background:rgba(200,151,58,.28);color:var(--text);border-radius:2px;padding:0 2px;}
+.sbmt{text-align:center;color:var(--text3);font-size:12px;padding:24px 10px;line-height:1.6;}
+.ann-item{padding:10px 12px;border-radius:var(--rs);background:var(--cream);border-left:3px solid var(--ochre);font-size:12px;cursor:pointer;transition:background var(--tr);margin-bottom:4px;}
+.ann-item:hover{background:rgba(200,151,58,.09);}
+.ann-pg{font-size:10px;color:var(--ochre);font-weight:700;margin-bottom:3px;}
+.ann-text{color:var(--text2);line-height:1.4;}.ann-note{color:var(--text3);font-style:italic;margin-top:3px;font-size:11px;}
+.ann-del{float:right;color:var(--text3);cursor:pointer;font-size:14px;padding:0 3px;}
+.ann-del:hover{color:var(--terra);}
+.stat-card{background:var(--cream);border-radius:var(--rs);padding:12px 14px;border:1px solid var(--cream3);margin-bottom:6px;}
+.stat-lbl{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.stat-val{font-size:22px;font-weight:800;color:var(--ochre);}
+.stat-sub{font-size:10px;color:var(--text3);margin-top:2px;}
+.stat-bar{height:4px;background:var(--cream3);border-radius:2px;margin-top:8px;overflow:hidden;}
+.stat-bar-fill{height:100%;background:linear-gradient(90deg,var(--ochre),var(--terra));border-radius:2px;transition:width .5s;}
+.cfg-row{display:flex;align-items:center;gap:8px;padding:5px 0;}
+.cfg-lbl{font-size:11px;color:var(--text3);min-width:56px;font-weight:600;}
+.cfg-sel{flex:1;padding:5px 8px;border:1px solid var(--cream3);border-radius:6px;
+  background:var(--cream);color:var(--text);font-size:11px;outline:none;font-family:'Manrope',sans-serif;}
+
+/* CENTER */
+#ctr{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+#viewer{flex:1;position:relative;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;background:var(--cream);}
+#fwrap{display:flex;align-items:center;justify-content:center;height:100%;width:100%;position:relative;}
+#bkel{position:relative;display:block;}
+.page{background:#fff;overflow:hidden;}
+.page canvas{display:block;width:100%;height:100%;}
+.nbtn{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;
+  background:var(--white);border:1px solid var(--cream3);box-shadow:var(--s2);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--text2);
+  z-index:20;transition:all var(--tr);}
+.nbtn:hover{background:var(--ochre);border-color:var(--ochre);color:#fff;transform:translateY(-50%) scale(1.08);}
+#nprev{left:10px;}#nnext{right:10px;}
+
+/* SCROLL */
+#sview{display:none;flex-direction:column;align-items:center;gap:18px;overflow-y:auto;height:100%;padding:20px 14px;}
+#sview.on{display:flex;}
+.scpg{position:relative;border-radius:10px;overflow:hidden;box-shadow:var(--s2);}
+.scpg canvas{display:block;max-width:100%;height:auto;}
+.scnum{position:absolute;bottom:7px;right:9px;background:rgba(0,0,0,.45);color:#fff;
+  font-size:10px;padding:2px 6px;border-radius:3px;pointer-events:none;}
+
+/* TTS BAR */
+#tts-bar{display:none;align-items:center;gap:8px;padding:6px 14px;
+  background:rgba(74,124,89,.1);border-bottom:1px solid rgba(74,124,89,.2);
+  font-size:11px;color:var(--green);flex-shrink:0;}
+#tts-bar.sh{display:flex;}
+#tts-pw{flex:1;height:3px;background:rgba(74,124,89,.2);border-radius:2px;cursor:pointer;}
+#tts-pf{height:100%;background:var(--green);border-radius:2px;transition:width .2s;width:0;}
+#tts-prev{flex:2;font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tbtn{background:transparent;border:1px solid rgba(74,124,89,.3);color:var(--green);
+  border-radius:6px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Manrope',sans-serif;transition:all var(--tr);}
+.tbtn:hover{background:rgba(74,124,89,.15);}
+
+/* ANN POPUP */
+#ann-bd{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:750;display:none;backdrop-filter:blur(2px);}
+#ann-bd.sh{display:block;}
+#ann-pop{position:fixed;z-index:800;background:var(--white);border:1px solid var(--cream3);
+  border-radius:var(--r);box-shadow:var(--s3);padding:16px;width:280px;display:none;
+  flex-direction:column;gap:10px;top:50%;left:50%;transform:translate(-50%,-50%);}
+#ann-pop.sh{display:flex;}
+#ann-pop h3{font-size:13px;font-weight:700;color:var(--text);}
+#ann-qtxt{font-size:12px;color:var(--ochre);font-style:italic;line-height:1.4;background:var(--cream);padding:8px 10px;border-radius:8px;}
+#ann-note{width:100%;padding:8px 10px;border:1px solid var(--cream3);border-radius:8px;
+  background:var(--cream);color:var(--text);font-family:'Manrope',sans-serif;font-size:12px;
+  outline:none;resize:none;height:60px;transition:border-color var(--tr);}
+#ann-note:focus{border-color:var(--ochre);}
+.popbtns{display:flex;gap:6px;}
+
+/* SHARE POPUP */
+#share-bd{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:750;display:none;backdrop-filter:blur(2px);}
+#share-bd.sh{display:block;}
+#share-pop{position:fixed;z-index:800;background:var(--white);border:1px solid var(--cream3);
+  border-radius:var(--r);box-shadow:var(--s3);padding:20px;width:320px;display:none;
+  flex-direction:column;gap:12px;top:50%;left:50%;transform:translate(-50%,-50%);}
+#share-pop.sh{display:flex;}
+#share-pop h3{font-size:14px;font-weight:700;color:var(--text);}
+#share-wrap{border-radius:10px;overflow:hidden;box-shadow:var(--s2);}
+#share-cv{max-width:100%;display:block;}
+.popbtns2{display:flex;gap:6px;}
+
+/* FOOTER */
+#ftr{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:6px 14px;
+  background:var(--white);border-top:1px solid var(--cream3);
+  box-shadow:0 -2px 10px rgba(107,66,38,.06);flex-shrink:0;z-index:100;}
+#finfo{font-size:11px;color:var(--text3);white-space:nowrap;}
+.pjw{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3);}
+.pji{width:44px;text-align:center;padding:3px 5px;border:1px solid var(--cream3);border-radius:5px;
+  background:var(--cream);color:var(--text);font-family:'Manrope',sans-serif;font-size:11px;outline:none;}
+.pji:focus{border-color:var(--ochre);}
+.prw{flex:1;min-width:50px;height:4px;background:var(--cream3);border-radius:2px;cursor:pointer;overflow:hidden;}
+.prf{height:100%;pointer-events:none;background:linear-gradient(90deg,var(--ochre),var(--terra));border-radius:2px;transition:width .3s;}
+.zrow{display:flex;align-items:center;gap:3px;}
+.zbtn{width:24px;height:24px;border-radius:5px;border:1px solid var(--cream3);background:transparent;
+  color:var(--text2);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all var(--tr);}
+.zbtn:hover{border-color:var(--ochre);color:var(--ochre);}
+#zlbl{font-size:10px;color:var(--text3);min-width:32px;text-align:center;font-weight:600;}
+
+.btn{padding:8px 16px;border-radius:var(--rs);border:none;font-family:'Manrope',sans-serif;
+  font-size:12px;font-weight:700;cursor:pointer;transition:all var(--tr);}
+.btn-p{background:linear-gradient(135deg,var(--ochre),var(--terra));color:#fff;}
+.btn-p:hover{opacity:.9;transform:translateY(-1px);}
+.btn-g{background:transparent;border:1px solid var(--cream3);color:var(--text2);}
+.btn-g:hover{border-color:var(--ochre);color:var(--ochre);}
+
+#rbadge{position:fixed;bottom:58px;right:14px;z-index:200;background:var(--white);
+  border:1px solid var(--cream3);border-radius:50px;padding:5px 12px;
+  font-size:11px;font-weight:700;color:var(--ochre);box-shadow:var(--s2);display:none;pointer-events:none;}
+#rbadge.sh{display:block;}
+#toast{position:fixed;bottom:54px;left:50%;transform:translateX(-50%) translateY(14px);
+  background:var(--brown);color:var(--ochre2);border:1px solid rgba(200,151,58,.3);
+  padding:9px 18px;border-radius:12px;font-size:12px;font-weight:500;
+  box-shadow:var(--s3);opacity:0;transition:all .3s;z-index:9999;pointer-events:none;white-space:nowrap;}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+
+::-webkit-scrollbar{width:4px;height:4px;}::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--cream3);border-radius:2px;}
+::-webkit-scrollbar-thumb:hover{background:var(--ochre2);}
+@media(max-width:768px){
+  #sb{position:absolute;left:0;top:0;height:100%;z-index:50;}
+  #sb:not(.off){box-shadow:4px 0 24px rgba(107,66,38,.25);}
+  .hbrand .nm{display:none;}.nbtn{width:36px;height:36px;font-size:15px;}
+}
+</style>
+</head>
+<body>
+<div id="mesh"><div class="orb"></div><div class="orb"></div><div class="orb"></div></div>
+
+<!-- LOADING -->
+<div id="ld">
+  <div class="ld-bk">📖</div>
+  <div class="ld-t" id="ldt">Открываем «Наследие Кубани»…</div>
+  <div class="ld-s" id="lds">Загрузка файла</div>
+  <div class="ptrack"><div class="pfill" id="pf"></div></div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div id="hdr">
+    <div class="hbrand"><span class="ico">📖</span><span class="nm">Читалка</span></div>
+    <div class="hsep"></div>
+    <div id="htitle">Наследие Кубани</div>
+    <div class="hsep"></div>
+    <button class="hbtn" id="bsb" onclick="toggleSB()">☰</button>
+    <button class="hbtn on" id="bflip" onclick="setMode('flip')">📚 Книга</button>
+    <button class="hbtn" id="bscr" onclick="setMode('scroll')">📜 Лента</button>
+    <div class="hsep"></div>
+    <button class="hbtn" id="btts" onclick="toggleTTS()">🔊 Озвучить</button>
+    <button class="hbtn" id="bbm" onclick="addBM()">🔖</button>
+    <button class="hbtn" id="bhl" onclick="toggleHL()">✏️ Выделить</button>
+    <button class="hbtn" id="bshare" onclick="openShare()">↗ Цитата</button>
+    <div class="hsep"></div>
+    <button class="hbtn" id="btheme" onclick="cycleTheme()">🌙</button>
+    <button class="hbtn" onclick="goFS()">⛶</button>
+    <button class="hbtn" onclick="dlPDF()">⬇</button>
+  </div>
+
+  <div id="tts-bar">
+    <button class="tbtn" id="tts-pp" onclick="ttsPP()">⏸ Пауза</button>
+    <button class="tbtn" onclick="ttsStop()">⏹</button>
+    <div id="tts-prev">Читаю…</div>
+    <div id="tts-pw"><div id="tts-pf"></div></div>
+    <button class="tbtn" onclick="ttsSpd(-0.25)">🐢</button>
+    <span id="tts-slbl" style="font-size:11px;color:var(--green);font-weight:700;min-width:22px;">1×</span>
+    <button class="tbtn" onclick="ttsSpd(0.25)">🐇</button>
+  </div>
+
+  <div id="layout">
+    <div id="sb">
+      <div class="sbtabs">
+        <div class="sbtab on" id="st0" onclick="sbTab(0)">📋</div>
+        <div class="sbtab" id="st1" onclick="sbTab(1)">🔖</div>
+        <div class="sbtab" id="st2" onclick="sbTab(2)">📑</div>
+        <div class="sbtab" id="st3" onclick="sbTab(3)">🔍</div>
+        <div class="sbtab" id="st4" onclick="sbTab(4)">✏️</div>
+        <div class="sbtab" id="st5" onclick="sbTab(5)">📊</div>
+        <div class="sbtab" id="st6" onclick="sbTab(6)">⚙️</div>
+      </div>
+      <div class="sbbody">
+        <div class="sbp on" id="sp0"><div id="tgrid"></div></div>
+        <div class="sbp" id="sp1"><div id="bmlist"><div class="sbmt">Нет закладок.<br>Нажмите 🔖</div></div></div>
+        <div class="sbp" id="sp2"><div id="toclist"><div class="sbmt">Оглавление не найдено</div></div></div>
+        <div class="sbp" id="sp3">
+          <input class="sbsin" id="sbsearch" placeholder="Поиск по тексту…" oninput="doSearch(this.value)">
+          <div id="srlist"></div>
+        </div>
+        <div class="sbp" id="sp4"><div id="annlist"><div class="sbmt">Нет заметок.<br>Включите ✏️ и выделите текст.</div></div></div>
+        <div class="sbp" id="sp5">
+          <div class="stat-card"><div class="stat-lbl">Прочитано</div><div class="stat-val" id="st-pct">0%</div><div class="stat-sub" id="st-pgs">0 из 0 стр.</div><div class="stat-bar"><div class="stat-bar-fill" id="st-bar" style="width:0%"></div></div></div>
+          <div class="stat-card"><div class="stat-lbl">Время чтения</div><div class="stat-val" id="st-time">0 мин</div><div class="stat-sub">текущая сессия</div></div>
+          <div class="stat-card"><div class="stat-lbl">Скорость</div><div class="stat-val" id="st-spd">—</div><div class="stat-sub">стр/мин</div></div>
+          <div class="stat-card"><div class="stat-lbl">Закладок / Заметок</div><div class="stat-val" id="st-counts">0 / 0</div></div>
+        </div>
+        <div class="sbp" id="sp6" style="gap:8px;padding:12px;">
+          <div class="cfg-row"><span class="cfg-lbl">Тема:</span>
+            <select class="cfg-sel" id="theme-sel" onchange="setTheme(this.value)">
+              <option value="light">☀️ Светлая</option>
+              <option value="dark">🌙 Тёмная</option>
+              <option value="night">🌌 Ночная</option>
+              <option value="sepia">📜 Сепия</option>
+            </select>
+          </div>
+          <div class="cfg-row"><span class="cfg-lbl">Голос:</span><select class="cfg-sel" id="voice-sel"></select></div>
+          <div class="cfg-row"><span class="cfg-lbl">Скорость:</span>
+            <input type="range" min="0.5" max="2" step="0.25" value="1" id="speed-rng"
+              oninput="ttsSetRate(parseFloat(this.value))" style="flex:1;accent-color:var(--ochre);">
+            <span id="speed-val" style="font-size:11px;color:var(--ochre);font-weight:700;min-width:26px;">1×</span>
+          </div>
+          <div class="cfg-row"><span class="cfg-lbl">Высота:</span>
+            <input type="range" min="0.5" max="2" step="0.1" value="1" id="pitch-rng"
+              oninput="document.getElementById('pitch-val').textContent=parseFloat(this.value).toFixed(1)+'×'" style="flex:1;accent-color:var(--ochre);">
+            <span id="pitch-val" style="font-size:11px;color:var(--ochre);font-weight:700;min-width:26px;">1×</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="ctr">
+      <div id="viewer">
+        <div id="fwrap">
+          <button class="nbtn" id="nprev" onclick="prevPg()">‹</button>
+          <div id="bkel"></div>
+          <button class="nbtn" id="nnext" onclick="nextPg()">›</button>
+        </div>
+        <div id="sview"></div>
+      </div>
+      <div id="ftr">
+        <div id="finfo">Стр. 1 из 1</div>
+        <div class="pjw">→ <input type="number" class="pji" id="pji" min="1" value="1" onkeydown="if(event.key==='Enter')jump()"></div>
+        <div class="prw" onclick="seekProg(event)"><div class="prf" id="prf" style="width:0%"></div></div>
+        <div class="zrow">
+          <button class="zbtn" onclick="zm(-0.25)">−</button>
+          <span id="zlbl">100%</span>
+          <button class="zbtn" onclick="zm(0.25)">+</button>
+          <button class="zbtn" onclick="zm(0)">⊙</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ANN POPUP -->
+<div id="ann-bd" onclick="closeAnn()"></div>
+<div id="ann-pop">
+  <h3>✏️ Добавить заметку</h3>
+  <div id="ann-qtxt"></div>
+  <textarea id="ann-note" placeholder="Ваша заметка…"></textarea>
+  <div class="popbtns">
+    <button class="btn btn-p" onclick="saveAnn()" style="flex:1">Сохранить</button>
+    <button class="btn btn-g" onclick="closeAnn()">Отмена</button>
+  </div>
+</div>
+
+<!-- SHARE POPUP -->
+<div id="share-bd" onclick="closeShare()"></div>
+<div id="share-pop">
+  <h3>↗ Поделиться цитатой</h3>
+  <div id="share-wrap"><canvas id="share-cv" width="560" height="200"></canvas></div>
+  <div class="popbtns2">
+    <button class="btn btn-p" onclick="dlShare()" style="flex:1">⬇ Скачать картинку</button>
+    <button class="btn btn-g" onclick="closeShare()">Закрыть</button>
+  </div>
+</div>
+
+<div id="rbadge"></div>
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════
+//  CONFIG
+// ══════════════════════════════════════
+const PDF_URL   = 'https://qigod888.github.io/1/sbornik.pdf';
+const BOOK_NAME = 'Наследие Кубани';
+const SK = 'nk3-';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// ══════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════
+let pdf=null, total=0, cur=1, flip=null, flipReady=false;
+let mode='flip', zoom=1, theme='light';
+let bookmarks=[], annotations=[], pageTexts={};
+let hlMode=false, pendingHL=null;
+let ttsActive=false, ttsRate=1, ttsPaused=false, voices=[], ttsVoiceIdx=0;
+let readStart=Date.now(), readTime=0, pagesRead=new Set(), speedLog=[];
+
+// ══════════════════════════════════════
+//  BOOT — автозагрузка
+// ══════════════════════════════════════
+window.addEventListener('load', () => {
+  loadStored();
+  startLoad();
+});
+
+async function startLoad() {
+  prog(0, 'Открываем «Наследие Кубани»…', 'Загрузка файла');
+  try {
+    const task = pdfjsLib.getDocument({ url: PDF_URL, withCredentials: false });
+    task.onProgress = p => { if(p.total) prog(p.loaded/p.total*30, 'Загружаем…', Math.round(p.loaded/p.total*100)+'%'); };
+    pdf = await task.promise;
+    total = pdf.numPages;
+    document.getElementById('pji').max = total;
+    prog(32, 'Рендерим страницы…', 'Это займёт немного времени');
+    await renderAll();
+    await buildTOC();
+    populateVoices();
+    prog(100, 'Готово! ✨', 'Приятного чтения');
+    setTimeout(() => {
+      document.getElementById('ld').style.display = 'none';
+      document.getElementById('app').classList.add('sh');
+      restorePos();
+      // Даём браузеру время отрисовать layout перед инициализацией FlipBook
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            if (mode === 'flip') initFlip();
+            else setMode('scroll');
+            updateUI();
+            startTimer();
+          }, 150);
+        });
+      });
+    }, 400);
+  } catch(e) {
+    document.getElementById('ldt').textContent = 'Ошибка загрузки';
+    document.getElementById('lds').textContent = e.message;
+  }
+}
+
+function prog(pct, t, s) {
+  document.getElementById('pf').style.width = pct + '%';
+  document.getElementById('ldt').textContent = t;
+  document.getElementById('lds').textContent = s;
+}
+
+// ══════════════════════════════════════
+//  RENDER ALL PAGES
+// ══════════════════════════════════════
+async function renderAll() {
+  const bkel = document.getElementById('bkel');
+  const sv   = document.getElementById('sview');
+  const tg   = document.getElementById('tgrid');
+  bkel.innerHTML = ''; sv.innerHTML = ''; tg.innerHTML = '';
+
+  const pg1 = await pdf.getPage(1);
+  const vp0 = pg1.getViewport({ scale: 1 });
+
+  // Считаем scale от реального доступного пространства
+  const viewerW = window.innerWidth - 265; // минус сайдбар
+  const maxPgW  = Math.min(Math.floor(viewerW / 2 - 60), 560);
+  const scale   = maxPgW / vp0.width;
+
+  for (let i = 1; i <= total; i++) {
+    prog(32 + i/total*62, `Страница ${i} из ${total}…`, Math.round(i/total*100) + '%');
+    const page = await pdf.getPage(i);
+    const vp   = page.getViewport({ scale });
+
+    // Текст для TTS и поиска
+    try {
+      const tc = await page.getTextContent();
+      pageTexts[i] = tc.items.map(x => x.str).join(' ').replace(/\s+/g,' ').trim();
+    } catch(e) { pageTexts[i] = ''; }
+
+    // ── FlipBook страница
+    const div = document.createElement('div');
+    div.className = 'page';
+    div.style.width  = Math.round(vp.width)  + 'px';
+    div.style.height = Math.round(vp.height) + 'px';
+    const c = document.createElement('canvas');
+    c.width = Math.round(vp.width);
+    c.height = Math.round(vp.height);
+    await page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise;
+    div.appendChild(c);
+    bkel.appendChild(div);
+
+    // ── Scroll страница
+    const sw = document.createElement('div'); sw.className = 'scpg'; sw.dataset.page = i;
+    const sc2 = document.createElement('canvas');
+    sc2.width = Math.round(vp.width); sc2.height = Math.round(vp.height);
+    sc2.getContext('2d').drawImage(c, 0, 0);
+    const pn = document.createElement('div'); pn.className = 'scnum'; pn.textContent = i;
+    sw.appendChild(sc2); sw.appendChild(pn); sv.appendChild(sw);
+
+    // ── Миниатюра
+    const tvp = page.getViewport({ scale: 0.17 });
+    const tw  = document.createElement('div');
+    tw.className = 'th' + (i === 1 ? ' cur' : '');
+    tw.dataset.page = i;
+    tw.onclick = () => go(i);
+    const tc2 = document.createElement('canvas');
+    tc2.width = Math.round(tvp.width); tc2.height = Math.round(tvp.height);
+    await page.render({ canvasContext: tc2.getContext('2d'), viewport: tvp }).promise;
+    const tn = document.createElement('div'); tn.className = 'thn'; tn.textContent = i;
+    tw.appendChild(tc2); tw.appendChild(tn); tg.appendChild(tw);
+  }
+}
+
+// ══════════════════════════════════════
+//  FLIPBOOK INIT
+// ══════════════════════════════════════
+function initFlip() {
+  const el    = document.getElementById('bkel');
+  const pages = Array.from(el.querySelectorAll('.page'));
+  if (!pages.length) return;
+
+  const ctrEl = document.getElementById('ctr');
+  const ctrW  = ctrEl.getBoundingClientRect().width || (window.innerWidth - 265);
+  const ctrH  = ctrEl.getBoundingClientRect().height || window.innerHeight - 100;
+
+  const firstCanvas = pages[0].querySelector('canvas');
+  const srcW = firstCanvas ? firstCanvas.width  : 500;
+  const srcH = firstCanvas ? firstCanvas.height : 700;
+
+  // Максимальный размер одной страницы чтобы влезли 2 + стрелки
+  const maxW = Math.floor(ctrW / 2 - 56);
+  const maxH = Math.floor(ctrH - 20);
+  const scaleByW = maxW / srcW;
+  const scaleByH = maxH / srcH;
+  const sc = Math.min(scaleByW, scaleByH, 1);
+
+  const fw = Math.max(Math.round(srcW * sc), 100);
+  const fh = Math.max(Math.round(srcH * sc), 120);
+
+  // Применяем размер к страницам
+  pages.forEach(p => {
+    p.style.width  = fw + 'px';
+    p.style.height = fh + 'px';
+    p.style.background = '#fff';
+  });
+
+  if (flip) { try { flip.destroy(); } catch(e) {} flip = null; }
+
+  flip = new St.PageFlip(el, {
+    width:  fw,
+    height: fh,
+    size:   'fixed',
+    maxShadowOpacity: 0.5,
+    showCover: total >= 3,
+    mobileScrollSupport: false,
+    usePortrait: false,
+    autoSize: false,
+    flippingTime: 700,
+    useMouseEvents: true,
+  });
+
+  flip.loadFromHTML(pages);
+  flipReady = true;
+
+  flip.on('flip', e => {
+    cur = e.data + 1;
+    trackPage();
+    updateUI();
+    savePos();
+  });
+
+  // Touch swipe
+  let tx0 = null;
+  el.addEventListener('touchstart', e => { tx0 = e.touches[0].clientX; }, { passive: true });
+  el.addEventListener('touchend',   e => {
+    if (tx0 === null) return;
+    const dx = e.changedTouches[0].clientX - tx0;
+    if (Math.abs(dx) > 50) { dx < 0 ? nextPg() : prevPg(); }
+    tx0 = null;
+  }, { passive: true });
+
+  // Переходим на сохранённую страницу
+  if (cur > 1) {
+    setTimeout(() => {
+      try { flip.turnToPage(cur - 1); } catch(e) {}
+    }, 100);
+  }
+}
+
+// ══════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════
+function go(n, anim = true) {
+  n = Math.max(1, Math.min(n, total));
+  cur = n;
+  if (mode === 'flip' && flip && flipReady) {
+    try { flip.turnToPage(n - 1); } catch(e) {}
+  } else {
+    const w = document.querySelector(`#sview .scpg[data-page="${n}"]`);
+    if (w) w.scrollIntoView({ behavior: anim ? 'smooth' : 'auto', block: 'start' });
+  }
+  trackPage(); updateUI(); savePos();
+}
+
+function prevPg() {
+  if (mode === 'flip' && flip && flipReady) { try { flip.flipPrev(); } catch(e) { go(cur - 1); } }
+  else go(cur - 1);
+}
+function nextPg() {
+  if (mode === 'flip' && flip && flipReady) { try { flip.flipNext(); } catch(e) { go(cur + 1); } }
+  else go(cur + 1);
+}
+function jump() { const v = parseInt(document.getElementById('pji').value); if (!isNaN(v)) go(v); }
+function seekProg(e) {
+  const r = e.currentTarget.getBoundingClientRect();
+  go(Math.max(1, Math.round((e.clientX - r.left) / r.width * total)));
+}
+
+// ══════════════════════════════════════
+//  VIEW MODE
+// ══════════════════════════════════════
+function setMode(m) {
+  mode = m;
+  const fw = document.getElementById('fwrap');
+  const sv = document.getElementById('sview');
+  document.getElementById('bflip').classList.toggle('on', m === 'flip');
+  document.getElementById('bscr').classList.toggle('on',  m === 'scroll');
+  if (m === 'flip') {
+    fw.style.display = 'flex'; sv.classList.remove('on');
+    if (!flipReady && pdf) {
+      requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(initFlip, 100)));
+    } else { go(cur, false); }
+  } else {
+    fw.style.display = 'none'; sv.classList.add('on');
+    setTimeout(() => go(cur, false), 30);
+    trackScroll();
+  }
+  localStorage.setItem(SK + 'mode', m);
+}
+
+function trackScroll() {
+  const sv = document.getElementById('sview');
+  sv.onscroll = () => {
+    for (const it of sv.querySelectorAll('.scpg')) {
+      const r = it.getBoundingClientRect();
+      if (r.top >= 0 && r.top < window.innerHeight * 0.55) {
+        const p = parseInt(it.dataset.page);
+        if (p !== cur) { cur = p; trackPage(); updateUI(); savePos(); }
+        break;
+      }
+    }
+  };
+}
+
+// ══════════════════════════════════════
+//  UI
+// ══════════════════════════════════════
+function updateUI() {
+  document.getElementById('finfo').textContent = `Стр. ${cur} из ${total}`;
+  document.getElementById('pji').value = cur;
+  const pct = total > 1 ? (cur - 1) / (total - 1) * 100 : 100;
+  document.getElementById('prf').style.width = pct + '%';
+  const badge = document.getElementById('rbadge');
+  badge.textContent = Math.round(pct) + '% прочитано';
+  badge.classList.toggle('sh', pct > 0);
+  document.querySelectorAll('.th').forEach(t => t.classList.toggle('cur', parseInt(t.dataset.page) === cur));
+  updateStats();
+}
+
+// ══════════════════════════════════════
+//  TTS
+// ══════════════════════════════════════
+function populateVoices() {
+  const load = () => {
+    let all = window.speechSynthesis.getVoices();
+    voices = all.filter(v => v.lang.startsWith('ru'));
+    if (!voices.length) voices = all;
+    const sel = document.getElementById('voice-sel'); sel.innerHTML = '';
+    voices.forEach((v, i) => {
+      const o = document.createElement('option');
+      o.value = i; o.textContent = v.name + ' (' + v.lang + ')'; sel.appendChild(o);
+    });
+    const ruIdx = voices.findIndex(v => v.lang.startsWith('ru'));
+    if (ruIdx >= 0) { ttsVoiceIdx = ruIdx; sel.value = ruIdx; }
+  };
+  if (window.speechSynthesis.getVoices().length) load();
+  window.speechSynthesis.onvoiceschanged = load;
+  document.getElementById('voice-sel').onchange = e => { ttsVoiceIdx = parseInt(e.target.value); if (ttsActive) restartTTS(); };
+}
+
+function toggleTTS() {
+  if (ttsActive) ttsStop(); else ttsRead(cur);
+}
+function ttsRead(pgNum) {
+  const text = pageTexts[pgNum] || '';
+  if (!text) { toast('На этой странице нет текста'); return; }
+  window.speechSynthesis.cancel();
+  ttsActive = true; ttsPaused = false;
+  document.getElementById('btts').classList.add('tts-on');
+  document.getElementById('btts').textContent = '⏹ Стоп';
+  document.getElementById('tts-bar').classList.add('sh');
+  document.getElementById('tts-pp').textContent = '⏸ Пауза';
+
+  const words = text.split(' '); let wi = 0;
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.rate  = ttsRate;
+  utt.pitch = parseFloat(document.getElementById('pitch-rng').value) || 1;
+  if (voices[ttsVoiceIdx]) utt.voice = voices[ttsVoiceIdx];
+  utt.lang = 'ru-RU';
+  utt.onboundary = e => {
+    if (e.name === 'word') {
+      wi++;
+      document.getElementById('tts-pf').style.width = Math.round(wi / words.length * 100) + '%';
+      document.getElementById('tts-prev').textContent = words.slice(Math.max(0, wi - 1), wi + 6).join(' ');
+    }
+  };
+  utt.onend = () => { if (ttsActive && cur < total) { go(cur + 1); setTimeout(() => ttsRead(cur), 300); } else ttsStop(); };
+  utt.onerror = () => ttsStop();
+  window.speechSynthesis.speak(utt);
+  toast('🔊 Читаю стр. ' + pgNum);
+}
+function ttsPP() {
+  if (ttsPaused) { window.speechSynthesis.resume(); ttsPaused = false; document.getElementById('tts-pp').textContent = '⏸ Пауза'; }
+  else { window.speechSynthesis.pause(); ttsPaused = true; document.getElementById('tts-pp').textContent = '▶ Играть'; }
+}
+function ttsStop() {
+  window.speechSynthesis.cancel(); ttsActive = false; ttsPaused = false;
+  document.getElementById('btts').classList.remove('tts-on');
+  document.getElementById('btts').textContent = '🔊 Озвучить';
+  document.getElementById('tts-bar').classList.remove('sh');
+}
+function restartTTS() { if (ttsActive) { ttsStop(); setTimeout(() => ttsRead(cur), 100); } }
+function ttsSpd(d) { ttsRate = Math.max(0.5, Math.min(2, Math.round((ttsRate + d) * 4) / 4)); ttsSetRate(ttsRate); }
+function ttsSetRate(v) {
+  ttsRate = v;
+  const lbl = v + '×';
+  document.getElementById('tts-slbl').textContent  = lbl;
+  document.getElementById('speed-val').textContent = lbl;
+  document.getElementById('speed-rng').value = v;
+  if (ttsActive) restartTTS();
+}
+
+// ══════════════════════════════════════
+//  HIGHLIGHT + ANNOTATIONS
+// ══════════════════════════════════════
+function toggleHL() {
+  hlMode = !hlMode;
+  document.getElementById('bhl').classList.toggle('on', hlMode);
+  document.body.style.cursor = hlMode ? 'text' : 'default';
+  toast(hlMode ? '✏️ Выделите текст на странице' : 'Режим выделения выключен');
+}
+document.addEventListener('mouseup', () => {
+  if (!hlMode || !pdf) return;
+  const sel = window.getSelection();
+  if (!sel || sel.isCollapsed || !sel.toString().trim()) return;
+  const txt = sel.toString().trim().substring(0, 300);
+  pendingHL = { text: txt, page: cur };
+  sel.removeAllRanges();
+  document.getElementById('ann-qtxt').textContent = '"' + txt + '"';
+  document.getElementById('ann-note').value = '';
+  document.getElementById('ann-pop').classList.add('sh');
+  document.getElementById('ann-bd').classList.add('sh');
+  setTimeout(() => document.getElementById('ann-note').focus(), 80);
+});
+function closeAnn() {
+  document.getElementById('ann-pop').classList.remove('sh');
+  document.getElementById('ann-bd').classList.remove('sh');
+  pendingHL = null;
+}
+function saveAnn() {
+  if (!pendingHL) return;
+  annotations.push({ id: Date.now(), page: pendingHL.page, text: pendingHL.text, note: document.getElementById('ann-note').value, t: Date.now() });
+  saveAnns(); renderAnns(); closeAnn();
+  toast('✏️ Заметка сохранена на стр. ' + pendingHL.page);
+}
+function delAnn(id) { annotations = annotations.filter(a => a.id !== id); saveAnns(); renderAnns(); }
+function renderAnns() {
+  const list = document.getElementById('annlist');
+  if (!annotations.length) { list.innerHTML = '<div class="sbmt">Нет заметок.<br>Включите ✏️ и выделите текст.</div>'; return; }
+  list.innerHTML = '';
+  [...annotations].sort((a,b) => a.page - b.page).forEach(a => {
+    const d = document.createElement('div'); d.className = 'ann-item';
+    d.innerHTML = `<span class="ann-del" onclick="event.stopPropagation();delAnn(${a.id})">×</span><div class="ann-pg">Стр. ${a.page}</div><div class="ann-text">"${a.text.substring(0,80)}${a.text.length>80?'…':''}"</div>${a.note?`<div class="ann-note">${a.note}</div>`:''}`;
+    d.onclick = () => go(a.page); list.appendChild(d);
+  });
+}
+function saveAnns() { localStorage.setItem(SK + 'anns', JSON.stringify(annotations)); }
+
+// ══════════════════════════════════════
+//  SHARE / QUOTE IMAGE
+// ══════════════════════════════════════
+function openShare() {
+  const txt = (pageTexts[cur] || '').substring(0, 160).trim() + '…';
+  const cv = document.getElementById('share-cv');
+  const ctx = cv.getContext('2d');
+  ctx.clearRect(0,0,560,200);
+  ctx.fillStyle = '#faf7f2'; ctx.fillRect(0,0,560,200);
+  const g = ctx.createLinearGradient(0,0,560,0);
+  g.addColorStop(0,'#c8973a'); g.addColorStop(1,'#b5533c');
+  ctx.fillStyle = g; ctx.fillRect(0,0,560,4);
+  ctx.fillStyle = 'rgba(200,151,58,.12)'; ctx.font = 'bold 60px Georgia'; ctx.fillText('"',18,68);
+  ctx.fillStyle = '#2a1f14'; ctx.font = '500 13px Manrope,sans-serif';
+  const words = txt.split(' '); let line='', y=44, x=50;
+  for (const w of words) { const t = line+w+' '; if (ctx.measureText(t).width > 490 && line) { ctx.fillText(line,x,y); line=w+' '; y+=20; if(y>155)break; } else line=t; }
+  ctx.fillText(line,x,y);
+  ctx.fillStyle = '#c8973a'; ctx.font = '600 10px Manrope,sans-serif';
+  ctx.fillText(`— стр. ${cur} · Наследие Кубани · dolina-vetrov.ru`, 50, 183);
+  ctx.fillStyle = g; ctx.fillRect(0,196,560,4);
+  document.getElementById('share-pop').classList.add('sh');
+  document.getElementById('share-bd').classList.add('sh');
+}
+function closeShare() {
+  document.getElementById('share-pop').classList.remove('sh');
+  document.getElementById('share-bd').classList.remove('sh');
+}
+function dlShare() {
+  const a = document.createElement('a'); a.download = `цитата-стр${cur}.png`;
+  a.href = document.getElementById('share-cv').toDataURL(); a.click(); toast('Картинка скачана!');
+}
+
+// ══════════════════════════════════════
+//  BOOKMARKS
+// ══════════════════════════════════════
+function addBM() {
+  if (bookmarks.find(b => b.page === cur)) { toast('Закладка уже есть'); return; }
+  bookmarks.push({ page: cur, label: `Страница ${cur}`, t: Date.now() });
+  saveBMs(); renderBMs(); toast('🔖 Закладка: стр. ' + cur);
+}
+function delBM(p) { bookmarks = bookmarks.filter(b => b.page !== p); saveBMs(); renderBMs(); }
+function renderBMs() {
+  const list = document.getElementById('bmlist');
+  if (!bookmarks.length) { list.innerHTML = '<div class="sbmt">Нет закладок.<br>Нажмите 🔖</div>'; return; }
+  list.innerHTML = '';
+  [...bookmarks].sort((a,b) => a.page-b.page).forEach(bm => {
+    const d = document.createElement('div'); d.className = 'bmit';
+    d.innerHTML = `<span class="bmico">🔖</span><span class="bmlb">${bm.label}</span><span class="bmpg">стр.${bm.page}</span><span class="bmdl" onclick="event.stopPropagation();delBM(${bm.page})">×</span>`;
+    d.onclick = () => go(bm.page); list.appendChild(d);
+  });
+}
+function saveBMs() { localStorage.setItem(SK + 'bm', JSON.stringify(bookmarks)); }
+
+// ══════════════════════════════════════
+//  TOC
+// ══════════════════════════════════════
+async function buildTOC() {
+  const tl = document.getElementById('toclist');
+  try {
+    const outline = await pdf.getOutline();
+    if (!outline || !outline.length) return;
+    tl.innerHTML = '';
+    for (const item of outline) {
+      let pgN = '?';
+      try { if (item.dest) { const dest = Array.isArray(item.dest) ? item.dest : await pdf.getDestination(item.dest); if (dest) pgN = await pdf.getPageIndex(dest[0]) + 1; } } catch(e) {}
+      const d = document.createElement('div'); d.className = 'tocit';
+      d.innerHTML = `<span class="toctit">${item.title}</span><span class="tocpg">${pgN}</span>`;
+      if (pgN !== '?') d.onclick = () => go(parseInt(pgN));
+      tl.appendChild(d);
+    }
+  } catch(e) {}
+}
+
+// ══════════════════════════════════════
+//  SEARCH
+// ══════════════════════════════════════
+let stimer = null;
+async function doSearch(q) {
+  clearTimeout(stimer);
+  const rl = document.getElementById('srlist');
+  if (!q || q.length < 3) { rl.innerHTML = ''; return; }
+  stimer = setTimeout(() => {
+    rl.innerHTML = '<div class="sbmt">Поиск…</div>';
+    const found = [];
+    for (let i = 1; i <= total; i++) {
+      const tx = pageTexts[i] || '';
+      const idx = tx.toLowerCase().indexOf(q.toLowerCase());
+      if (idx !== -1) found.push({ page: i, snip: tx.substring(Math.max(0, idx-20), idx+55) });
+    }
+    if (!found.length) { rl.innerHTML = '<div class="sbmt">Ничего не найдено</div>'; return; }
+    rl.innerHTML = '';
+    found.slice(0, 30).forEach(r => {
+      const d = document.createElement('div'); d.className = 'srit';
+      const hi = r.snip.replace(new RegExp(q,'gi'), m => `<mark>${m}</mark>`);
+      d.innerHTML = `<div class="srpg">Стр. ${r.page}</div><div class="srtx">${hi}</div>`;
+      d.onclick = () => go(r.page); rl.appendChild(d);
+    });
+  }, 400);
+}
+
+// ══════════════════════════════════════
+//  STATS
+// ══════════════════════════════════════
+function trackPage() {
+  pagesRead.add(cur);
+  speedLog.push({ p: cur, t: Date.now() });
+  if (speedLog.length > 12) speedLog.shift();
+}
+function startTimer() {
+  readStart = Date.now();
+  setInterval(() => { readTime = Math.floor((Date.now() - readStart) / 1000); updateStats(); }, 15000);
+}
+function updateStats() {
+  const pct = total > 0 ? Math.round(pagesRead.size / total * 100) : 0;
+  document.getElementById('st-pct').textContent = pct + '%';
+  document.getElementById('st-pgs').textContent = pagesRead.size + ' из ' + total + ' стр.';
+  document.getElementById('st-bar').style.width = pct + '%';
+  const mins = Math.floor(readTime / 60);
+  document.getElementById('st-time').textContent = mins > 0 ? mins + ' мин' : '< 1 мин';
+  if (speedLog.length >= 2) {
+    const dt = (speedLog[speedLog.length-1].t - speedLog[0].t) / 60000;
+    document.getElementById('st-spd').textContent = dt > 0 ? Math.round(speedLog.length / dt) : '—';
+  }
+  document.getElementById('st-counts').textContent = bookmarks.length + ' / ' + annotations.length;
+}
+
+// ══════════════════════════════════════
+//  ZOOM (scroll mode)
+// ══════════════════════════════════════
+function zm(d) {
+  if (d === 0) zoom = 1; else zoom = Math.max(0.5, Math.min(3, zoom + d));
+  document.getElementById('zlbl').textContent = Math.round(zoom * 100) + '%';
+  document.querySelectorAll('#sview canvas').forEach(c => c.style.maxWidth = (zoom * 100) + '%');
+}
+
+// ══════════════════════════════════════
+//  THEME
+// ══════════════════════════════════════
+const THEMES = ['light','dark','night','sepia'];
+const TICONS = { light:'🌙', dark:'🌅', night:'☀️', sepia:'📖' };
+function cycleTheme() { setTheme(THEMES[(THEMES.indexOf(theme)+1) % THEMES.length]); }
+function setTheme(t) {
+  theme = t;
+  document.body.setAttribute('data-theme', t === 'light' ? '' : t);
+  document.getElementById('btheme').textContent = TICONS[t];
+  document.getElementById('theme-sel').value = t;
+  localStorage.setItem(SK + 'theme', t);
+}
+
+// ══════════════════════════════════════
+//  SIDEBAR
+// ══════════════════════════════════════
+function toggleSB() { document.getElementById('sb').classList.toggle('off'); }
+function sbTab(i) {
+  document.querySelectorAll('.sbtab').forEach((t,j) => t.classList.toggle('on', j === i));
+  document.querySelectorAll('.sbp').forEach((p,j) => p.classList.toggle('on', j === i));
+}
+
+// ══════════════════════════════════════
+//  PERSIST
+// ══════════════════════════════════════
+function savePos() { localStorage.setItem(SK + 'p', cur); }
+function restorePos() {
+  const p = localStorage.getItem(SK + 'p'); if (p) cur = parseInt(p) || 1;
+  const m = localStorage.getItem(SK + 'mode'); if (m) mode = m;
+  const th = localStorage.getItem(SK + 'theme'); if (th) setTheme(th);
+}
+function loadStored() {
+  try { const b = localStorage.getItem(SK + 'bm');   if (b) bookmarks    = JSON.parse(b); } catch(e) {}
+  try { const a = localStorage.getItem(SK + 'anns'); if (a) annotations  = JSON.parse(a); } catch(e) {}
+  renderBMs(); renderAnns();
+}
+
+// ══════════════════════════════════════
+//  MISC
+// ══════════════════════════════════════
+function goFS() { if (!document.fullscreenElement) document.documentElement.requestFullscreen?.(); else document.exitFullscreen?.(); }
+function dlPDF() { window.open(PDF_URL, '_blank'); }
+
+let tt = null;
+function toast(msg) {
+  const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('on');
+  clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), 2800);
+}
+
+document.addEventListener('keydown', e => {
+  if (!pdf || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextPg(); }
+  if (e.key === 'ArrowLeft')  { e.preventDefault(); prevPg(); }
+  if (e.key === 'b' || e.key === 'B') addBM();
+  if (e.key === 'f' || e.key === 'F') goFS();
+  if (e.key === 't' || e.key === 'T') toggleTTS();
+  if (e.key === 'h' || e.key === 'H') toggleHL();
+  if (e.key === '+') zm(0.25); if (e.key === '-') zm(-0.25); if (e.key === '0') zm(0);
+  if (e.key === 'Home') go(1); if (e.key === 'End') go(total);
+  if (e.key === 'Escape') { ttsStop(); if (hlMode) toggleHL(); closeAnn(); closeShare(); }
+});
+
+window.addEventListener('resize', () => {
+  if (flip && mode === 'flip') {
+    flipReady = false;
+    clearTimeout(window._resizeTimer);
+    window._resizeTimer = setTimeout(() => { initFlip(); }, 300);
+  }
+});
+</script>
+</body>
+</html>
