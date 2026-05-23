@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Наследие Кубани — PRO-читалка</title>
+<title>PROЧИТАЙ — Наследие Кубани</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -350,7 +350,325 @@ body::before{
 @media(max-width:980px){#bookView{padding:18px 50px!important;}}
 @media(max-width:760px){#bookView{padding:12px 38px!important;}#brandFooter{align-items:center;text-align:center;}}
 
+
+
+/* === FINAL STABILITY FIX: чистый текст, рабочий масштаб, без всплывающих теней === */
+.hb[data-tip]::after{display:none!important;content:none!important;}
+.hb:hover,.tb:hover,.proBtn:hover,.zb:hover{
+  transform:none!important;
+  box-shadow:none!important;
+  filter:none!important;
+}
+.hb:hover{background:rgba(49,101,255,.10)!important;border-color:rgba(49,101,255,.42)!important;color:#3165ff!important;}
+.hb.on{box-shadow:none!important;}
+#bookView{
+  overflow:auto!important;
+  align-items:stretch!important;
+  justify-content:stretch!important;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+}
+#bookStage{
+  width:max-content!important;
+  height:max-content!important;
+  max-width:none!important;
+  max-height:none!important;
+  overflow:visible!important;
+  flex:0 0 auto!important;
+  margin:auto!important;
+}
+.bookPage,.bookPage canvas{max-width:none!important;max-height:none!important;}
+#sv{background:transparent!important;}
+.scp{overflow:hidden!important;}
+.textLayer{
+  display:block!important;
+  min-height:180px!important;
+  color:#111827!important;
+  background:#ffffff!important;
+  background-image:none!important;
+  border:0!important;
+  opacity:1!important;
+  visibility:visible!important;
+}
+.textLayer.wait,.textLayer.ocr,.textLayer.bad{
+  color:#111827!important;
+  background:#ffffff!important;
+  background-image:none!important;
+  font-style:normal!important;
+  font-weight:700!important;
+  border:1px dashed rgba(49,101,255,.35)!important;
+}
+.textLayer:empty::before{
+  content:'На этой странице чистый текст не найден. Перейдите на следующую страницу или дождитесь OCR.';
+  color:#111827;
+}
+[data-t=dark] .textLayer,[data-t=dark] .textLayer.wait,[data-t=dark] .textLayer.ocr,[data-t=dark] .textLayer.bad{
+  color:#111827!important;
+  background:#ffffff!important;
+}
+#badge{top:92px!important;right:18px!important;bottom:auto!important;z-index:700!important;}
+#brandFooter{
+  display:grid!important;
+  grid-template-columns:minmax(180px,1fr) auto minmax(180px,1fr)!important;
+  align-items:center!important;
+  gap:12px!important;
+  color:var(--tx2)!important;
+}
+#brandFooter .bfLeft{text-align:left!important;display:flex;flex-direction:column;gap:2px;}
+#brandFooter .bfCenter{text-align:center!important;display:flex;flex-direction:column;gap:2px;font-weight:800;letter-spacing:.02em;}
+#brandFooter .bfCenter b{font-size:14px;color:var(--tx)!important;}
+#brandFooter .bfRight{text-align:right!important;}
+#brandFooter small{font-size:9px;color:var(--tx3)!important;font-weight:700;}
+#brandFooter a{color:#3165ff!important;background:none!important;-webkit-background-clip:initial!important;background-clip:initial!important;}
+#brandFooter .bfVk{display:inline-flex!important;color:#fff!important;background:#3165ff!important;border:0!important;border-radius:999px!important;padding:7px 13px!important;text-decoration:none!important;}
+@media(max-width:760px){
+  #brandFooter{grid-template-columns:1fr!important;text-align:center!important;gap:6px!important;}
+  #brandFooter .bfLeft,#brandFooter .bfCenter,#brandFooter .bfRight{text-align:center!important;align-items:center!important;}
+  #badge{top:auto!important;bottom:86px!important;right:10px!important;}
+}
+
+
+
+/* === FINAL UI FIX: clean premium light/dark, no yellow, canvas thumbnails, stable text mode === */
+:root{
+  --bg:#f5f7fb!important;
+  --bg2:#eef3fb!important;
+  --bg3:#d8e2f0!important;
+  --wh:rgba(255,255,255,.92)!important;
+  --panel:rgba(255,255,255,.82)!important;
+  --panel2:rgba(248,250,255,.70)!important;
+  --line:rgba(30,41,59,.12)!important;
+  --gold:#3165ff!important;
+  --gold2:#7c3aed!important;
+  --red:#0ea5e9!important;
+  --br:#111827!important;
+  --tx:#111827!important;
+  --tx2:#334155!important;
+  --tx3:#64748b!important;
+  --gr:#0f766e!important;
+  --premiumGlow:0 1px 0 rgba(255,255,255,.72) inset,0 18px 50px rgba(15,23,42,.08)!important;
+  --premiumGlowStrong:0 1px 0 rgba(255,255,255,.80) inset,0 28px 80px rgba(15,23,42,.13)!important;
+  --glassBlur:blur(18px) saturate(1.08)!important;
+}
+[data-t=dark]{
+  --bg:#080d18!important;
+  --bg2:#0f172a!important;
+  --bg3:#1e293b!important;
+  --wh:rgba(15,23,42,.88)!important;
+  --panel:rgba(15,23,42,.86)!important;
+  --panel2:rgba(17,24,39,.70)!important;
+  --line:rgba(148,163,184,.18)!important;
+  --gold:#60a5fa!important;
+  --gold2:#a78bfa!important;
+  --red:#38bdf8!important;
+  --br:#020617!important;
+  --tx:#f8fafc!important;
+  --tx2:#cbd5e1!important;
+  --tx3:#94a3b8!important;
+  --gr:#2dd4bf!important;
+  --premiumGlow:0 1px 0 rgba(255,255,255,.06) inset,0 22px 70px rgba(0,0,0,.34)!important;
+  --premiumGlowStrong:0 1px 0 rgba(255,255,255,.08) inset,0 30px 88px rgba(0,0,0,.46)!important;
+}
+html,body{background:var(--bg)!important;}
+body{
+  background:
+    radial-gradient(circle at 12% -10%,rgba(49,101,255,.13),transparent 32%),
+    radial-gradient(circle at 90% 0%,rgba(124,58,237,.10),transparent 28%),
+    linear-gradient(135deg,var(--bg),var(--bg2) 58%,var(--bg))!important;
+}
+[data-t=dark] body{
+  background:
+    radial-gradient(circle at 12% -8%,rgba(96,165,250,.12),transparent 30%),
+    radial-gradient(circle at 86% 0%,rgba(167,139,250,.10),transparent 28%),
+    linear-gradient(135deg,#050814,#0f172a 58%,#020617)!important;
+}
+body::before{opacity:.14!important;background-size:54px 54px!important;}
+.orb:nth-child(1){background:radial-gradient(circle,rgba(49,101,255,.42),transparent 70%)!important;}
+.orb:nth-child(2){background:radial-gradient(circle,rgba(124,58,237,.34),transparent 72%)!important;}
+#ld,#hdr,#ttsbar,#sb,#ctr,#ftr,#brandFooter,.pop,.scp{
+  border-color:var(--line)!important;
+  background:linear-gradient(145deg,var(--panel),var(--panel2))!important;
+  box-shadow:var(--premiumGlow)!important;
+}
+#viewer{
+  background:
+    radial-gradient(circle at 50% 10%,rgba(49,101,255,.08),transparent 30%),
+    linear-gradient(145deg,rgba(255,255,255,.20),rgba(15,23,42,.03))!important;
+}
+[data-t=dark] #viewer{
+  background:
+    radial-gradient(circle at 50% 8%,rgba(96,165,250,.10),transparent 30%),
+    linear-gradient(145deg,rgba(255,255,255,.03),rgba(0,0,0,.18))!important;
+}
+.hbrand .ico,.hb.on,.proBtn.primary,.btnp,.nb:hover,#brandFooter .bfVk{
+  background:linear-gradient(135deg,var(--gold),var(--gold2))!important;
+  color:#fff!important;
+  border-color:transparent!important;
+}
+[data-t=dark] .hbrand .ico,[data-t=dark] .hb.on,[data-t=dark] .proBtn.primary,[data-t=dark] .btnp,[data-t=dark] .nb:hover,[data-t=dark] #brandFooter .bfVk{color:#020617!important;}
+.hbrand .nm,#brandFooter a:not(.bfVk),.sbt.on,.srpg,.anpg,.slbl,.sval,.scpHead b{color:var(--gold)!important;background:none!important;-webkit-background-clip:initial!important;background-clip:initial!important;}
+.hbrand::after{content:'ARSTUDIO.TECH 2026'!important;color:var(--gold)!important;border-color:var(--line)!important;background:rgba(49,101,255,.07)!important;}
+[data-t=dark] .hbrand::after{background:rgba(96,165,250,.10)!important;}
+.hb,.tb,.proBtn,.btn,.zb,.pji,.csel,.sbin,.popn,.aiGrid input,.aiGrid select,.aiGrid textarea,.quoteCtl select{
+  background:rgba(255,255,255,.62)!important;
+  border-color:var(--line)!important;
+  color:var(--tx2)!important;
+  box-shadow:none!important;
+}
+[data-t=dark] .hb,[data-t=dark] .tb,[data-t=dark] .proBtn,[data-t=dark] .btn,[data-t=dark] .zb,[data-t=dark] .pji,[data-t=dark] .csel,[data-t=dark] .sbin,[data-t=dark] .popn,[data-t=dark] .aiGrid input,[data-t=dark] .aiGrid select,[data-t=dark] .aiGrid textarea,[data-t=dark] .quoteCtl select{
+  background:rgba(15,23,42,.72)!important;
+  color:var(--tx2)!important;
+}
+.hb:hover,.tb:hover,.proBtn:hover,.zb:hover,.btn:hover{
+  transform:none!important;
+  box-shadow:none!important;
+  background:rgba(49,101,255,.10)!important;
+  border-color:rgba(49,101,255,.28)!important;
+  color:var(--gold)!important;
+}
+[data-t=dark] .hb:hover,[data-t=dark] .tb:hover,[data-t=dark] .proBtn:hover,[data-t=dark] .zb:hover,[data-t=dark] .btn:hover{
+  background:rgba(96,165,250,.12)!important;
+  border-color:rgba(96,165,250,.28)!important;
+}
+.hb[data-tip]::after{display:none!important;content:none!important;}
+.th,.bmit,.tocit,.srit,.anit,.scard,.libCard,.flashCard,.proOut,.aiStatusCard,.aiWarn{
+  background:rgba(255,255,255,.70)!important;
+  border-color:var(--line)!important;
+  box-shadow:0 1px 0 rgba(255,255,255,.64) inset,0 8px 22px rgba(15,23,42,.05)!important;
+}
+[data-t=dark] .th,[data-t=dark] .bmit,[data-t=dark] .tocit,[data-t=dark] .srit,[data-t=dark] .anit,[data-t=dark] .scard,[data-t=dark] .libCard,[data-t=dark] .flashCard,[data-t=dark] .proOut,[data-t=dark] .aiStatusCard,[data-t=dark] .aiWarn{
+  background:rgba(15,23,42,.62)!important;
+  box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 8px 22px rgba(0,0,0,.14)!important;
+}
+.th.cur{border-color:var(--gold)!important;box-shadow:0 0 0 2px rgba(49,101,255,.28),0 12px 30px rgba(15,23,42,.08)!important;}
+.bookPage{background:#fff!important;box-shadow:0 0 0 1px rgba(15,23,42,.10),0 22px 55px rgba(15,23,42,.20)!important;}
+.bookPage::after{background:linear-gradient(90deg,rgba(15,23,42,.08),transparent 10%,transparent 88%,rgba(15,23,42,.06))!important;}
+#bookView{overflow:auto!important;align-items:center!important;justify-content:center!important;}
+#bookStage{overflow:visible!important;}
+#sv{background:transparent!important;}
+.scpHead{background:rgba(49,101,255,.06)!important;border-color:var(--line)!important;color:var(--tx3)!important;}
+[data-t=dark] .scpHead{background:rgba(96,165,250,.08)!important;}
+.textLayer{background:rgba(255,255,255,.94)!important;color:#111827!important;box-shadow:none!important;}
+[data-t=dark] .textLayer{background:rgba(248,250,252,.96)!important;color:#0f172a!important;}
+.textLayer.wait,.textLayer.ocr,.textLayer.bad{background:rgba(255,255,255,.94)!important;color:#475569!important;font-style:normal!important;}
+.textLayer::selection,.textLayer *::selection{background:rgba(49,101,255,.24)!important;color:inherit!important;}
+.prf,.sbarf,.pfll{background:linear-gradient(90deg,var(--gold),var(--gold2))!important;}
+mark{background:rgba(49,101,255,.18)!important;color:inherit!important;}
+#badge{top:88px!important;right:22px!important;bottom:auto!important;background:rgba(15,23,42,.78)!important;color:#fff!important;border:0!important;box-shadow:0 12px 32px rgba(15,23,42,.18)!important;}
+[data-t=dark] #badge{background:rgba(248,250,252,.90)!important;color:#0f172a!important;}
+#toast,#selbar{background:rgba(15,23,42,.84)!important;color:#fff!important;border:1px solid rgba(255,255,255,.10)!important;}
+#brandFooter{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;color:var(--tx2)!important;}
+#brandFooter .bfVk{box-shadow:none!important;color:#fff!important;background:linear-gradient(135deg,var(--gold),var(--gold2))!important;}
+[data-t=dark] #brandFooter .bfVk{color:#020617!important;}
+#brandFooter small{color:var(--tx3)!important;}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--gold),var(--gold2))!important;}
+@media(max-width:760px){
+  #brandFooter{grid-template-columns:1fr!important;gap:6px!important;text-align:center!important;}
+  #bookView{padding:12px 38px!important;}
+  #badge{top:76px!important;right:12px!important;}
+}
+
 </style>
+
+
+<style id="critical-text-mode-fix">
+/* CRITICAL FIX: настоящий режим текста, без фоновых линеек и без canvas в центральном текстовом режиме */
+#sv.textModeFixed{
+  align-items:center!important;
+  gap:22px!important;
+  padding:22px 12px!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  background:transparent!important;
+  user-select:text!important;
+  -webkit-user-select:text!important;
+}
+#sv.textModeFixed .scp{
+  width:min(920px,calc(100vw - 42px))!important;
+  max-width:calc(100vw - 42px)!important;
+  overflow:hidden!important;
+  background:#fff!important;
+  border:1px solid rgba(30,41,59,.12)!important;
+  border-radius:22px!important;
+  box-shadow:0 20px 60px rgba(15,23,42,.10)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+#sv.textModeFixed .scpHead{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  padding:12px 18px!important;
+  background:#f8fafc!important;
+  border-bottom:1px solid rgba(30,41,59,.10)!important;
+  color:#475569!important;
+  font:800 12px/1.2 Manrope,system-ui,sans-serif!important;
+  user-select:none!important;
+  -webkit-user-select:none!important;
+}
+#sv.textModeFixed .scpHead b{color:#3165ff!important;font-size:13px!important;}
+#sv.textModeFixed .scpHead span{background:transparent!important;border:0!important;color:#64748b!important;padding:0!important;}
+#sv.textModeFixed .textLayer,
+#sv.textModeFixed .plainTextLayer,
+#sv.textModeFixed .textLayer.wait,
+#sv.textModeFixed .textLayer.ocr,
+#sv.textModeFixed .textLayer.bad{
+  display:block!important;
+  position:relative!important;
+  z-index:2!important;
+  width:100%!important;
+  min-height:auto!important;
+  max-height:none!important;
+  overflow:visible!important;
+  padding:34px 44px 44px!important;
+  color:#111827!important;
+  background:#ffffff!important;
+  background-image:none!important;
+  opacity:1!important;
+  visibility:visible!important;
+  font-family:Manrope,system-ui,-apple-system,"Segoe UI",Arial,sans-serif!important;
+  font-size:var(--readerTextPx,18px)!important;
+  line-height:1.78!important;
+  font-style:normal!important;
+  font-weight:500!important;
+  text-align:left!important;
+  white-space:pre-wrap!important;
+  word-break:normal!important;
+  overflow-wrap:break-word!important;
+  letter-spacing:.005em!important;
+  user-select:text!important;
+  -webkit-user-select:text!important;
+  cursor:text!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+#sv.textModeFixed .textLayer:empty::before{content:none!important;display:none!important;}
+#sv.textModeFixed .textLayer::selection,
+#sv.textModeFixed .textLayer *::selection{background:rgba(49,101,255,.24)!important;color:inherit!important;}
+#sv.textModeFixed .textEmpty{
+  color:#64748b!important;
+  background:#fff!important;
+  border:1px dashed rgba(49,101,255,.25)!important;
+  border-radius:16px!important;
+  padding:18px!important;
+}
+[data-t=dark] #sv.textModeFixed .scp{background:#f8fafc!important;border-color:rgba(148,163,184,.18)!important;}
+[data-t=dark] #sv.textModeFixed .scpHead{background:#eef2ff!important;color:#334155!important;border-color:rgba(30,41,59,.10)!important;}
+[data-t=dark] #sv.textModeFixed .textLayer,
+[data-t=dark] #sv.textModeFixed .plainTextLayer{background:#ffffff!important;color:#111827!important;}
+/* масштаб книги */
+#bookView.zoomedBook{align-items:flex-start!important;justify-content:flex-start!important;overflow:auto!important;}
+#bookView.zoomedBook #bookStage{margin:24px auto!important;}
+#bookView:not(.zoomedBook){overflow:auto!important;}
+.zr,.zb,#zl{position:relative!important;z-index:1000!important;}
+@media(max-width:760px){
+  #sv.textModeFixed{padding:14px 8px!important;}
+  #sv.textModeFixed .scp{width:calc(100vw - 24px)!important;max-width:calc(100vw - 24px)!important;border-radius:18px!important;}
+  #sv.textModeFixed .textLayer{padding:24px 20px 30px!important;font-size:var(--readerTextPx,16px)!important;line-height:1.72!important;}
+}
+</style>
+
 </head>
 <body>
 <div id="mesh"><div class="orb"></div><div class="orb"></div></div>
@@ -400,15 +718,22 @@ body::before{
         <div class="view on" id="bookView"><div class="navZone left" onclick="prevPg()"></div><button class="nb" id="np" onclick="prevPg()">‹</button><div id="bookStage"></div><button class="nb" id="nn" onclick="nextPg()">›</button><div class="navZone right" onclick="nextPg()"></div></div>
         <div class="view" id="scrollView"><div id="sv"></div></div>
       </div>
-      <div id="ftr"><div id="fi">Стр. 1 из 1</div><div class="pjw">→<input type="number" class="pji" id="pji" min="1" value="1" title="Перейти" onkeydown="if(event.key==='Enter')jump()"></div><div class="prw" title="Прогресс" onclick="seekProg(event)"><div class="prf" id="prf" style="width:0%"></div></div><div class="zr"><button class="zb" title="Уменьшить" onclick="zm(-.25)">−</button><span id="zl">100%</span><button class="zb" title="Увеличить" onclick="zm(.25)">+</button><button class="zb" title="Сбросить" onclick="zm(0)">⊙</button></div></div>
+      <div id="ftr"><div id="fi">Стр. 1 из 1</div><div class="pjw">→<input type="number" class="pji" id="pji" min="1" value="1" title="Перейти" onkeydown="if(event.key==='Enter')jump()"></div><div class="prw" title="Прогресс" onclick="seekProg(event)"><div class="prf" id="prf" style="width:0%"></div></div><div class="zr"><button class="zb" title="Уменьшить" onclick="event.stopPropagation();zm(-.25)">−</button><span id="zl">100%</span><button class="zb" title="Увеличить" onclick="event.stopPropagation();zm(.25)">+</button><button class="zb" title="Сбросить" onclick="event.stopPropagation();zm(0)">⊙</button></div></div>
     </div>
   </div>
   <div id="brandFooter" aria-label="Информация о разработчике">
-    <span>Разработано <a href="https://arstudio.tech" target="_blank" rel="noopener noreferrer">arstudio.tech</a></span>
-    <span class="bfSep">·</span>
-    <span>специально для НКО «Долина ветров» в рамках проекта «Наследие Кубани»</span>
-    <span class="bfSep">·</span>
-    <a class="bfVk" href="https://vk.com/qigod" target="_blank" rel="noopener noreferrer">VK: заказать готовое технологическое решение / связь с разработчиком</a>
+    <div class="bfLeft">
+      <span>Разработано <a href="https://arstudio.tech" target="_blank" rel="noopener noreferrer">arstudio.tech</a></span>
+      <small>для НКО «Долина ветров» · проект «Наследие Кубани»</small>
+    </div>
+    <div class="bfCenter">
+      <b>PROЧИТАЙ</b>
+      <span>2026 · Все права защищены</span>
+      <small>Любое копирование преследуется по закону</small>
+    </div>
+    <div class="bfRight">
+      <a class="bfVk" href="https://vk.com/qigod" target="_blank" rel="noopener noreferrer">VK: заказать готовое технологическое решение</a>
+    </div>
   </div>
 </div>
 <div class="bd" id="abd" onclick="closeAnn()"></div><div class="pop" id="apop"><h3>✏️ Заметка</h3><div class="popq" id="aq"></div><textarea class="popn" id="anote" placeholder="Ваш комментарий…"></textarea><div class="pbr"><button class="btn btnp" onclick="saveAnn()" style="flex:1">Сохранить</button><button class="btn btng" onclick="closeAnn()">Отмена</button></div></div>
@@ -475,7 +800,7 @@ function makeScrollPage(i,srcCanvas,vp,textContent){
   scp.style.maxWidth='calc(100vw - 32px)';
   const head=document.createElement('div');
   head.className='scpHead';
-  head.innerHTML='<b>Страница '+i+'</b><span>Чистый текст · выделение и заметки</span>';
+  head.innerHTML='<b>Страница '+i+'</b><span>Чистый HTML-текст · выделение и заметки</span>';
   const tl=document.createElement('div');
   tl.className='textLayer';
   tl.dataset.page=i;
@@ -554,7 +879,7 @@ function selectionLooksBad(t){
   if(digits>letters*2&&words<3)return true;
   return false;
 }
-function setLayerText(tl,text,state){tl.dataset.state=state||'ready';tl.classList.remove('wait','ocr','bad');if(state&&state!=='ready')tl.classList.add(state);tl.textContent=text||'';}
+function setLayerText(tl,text,state){tl.dataset.state=state||'ready';tl.classList.remove('wait','ocr','bad');if(state&&state!=='ready')tl.classList.add(state);tl.textContent=(text&&String(text).trim())?text:'На этой странице чистый текст не найден. Если это обложка или изображение — перейдите на следующую страницу, либо дождитесь OCR-распознавания.';}
 function fallbackTextLayer(tl,i){
   let cached='';try{cached=localStorage.getItem(SK+'ocr-'+i)||'';}catch(e){}
   if(cached&&!textLooksBad(cached)){ocrCache[i]=cached;pageTexts[i]=cached;setLayerText(tl,cached,'ready');return;}
@@ -614,37 +939,50 @@ function spreadLeft(n){if(n<=1)return 1;return n%2===0?n:n-1;}
 function renderBook(direction='next',animate=true){
   if(!pageCanvases[cur])return;
   const stage=$('bookStage');
+  const wrap=$('bookView');
   const safeDir=direction==='prev'?'prev':'next';
   stage.classList.remove('turnNext','turnPrev');
   stage.innerHTML='';
-  const two=canTwoPages();let pages=[];
+
+  const two=canTwoPages();
+  let pages=[];
   if(two&&cur>1){const left=spreadLeft(cur);pages=[left];if(left+1<=total)pages.push(left+1);}else pages=[cur];
 
-  // ВАЖНО: задаём реальные размеры страниц вручную.
-  // Иначе canvas может сохранять натуральную высоту и обрезаться сверху/снизу в обычном окне браузера.
-  const stW=Math.max(120,stage.clientWidth||$('viewer').clientWidth||900);
-  const stH=Math.max(120,stage.clientHeight||$('viewer').clientHeight||650);
   const gap=parseFloat(getComputedStyle(stage).gap)||22;
-  const maxPageW=Math.max(80,(stW-gap*Math.max(0,pages.length-1))/pages.length);
-  const maxPageH=Math.max(100,stH-10);
+  const wrapW=Math.max(280,(wrap&&wrap.clientWidth)||$('viewer').clientWidth||900);
+  const wrapH=Math.max(280,(wrap&&wrap.clientHeight)||$('viewer').clientHeight||650);
+  const availW=Math.max(180,wrapW-110);
+  const availH=Math.max(220,wrapH-42);
+  const srcs=pages.map(p=>pageCanvases[p]).filter(Boolean);
+  const naturalW=srcs.reduce((sum,c)=>sum+c.width,0)+gap*Math.max(0,srcs.length-1);
+  const naturalH=Math.max(...srcs.map(c=>c.height));
+  const fitScale=Math.min(availW/naturalW,availH/naturalH,1);
+  const displayScale=Math.max(.18,fitScale*zoom);
+  const stageW=Math.ceil(naturalW*displayScale);
+  const stageH=Math.ceil(naturalH*displayScale);
+  stage.style.width=stageW+'px';
+  stage.style.minWidth=stageW+'px';
+  stage.style.height=stageH+'px';
+  stage.style.minHeight=stageH+'px';
+  stage.style.margin='auto';
 
   if(animate){
     stage.classList.add(safeDir==='prev'?'turnPrev':'turnNext');
     clearTimeout(stage._turnTimer);
-    stage._turnTimer=setTimeout(()=>stage.classList.remove('turnNext','turnPrev'),520);
+    stage._turnTimer=setTimeout(()=>stage.classList.remove('turnNext','turnPrev'),360);
   }
+
   pages.forEach(p=>{
     const src=pageCanvases[p];if(!src)return;
-    const scale=Math.min(maxPageW/src.width,maxPageH/src.height);
-    const w=Math.max(80,Math.floor(src.width*scale));
-    const h=Math.max(100,Math.floor(src.height*scale));
+    const w=Math.max(70,Math.floor(src.width*displayScale));
+    const h=Math.max(90,Math.floor(src.height*displayScale));
     const d=document.createElement('div');
     d.className='bookPage '+(animate?(safeDir==='prev'?'turnPrev':'turnNext'):'')+(pages.length===1?' single':'')+(p===1?' cover':'');
     d.dataset.page=p;
     d.style.width=w+'px';
     d.style.height=h+'px';
-    d.style.maxWidth=w+'px';
-    d.style.maxHeight=h+'px';
+    d.style.maxWidth='none';
+    d.style.maxHeight='none';
     const c=cloneCanvas(src);
     c.style.width=w+'px';
     c.style.height=h+'px';
@@ -666,7 +1004,7 @@ function setMode(m,save=true){
   $('scrollView').style.display=mode==='scroll'?'flex':'none';
   $('sv').style.display=mode==='scroll'?'flex':'none';
   if(mode==='book'){renderBook('next',false);}
-  else{trackScroll();setTimeout(()=>{scrollToPage(cur,false);ensureReadableText(cur,false);},60);}
+  else{trackScroll();setTimeout(()=>{scrollToPage(cur,false);ensureReadableText(cur,true);applyZoom();},60);}
   if(save)localStorage.setItem(SK+'mode',mode);
 }
 function go(n,anim=true){n=Math.max(1,Math.min(total,n||1));const oldCur=cur;const dir=n<oldCur?'prev':'next';cur=n;if(mode==='book')renderBook(dir,anim);else{scrollToPage(n,anim);if(hlMode)setTimeout(()=>{ensureReadableText(n,false);},120);}trackPage();updateUI();savePos();}
@@ -824,11 +1162,52 @@ function openShare(){
   $('shpop').classList.add('on');$('shbd').classList.add('on');
 }
 function closeShare(){$('shpop').classList.remove('on');$('shbd').classList.remove('on');}function dlShare(){const a=document.createElement('a');a.download='цитата-стр'+cur+'.png';a.href=$('shcv').toDataURL();a.click();toast('Картинка скачана');}
-function loadVoices(){const load=()=>{const all=window.speechSynthesis?window.speechSynthesis.getVoices():[];voices=all.filter(v=>v.lang&&v.lang.startsWith('ru'));if(!voices.length)voices=all;const sel=$('voicel');sel.innerHTML='';voices.forEach((v,i)=>{const o=document.createElement('option');o.value=i;o.textContent=v.name+' ('+v.lang+')';sel.appendChild(o);});const ri=voices.findIndex(v=>v.lang&&v.lang.startsWith('ru'));if(ri>=0){voiceIdx=ri;sel.value=ri;}};if(!window.speechSynthesis)return;if(window.speechSynthesis.getVoices().length)load();window.speechSynthesis.onvoiceschanged=load;$('voicel').onchange=e=>{voiceIdx=parseInt(e.target.value,10);if(ttsOn)restartTTS();};}
+function loadVoices(){
+  const maleHints=['male','муж','pavel','павел','maxim','максим','dmitry','дмитрий','alexander','александр','kirill','кирилл','yuri','юрий','oleg','олег','google русский'];
+  const load=()=>{
+    const all=window.speechSynthesis?window.speechSynthesis.getVoices():[];
+    voices=all.slice().sort((a,b)=>{
+      const ar=(a.lang||'').toLowerCase().startsWith('ru')?0:1;
+      const br=(b.lang||'').toLowerCase().startsWith('ru')?0:1;
+      return ar-br || (a.name||'').localeCompare(b.name||'');
+    });
+    const sel=$('voicel');if(!sel)return;
+    sel.innerHTML='';
+    voices.forEach((v,i)=>{const o=document.createElement('option');o.value=i;o.textContent=(v.lang&&v.lang.startsWith('ru')?'🇷🇺 ':'')+v.name+' ('+v.lang+')';sel.appendChild(o);});
+    const maleRu=voices.findIndex(v=>{
+      const name=(v.name||'').toLowerCase();const lang=(v.lang||'').toLowerCase();
+      return lang.startsWith('ru')&&maleHints.some(h=>name.includes(h));
+    });
+    const ru=voices.findIndex(v=>(v.lang||'').toLowerCase().startsWith('ru'));
+    voiceIdx=maleRu>=0?maleRu:(ru>=0?ru:0);
+    if(voices[voiceIdx])sel.value=voiceIdx;
+  };
+  if(!window.speechSynthesis)return;
+  load();
+  setTimeout(load,350);
+  window.speechSynthesis.onvoiceschanged=load;
+  const sel=$('voicel');if(sel)sel.onchange=e=>{voiceIdx=parseInt(e.target.value,10);if(ttsOn)restartTTS();};
+}
 function toggleTTS(){ttsOn?ttsStop():ttsRead(cur);}function ttsRead(pgNum){if(!window.speechSynthesis){toast('Озвучка не поддерживается');return;}const tx=pageTexts[pgNum]||'';if(!tx){toast('На этой странице нет текста');return;}window.speechSynthesis.cancel();ttsOn=true;ttsPaused=false;$('btts').classList.add('tts');$('btts').textContent='⏹ Стоп';$('ttsbar').classList.add('on');$('ttspp').textContent='⏸';const wds=tx.split(' ');let wi=0;const u=new SpeechSynthesisUtterance(tx);u.rate=ttsRate;u.pitch=parseFloat($('pitchr').value)||1;if(voices[voiceIdx])u.voice=voices[voiceIdx];u.lang='ru-RU';u.onboundary=e=>{if(e.name==='word'){wi++;$('ttspf').style.width=Math.round(wi/wds.length*100)+'%';$('ttsprev').textContent=wds.slice(Math.max(0,wi-1),wi+6).join(' ');}};u.onend=()=>{if(ttsOn&&cur<total){go(cur+1);setTimeout(()=>ttsRead(cur),300);}else ttsStop();};u.onerror=()=>ttsStop();window.speechSynthesis.speak(u);toast('🔊 Читаю стр.'+pgNum);}function ttsPP(){if(!window.speechSynthesis)return;if(ttsPaused){window.speechSynthesis.resume();ttsPaused=false;$('ttspp').textContent='⏸';}else{window.speechSynthesis.pause();ttsPaused=true;$('ttspp').textContent='▶';}}function ttsStop(){if(window.speechSynthesis)window.speechSynthesis.cancel();ttsOn=false;ttsPaused=false;$('btts').classList.remove('tts');$('btts').textContent='🔊 Озвучить';$('ttsbar').classList.remove('on');}function restartTTS(){if(ttsOn){ttsStop();setTimeout(()=>ttsRead(cur),100);}}function ttsSpd(d){ttsRate=Math.max(.5,Math.min(2,Math.round((ttsRate+d)*4)/4));ttsSetRate(ttsRate);}function ttsSetRate(v){ttsRate=v;const l=v+'×';$('ttssl').textContent=l;$('speedv').textContent=l;$('speedr').value=v;if(ttsOn)restartTTS();}
 function trackPage(){pread.add(cur);slog.push({p:cur,t:Date.now()});if(slog.length>14)slog.shift();}
 function startTimer(){readStart=Date.now();setInterval(()=>{readSec=Math.floor((Date.now()-readStart)/1000);updateStats();},15000);}function updateStats(){const pct=total>0?Math.round(pread.size/total*100):0;$('spct').textContent=pct+'%';$('spgs').textContent=pread.size+' из '+total+' стр.';$('sbar').style.width=pct+'%';const m=Math.floor(readSec/60);$('stime').textContent=m>0?m+' мин':'< 1 мин';if(slog.length>=2){const dt=(slog[slog.length-1].t-slog[0].t)/60000;$('sspd').textContent=dt>0?Math.round(slog.length/dt):'—';}$('scnt').textContent=bookmarks.length+' / '+annotations.length;}
-function zm(d){if(d===0)zoom=1;else zoom=Math.max(.6,Math.min(2.4,zoom+d));$('zl').textContent=Math.round(zoom*100)+'%';document.querySelectorAll('#sv .scp').forEach(p=>{p.style.width=Math.min(980,Math.max(520,860*zoom))+'px';});if(mode==='book')renderBook();}
+function applyZoom(){
+  $('zl').textContent=Math.round(zoom*100)+'%';
+  const textFont=Math.round(17*zoom);
+  document.querySelectorAll('#sv .scp').forEach(p=>{
+    p.style.width=Math.min(1180,Math.max(520,860*zoom))+'px';
+  });
+  document.querySelectorAll('#sv .textLayer').forEach(tl=>{
+    tl.style.fontSize=textFont+'px';
+    tl.style.lineHeight=(zoom>=1.4?'1.68':'1.78');
+  });
+  if(mode==='book')renderBook('next',false);
+}
+function zm(d){
+  if(d===0)zoom=1;
+  else zoom=Math.max(.55,Math.min(3.2,Math.round((zoom+d)*100)/100));
+  applyZoom();
+}
 const THEMES=['light','dark'];const TICONS={light:'🌙 Тёмная',dark:'☀️ Светлая'};function normalizeTheme(t){return t==='dark'?'dark':'light';}function cycleTheme(){setTheme(theme==='dark'?'light':'dark');}function setTheme(t){theme=normalizeTheme(t);document.body.setAttribute('data-t',theme==='light'?'':theme);$('btheme').textContent=TICONS[theme]||TICONS.light;const sel=$('thsel');if(sel)sel.value=theme;localStorage.setItem(SK+'theme',theme);}
 function toggleSB(){$('sb').classList.toggle('off');}function sbTab(i){document.querySelectorAll('.sbt').forEach((t,j)=>t.classList.toggle('on',j===i));document.querySelectorAll('.sbp').forEach((p,j)=>p.classList.toggle('on',j===i));}
 function savePos(){localStorage.setItem(SK+'p',cur);}function restorePrefs(){const p=localStorage.getItem(SK+'p');if(p)cur=Math.max(1,parseInt(p,10)||1);const m=localStorage.getItem(SK+'mode');if(m)mode=m==='flip'?'book':m;const t=localStorage.getItem(SK+'theme');if(t)setTheme(t);}function loadStored(){try{const b=localStorage.getItem(SK+'bm');if(b)bookmarks=JSON.parse(b)||[];}catch(e){}try{const a=localStorage.getItem(SK+'anns');if(a)annotations=JSON.parse(a)||[];}catch(e){}}
@@ -950,6 +1329,81 @@ function installSoftProtection(){
 }
 window.addEventListener('load',installSoftProtection,{once:true});
 
+
+
+/* === FINAL BEHAVIOR PATCH: keep canvas previews/book; strengthen clean text mode and zoom === */
+(function(){
+  function normTxt(t){
+    try{return normalizeBookText(t||'');}catch(e){return String(t||'').replace(/\s+/g,' ').trim();}
+  }
+  function readable(pg){
+    const t=normTxt((window.pageTexts||{})[pg]||'');
+    try{return !!t && !textLooksBad(t);}catch(e){return t.length>40 && /[А-Яа-яA-Za-zЁё]/.test(t);}
+  }
+  function nearestReadable(start){
+    start=Math.max(1,Math.min(total||1,start||1));
+    if(readable(start))return start;
+    for(let d=1;d<=Math.min(12,total||1);d++){
+      if(start+d<=total && readable(start+d))return start+d;
+      if(start-d>=1 && readable(start-d))return start-d;
+    }
+    for(let p=1;p<=total;p++)if(readable(p))return p;
+    return start;
+  }
+  const oldSetMode=window.setMode;
+  window.setMode=function(m,save){
+    const target=(m==='flip')?'book':m;
+    if(target==='scroll' && total){cur=nearestReadable(cur);}
+    oldSetMode.call(this,target,save!==false);
+    if(target==='scroll'){
+      setTimeout(function(){
+        try{
+          const pg=nearestReadable(cur);
+          if(pg!==cur)cur=pg;
+          scrollToPage(cur,false);
+          ensureReadableText(cur,true);
+          if(typeof applyZoom==='function')applyZoom();
+        }catch(e){console.warn('text mode patch',e);}
+      },90);
+    }
+  };
+  const oldRenderBook=window.renderBook;
+  window.renderBook=function(direction,animate){
+    const stage=document.getElementById('bookStage');
+    if(stage)stage.classList.remove('textBookStage');
+    oldRenderBook.call(this,direction||'next',animate!==false);
+    if(stage)stage.classList.remove('textBookStage');
+  };
+  window.makeThumb=function(i,src){
+    const tw=document.createElement('div');
+    tw.className='th'+(i===cur?' cur':'');
+    tw.dataset.page=i;
+    tw.onclick=function(){go(i);};
+    const c=cloneCanvas(src);
+    const n=document.createElement('div');n.className='thn';n.textContent=i;
+    tw.appendChild(c);tw.appendChild(n);$('tgrid').appendChild(tw);
+  };
+  const oldApplyZoom=window.applyZoom;
+  window.applyZoom=function(){
+    if($('zl'))$('zl').textContent=Math.round(zoom*100)+'%';
+    document.querySelectorAll('#sv .scp').forEach(function(p){p.style.width=Math.min(1180,Math.max(520,860*zoom))+'px';});
+    document.querySelectorAll('#sv .textLayer').forEach(function(tl){tl.style.fontSize=Math.round(17*zoom)+'px';tl.style.lineHeight=(zoom>=1.4?'1.68':'1.78');});
+    if(mode==='book')renderBook('next',false);
+  };
+  window.zm=function(d){
+    if(d===0)zoom=1; else zoom=Math.max(.55,Math.min(3.2,Math.round((zoom+d)*100)/100));
+    applyZoom();
+  };
+  document.addEventListener('click',function(e){
+    const z=e.target&&e.target.closest&&e.target.closest('.zr,.zb,#zl');
+    if(z){e.stopPropagation();}
+  },true);
+  window.addEventListener('load',function(){
+    document.querySelectorAll('.zr .zb').forEach(function(btn){
+      btn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();},true);
+    });
+  });
+})();
 </script>
 
 <script>
@@ -1100,6 +1554,162 @@ window.makeQuiz=async function(){
   }
   const ss=sentences(tx).slice(0,5);out.innerHTML='';if(!ss.length){out.innerHTML='<div class="sbmt">Мало текста для теста</div>';return;}ss.forEach((s,i)=>{const d=document.createElement('div');d.className='flashCard';d.innerHTML='<b>Вопрос '+(i+1)+':</b> Верно ли утверждение?<br>«'+escapeHTML(s.slice(0,180))+'»<br><span class="proMini">Ответ: проверьте формулировку по странице '+cur+'.</span>';out.appendChild(d);});
 };
+</script>
+
+
+
+<script id="critical-text-and-zoom-fix">
+/* CRITICAL PATCH: кнопка «Текст» строит отдельный чистый HTML-текст из pageTexts, а масштаб реально меняет книгу/текст. */
+(function(){
+  function byId(id){return document.getElementById(id);}
+  function cleanText(t){
+    try { return normalizeBookText(t || ''); }
+    catch(e){ return String(t || '').replace(/[\x00]/g,' ').replace(/[ \t]+\n/g,'\n').replace(/\n{3,}/g,'\n\n').replace(/[ \t]{2,}/g,' ').trim(); }
+  }
+  function looksBadText(t){
+    t=cleanText(t);
+    if(!t || t.length < 25) return true;
+    var letters=(t.match(/[A-Za-zА-Яа-яЁё]/g)||[]).length;
+    var words=(t.match(/[A-Za-zА-Яа-яЁё]{2,}/g)||[]).length;
+    return letters < 15 || words < 4;
+  }
+  function textForPage(pg){
+    try { return cleanText(pageTexts[pg] || ''); }
+    catch(e){ return ''; }
+  }
+  function findReadablePage(start){
+    start=Math.max(1,Math.min(total||1,parseInt(start||1,10)||1));
+    if(!looksBadText(textForPage(start))) return start;
+    for(var d=1; d<=Math.min(20,total||1); d++){
+      if(start+d<=total && !looksBadText(textForPage(start+d))) return start+d;
+      if(start-d>=1 && !looksBadText(textForPage(start-d))) return start-d;
+    }
+    for(var p=1;p<=total;p++) if(!looksBadText(textForPage(p))) return p;
+    return start;
+  }
+  function pageLabel(pg){ return 'Страница ' + pg; }
+  function makeCleanTextPage(pg){
+    var scp=document.createElement('section');
+    scp.className='scp cleanTextPage';
+    scp.dataset.page=String(pg);
+    var head=document.createElement('div');
+    head.className='scpHead';
+    head.innerHTML='<b>'+pageLabel(pg)+'</b><span>Чистый текст · можно выделять и копировать</span>';
+    var tl=document.createElement('div');
+    tl.className='textLayer plainTextLayer';
+    tl.dataset.page=String(pg);
+    tl.dataset.state='ready';
+    var tx=textForPage(pg);
+    if(looksBadText(tx)){
+      tl.classList.add('textEmpty');
+      tl.dataset.state='bad';
+      tl.textContent='На этой странице не найден читаемый текст. Если это скан/картинка, включите заметку на этой странице и дождитесь OCR, либо перейдите к следующей текстовой странице.';
+    }else{
+      tl.textContent=tx;
+    }
+    scp.appendChild(head);
+    scp.appendChild(tl);
+    return scp;
+  }
+  function buildCleanTextView(){
+    var sv=byId('sv');
+    if(!sv || !total) return;
+    sv.innerHTML='';
+    sv.classList.add('textModeFixed');
+    for(var i=1;i<=total;i++) sv.appendChild(makeCleanTextPage(i));
+    sv.dataset.cleanTextBuilt='1';
+    applyCriticalZoom();
+  }
+  function ensureCleanTextPage(pg){
+    var sv=byId('sv');
+    if(!sv) return;
+    if(sv.dataset.cleanTextBuilt!=='1') buildCleanTextView();
+    var tl=sv.querySelector('.textLayer[data-page="'+pg+'"]');
+    var tx=textForPage(pg);
+    if(tl && !looksBadText(tx)){
+      tl.classList.remove('textEmpty','wait','ocr','bad');
+      tl.dataset.state='ready';
+      if(tl.textContent!==tx) tl.textContent=tx;
+    }
+  }
+  function scrollCleanTo(pg, instant){
+    var el=document.querySelector('#sv .scp[data-page="'+pg+'"]');
+    if(el) el.scrollIntoView({behavior:instant?'auto':'smooth',block:'start'});
+  }
+  function enterCleanTextMode(save){
+    if(!total) return;
+    mode='scroll';
+    cur=findReadablePage(cur);
+    var bflip=byId('bflip'), bscr=byId('bscr'), book=byId('bookView'), scroll=byId('scrollView'), sv=byId('sv');
+    if(bflip) bflip.classList.remove('on');
+    if(bscr) bscr.classList.add('on');
+    if(book){book.classList.remove('on');book.style.display='none';}
+    if(scroll){scroll.classList.add('on');scroll.style.display='flex';}
+    if(sv){sv.style.display='flex';}
+    buildCleanTextView();
+    try{ trackScroll(); }catch(e){}
+    setTimeout(function(){ ensureCleanTextPage(cur); scrollCleanTo(cur,true); updateUI(); },30);
+    if(save!==false) localStorage.setItem(SK+'mode','scroll');
+  }
+  var oldSetMode = setMode;
+  setMode = window.setMode = function(m,save){
+    var target=(m==='flip')?'book':m;
+    if(target==='scroll') { enterCleanTextMode(save); return; }
+    if(byId('sv')) byId('sv').classList.remove('textModeFixed');
+    oldSetMode.call(this,target,save!==false);
+    applyCriticalZoom();
+  };
+  var oldGo = go;
+  go = window.go = function(n,anim){
+    n=Math.max(1,Math.min(total||1,parseInt(n||1,10)||1));
+    if(mode==='scroll'){
+      cur=n;
+      ensureCleanTextPage(cur);
+      scrollCleanTo(cur,anim===false);
+      try{trackPage();updateUI();savePos();}catch(e){}
+      return;
+    }
+    oldGo.call(this,n,anim!==false);
+    applyCriticalZoom();
+  };
+  var oldEnsure = ensureReadableText;
+  ensureReadableText = window.ensureReadableText = async function(pg,priority){
+    pg=Math.max(1,Math.min(total||1,parseInt(pg||cur||1,10)||1));
+    ensureCleanTextPage(pg);
+    var tx=textForPage(pg);
+    if(!looksBadText(tx)) return tx;
+    try { return await oldEnsure.call(this,pg,priority); }
+    catch(e){ return tx; }
+  };
+  function applyCriticalZoom(){
+    var z = Math.max(.55, Math.min(3.2, Number(zoom)||1));
+    zoom=z;
+    var zl=byId('zl'); if(zl) zl.textContent=Math.round(z*100)+'%';
+    document.documentElement.style.setProperty('--readerTextPx', Math.round(18*z)+'px');
+    document.querySelectorAll('#sv.textModeFixed .scp').forEach(function(p){
+      p.style.width=Math.min(1280,Math.max(540,920*z))+'px';
+    });
+    var book=byId('bookView');
+    if(book) book.classList.toggle('zoomedBook', mode==='book' && z>1.02);
+    if(mode==='book'){
+      try{ renderBook('next',false); }catch(e){}
+    }
+  }
+  applyZoom = window.applyZoom = applyCriticalZoom;
+  zm = window.zm = function(d){
+    if(d===0) zoom=1;
+    else zoom=Math.max(.55,Math.min(3.2,Math.round((zoom + d)*100)/100));
+    applyCriticalZoom();
+    return false;
+  };
+  window.addEventListener('load',function(){
+    var buttons=document.querySelectorAll('.zr .zb');
+    if(buttons[0]) buttons[0].onclick=function(e){ if(e){e.preventDefault();e.stopPropagation();} return zm(-.25); };
+    if(buttons[1]) buttons[1].onclick=function(e){ if(e){e.preventDefault();e.stopPropagation();} return zm(.25); };
+    if(buttons[2]) buttons[2].onclick=function(e){ if(e){e.preventDefault();e.stopPropagation();} return zm(0); };
+  });
+  window.PROCHITAI_FORCE_TEXT_MODE=enterCleanTextMode;
+})();
 </script>
 
 </body>
